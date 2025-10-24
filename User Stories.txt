@@ -20,3 +20,5 @@ As a user, I want to set a sleep timer so that playback will end automatically
 As a user I want the player to run in the background so that it is always available to use without needing to open the application again.
 As a user, I want to schedule automatic playback for songs so that I can play tracks at specific times of the day for daily routines.
 As a user, I want the progress of a song to be saved when closed so that when the app is opened again it is already on the last track that was playing.
+As a user, I want to be able to like my favourite songs to enhance my listening experience.
+As a user, I want to have a separate folder of my liked songs, so I can play them back whenever.
