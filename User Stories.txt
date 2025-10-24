@@ -1,0 +1,9 @@
+As a user, I want to play, pause and stop songs so that I can control my listening experience.
+As a user, I want to skip to the next song or go back to the previous song so that I can navigate through a playlist/album.
+As a user, I want to see the current song's title, artists name and image cover displayed in the application as the song is being played.
+As a user, I want to adjust the volume using a slider so that I can set the sound to my preferable level.
+As a user, I want to see the song's progress and duration in text format, so I know how much time has elapsed.
+As a user, I want to see the songs progress represented using a progress bar where it moves with each passing second and I can click along it to move to any point in the song so that I have control over how to play the song.
+As a user, I want to create, rename and delete playlists so that I can have my own personalised collection of songs.
+As a user, I want to be able to add, remove and move songs around on a playlist so that I have control over how I customise the playlist, so I can organise my music manually.
+As a user, I want to search for songs by title, artist, or filename so that I can quickly find specific tracks.
