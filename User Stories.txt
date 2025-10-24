@@ -22,3 +22,8 @@ As a user, I want to schedule automatic playback for songs so that I can play tr
 As a user, I want the progress of a song to be saved when closed so that when the app is opened again it is already on the last track that was playing.
 As a user, I want to be able to like my favourite songs to enhance my listening experience.
 As a user, I want to have a separate folder of my liked songs, so I can play them back whenever.
+As a user, I want to import songs from local files or external storage so that I can add music from my device.
+As a user, I want to sort playlists automatically (by artist, alphabetically, etc.) for faster organisation.
+As a user, I want the UI to adapt to a light or dark mode automatically based on the system settings or time of day.
+As a user, I want a rewind and fast-forward button (e.g., 5 to 10 seconds) so that I can replay or skip parts of a song.
+As a user, I want to lock the screen controls to avoid accidentally changing the song.
