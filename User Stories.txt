@@ -12,6 +12,11 @@ As a user, I want to toggle shuffle mode so that songs play in a random order.
 As a user, I want to enable loop mode so that I can loop songs on repeat.
 As a user, I want to use keyboard shortcut commands (space for play/pause, m for mute, etc.) so that it is simpler to navigate the application.
 As a user, I want to see a queue of upcoming songs and a history of recently played songs so that I can either skip ahead or go back to a previous song from the current session.
+As a user, I want to add or remove songs from the queue so that I can create my own track list order.
+As a user, I want to queue songs to play next (send them straight to the top of the queue) so that I can listen to a track without needing to go through the entire queue first.
 As a user, I want to adjust playback speed of tracks so that there is more flexibility in the listening experience.
 As a user, I want to see a list of my most played songs so that I can quickly access my favourite songs.
 As a user, I want to set a sleep timer so that playback will end automatically
+As a user I want the player to run in the background so that it is always available to use without needing to open the application again.
+As a user, I want to schedule automatic playback for songs so that I can play tracks at specific times of the day for daily routines.
+As a user, I want the progress of a song to be saved when closed so that when the app is opened again it is already on the last track that was playing.
