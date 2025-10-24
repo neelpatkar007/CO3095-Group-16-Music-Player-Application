@@ -27,3 +27,10 @@ As a user, I want to sort playlists automatically (by artist, alphabetically, et
 As a user, I want the UI to adapt to a light or dark mode automatically based on the system settings or time of day.
 As a user, I want a rewind and fast-forward button (e.g., 5 to 10 seconds) so that I can replay or skip parts of a song.
 As a user, I want to lock the screen controls to avoid accidentally changing the song.
+As a user, I want preset audio modes (jazz, classical, pop) to quickly enhance sound quality.
+As a user, I want to hide certain albums or songs so that they don't appear in my library.
+As a user, I want to choose whether to use the app online or offline so that I can save mobile data.
+As a user, I want to share or post a song directly to social media from the music player.
+As a user, I want to merge two playlists into one so I can combine my songs easily.
+As a user, I want to duplicate a playlist so that I can create a copy without changing the original. 
+As a user, I want to select an equaliser band manually so that I can customise bass, mid and treble settings. 
