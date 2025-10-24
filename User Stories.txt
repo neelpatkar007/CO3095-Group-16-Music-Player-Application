@@ -7,3 +7,11 @@ As a user, I want to see the songs progress represented using a progress bar whe
 As a user, I want to create, rename and delete playlists so that I can have my own personalised collection of songs.
 As a user, I want to be able to add, remove and move songs around on a playlist so that I have control over how I customise the playlist, so I can organise my music manually.
 As a user, I want to search for songs by title, artist, or filename so that I can quickly find specific tracks.
+As a user, I want to list all the songs, albums, or artists in my library in a tabular format so that it is more readable.
+As a user, I want to toggle shuffle mode so that songs play in a random order.
+As a user, I want to enable loop mode so that I can loop songs on repeat.
+As a user, I want to use keyboard shortcut commands (space for play/pause, m for mute, etc.) so that it is simpler to navigate the application.
+As a user, I want to see a queue of upcoming songs and a history of recently played songs so that I can either skip ahead or go back to a previous song from the current session.
+As a user, I want to adjust playback speed of tracks so that there is more flexibility in the listening experience.
+As a user, I want to see a list of my most played songs so that I can quickly access my favourite songs.
+As a user, I want to set a sleep timer so that playback will end automatically
