@@ -34,3 +34,17 @@ As a user, I want to share or post a song directly to social media from the musi
 As a user, I want to merge two playlists into one so I can combine my songs easily.
 As a user, I want to duplicate a playlist so that I can create a copy without changing the original. 
 As a user, I want to select an equaliser band manually so that I can customise bass, mid and treble settings. 
+As a user, I want to click/tap on a song in a list to start playing it immediately.
+As a user, I want to click on an album to see all the songs contained within that album.
+As a user, I want to click on an artist's name to see all their albums and songs.
+As a user, I want to see a simple list of all my playlists in a side menu so I can quickly select one.
+As a user, I want to click on a playlist's name to open it and see all the songs inside it.
+As a user, I want a mute/unmute button so I can instantly silence the audio without moving the volume slider.
+As a user, I want to see a visual indicator (e.g., a "playing" icon or highlighted row) next to the song that is currently playing in any list.
+As a user, I want the shuffle and loop buttons to change color or appearance so I know when they are active.
+As a user, I want the application to remember my last volume setting when I close and re-open it.
+As a user, I want to add a song from my main library to one of my existing playlists (e.g., via a right-click or "add to" button).
+As a user, I want to see a confirmation message (e.g., "Song added") after I add a song to a playlist.
+As a user, I want the application to automatically scan my device's music folder to find and add new songs.
+As a user, I want to see the total number of songs and total playing time for each of my playlists.
+As a user, I want a 'Clear Queue' button so I can remove all upcoming songs from the queue at once.
