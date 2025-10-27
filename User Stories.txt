@@ -34,7 +34,7 @@ As a user, I want to share or post a song directly to social media from the musi
 As a user, I want to merge two playlists into one so I can combine my songs easily.
 As a user, I want to duplicate a playlist so that I can create a copy without changing the original. 
 As a user, I want to select an equaliser band manually so that I can customise bass, mid and treble settings. 
-As a user, I want to click/tap on a song in a list to start playing it immediately.
+As a user, I want to click on the play icon next to a song in a list or double click to start playing it immediately.
 As a user, I want to click on an album to see all the songs contained within that album.
 As a user, I want to click on an artist's name to see all their albums and songs.
 As a user, I want to see a simple list of all my playlists in a side menu so I can quickly select one.
