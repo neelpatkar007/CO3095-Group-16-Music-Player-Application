@@ -48,3 +48,10 @@ As a user, I want to see a confirmation message (e.g., "Song added") after I add
 As a user, I want the application to automatically scan my device's music folder to find and add new songs.
 As a user, I want to see the total number of songs and total playing time for each of my playlists.
 As a user, I want a 'Clear Queue' button so I can remove all upcoming songs from the queue at once.
+As a user, I want to easily tag a song as 'broken' or 'corrupt' (e.g., if the song skips or is distorted)
+As a user, I want the player to automatically crossfade between tracks so that there are no gaps or abrupt stops when transitioning from one song to the next.
+As a user, I want a "Recently Added" smart list/view so that I can easily find and listen to the new songs I've imported over the last week or month.
+As a user, I want to right-click an artist's name and see a "Radio/Similar Artists" option so that the application can automatically generate a temporary playlist of tracks from similar artists in my library.
+As a user, I want the player to automatically normalise the volume across all tracks so that I don't experience jarring volume shifts between songs from different albums or sources.
+As a user, I want to create custom tags or labels (e.g., "Workout," "Focus," "Road Trip") and apply them to songs so that I can easily filter my library and create dynamic playlists based on context.
+As a user, I want to create a "Shared/Guest Profile" with restricted library access so that others can use my music player without being able to modify my personal playlists or settings.
