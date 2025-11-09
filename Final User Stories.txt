@@ -1,3 +1,4 @@
+SPRINT 1:
 As a user, I want to play, pause and stop songs so that I can control my music easily.
 As a user, I want to skip to the next or previous song so that I can choose what I listen to.
 As a user, I want to see the current song title, artist name and duration so that I know what is playing.
@@ -10,3 +11,16 @@ As a user, I want to mute and unmute the sound instantly so that I can quickly s
 As a user, I want an indicator to show which song is playing so that it is easy to see in a list.
 As a user, I want to turn shuffle and loop modes on or off so that I can change how songs play.
 As a user, I want the player to remember my last settings such as volume, shuffle and loop so that it starts how I left it.
+SPRINT 2:
+As a user, I want to create, rename and delete playlists so that I can organise my music library easily.
+As a user, I want to add, remove and change the order of songs in a playlist so that I can choose the order of tracks.
+As a user, I want to search for songs by title, artist or file name so that I can find specific tracks quickly.
+As a user, I want to view songs, albums and artists in a clear text table so that the information is easy to read.
+As a user, I want to see a list of all my playlists and pick one by typing its name or number so that I can switch between them quickly.
+As a user, I want to open a playlist and see all its songs with numbers and durations so that I can view its contents easily.
+As a user, I want to add a song from my main library to a playlist using a text command so that I can organise tracks faster.
+As a user, I want a confirmation message when I add or remove a song from a playlist so that I know the change worked.
+As a user, I want the player to scan my music folder for new files so that my library stays up to date automatically.
+As a user, I want to see the number of songs and total play time for each playlist so that I can see how long it is.
+As a user, I want to merge two playlists and choose whether to remove duplicate songs so that I can combine them easily.
+As a user, I want to make a copy of a playlist so that I can edit it without changing the original.
