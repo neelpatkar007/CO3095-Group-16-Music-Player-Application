@@ -24,3 +24,16 @@ As a user, I want the player to scan my music folder for new files so that my li
 As a user, I want to see the number of songs and total play time for each playlist so that I can see how long it is.
 As a user, I want to merge two playlists and choose whether to remove duplicate songs so that I can combine them easily.
 As a user, I want to make a copy of a playlist so that I can edit it without changing the original.
+SPRINT 3:
+As a user, I want to turn shuffle mode on or off so that songs play in a random order when I choose.
+As a user, I want to turn loop mode on for one song or all songs so that tracks can repeat automatically.
+As a user, I want to see the current queue and recently played songs as text so that I know what is coming next.
+As a user, I want to add or remove songs from the queue so that I can control what plays next.
+As a user, I want to queue a specific song to play next so that I can hear it straight after the current one.
+As a user, I want to clear the whole queue with one command so that I can start a new list easily.
+As a user, I want to change the playback speed between 0.5× and2× so that I can listen faster or slower.
+As a user, I want to like or unlike songs so that I can mark my favourites.
+As a user, I want to view my liked songs in a single list so that I can play them quickly.
+As a user, I want to sort playlists automatically by artist, title or duration so that they are organised better.
+As a user, I want to see a list of my most‑played songs so that I can find my favourites easily.
+As a user, I want to set a sleep timer so that the music stops after a chosen time.
