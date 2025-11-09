@@ -37,3 +37,16 @@ As a user, I want to view my liked songs in a single list so that I can play the
 As a user, I want to sort playlists automatically by artist, title or duration so that they are organised better.
 As a user, I want to see a list of my most‑played songs so that I can find my favourites easily.
 As a user, I want to set a sleep timer so that the music stops after a chosen time.
+SPRINT 4:
+As a user, I want the player to keep running in the background so that music continues while I use other commands.
+As a user, I want to schedule playback at certain times so that music starts automatically during my routine.
+As a user, I want the player to remember the last song and position when I close it so that I can continue later.
+As a user, I want to import songs from local or external folders so that I can add new music easily.
+As a user, I want tracks to fade smoothly between songs so that playback sounds natural.
+As a user, I want sound levels to stay consistent across songs so that there are no sudden volume changes.
+As a user, I want to mark songs as broken or corrupt so that the player skips them automatically.
+As a user, I want to create custom tags or labels for songs and filter by them so that I can group music by mood.
+As a user, I want to see a “Recently Added” list so that I can find new songs quickly.
+As a user, I want to generate a temporary radio queue of similar artists so that I can discover related songs.
+As a user, I want to adjust bass, mid and treble controls manually so that I can tune the sound to my liking.
+As a user, I want to create a guest profile with limited permissions so that others can use the player safely.
