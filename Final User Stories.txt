@@ -9,7 +9,7 @@ As a user, I want to use keyboard shortcuts for play, pause, stop and mute so th
 As a user, I want to rewind or fast forward by five seconds so that I can skip small parts easily.
 As a user, I want to mute and unmute the sound instantly so that I can quickly silence the music.
 As a user, I want an indicator to show which song is playing so that it is easy to see in a list.
-As a user, I want to turn shuffle and loop modes on or off so that I can change how songs play.
+As a user, I want a list of help commands so that I know how to navigate the application.
 As a user, I want the player to remember my last settings such as volume, shuffle and loop so that it starts how I left it.
 SPRINT 2:
 As a user, I want to create, rename and delete playlists so that I can organise my music library easily.
