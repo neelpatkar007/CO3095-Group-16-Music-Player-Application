@@ -1,0 +1,12 @@
+As a user, I want to play, pause and stop songs so that I can control my music easily.
+As a user, I want to skip to the next or previous song so that I can choose what I listen to.
+As a user, I want to see the current song title, artist name and duration so that I know what is playing.
+As a user, I want to change the volume between 0 and 100 so that I can set it to a comfortable level.
+As a user, I want to see the song progress and total time so that I can tell how long it has left.
+As a user, I want to see a progress bar and be able to type a time to jump to in the song so that I can move to a specific point.
+As a user, I want to use keyboard shortcuts for play, pause, stop and mute so that I can control playback quickly.
+As a user, I want to rewind or fast forward by five seconds so that I can skip small parts easily.
+As a user, I want to mute and unmute the sound instantly so that I can quickly silence the music.
+As a user, I want an indicator to show which song is playing so that it is easy to see in a list.
+As a user, I want to turn shuffle and loop modes on or off so that I can change how songs play.
+As a user, I want the player to remember my last settings such as volume, shuffle and loop so that it starts how I left it.
