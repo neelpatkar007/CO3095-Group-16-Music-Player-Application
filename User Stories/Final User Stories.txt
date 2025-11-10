@@ -44,3 +44,6 @@ As a user, I want the player to remember the last song and position when I close
 As a user, I want to import songs from local or external folders so that I can add new music easily.
 As a user, I want to create custom tags or labels for songs and filter by them so that I can group music by mood.
 As a user, I want to see a “Recently Added” list so that I can find new songs quickly.
+As a user, I want to create and switch between multiple user profiles so that each listener can maintain separate preferences and playlists.
+As a user, I want to view detailed playback statistics (total listening time, most-played artists) so that I can understand my listening habits.
+As a user, I want the player to watch my music folders for file changes so that my library stays accurate without manual scans.
