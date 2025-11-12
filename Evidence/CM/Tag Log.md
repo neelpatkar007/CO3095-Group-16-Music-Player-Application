@@ -25,9 +25,12 @@ Tags are applied at the end of each sprint and correspond to stable, reviewed bu
 
 ---
 
-## 3. Tag Creation
+## 3. Tag Creation & Maintenance
 
-1. All acceptance criteria for the sprint are met and verified.   
+1. All acceptance criteria for the sprint are met and verified. 
+2. The tag cannot be created directly on untested branches.
 2. 85 %+ coverage across all test types.  
 4. Merge all approved feature branches.  
 5. Create the tag (using `git tag` command)
+6. Record the tag in this file
+7. Retrospective changes must generate a new patch tag (e.g., v0.2.1).
