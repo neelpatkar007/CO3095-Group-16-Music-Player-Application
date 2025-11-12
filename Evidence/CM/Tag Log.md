@@ -1,5 +1,9 @@
 # Tag Log – Music Player Application
 
+**Version:** 1.0  
+**Date:** 2025-11-12   
+**Applies To:** All contributors to this repository
+
 **Purpose:** Record and describe all repository tags (baselines) created during the project to comply with CMMI Level 2 – Configuration Management (CM)
 
 ---
