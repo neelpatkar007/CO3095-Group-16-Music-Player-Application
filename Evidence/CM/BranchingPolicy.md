@@ -21,11 +21,11 @@ To establish a consistent, auditable process for managing source code versions a
 
 ## 3. Branch Naming Convention
 - feature/<sprint-id>-<story-id>-<short-description>
-- bugfix/<issue-id>-<short-description>
+- bugfix/<sprint-id>-<story-id>-<short-description>
 - **Examples:**
   - feature/S1-04-volume-control 
   - feature/S3-08-like-songs 
-  - bugfix/issue-21-seek-edgecase
+  - bugfix/S1-08-seek-edgecase
 
 Each branch must correspond to an open GitHub Issue (user story) for traceability.
 
@@ -57,10 +57,10 @@ Each branch must correspond to an open GitHub Issue (user story) for traceabilit
 ## 6. Configuration Baselines
 - Each sprint release (tagged version) forms a **baseline**.
 - Artefacts captured at baseline:
-- Source code snapshot (tag)
-- Test coverage report
-- Evidence folder (REQM, PP, PMC, CM, MA, PPQA)
-- EVM & COCOMO artefacts
+  - Source code snapshot (tag)
+  - Test coverage reported in `/Evidence/MA/coverage_report.xlsx`
+  - Evidence folder (REQM, PP, PMC, CM, MA, PPQA)
+  - EVM & COCOMO artefacts
 
 ---
 
@@ -68,7 +68,7 @@ Each branch must correspond to an open GitHub Issue (user story) for traceabilit
 - Any modification to an implemented story must go through:
 1. Updated Issue comment on Projects Board (reason + approval).
 2. New branch referencing original story ID.
-3. Updated traceability in `/evidence/REQM/requirements_traceability.csv`.
+3. Updated traceability in `/Evidence/REQM/requirements_traceability.xlsx`.
 
 ---
 
