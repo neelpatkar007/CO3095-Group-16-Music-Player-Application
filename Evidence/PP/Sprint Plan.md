@@ -1,4 +1,5 @@
-Sprint 1
+# Sprint Plan
+## Sprint 1
 
 - As a user, I want to play, pause, and stop songs so that I can control my music easily.
 
@@ -24,7 +25,9 @@ Sprint 1
 
 - As a user, I want the player to keep running in the background so that music continues while I use other commands.
 
-Sprint 2
+---
+
+## Sprint 2
 
 - As a user, I want to create, rename, and delete playlists so that I can organize my music library easily.
 
@@ -50,7 +53,9 @@ Sprint 2
 
 - As a user, I want to make a copy of a playlist so that I can edit it without changing the original.
 
-Sprint 3
+---
+
+## Sprint 3
 
 - As a user, I want to turn shuffle mode on or off so that songs play in a random order when I choose.
 
@@ -76,7 +81,9 @@ Sprint 3
 
 - As a user, I want to set a sleep timer so that the music stops after a chosen time.
 
-Sprint 4
+---
+
+## Sprint 4
 
 - As a user, I want the player to remember my last settings such as volume, shuffle, and loop so that it starts how I left it.
 
