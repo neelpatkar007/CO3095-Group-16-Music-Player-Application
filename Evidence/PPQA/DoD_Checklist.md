@@ -1,9 +1,11 @@
 # Definition of Done (DoD) – Music Player Application
 
-Version: 1.1
-Date: 2025-11-13
+Version: 1.2 
+
+Date: 2025-11-13 
+
 Purpose:
-To define objective criteria for user stories, features, and sprints, so that all deliverables meet the project’s quality, testing, and documentation standards in compliance with CMMI Level 2.
+To define objective criteria for user stories, sprints and the final project so that all deliverables meet the project’s quality, testing, and documentation standards in compliance with CMMI Level 2.
 
 
 ## 1. Story-Level Completion Criteria
