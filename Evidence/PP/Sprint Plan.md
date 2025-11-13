@@ -1,4 +1,5 @@
 # Sprint Plan
+
 ## Sprint 1
 
 1. As a user, I want to play, pause, and stop songs so that I can control my music easily. 
@@ -34,6 +35,7 @@
 ---
 
 ## Sprint 3
+
 1. As a user, I want to turn shuffle mode on or off so that songs play in a random order when I choose. 
 2. As a user, I want to turn loop mode on for one song or all songs so that tracks can repeat automatically. 
 3. As a user, I want to see the current queue and recently played songs as text so that I know what is coming next. 
