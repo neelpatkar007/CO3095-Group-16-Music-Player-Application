@@ -13,9 +13,9 @@ Date: 2025-11-13
 
 ## 2. Sprint Metrics
 
-| Sprint | Planned Stories | Completed Stories | Velocity | Carryover Items | Burndown |
-|--------|-----------------|-------------------|----------|-----------------|----------|
-|        |                 |                   |          |                 |          | 
+| Sprint | Planned Stories | Completed Stories | Velocity | Carryover Items | Burndown | Coverage |
+|--------|-----------------|-------------------|----------|-----------------|----------|----------|
+|        |                 |                   |          |                 |          |          | 
 
 ---
 
