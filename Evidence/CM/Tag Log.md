@@ -1,31 +1,31 @@
 # Tag Log – Music Player Application
 
-**Version:** 1.0  
-**Date:** 2025-11-12   
-**Applies To:** All contributors to this repository
+Version: 1.1  
+Date: 2025-11-13   
+Applies To: All contributors to this repository
 
-**Purpose:** Record and describe all repository tags (baselines) created during the project to comply with CMMI Level 2 – Configuration Management (CM)
+Purpose: Record and describe all repository tags (baselines) created during the project to comply with CMMI Level 2 – Configuration Management (CM)
 
 ---
 
 ## 1. Overview
 
-Each tag represents a **configuration baseline** at a specific point in the project life cycle.  
+Each tag represents a configuration baseline at a specific point in the project life cycle.  
 Tags are applied at the end of each sprint and correspond to stable, reviewed builds that passed all QA and coverage requirements.
 
-**Tag format:**  
+Tag format:  
 `v<major>.<minor>.<patch>`  
-- **Major** – major milestone or final release  
-- **Minor** – sprint-level release  
-- **Patch** – hotfix or minor adjustment
+- Major – major milestone or final release  
+- Minor – sprint-level release  
+- Patch – hotfix or minor adjustment
 
 ---
 
 ## 2. Tag History Table
 
 | Tag | Date Created | Sprint | Commit Hash | Created By | Description / Contents | QA Status | Evidence Links |
-|-|----|--|-----|-------|-|-|-|
-| | |  |  | | | | |
+|-----|--------------|--------|-------------|------------|------------------------|-----------|----------------|
+|     |              |        |             |            |                        |           |                |
 
 ---
 
@@ -33,7 +33,7 @@ Tags are applied at the end of each sprint and correspond to stable, reviewed bu
 
 1. All acceptance criteria for the sprint are met and verified. 
 2. The tag cannot be created directly on untested branches.
-2. 85 %+ coverage across all test types.  
+3. 85 %+ coverage across all test types.  
 4. Merge all approved feature branches.  
 5. Create the tag (using `git tag` command)
 6. Record the tag in this file
