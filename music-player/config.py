@@ -12,4 +12,4 @@ from pathlib import Path
 MUSIC_DIR: Path = Path("songs")
 
 # Supported audio file extensions.
-SUPPORTED_EXTENSIONS = {".mp3", ".wav", ".ogg", ".flac"}
+SUPPORTED_EXTENSIONS = {".mp3", ".wav", ".ogg", ".flac", ".m4a"}
