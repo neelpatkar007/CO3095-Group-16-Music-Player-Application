@@ -34,7 +34,7 @@ def discover_tracks() -> List[Track]:
     if not MUSIC_DIR.exists():
         print(f"[library] WARNING: MUSIC_DIR '{MUSIC_DIR}' does not exist.")
         return tracks
-
+    # Default values for metadata for testing before implementing search for metadata.
     for path in sorted(MUSIC_DIR.iterdir()):
         if not path.is_file():
             continue
