@@ -12,7 +12,7 @@ Used in Sprint 1:
  - S1-10: indicator
  - S1-12: non-blocking playback while using CLI
 """
-
+from __future__ import annotations
 from typing import List, Optional
 
 from library import Track

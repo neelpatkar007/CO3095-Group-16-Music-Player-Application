@@ -5,7 +5,7 @@ Responsible for discovering audio files in the songs folder.
 Used in Sprint 1 for:
  - Loading initial list of tracks from /songs (S1-01, S1-02, S1-03, S1-10, S1-12).
 """
-
+from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List
@@ -44,4 +44,4 @@ def discover_tracks() -> List[Track]:
         title = path.stem
         # Default to 3 minutes so progress bar has a sensible scale.
         tracks.append(Track(path=path, title=title, duration_seconds=180.0))
-    return []
+    return tracks

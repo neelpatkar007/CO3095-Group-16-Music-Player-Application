@@ -1,3 +1,5 @@
+from __future__ import annotations
+from pathlib import Path
 """
 Module: audio_backend
 Abstracts the low-level audio playback engine.
@@ -15,9 +17,6 @@ except Exception:
     pygame = None  # type: ignore
     HAS_PYGAME = False
     print("[audio] pygame not available – using simulated audio backend.")
-
-from pathlib import Path
-
 
 class AudioEngine:
     """Placeholder audio engine to be implemented."""

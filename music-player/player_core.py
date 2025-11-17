@@ -6,7 +6,7 @@ User Stories:
  - S1-01: play, pause and stop songs
  - S1-12: keep player running in the background (non-blocking playback)
 """
-
+from __future__ import annotations
 from player_state import PlayerState
 
 
