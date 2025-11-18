@@ -41,13 +41,21 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
     song is currently playing (S1-10).
     """
     if not state.tracks:
-        print("[ui] Library is empty.")
+        print("[ui] Warning: Library is empty.")
         return
     # Clamp current_index to valid bounds
     if state.current_index < 0:
         state.current_index = 0
     if state.current_index >= len(state.tracks):
         state.current_index = len(state.tracks) - 1
+
+    # Warning for tracks with missing metadata
+    if any(not t.display_name for t in state.tracks):
+        print("[ui] Warning: Some tracks have missing titles.")
+
+    # Warning for if the playlist has only one track
+    if len(state.tracks) == 1:
+        print("[ui] Note: Only one track in the library.")
 
     for idx, track in enumerate(state.tracks):
         # Select indicator for the active track
