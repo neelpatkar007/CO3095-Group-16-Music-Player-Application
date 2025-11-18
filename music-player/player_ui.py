@@ -40,4 +40,19 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
     Print the track list with an indicator (e.g. '▶') showing which
     song is currently playing (S1-10).
     """
-    pass
+    if not state.tracks:
+        print("[ui] Library is empty.")
+        return
+
+    for idx, track in enumerate(state.tracks):
+        if idx == state.current_index:
+            if state.is_playing:
+                marker = "▶"
+            elif state.is_paused:
+                marker = "‖"
+            else:
+                marker = "•"
+        else:
+            marker = " "
+
+        print(f"{marker} {idx:02d}: {track.display_name}")
