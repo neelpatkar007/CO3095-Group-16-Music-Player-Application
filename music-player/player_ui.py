@@ -43,16 +43,21 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
     if not state.tracks:
         print("[ui] Library is empty.")
         return
+    # Clamp current_index to valid bounds
+    if state.current_index < 0:
+        state.current_index = 0
+    if state.current_index >= len(state.tracks):
+        state.current_index = len(state.tracks) - 1
 
     for idx, track in enumerate(state.tracks):
-        if idx == state.current_index:
-            if state.is_playing:
-                marker = "▶"
-            elif state.is_paused:
-                marker = "‖"
-            else:
-                marker = "•"
+        # Select indicator for the active track
+        if idx == state.current_index and state.is_playing:
+            marker = "▶"
+        elif idx == state.current_index and state.is_paused:
+            marker = "‖"
+        elif idx == state.current_index:
+            marker = "•"
         else:
             marker = " "
-
-        print(f"{marker} {idx:02d}: {track.display_name}")
+        # Print the track with its indicator
+        print(f"{marker} {idx + 1:02d}: {track.display_name}")
