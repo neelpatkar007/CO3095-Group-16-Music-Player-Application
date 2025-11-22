@@ -22,7 +22,17 @@ def next_track(state: PlayerState) -> None:
         old = 0
     if old >= n:
         old = n - 1
-    new = (old + 1) % n
+    single = n == 1
+    if single:
+        new = 0
+    else:
+        cand = old + 1
+        if cand >= n:
+            new = 0
+        else:
+            new = cand
+    wrapped = new == 0 and old != 0
+    changed = new != old
     state.current_index = new
     state.position_seconds = 0.0
     track = state.current_track
@@ -34,13 +44,28 @@ def next_track(state: PlayerState) -> None:
             state.audio_engine.play(track.path, start_pos=0.0)
             state.is_playing = True
             state.is_paused = False
-            print(f"[queue] Next: {track.display_name}")
+            if wrapped:
+                print(f"[queue] Wrapped to next: {track.display_name}")
+            elif changed:
+                print(f"[queue] Next: {track.display_name}")
+            else:
+                print(f"[queue] Restarted: {track.display_name}")
         except Exception as e:
             print(f"[queue] Playback failed: {e}")
     elif state.is_paused:
-        print(f"[queue] Selected next (paused): {track.display_name}")
+        if wrapped:
+            print(f"[queue] Wrapped to next (paused): {track.display_name}")
+        elif changed:
+            print(f"[queue] Selected next (paused): {track.display_name}")
+        else:
+            print(f"[queue] Selected (paused): {track.display_name}")
     else:
-        print(f"[queue] Selected next: {track.display_name}")
+        if wrapped:
+            print(f"[queue] Wrapped to next: {track.display_name}")
+        elif changed:
+            print(f"[queue] Selected next: {track.display_name}")
+        else:
+            print(f"[queue] Selected: {track.display_name}")
 
 def previous_track(state: PlayerState) -> None:
     if not state.tracks:
@@ -57,7 +82,17 @@ def previous_track(state: PlayerState) -> None:
         old = 0
     if old >= n:
         old = n - 1
-    new = (old - 1) % n
+    single = n == 1
+    if single:
+        new = 0
+    else:
+        cand = old - 1
+        if cand < 0:
+            new = n - 1
+        else:
+            new = cand
+    wrapped = new == n - 1 and old == 0
+    changed = new != old
     state.current_index = new
     state.position_seconds = 0.0
     track = state.current_track
@@ -69,10 +104,25 @@ def previous_track(state: PlayerState) -> None:
             state.audio_engine.play(track.path, start_pos=0.0)
             state.is_playing = True
             state.is_paused = False
-            print(f"[queue] Previous: {track.display_name}")
+            if wrapped:
+                print(f"[queue] Wrapped to prev: {track.display_name}")
+            elif changed:
+                print(f"[queue] Previous: {track.display_name}")
+            else:
+                print(f"[queue] Restarted: {track.display_name}")
         except Exception as e:
             print(f"[queue] Playback failed: {e}")
     elif state.is_paused:
-        print(f"[queue] Selected prev (paused): {track.display_name}")
+        if wrapped:
+            print(f"[queue] Wrapped to prev (paused): {track.display_name}")
+        elif changed:
+            print(f"[queue] Selected prev (paused): {track.display_name}")
+        else:
+            print(f"[queue] Selected (paused): {track.display_name}")
     else:
-        print(f"[queue] Selected prev: {track.display_name}")
+        if wrapped:
+            print(f"[queue] Wrapped to prev: {track.display_name}")
+        elif changed:
+            print(f"[queue] Selected prev: {track.display_name}")
+        else:
+            print(f"[queue] Selected: {track.display_name}")
