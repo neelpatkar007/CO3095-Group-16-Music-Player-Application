@@ -41,7 +41,32 @@ def next_track(state: PlayerState) -> None:
         return
     if state.is_playing:
         try:
-            state.audio_engine.play(track.path, start_pos=0.0)
+            engine = state.audio_engine
+            try:
+                busy = False
+                if hasattr(engine, "is_busy"):
+                    busy = engine.is_busy()
+            except Exception:
+                busy = False
+            if busy and hasattr(engine, "stop"):
+                try:
+                    engine.stop()
+                except Exception:
+                    pass
+            try:
+                engine.play(track.path, start_pos=0.0)
+            except Exception as e:
+                try:
+                    engine.stop()
+                except Exception:
+                    pass
+                try:
+                    engine.play(track.path, start_pos=0.0)
+                except Exception:
+                    print(f"[queue] ERROR starting playback: {e}")
+                    state.is_playing = False
+                    state.is_paused = False
+                    return
             state.is_playing = True
             state.is_paused = False
             if wrapped:
@@ -52,6 +77,8 @@ def next_track(state: PlayerState) -> None:
                 print(f"[queue] Restarted: {track.display_name}")
         except Exception as e:
             print(f"[queue] Playback failed: {e}")
+            state.is_playing = False
+            state.is_paused = False
     elif state.is_paused:
         if wrapped:
             print(f"[queue] Wrapped to next (paused): {track.display_name}")
@@ -101,7 +128,32 @@ def previous_track(state: PlayerState) -> None:
         return
     if state.is_playing:
         try:
-            state.audio_engine.play(track.path, start_pos=0.0)
+            engine = state.audio_engine
+            try:
+                busy = False
+                if hasattr(engine, "is_busy"):
+                    busy = engine.is_busy()
+            except Exception:
+                busy = False
+            if busy and hasattr(engine, "stop"):
+                try:
+                    engine.stop()
+                except Exception:
+                    pass
+            try:
+                engine.play(track.path, start_pos=0.0)
+            except Exception as e:
+                try:
+                    engine.stop()
+                except Exception:
+                    pass
+                try:
+                    engine.play(track.path, start_pos=0.0)
+                except Exception:
+                    print(f"[queue] ERROR starting playback: {e}")
+                    state.is_playing = False
+                    state.is_paused = False
+                    return
             state.is_playing = True
             state.is_paused = False
             if wrapped:
@@ -112,6 +164,8 @@ def previous_track(state: PlayerState) -> None:
                 print(f"[queue] Restarted: {track.display_name}")
         except Exception as e:
             print(f"[queue] Playback failed: {e}")
+            state.is_playing = False
+            state.is_paused = False
     elif state.is_paused:
         if wrapped:
             print(f"[queue] Wrapped to prev (paused): {track.display_name}")
