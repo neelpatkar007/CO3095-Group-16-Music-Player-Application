@@ -6,8 +6,11 @@ User Stories:
  - S1-06: see a progress bar
  - S1-10: indicator showing which song is playing in a list
 """
+from __future__ import annotations
 
 from player_state import PlayerState
+from player_seek import get_progress
+from time_utils import format_mm_ss
 
 
 def print_now_playing(state: PlayerState) -> None:
@@ -20,12 +23,8 @@ def print_now_playing(state: PlayerState) -> None:
 
 
 def print_progress(state: PlayerState) -> None:
-    """
-    Print the current progress and total time of the song (S1-05).
-
-    Will use functions from player_seek.
-    """
-    pass
+    pos, total = get_progress(state)
+    print(f"[ui] Progress: {format_mm_ss(pos)}/{format_mm_ss(total)}")
 
 
 def print_progress_bar(state: PlayerState) -> None:
