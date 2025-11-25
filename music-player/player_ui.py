@@ -37,35 +37,37 @@ def print_progress_bar(state: PlayerState) -> None:
 
 def print_playlist_with_indicator(state: PlayerState) -> None:
     """
-    Print the track list with an indicator (e.g. '▶') showing which
-    song is currently playing (S1-10).
+    Print the track list with an indicator showing the currently
+    active track (S1-10).
     """
     if not state.tracks:
         print("[ui] Warning: Library is empty.")
         return
-    # Clamp current_index to valid bounds
+
+    # Clamp current_index to a valid range
     if state.current_index < 0:
         state.current_index = 0
-    if state.current_index >= len(state.tracks):
+    elif state.current_index >= len(state.tracks):
         state.current_index = len(state.tracks) - 1
 
-    # Warning for tracks with missing metadata
+    # Metadata warning
     if any(not t.display_name for t in state.tracks):
         print("[ui] Warning: Some tracks have missing titles.")
 
-    # Warning for if the playlist has only one track
+    # Single-track warning
     if len(state.tracks) == 1:
         print("[ui] Note: Only one track in the library.")
 
     for idx, track in enumerate(state.tracks):
-        # Select indicator for the active track
-        if idx == state.current_index and state.is_playing:
-            marker = "▶"
-        elif idx == state.current_index and state.is_paused:
-            marker = "‖"
-        elif idx == state.current_index:
-            marker = "•"
+        # Determine marker for the active track
+        if idx == state.current_index:
+            if state.is_playing:
+                marker = "▶"
+            elif state.is_paused:
+                marker = "‖"
+            else:
+                marker = "•"
         else:
             marker = " "
-        # Print the track with its indicator
+
         print(f"{marker} {idx + 1:02d}: {track.display_name}")
