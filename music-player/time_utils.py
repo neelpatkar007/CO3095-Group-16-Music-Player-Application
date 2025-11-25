@@ -7,9 +7,9 @@ def format_mm_ss(seconds: float) -> str:
     if seconds is None or seconds < 0:
         return "??:??"
 
-    total = int(seconds)
-    minutes = total // 60
-    secs = total % 60
+    timeTotal = int(seconds)
+    minutes = timeTotal // 60
+    secs = timeTotal % 60
     return f"{minutes:02d}:{secs:02d}"
 
 
