@@ -4,13 +4,13 @@ Helper functions for formatting and parsing time strings.
 """
 
 def format_mm_ss(seconds: float) -> str:
-    """
-    Convert seconds to a 'mm:ss' formatted string.
+    if seconds is None or seconds < 0:
+        return "??:??"
 
-    Used by progress display (S1-05, S1-06).
-    """
-    return ""
-
+    timeTotal = int(seconds)
+    minutes = timeTotal // 60
+    secs = timeTotal % 60
+    return f"{minutes:02d}:{secs:02d}
 
 def parse_timecode(text: str) -> float:
     """
@@ -18,4 +18,15 @@ def parse_timecode(text: str) -> float:
 
     Used by seek_to / nudge (S1-06, S1-08).
     """
-    return 0.0
+    text = text.strip()
+    if ":" in text:
+        parts = text.split(":")
+        if len(parts) != 2:
+            raise ValueError(f"Invalid format: {text}")
+    minutes = int(parts[0])
+    seconds = int(parts[1])
+    if minutes < 0 or seconds < 0:
+        raise ValueError(f"Invalid format, negative time: {text}")
+    return float(minutes * 60 + seconds
+
+
