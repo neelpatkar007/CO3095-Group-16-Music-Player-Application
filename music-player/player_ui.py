@@ -21,7 +21,14 @@ def print_now_playing(state: PlayerState) -> None:
         return
 
     duration_str = format_mm_ss(track.duration_seconds)
-    status = "Playing" if state.is_playing else "Paused" if state.is_paused else "Stopped"
+
+    if state.is_playing:
+        status = "Playing"
+    elif state.is_paused:
+        status = "Paused"
+    else:
+        status = "Stopped"
+
     print(f"[ui] {status}: {track.display_name} [{duration_str}]")
 
 
