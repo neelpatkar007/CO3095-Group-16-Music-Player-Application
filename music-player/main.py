@@ -43,6 +43,13 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_help.print_help(topic)
     elif base == "/volume" or base == "/vol":
         player_audio.change_volume(state, arg)
+
+    # S1-09 Commands
+    elif base == "/mute":
+        player_audio.handle_mute_command(state, "mute")
+    elif base == "/unmute":
+        player_audio.handle_mute_command(state, "unmute")
+
     else:
         print("Unknown command. Try /help")
 
@@ -55,7 +62,7 @@ def main() -> None:
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /volume <val>, /help, /quit")
+    print("Commands: /play, /pause, /stop, /next, /prev, /info, /volume, /mute, /unmute, /quit")
 
     last_time = time.time()
 
@@ -74,6 +81,7 @@ def main() -> None:
             break
 
     state.audio_engine.stop()
+
 
 if __name__ == "__main__":
     main()
