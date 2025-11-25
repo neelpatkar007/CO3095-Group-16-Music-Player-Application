@@ -3,12 +3,14 @@ from pathlib import Path
 
 try:
     import pygame
+
     pygame.mixer.init()
     HAS_PYGAME = True
 except Exception:
     pygame = None  # type: ignore
     HAS_PYGAME = False
     print("[audio] pygame not available – using simulated audio backend.")
+
 
 class AudioEngine:
     def __init__(self) -> None:
@@ -74,15 +76,27 @@ class AudioEngine:
             vol_float = max(0.0, min(1.0, value / 100.0))
             if pygame and pygame.mixer and pygame.mixer.music:
                 pygame.mixer.music.set_volume(vol_float)
+
+    def set_muted(self, muted: bool) -> None:
+        self.muted = muted
+        if muted:
+            if HAS_PYGAME:
+                pygame.mixer.music.set_volume(0.0)
+            print("[audio] Muted.")
         else:
-            pass
+            print("[audio] Unmuted.")
 
     def _play_real(self, path: Path, start_pos: float) -> None:
         assert pygame is not None
         try:
             pygame.mixer.music.load(str(path))
             pygame.mixer.music.play(loops=0, start=start_pos)
-            self.set_volume(self.volume)
+
+            if self.muted:
+                pygame.mixer.music.set_volume(0.0)
+            else:
+                self.set_volume(self.volume)
+
             print(f"[audio] PLAY (real) {path.name} from {start_pos:.1f}s")
         except Exception as e:
             print(f"[audio] ERROR playing {path}: {e}")
