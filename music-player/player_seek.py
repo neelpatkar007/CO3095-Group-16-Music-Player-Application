@@ -5,18 +5,13 @@ User Stories:
  - S1-06: progress bar and jump to a specific time
  - S1-08: rewind or fast-forward by five seconds
 """
-
 from player_state import PlayerState
 
 
 def get_progress(state: PlayerState) -> tuple[float, float | None]:
-    """
-    Return (current_position_seconds, total_duration_seconds).
-
-    S1-05: used to display progress.
-    """
-    # Placeholder return
-    return 0.0, None
+    track = state.current_track
+    total = track.duration_seconds if track else None
+    return state.position_seconds, total
 
 
 def render_progress_bar(state: PlayerState) -> str:
