@@ -76,6 +76,21 @@ class AudioEngine:
                 pygame.mixer.music.set_volume(vol_float)
         else:
             pass
+    def set_muted(self, muted: bool) -> None:
+        """Mute/unmute."""
+        self.muted = muted
+        if HAS_PYGAME:
+            assert pygame is not None
+            if muted:
+                pygame.mixer.music.set_volume(0.0)
+            else:
+                vol = max(0.0, min(1.0, self.volume / 100.0))
+                pygame.mixer.music.set_volume(vol)
+        # Print status
+        if muted:
+            print("[audio] MUTED")
+        else:
+            print(f"[audio] UNMUTED (volume={self.volume})")
 
     def _play_real(self, path: Path, start_pos: float) -> None:
         assert pygame is not None
@@ -101,3 +116,30 @@ class AudioEngine:
 
     def _play_simulated(self, path: Path, start_pos: float) -> None:
         print(f"[audio] PLAY (simulated) {path.name} from {start_pos:.1f}s")
+
+    # Seek implementation functions below
+    def seek(self, seconds: float) -> None:
+        # Jump to a new position in the currently loaded file.
+        if not self.current_path:
+            return
+        self.playing = True
+        self.paused = False
+        if HAS_PYGAME:
+            self._seek_real(seconds)
+        else:
+            self._seek_simulated(seconds)
+
+    def _seek_real(self, seconds: float) -> None:
+        assert pygame is not None
+        try:
+            # Reload the current track and start from the new position.
+            pygame.mixer.music.load(str(self.current_path))
+            pygame.mixer.music.play(loops=0, start=seconds)
+            vol = max(0.0, min(1.0, self.volume / 100.0))
+            pygame.mixer.music.set_volume(vol)
+            print(f"[audio] SEEK (real) → {seconds:.1f}s")
+        except Exception as e:
+            print(f"[audio] ERROR seeking: {e}")
+
+    def _seek_simulated(self, seconds: float) -> None:
+        print(f"[audio] SEEK (simulated) → {seconds:.1f}s")
