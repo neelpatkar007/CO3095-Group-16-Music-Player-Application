@@ -20,8 +20,6 @@ def handle_command(state: PlayerState, command: str) -> bool:
     parts = cmd.split()
     base = parts[0] if parts else ""
     arg = parts[1] if len(parts) > 1 else ""
-
-    if base == "/play":
     """
     Simple command dispatcher backbone.
 
@@ -39,23 +37,22 @@ def handle_command(state: PlayerState, command: str) -> bool:
         return False
     if cmd == "/play":
         player_core.play(state)
-    elif base == "/pause":
+    elif cmd == "/pause":
         player_core.pause(state)
-    elif base == "/stop":
+    elif cmd == "/stop":
         player_core.stop(state)
-    elif base == "/next":
+    elif cmd == "/next":
         player_queue.next_track(state)
-    elif base == "/prev":
+    elif cmd == "/prev":
         player_queue.previous_track(state)
-    elif base == "/info":
+    elif cmd == "/info":
         player_ui.print_now_playing(state)
-    elif base == "/progress":
+    elif cmd == "/progress":
         player_ui.print_progress(state)
-    elif base == "/bar":
+    elif cmd == "/bar":
         player_ui.print_progress_bar(state)
-    elif base == "/list":
+    elif cmd == "/list":
         player_ui.print_playlist_with_indicator(state)
-    elif base.startswith("/help"):
     # S1-08 rewind/fast-forward
     elif cmd == "/rw":
         player_seek.nudge(state, -5.0)
