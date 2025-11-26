@@ -1,13 +1,3 @@
-"""
-Main entry point – Sprint 1 backbone.
-
-Responsibilities:
- - Load tracks from the /songs folder.
- - Create PlayerState and AudioEngine.
- - Run a simple CLI loop.
- - Periodically call update_playback so playback continues while the user types commands (S1-12).
-"""
-
 import time
 import player_seek
 
@@ -18,9 +8,20 @@ import player_core
 import player_queue
 import player_help
 import player_ui
+import player_audio
 
 
 def handle_command(state: PlayerState, command: str) -> bool:
+    cmd = command.strip().lower()
+
+    if cmd in ("/quit", "/exit", "q"):
+        return False
+
+    parts = cmd.split()
+    base = parts[0] if parts else ""
+    arg = parts[1] if len(parts) > 1 else ""
+
+    if base == "/play":
     """
     Simple command dispatcher backbone.
 
@@ -38,24 +39,23 @@ def handle_command(state: PlayerState, command: str) -> bool:
         return False
     if cmd == "/play":
         player_core.play(state)
-    elif cmd == "/pause":
+    elif base == "/pause":
         player_core.pause(state)
-    elif cmd == "/stop":
+    elif base == "/stop":
         player_core.stop(state)
-    # S1-02
-    elif cmd == "/next":
+    elif base == "/next":
         player_queue.next_track(state)
-    elif cmd == "/prev":
+    elif base == "/prev":
         player_queue.previous_track(state)
-    # S1-03, S1-05, S1-06, S1-10
-    elif cmd == "/info":
+    elif base == "/info":
         player_ui.print_now_playing(state)
-    elif cmd == "/progress":
+    elif base == "/progress":
         player_ui.print_progress(state)
-    elif cmd == "/bar":
+    elif base == "/bar":
         player_ui.print_progress_bar(state)
-    elif cmd == "/list":
+    elif base == "/list":
         player_ui.print_playlist_with_indicator(state)
+    elif base.startswith("/help"):
     # S1-08 rewind/fast-forward
     elif cmd == "/rw":
         player_seek.nudge(state, -5.0)
@@ -72,6 +72,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
         parts = cmd.split(maxsplit=1)
         topic = parts[1] if len(parts) == 2 else None
         player_help.print_help(topic)
+    elif base == "/volume" or base == "/vol":
+        player_audio.change_volume(state, arg)
     else:
         print("Unknown command. Try /help")
 
@@ -84,7 +86,7 @@ def main() -> None:
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /seek, /rw, /ff, /list, /help, /quit")
+    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /volume <val>, /seek, /rw, /ff, /list, /help, /quit")
 
     last_time = time.time()
 
@@ -102,6 +104,7 @@ def main() -> None:
         if not handle_command(state, command):
             break
 
+    state.audio_engine.stop()
 
 if __name__ == "__main__":
     main()
