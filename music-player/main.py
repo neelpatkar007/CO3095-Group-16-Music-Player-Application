@@ -21,7 +21,19 @@ import player_ui
 
 
 def handle_command(state: PlayerState, command: str) -> bool:
-    cmd = command.strip().lower()
+    """
+        Simple command dispatcher backbone.
+
+        Returns False if the application should quit.
+        """
+    raw = command.strip()
+    # S1-07 keyboard shortcuts (single letters)
+    if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
+        import player_shortcuts
+        player_shortcuts.handle_keypress(state, raw)
+        return True
+    cmd = raw.lower()
+
     if cmd in ("/quit", "/exit", "q"):
         return False
     if cmd == "/play":
