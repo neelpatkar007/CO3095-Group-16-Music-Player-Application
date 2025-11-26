@@ -10,7 +10,7 @@ def format_mm_ss(seconds: float) -> str:
     timeTotal = int(seconds)
     minutes = timeTotal // 60
     secs = timeTotal % 60
-    return f"{minutes:02d}:{secs:02d}
+    return f"{minutes:02d}:{secs:02d}"
 
 def parse_timecode(text: str) -> float:
     """
@@ -19,14 +19,17 @@ def parse_timecode(text: str) -> float:
     Used by seek_to / nudge (S1-06, S1-08).
     """
     text = text.strip()
-    if ":" in text:
-        parts = text.split(":")
-        if len(parts) != 2:
-            raise ValueError(f"Invalid format: {text}")
-    minutes = int(parts[0])
-    seconds = int(parts[1])
-    if minutes < 0 or seconds < 0:
-        raise ValueError(f"Invalid format, negative time: {text}")
-    return float(minutes * 60 + seconds
+    try:
+        if ":" in text:
+            minutes, seconds = map(float,text.split(":"))
+            total = float(minutes * 60 + seconds)
+        else:
+            total = float(text)
+        if total < 0:
+            raise ValueError("Negative seconds are not supported")
 
+        return total
+
+    except ValueError:
+        raise ValueError("Invalid timecode")
 
