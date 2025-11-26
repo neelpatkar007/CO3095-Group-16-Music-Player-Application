@@ -8,15 +8,28 @@ User Stories:
 """
 
 from player_state import PlayerState
+from time_utils import format_mm_ss
 
 
 def print_now_playing(state: PlayerState) -> None:
     """
     Print the current song title, artist and duration (S1-03).
-
-    Backbone: Signature and docstring only.
     """
-    pass
+    track = state.current_track
+    if track is None:
+        print("[ui] No track selected.")
+        return
+
+    duration_str = format_mm_ss(track.duration_seconds)
+
+    if state.is_playing:
+        status = "Playing"
+    elif state.is_paused:
+        status = "Paused"
+    else:
+        status = "Stopped"
+
+    print(f"[ui] {status}: {track.display_name} [{duration_str}]")
 
 
 def print_progress(state: PlayerState) -> None:
