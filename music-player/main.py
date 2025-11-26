@@ -9,6 +9,7 @@ Responsibilities:
 """
 
 import time
+import player_seek
 
 from audio_backend import AudioEngine
 from library import discover_tracks
@@ -35,8 +36,6 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     if cmd in ("/quit", "/exit", "q"):
         return False
-
-    # S1-01 commands (backbone only)
     if cmd == "/play":
         player_core.play(state)
     elif cmd == "/pause":
@@ -57,6 +56,17 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_ui.print_progress_bar(state)
     elif cmd == "/list":
         player_ui.print_playlist_with_indicator(state)
+    # S1-08 rewind/fast-forward
+    elif cmd == "/rw":
+        player_seek.nudge(state, -5.0)
+    elif cmd == "/ff":
+        player_seek.nudge(state, 5.0)
+    elif cmd.startswith("/seek"):
+        parts = command.split()
+        if len(parts) < 2:
+            print("[main] Usage: /seek <mm:ss or seconds>")
+        else:
+            player_seek.seek_to(state, parts[1])
     # S1-11
     elif cmd.startswith("/help"):
         parts = cmd.split(maxsplit=1)
@@ -69,18 +79,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
 
 def main() -> None:
-    """
-    Initialise library, state and run the main command loop.
-
-    Playback is updated every loop iteration so that audio continues
-    while commands are processed (S1-12).
-    """
     audio_engine = AudioEngine()
     tracks = discover_tracks()
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /help, /quit")
+    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /seek, /rw, /ff, /list, /help, /quit")
 
     last_time = time.time()
 
