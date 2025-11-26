@@ -5,11 +5,25 @@ User Stories:
  - S1-06: progress bar and jump to a specific time
  - S1-08: rewind or fast-forward by five seconds
 """
-
+from player_state import PlayerState
 from __future__ import annotations # Importing annotations
-from player_state import PlayerState # Import PlayerState
 from time_utils import parse_timecode, format_mm_ss # Import time utilities
 
+
+def get_progress(state: PlayerState) -> tuple[float, float | None]:
+    track = state.current_track
+    total = track.duration_seconds if track else None
+    return state.position_seconds, total
+
+
+def render_progress_bar(state: PlayerState) -> str:
+    """
+    Return textual progress bar for current track (S1-06).
+
+    Example final format: '████░░ 40%'.
+    """
+    return ""
+  
 # Function to seek to a specific time in the track
 def seek_to(state: PlayerState, text_or_seconds) -> None:
     track = state.current_track
