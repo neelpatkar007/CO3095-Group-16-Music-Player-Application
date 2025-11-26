@@ -25,10 +25,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     Returns False if the application should quit.
     """
-    cmd = command.strip().lower()
+    raw = command.strip()
+    # S1-07 keyboard shortcuts (single letters)
+    if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
+        import player_shortcuts
+        player_shortcuts.handle_keypress(state, raw)
+        return True
+    cmd = raw.lower()
 
     if cmd in ("/quit", "/exit", "q"):
-        # Exit command
         return False
 
     # S1-01 commands (backbone only)
@@ -54,12 +59,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_ui.print_playlist_with_indicator(state)
     # S1-11
     elif cmd.startswith("/help"):
-        # '/help' or '/help cmd'
         parts = cmd.split(maxsplit=1)
         topic = parts[1] if len(parts) == 2 else None
         player_help.print_help(topic)
     else:
-        # Unknown command – will be refined later
         print("Unknown command. Try /help")
 
     return True

@@ -81,6 +81,22 @@ class AudioEngine:
             return pygame.mixer.music.get_busy()
         return self.playing and not self.paused
 
+    def set_muted(self, muted: bool) -> None:
+        """Mute/unmute."""
+        self.muted = muted
+        if HAS_PYGAME:
+            assert pygame is not None
+            if muted:
+                pygame.mixer.music.set_volume(0.0)
+            else:
+                vol = max(0.0, min(1.0, self.volume / 100.0))
+                pygame.mixer.music.set_volume(vol)
+        # Print status
+        if muted:
+            print("[audio] MUTED")
+        else:
+            print(f"[audio] UNMUTED (volume={self.volume})")
+
     def _play_real(self, path: Path, start_pos: float) -> None:
         assert pygame is not None
         try:
