@@ -5,8 +5,9 @@ User Stories:
  - S1-06: progress bar and jump to a specific time
  - S1-08: rewind or fast-forward by five seconds
 """
-from player_state import PlayerState
 from __future__ import annotations # Importing annotations
+
+from player_state import PlayerState
 from time_utils import parse_timecode, format_mm_ss # Import time utilities
 
 
