@@ -22,10 +22,10 @@ import player_ui
 
 def handle_command(state: PlayerState, command: str) -> bool:
     """
-        Simple command dispatcher backbone.
+    Simple command dispatcher backbone.
 
-        Returns False if the application should quit.
-        """
+    Returns False if the application should quit.
+    """
     raw = command.strip()
     # S1-07 keyboard shortcuts (single letters)
     if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:

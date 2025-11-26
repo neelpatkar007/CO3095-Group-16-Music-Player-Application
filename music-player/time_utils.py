@@ -11,9 +11,13 @@ def format_mm_ss(seconds: float) -> str:
     """
     if seconds is None or seconds < 0:
         return "??:??"
+
     total_seconds = int(seconds)
     minutes = total_seconds // 60
     secs = total_seconds % 60
+
+    return f"{minutes:02d}:{secs:02d}"
+
 
     return f"{minutes:02d}:{secs:02d}"
 def parse_timecode(text: str) -> float:
