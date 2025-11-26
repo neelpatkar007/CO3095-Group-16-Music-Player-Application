@@ -19,65 +19,51 @@ import player_help
 import player_ui
 
 
-def handle_command(state: PlayerState, command: str) -> bool:
-    """
-    Simple command dispatcher backbone.
 
-    Returns False if the application should quit.
-    """
+def handle_command(state: PlayerState, command: str) -> bool:
     cmd = command.strip().lower()
 
     if cmd in ("/quit", "/exit", "q"):
-        # Exit command
         return False
 
-    # S1-01 commands (backbone only)
-    if cmd == "/play":
+    parts = cmd.split()
+    base = parts[0] if parts else ""
+    arg = parts[1] if len(parts) > 1 else ""
+
+    if base == "/play":
         player_core.play(state)
-    elif cmd == "/pause":
+    elif base == "/pause":
         player_core.pause(state)
-    elif cmd == "/stop":
+    elif base == "/stop":
         player_core.stop(state)
-    # S1-02
-    elif cmd == "/next":
+    elif base == "/next":
         player_queue.next_track(state)
-    elif cmd == "/prev":
+    elif base == "/prev":
         player_queue.previous_track(state)
-    # S1-03, S1-05, S1-06, S1-10
-    elif cmd == "/info":
+    elif base == "/info":
         player_ui.print_now_playing(state)
-    elif cmd == "/progress":
+    elif base == "/progress":
         player_ui.print_progress(state)
-    elif cmd == "/bar":
+    elif base == "/bar":
         player_ui.print_progress_bar(state)
-    elif cmd == "/list":
+    elif base == "/list":
         player_ui.print_playlist_with_indicator(state)
-    # S1-11
-    elif cmd.startswith("/help"):
-        # '/help' or '/help cmd'
-        parts = cmd.split(maxsplit=1)
+    elif base.startswith("/help"):
         topic = parts[1] if len(parts) == 2 else None
         player_help.print_help(topic)
     else:
-        # Unknown command – will be refined later
         print("Unknown command. Try /help")
 
     return True
 
 
 def main() -> None:
-    """
-    Initialise library, state and run the main command loop.
-
-    Playback is updated every loop iteration so that audio continues
-    while commands are processed (S1-12).
-    """
     audio_engine = AudioEngine()
     tracks = discover_tracks()
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /help, /quit")
+    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /volume <val>, /help, /quit")
 
     last_time = time.time()
 
@@ -98,3 +84,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
