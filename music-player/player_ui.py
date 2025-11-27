@@ -9,6 +9,7 @@ User Stories:
 from __future__ import annotations
 
 from player_state import PlayerState
+from player_seek import render_progress_bar
 from player_seek import get_progress
 from time_utils import format_mm_ss
 
@@ -40,10 +41,9 @@ def print_progress(state: PlayerState) -> None:
 
 
 def print_progress_bar(state: PlayerState) -> None:
-    """
-    Print a textual progress bar for the current track (S1-06).
-    """
-    pass
+
+    bar = render_progress_bar(state)
+    print(f"[ui] {bar}")
 
 
 def print_playlist_with_indicator(state: PlayerState) -> None:

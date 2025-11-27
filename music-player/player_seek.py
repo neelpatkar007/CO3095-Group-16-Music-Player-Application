@@ -7,24 +7,63 @@ User Stories:
 """
 from __future__ import annotations # Importing annotations
 
+from time_utils import format_mm_ss, parse_timecode
 from player_state import PlayerState
 from time_utils import parse_timecode, format_mm_ss # Import time utilities
 
 
 def get_progress(state: PlayerState) -> tuple[float, float | None]:
+
     track = state.current_track
     total = track.duration_seconds if track else None
     return state.position_seconds, total
 
 
-def render_progress_bar(state: PlayerState) -> str:
-    """
-    Return textual progress bar for current track (S1-06).
+def render_progress_bar(state: PlayerState, width: int = 15) -> str:
 
-    Example final format: '████░░ 40%'.
-    """
-    return ""
-  
+
+    pos, total = get_progress(state)
+    if total is None or total <= 0 :
+        return "[Time null]"
+
+    ratio = max(0.0,min(1.0,pos/total))
+    filledCount = int(ratio * width)
+    emptyCount = width - filledCount
+    bar = ("█" * filledCount) + ("░"  * emptyCount)
+    percentage = int(ratio * 100)
+    return f"{bar} {percentage:3d}%"
+
+
+def seek_to(state: PlayerState, timecode: str) -> None:
+
+    track = state.current_track
+    if not track:
+        print("[seek] No track selected.")
+        return
+
+    try:
+        target = parse_timecode(timecode)
+    except ValueError:
+        print("[seek] Invalid time format. Use mm:ss or seconds.")
+        return
+
+    max_duration = track.duration_seconds if track.duration_seconds is not None else float('inf')
+
+    target = max(0.0, min(max_duration, target))
+
+    state.position_seconds = target
+    print(f"[seek] New position: {format_mm_ss(state.position_seconds)}")
+
+    if state.is_playing:
+        state.audio_engine.play(track.path, start_pos=state.position_seconds)
+
+# Function to nudge the current position by an offset
+def nudge(state: PlayerState, offset_seconds: float) -> None:
+    # Move forward/backward by offset seconds.
+    new_pos = state.position_seconds + offset
+    seek_to(state, new_pos)
+
+    
 # Function to seek to a specific time in the track
 def seek_to(state: PlayerState, text_or_seconds) -> None:
     track = state.current_track
@@ -43,9 +82,3 @@ def seek_to(state: PlayerState, text_or_seconds) -> None:
     # Audio seek
     state.audio_engine.seek(new_pos)
     print(f"[seek] Jumped to {format_mm_ss(new_pos)}")
-
-# Function to nudge the current position by an offset
-def nudge(state: PlayerState, offset: float) -> None:
-    # Move forward/backward by offset seconds.
-    new_pos = state.position_seconds + offset
-    seek_to(state, new_pos)

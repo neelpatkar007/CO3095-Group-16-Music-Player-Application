@@ -13,11 +13,23 @@ def format_mm_ss(seconds: float) -> str:
     return f"{minutes:02d}:{secs:02d}"
 
 def parse_timecode(text: str) -> float:
-    if ":" not in text:
-        return float(text)
-    parts = text.split(":")
-    if len(parts) != 2:
-        return 0.0
-    m = int(parts[0])
-    s = int(parts[1])
-    return float(m * 60 + s)
+    """
+    Parse 'mm:ss' or plain seconds into a float number of seconds.
+
+    Used by seek_to / nudge (S1-06, S1-08).
+    """
+    text = text.strip()
+    try:
+        if ":" in text:
+            minutes, seconds = map(float,text.split(":"))
+            total = float(minutes * 60 + seconds)
+        else:
+            total = float(text)
+        if total < 0:
+            raise ValueError("Negative seconds are not supported")
+
+        return total
+
+    except ValueError:
+        raise ValueError("Invalid timecode")
+

@@ -8,6 +8,7 @@ import player_core
 import player_queue
 import player_help
 import player_ui
+import player_seek
 import player_audio
 import player_shortcuts
 
@@ -33,25 +34,29 @@ def handle_command(state: PlayerState, command: str) -> bool:
         return False
     
     # Standard Controls
-    if base == "/play":
+    if cmd == "/play":
         player_core.play(state)
-    elif base == "/pause":
+    elif cmd == "/pause":
         player_core.pause(state)
-    elif base == "/stop":
+    elif cmd == "/stop":
         player_core.stop(state)
-    elif base == "/next":
+    elif cmd == "/next":
         player_queue.next_track(state)
-    elif base == "/prev":
+    elif cmd == "/prev":
         player_queue.previous_track(state)
     
     # UI / Info
-    elif base == "/info":
+    elif cmd == "/info":
         player_ui.print_now_playing(state)
-    elif base == "/progress":
+    elif cmd == "/progress":
         player_ui.print_progress(state)
-    elif base == "/bar":
+    elif cmd == "/bar":
         player_ui.print_progress_bar(state)
-    elif base == "/list":
+    elif cmd == "/seek":
+        player_seek.seek_to(state, arg)
+    elif cmd == "/list":
+        player_ui.print_playlist_with_indicator(state)
+    elif cmd == "/list":
         player_ui.print_playlist_with_indicator(state)
     
     # Seek / RW / FF (S1-08)
@@ -90,7 +95,7 @@ def main() -> None:
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /stop, /info, /bar, /list, /volume, /mute, /unmute, /seek, /rw, /ff, /help, /quit")
+    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /seek, /volume <val>, /mute, /unmute, /rw, /ff, /help, /quit")
 
     last_time = time.time()
 
