@@ -9,68 +9,75 @@ import player_queue
 import player_help
 import player_ui
 import player_audio
+import player_shortcuts
 
 
 def handle_command(state: PlayerState, command: str) -> bool:
-    cmd = command.strip().lower()
-
-    if cmd in ("/quit", "/exit", "q"):
-        return False
-
-    parts = cmd.split()
-    base = parts[0] if parts else ""
-    arg = parts[1] if len(parts) > 1 else ""
     """
     Simple command dispatcher backbone.
-
     Returns False if the application should quit.
     """
     raw = command.strip()
+    
     # S1-07 keyboard shortcuts (single letters)
-    if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
-        import player_shortcuts
+    if len(raw) == 1 and raw.lower() in {"p", "s", "m", "n", "b", "+", "-"}:
         player_shortcuts.handle_keypress(state, raw)
         return True
+
     cmd = raw.lower()
+    parts = cmd.split()
+    base = parts[0] if parts else ""
+    arg = parts[1] if len(parts) > 1 else ""
 
     if cmd in ("/quit", "/exit", "q"):
         return False
-    if cmd == "/play":
+    
+    # Standard Controls
+    if base == "/play":
         player_core.play(state)
-    elif cmd == "/pause":
+    elif base == "/pause":
         player_core.pause(state)
-    elif cmd == "/stop":
+    elif base == "/stop":
         player_core.stop(state)
-    elif cmd == "/next":
+    elif base == "/next":
         player_queue.next_track(state)
-    elif cmd == "/prev":
+    elif base == "/prev":
         player_queue.previous_track(state)
-    elif cmd == "/info":
+    
+    # UI / Info
+    elif base == "/info":
         player_ui.print_now_playing(state)
-    elif cmd == "/progress":
+    elif base == "/progress":
         player_ui.print_progress(state)
-    elif cmd == "/bar":
+    elif base == "/bar":
         player_ui.print_progress_bar(state)
-    elif cmd == "/list":
+    elif base == "/list":
         player_ui.print_playlist_with_indicator(state)
-    # S1-08 rewind/fast-forward
-    elif cmd == "/rw":
+    
+    # Seek / RW / FF (S1-08)
+    elif base == "/rw":
         player_seek.nudge(state, -5.0)
-    elif cmd == "/ff":
+    elif base == "/ff":
         player_seek.nudge(state, 5.0)
-    elif cmd.startswith("/seek"):
-        parts = command.split()
-        if len(parts) < 2:
+    elif base == "/seek":
+        if not arg:
             print("[main] Usage: /seek <mm:ss or seconds>")
         else:
-            player_seek.seek_to(state, parts[1])
-    # S1-11
-    elif cmd.startswith("/help"):
-        parts = cmd.split(maxsplit=1)
-        topic = parts[1] if len(parts) == 2 else None
-        player_help.print_help(topic)
+            player_seek.seek_to(state, arg)
+            
+    # Volume & Mute (S1-04 & S1-09)
     elif base == "/volume" or base == "/vol":
         player_audio.change_volume(state, arg)
+    elif base == "/mute":
+        player_audio.handle_mute_command(state, "mute")
+    elif base == "/unmute":
+        player_audio.handle_mute_command(state, "unmute")
+
+    # Help
+    elif base.startswith("/help"):
+        topic = parts[1] if len(parts) == 2 else None
+        player_help.print_help(topic)
+
     else:
         print("Unknown command. Try /help")
 
@@ -83,7 +90,7 @@ def main() -> None:
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /volume <val>, /seek, /rw, /ff, /list, /help, /quit")
+    print("Commands: /play, /stop, /info, /bar, /list, /volume, /mute, /unmute, /seek, /rw, /ff, /help, /quit")
 
     last_time = time.time()
 
@@ -102,6 +109,7 @@ def main() -> None:
             break
 
     state.audio_engine.stop()
+
 
 if __name__ == "__main__":
     main()
