@@ -81,10 +81,6 @@ class AudioEngine:
         if muted:
             if HAS_PYGAME:
                 pygame.mixer.music.set_volume(0.0)
-            print("[audio] Muted.")
-        else:
-            # Volume restoration is handled by player_audio.py
-            print("[audio] Unmuted.")
 
     def _play_real(self, path: Path, start_pos: float) -> None:
         assert pygame is not None
