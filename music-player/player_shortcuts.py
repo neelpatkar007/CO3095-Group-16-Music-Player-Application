@@ -21,8 +21,7 @@ def handle_keypress(state: PlayerState, key: str) -> None:
     elif key == "s":
         player_core.stop(state)
     elif key == "m":
-        state.is_muted = not state.is_muted
-        state.audio_engine.set_muted(state.is_muted)
-        print(f"[shortcut] mute -> {state.is_muted}")
+        import player_audio
+        player_audio.toggle_mute(state)
     else:
         print(f"[shortcut] No action bound to key '{key}'.")
