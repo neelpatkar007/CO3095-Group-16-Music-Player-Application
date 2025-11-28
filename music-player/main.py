@@ -72,9 +72,9 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/volume" or base == "/vol":
         player_audio.change_volume(state, arg)
     elif base == "/mute":
-        player_audio.handle_mute_command(state, "mute")
+        player_audio.handle_mute_command(state, "/mute")
     elif base == "/unmute":
-        player_audio.handle_mute_command(state, "unmute")
+        player_audio.handle_mute_command(state, "/unmute")
 
     # Help
     elif base.startswith("/help"):
