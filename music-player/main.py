@@ -50,8 +50,6 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_ui.print_progress(state)
     elif cmd == "/bar":
         player_ui.print_progress_bar(state)
-    elif cmd == "/seek":
-        player_seek.seek_to(state, arg)
     elif cmd == "/list":
         player_ui.print_playlist_with_indicator(state)
     elif cmd == "/list":
