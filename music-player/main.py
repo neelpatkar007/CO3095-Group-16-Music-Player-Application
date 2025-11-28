@@ -19,7 +19,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     raw = command.strip()
     
     # S1-07 keyboard shortcuts (single letters)
-    if len(raw) == 1 and raw.lower() in {"p", "s", "m", "n", "b", "+", "-"}:
+    if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
         player_shortcuts.handle_keypress(state, raw)
         return True
 
