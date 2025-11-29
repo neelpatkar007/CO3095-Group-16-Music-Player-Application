@@ -3,7 +3,7 @@ from typing import Optional
 def print_help(command: Optional[str] = None) -> None:
     if command is None or command.strip() == "":
         print("--- Help: Available Commands ---")
-        print("Commands: /play, /pause, /stop, /next")
+        print("Commands: /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
         print("Shortcuts: 'p' (play/pause), 's' (stop), 'm' (mute)")
         print("\nTip: Type '/help <command>' for specific details (e.g. '/help play').")
         return
@@ -31,6 +31,26 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /next")
         print("Usage: /next")
         print("Skips to the next song in the library.")
+
+    elif topic == "prev":
+        print("\n[Help] /prev")
+        print("Usage: /prev")
+        print("Goes back to the previous song in the library.")
+
+    elif topic == "seek":
+        print("\n[Help] /seek")
+        print("Usage: /seek <seconds> or <mm:ss>")
+        print("Jumps immediately to a specific time in the track.")
+
+    elif topic == "rw":
+        print("\n[Help] /rw")
+        print("Usage: /rw")
+        print("Rewinds playback by 5 seconds.")
+
+    elif topic == "ff":
+        print("\n[Help] /ff")
+        print("Usage: /ff")
+        print("Fast-forwards playback by 5 seconds.")
 
     else:
         print(f"Sorry, command '/{topic}' is not recognised.")
