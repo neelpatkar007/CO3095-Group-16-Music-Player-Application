@@ -4,6 +4,7 @@ def print_help(command: Optional[str] = None) -> None:
     if command is None or command.strip() == "":
         print("--- Help: Available Commands ---")
         print("Commands: /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
+        print("          /list, /info, /progress, /bar")
         print("Shortcuts: 'p' (play/pause), 's' (stop), 'm' (mute)")
         print("\nTip: Type '/help <command>' for specific details (e.g. '/help play').")
         return
@@ -51,6 +52,26 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /ff")
         print("Usage: /ff")
         print("Fast-forwards playback by 5 seconds.")
+
+    elif topic == "list":
+        print("\n[Help] /list")
+        print("Usage: /list")
+        print("Displays the full playlist and indicates the active song.")
+
+    elif topic == "info":
+        print("\n[Help] /info")
+        print("Usage: /info")
+        print("Displays metadata (Title, Artist) for the current track.")
+
+    elif topic == "progress":
+        print("\n[Help] /progress")
+        print("Usage: /progress")
+        print("Shows the current time position numerically.")
+
+    elif topic == "bar":
+        print("\n[Help] /bar")
+        print("Usage: /bar")
+        print("Displays a visual progress bar representing the song duration.")
 
     else:
         print(f"Sorry, command '/{topic}' is not recognised.")
