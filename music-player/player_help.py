@@ -5,6 +5,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("--- Help: Available Commands ---")
         print("Commands: /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
         print("          /list, /info, /progress, /bar")
+        print("          /volume, /mute, /unmute, /quit")
         print("Shortcuts: 'p' (play/pause), 's' (stop), 'm' (mute)")
         print("\nTip: Type '/help <command>' for specific details (e.g. '/help play').")
         return
@@ -72,6 +73,26 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /bar")
         print("Usage: /bar")
         print("Displays a visual progress bar representing the song duration.")
+
+    elif topic == "volume":
+        print("\n[Help] /volume")
+        print("Usage: /volume <0-100>")
+        print("Sets the playback volume level.")
+
+    elif topic == "mute":
+        print("\n[Help] /mute")
+        print("Usage: /mute")
+        print("Silences the audio immediately.")
+
+    elif topic == "unmute":
+        print("\n[Help] /unmute")
+        print("Usage: /unmute")
+        print("Restores the volume to its previous level.")
+
+    elif topic == "quit":
+        print("\n[Help] /quit")
+        print("Usage: /quit")
+        print("Exits the music player application.")
 
     else:
         print(f"Sorry, command '/{topic}' is not recognised.")
