@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd"><coverage line-rate="None" branch-rate="0.9090909090909091" lines-covered="0" lines-valid="0" branches-covered="10" branches-valid="11" complexity="0.0" version="pynguin-0.44.0" timestamp="1764534805">
+  <sources>
+    <source>music_player.time_utils</source>
+  </sources>
+  <packages>
+    <package name="" line-rate="None" branch-rate="0.9090909090909091" complexity="0.0">
+      <classes>
+        <class name="" filename="music_player.time_utils" line-rate="None" branch-rate="0.9090909090909091" complexity="0.0">
+          <methods />
+          <lines>
+            <line number="1" hits="1" branch="true" condition-coverage="100% (1/1)" />
+            <line number="7" hits="1" branch="true" condition-coverage="100% (4/4)" />
+            <line number="23" hits="1" branch="true" condition-coverage="100% (2/2)" />
+            <line number="28" hits="1" branch="true" condition-coverage="50% (1/2)" />
+            <line number="33" hits="1" branch="true" condition-coverage="100% (2/2)" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
