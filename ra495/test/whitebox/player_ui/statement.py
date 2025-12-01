@@ -16,10 +16,6 @@ class DummyEngine:
 def make_state_with_tracks(tracks):
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
 
-
-# Statement testing – print_now_playing
-
-
 def test_stmt_now_playing_invalid_state_type(capsys):
     """
     Statement test:
@@ -66,10 +62,6 @@ def test_stmt_now_playing_playing_status(capsys):
     assert "Playing:" in out
     assert "Song – Artist" in out
     assert "[02:00]" in out
-
-
-# Statement testing – print_playlist_with_indicator
-
 
 def test_stmt_playlist_invalid_state_type(capsys):
     """

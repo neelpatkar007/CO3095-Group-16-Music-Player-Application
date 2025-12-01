@@ -11,10 +11,6 @@ class DummyEngine:
 def make_state(tracks):
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
 
-
-# --- Statement testing for current_track ---
-
-
 def test_current_track_statement_empty_library():
     """
     Statement test:

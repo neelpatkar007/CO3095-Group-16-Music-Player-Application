@@ -39,9 +39,6 @@ def make_state_with_track(duration: float = 180.0):
     state.current_index = 0
     return state, track, engine
 
-
-# --- play() statement coverage -----------------------------------------------
-
 def test_play_no_tracks_executes_warning_statement(capsys):
     """Covers the 'no tracks loaded' path inside play()."""
     engine = DummyEngine()
@@ -64,9 +61,6 @@ def test_play_fresh_start_executes_main_play_path(capsys):
     assert state.is_playing is True
     assert state.is_paused is False
 
-
-# --- pause() statement coverage ----------------------------------------------
-
 def test_pause_success_executes_pause_path(capsys):
     """Covers the successful pause path (engine.pause, flags)."""
     state, track, engine = make_state_with_track()
@@ -79,9 +73,6 @@ def test_pause_success_executes_pause_path(capsys):
     assert engine.paused is True
     assert state.is_playing is False
     assert state.is_paused is True
-
-
-# --- stop() statement coverage -----------------------------------------------
 
 def test_stop_from_playing_executes_stop_path(capsys):
     """Covers the path where something is playing and we stop it."""
@@ -97,9 +88,6 @@ def test_stop_from_playing_executes_stop_path(capsys):
     assert state.is_playing is False
     assert state.is_paused is False
     assert state.position_seconds == pytest.approx(0.0)
-
-
-# --- update_playback() statement coverage ------------------------------------
 
 def test_update_playback_advances_and_finishes_track(capsys):
     """

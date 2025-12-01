@@ -39,9 +39,6 @@ def make_state_with_track(duration: float = 180.0):
     state.current_index = 0
     return state, track, engine
 
-
-# --- Branch testing for play() -----------------------------------------------
-
 def test_play_branch_no_tracks(capsys):
     """Branch: no tracks -> warning branch taken."""
     engine = DummyEngine()
@@ -92,9 +89,6 @@ def test_play_branch_fresh_start(capsys):
     assert state.is_playing is True
     assert state.is_paused is False
 
-
-# --- Branch testing for pause() ----------------------------------------------
-
 def test_pause_branch_nothing_to_pause(capsys):
     """Branch: not playing or already paused -> 'Nothing to pause'."""
     state, track, engine = make_state_with_track()
@@ -119,9 +113,6 @@ def test_pause_branch_success(capsys):
     assert engine.paused is True
     assert state.is_playing is False
     assert state.is_paused is True
-
-
-# --- Branch testing for stop() -----------------------------------------------
 
 def test_stop_branch_nothing_is_playing(capsys):
     """Branch: neither playing nor paused -> 'Nothing is playing'."""
@@ -163,9 +154,6 @@ def test_stop_branch_from_paused(capsys):
     assert "Stopped" in out
     assert engine.stopped is True
     assert state.position_seconds == pytest.approx(0.0)
-
-
-# --- Branch testing for update_playback() ------------------------------------
 
 def test_update_playback_branch_ignores_non_positive_delta():
     """Branch: delta <= 0 -> early return, no position change."""
