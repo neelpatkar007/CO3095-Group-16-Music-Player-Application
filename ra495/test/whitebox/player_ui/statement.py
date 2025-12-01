@@ -17,9 +17,7 @@ def make_state_with_tracks(tracks):
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
 
 
-# -------------------------------
 # Statement testing – print_now_playing
-# -------------------------------
 
 
 def test_stmt_now_playing_invalid_state_type(capsys):
