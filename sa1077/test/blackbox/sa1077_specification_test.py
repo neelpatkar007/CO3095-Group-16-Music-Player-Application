@@ -74,5 +74,103 @@ def make_state_with_track(duration: float) -> PlayerState:
     state.position_seconds = 0.0
     return state
 
+def test_bb_change_volume_show_current_from_empty_input(capsys):
+    # Frame F1
+    state = make_state(volume=42, muted=False)
+    change_volume(state, "")
+    out = capsys.readouterr().out
+    assert "Current Volume: 42%" in out
+    assert state.volume == 42
+    assert state.is_muted is False
+
+
+def test_bb_change_volume_error_non_numeric(capsys):
+    # Frame F2
+    state = make_state(volume=30, muted=False)
+    change_volume(state, "abc")
+    out = capsys.readouterr().out
+    assert "[audio] Error: Volume must be a number.\n" in out
+    assert state.volume == 30
+
+
+def test_bb_change_volume_error_range_low(capsys):
+    # Frame F3
+    state = make_state(volume=30, muted=False)
+    change_volume(state, "-1")
+    out = capsys.readouterr().out
+    assert "between 0 and 100" in out
+    assert state.volume == 30
+
+
+def test_bb_change_volume_error_range_high(capsys):
+    # Frame F4
+    state = make_state(volume=30, muted=False)
+    change_volume(state, "101")
+    out = capsys.readouterr().out
+    assert "between 0 and 100" in out
+    assert state.volume == 30
+
+def test_bb_seek_seconds_within_range():
+    # SF1
+    state = make_state_with_track(60.0)
+    seek_to(state, "30")
+    assert state.position_seconds == pytest.approx(30.0)
+    pos, total = get_progress(state)
+    assert pos == pytest.approx(30.0)
+    assert total == 60.0
+
+
+def test_bb_seek_seconds_clamped_to_end():
+    # SF2
+    state = make_state_with_track(60.0)
+    seek_to(state, "100")
+    assert state.position_seconds == pytest.approx(60.0)
+
+
+def test_bb_seek_mmss_string():
+    # SF3: 01:30 -> 90s
+    state = make_state_with_track(200.0)
+    seek_to(state, "01:30")
+    assert state.position_seconds == pytest.approx(90.0)
+
+
+def test_bb_seek_empty_string_parsed_to_zero():
+    # SF4: "" -> 0.0
+    state = make_state_with_track(200.0)
+    seek_to(state, "")
+    assert state.position_seconds == pytest.approx(0.0)
+
+
+def test_bb_seek_invalid_string_parsed_to_zero():
+    # SF5: invalid string -> 0.0
+    state = make_state_with_track(200.0)
+    seek_to(state, "xVSd6\tE")
+    assert state.position_seconds == pytest.approx(0.0)
+
+
+def test_bb_seek_negative_clamped_to_zero():
+    # SF6: negative -> 0
+    state = make_state_with_track(60.0)
+    seek_to(state, "-10")
+    assert state.position_seconds == pytest.approx(0.0)
+
+
+def test_bb_nudge_forward_and_clamped():
+    state = make_state_with_track(60.0)
+    state.position_seconds = 58.0
+    nudge(state, 5.0)
+    assert state.position_seconds == pytest.approx(60.0)
+
+
+def test_bb_nudge_backward_and_clamped(capsys):
+    state = make_state_with_track(60.0)
+    state.position_seconds = 2.0
+    nudge(state, -5.0)
+    assert state.position_seconds == pytest.approx(0.0)
+
+    # PR1: invalid type (bool) -> error-style message
+    print_progress(True)  # type: ignore[arg-type]
+    out = capsys.readouterr().out
+    assert "[ui] Invalid player state for progress." in out
 
 
