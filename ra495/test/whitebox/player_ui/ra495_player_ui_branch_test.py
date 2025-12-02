@@ -63,12 +63,6 @@ def test_branch_now_playing_stopped_status(capsys):
     out = capsys.readouterr().out
     assert "Stopped:" in out
 
-
-# -------------------------------
-# Branch testing – print_playlist_with_indicator
-# -------------------------------
-
-
 def test_branch_playlist_invalid_tracks_structure(capsys):
     """
     Branch test:
