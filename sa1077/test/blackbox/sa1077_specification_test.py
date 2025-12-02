@@ -174,3 +174,123 @@ def test_bb_nudge_backward_and_clamped(capsys):
     assert "[ui] Invalid player state for progress." in out
 
 
+def test_ui_progress_valid_state_no_track_unknown_time(capsys):
+    # PR2: no current track, but valid PlayerState
+    state = make_state_ui(tracks=[])
+    print_progress(state)
+    out = capsys.readouterr().out
+    # Code prints 00:00 for position, ?? for total
+    assert "[ui] Progress: 00:00/??:??" in out
+
+
+def test_ui_progress_valid_state_track_without_duration(capsys):
+    # PR3: duration_seconds=None
+    track = make_track(title="DurLess", artist="A", duration=0.0)
+    track.duration_seconds = None
+
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+    print_progress(state)
+    out = capsys.readouterr().out
+
+    assert "[ui] Progress: 00:00/??:??" in out
+
+
+def test_ui_progress_with_known_duration_shows_formatted_times(capsys):
+    # PR4: 30/180 -> 00:30/03:00
+    track = make_track(title="Timed", artist="A", duration=180.0)
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+    state.position_seconds = 30.0
+
+    print_progress(state)
+    out = capsys.readouterr().out
+
+    assert "[ui] Progress: 00:30/03:00" in out
+
+def test_ui_bar_invalid_state_prints_null(capsys):
+    # PB1: wrong type -> error message
+    print_progress_bar(False)  # type: ignore[arg-type]
+    out = capsys.readouterr().out
+    assert "[ui] Invalid player state for progress_bar." in out
+
+
+def test_ui_bar_no_track_unknown_bar(capsys):
+    # PB2: no tracks in library
+    state = make_state_ui(tracks=[])
+    print_progress_bar(state)
+    out = capsys.readouterr().out
+    # Your implementation currently prints this:
+    assert "[ui] [Time null]" in out
+
+
+def test_ui_bar_track_without_duration_unknown_bar(capsys):
+    # PB3: track but duration_seconds=None
+    track = make_track(title="DurLess", duration=0.0)
+    track.duration_seconds = None
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+
+    print_progress_bar(state)
+    out = capsys.readouterr().out
+    assert "[ui] [Time null]" in out
+
+
+def test_ui_bar_within_range_shows_bar_and_percentage(capsys):
+    # PB4: pos 30 / 60 -> should be some valid bar output, not "null"
+    track = make_track(title="Half", duration=60.0)
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+    state.position_seconds = 30.0
+
+    print_progress_bar(state)
+    out = capsys.readouterr().out
+
+    # Minimal, implementation-friendly checks:
+    assert "[ui]" in out
+    # Ensure we didn't hit the null/invalid paths
+    assert "Invalid player state for progress_bar" not in out
+    assert "[Time null]" not in out
+
+
+def test_ui_bar_clamps_position_beyond_duration(capsys):
+    # PB5: pos > duration -> clamped at end; we again just check it's a "real" bar
+    track = make_track(title="End", duration=60.0)
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+    state.position_seconds = 999.0
+
+    print_progress_bar(state)
+    out = capsys.readouterr().out
+
+    assert "[ui]" in out
+    assert "Invalid player state for progress_bar" not in out
+    assert "[Time null]" not in out
+
+def test_ui_progress_invalid_state_type_prints_null(capsys):
+    # PR1: invalid type (bool) -> error-style message
+    print_progress(True)  # type: ignore[arg-type]
+    out = capsys.readouterr().out
+    assert "[ui] Invalid player state for progress." in out
+
+
+def test_ui_progress_valid_state_no_track_unknown_time(capsys):
+    # PR2: no current track, but valid PlayerState
+    state = make_state_ui(tracks=[])
+    print_progress(state)
+    out = capsys.readouterr().out
+    # Code prints 00:00 for position, ?? for total
+    assert "[ui] Progress: 00:00/??:??" in out
+
+
+def test_ui_progress_valid_state_track_without_duration(capsys):
+    # PR3: duration_seconds=None
+    track = make_track(title="DurLess", artist="A", duration=0.0)
+    track.duration_seconds = None
+
+    state = make_state_ui(tracks=[track])
+    state.current_index = 0
+    print_progress(state)
+    out = capsys.readouterr().out
+
+    assert "[ui] Progress: 00:00/??:??" in out
