@@ -1,4 +1,5 @@
 from pathlib import Path
+import pytest
 
 from music_player.player_state import PlayerState
 from music_player.player_ui import (

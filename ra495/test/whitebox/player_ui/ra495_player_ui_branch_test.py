@@ -1,4 +1,5 @@
 from pathlib import Path
+import pytest
 
 from music_player.player_state import PlayerState
 from music_player.player_ui import (
@@ -61,12 +62,6 @@ def test_branch_now_playing_stopped_status(capsys):
     print_now_playing(state)
     out = capsys.readouterr().out
     assert "Stopped:" in out
-
-
-# -------------------------------
-# Branch testing – print_playlist_with_indicator
-# -------------------------------
-
 
 def test_branch_playlist_invalid_tracks_structure(capsys):
     """

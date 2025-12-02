@@ -1,4 +1,5 @@
 import types
+import pytest
 
 from music_player.player_state import PlayerState
 
