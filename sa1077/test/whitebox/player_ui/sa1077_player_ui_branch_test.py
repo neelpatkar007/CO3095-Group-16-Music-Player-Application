@@ -1,12 +1,10 @@
 from pathlib import Path
-import pytest
 
 from music_player.player_state import PlayerState
 from music_player.player_ui import (
     print_now_playing,
     print_progress,
     print_progress_bar,
-    print_playlist_with_indicator,
 )
 from music_player.library import Track
 
@@ -100,7 +98,6 @@ def test_branch_progress_bar_clamps_and_percentage(capsys):
     state.current_index = 0
     state.position_seconds = 999.0  # beyond duration -> clamp to 100%
 
-    # Call without width kwarg – matches current signature
     print_progress_bar(state)
     out = capsys.readouterr().out
 
