@@ -23,9 +23,9 @@ Tag format:
 
 ## 2. Tag History Table
 
-| Tag | Date Created | Sprint | Commit Hash | Created By | Description / Contents | QA Status | Evidence Links |
-|-----|--------------|--------|-------------|------------|------------------------|-----------|----------------|
-|     |              |        |             |            |                        |           |                |
+| Tag  | Date Created | Sprint | Commit Hash | Created By | Description / Contents | QA Status | Evidence Links |
+|------|--------------|--------|-------------|------------|------------------------|-----------|----------------|
+| v0.1 |              |        |             |            |                        |           |                |
 
 ---
 
