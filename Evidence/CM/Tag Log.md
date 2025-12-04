@@ -23,9 +23,9 @@ Tag format:
 
 ## 2. Tag History Table
 
-| Tag  | Date Created | Sprint | Commit Hash | Created By | Description / Contents | QA Status | Evidence Links |
-|------|--------------|--------|-------------|------------|------------------------|-----------|----------------|
-| v0.1 |              |        |             |            |                        |           |                |
+| Tag  | Date Created | Sprint | Commit Hash | Created By | Description / Contents     | QA Status | Evidence Links |
+|------|--------------|--------|-------------|------------|----------------------------|----------|----------------|
+| v0.1 | 04/12/2025   | 1      |   77bce81          | Raiyan805  | Completed Sprint 1 Release | Verified |     https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1           |
 
 ---
 
