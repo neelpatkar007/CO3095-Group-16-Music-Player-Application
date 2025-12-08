@@ -1,14 +1,18 @@
 import time
-from audio_backend import AudioEngine
-from library import discover_tracks
-from player_state import PlayerState
-import player_core
-import player_queue
-import player_help
-import player_ui
-import player_seek
-import player_audio
-import player_shortcuts
+
+from music_player.audio_backend import AudioEngine
+from music_player.library import discover_tracks
+from music_player.player_state import PlayerState
+
+from music_player import (
+    player_core,
+    player_queue,
+    player_help,
+    player_ui,
+    player_seek,
+    player_audio,
+    player_shortcuts,
+)
 
 
 def handle_command(state: PlayerState, command: str) -> bool:
