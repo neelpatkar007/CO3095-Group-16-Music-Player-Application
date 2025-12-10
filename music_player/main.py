@@ -1,3 +1,4 @@
+import threading
 import time
 
 from music_player.audio_backend import AudioEngine
@@ -15,6 +16,33 @@ from music_player import (
     player_shortcuts,       # Handles keyboard shortcuts (single-key commands)
 )
 
+# Sprint 2 modules
+from music_player import (
+    playlists_basic,
+    playlists_edit,
+    playlists_advanced,
+    library_search_scan,
+)
+
+def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
+    """
+    Background loop that periodically advances playback time.
+
+    It calls player_core.update_playback(state, delta_seconds) 10 times per second.
+    """
+    last = time.time()
+
+    while not stop_event.is_set():
+        now = time.time()
+        delta = now - last
+        last = now
+        # advances state.position_seconds while playing
+        # detects end-of-track
+        # auto-advances in playlists
+        player_core.update_playback(state, delta)
+
+        # Sleep
+        time.sleep(0.1)
 
 def handle_command(state: PlayerState, command: str) -> bool:
     """
