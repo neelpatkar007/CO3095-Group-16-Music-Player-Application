@@ -19,8 +19,8 @@ from music_player.playlist_model import Playlist
 
 def _ensure_playlists(state: PlayerState) -> None:
     """Internal helper to ensure state.playlists exists."""
-    # TODO: implement
-    raise NotImplementedError
+    if state.playlists is None:
+        state.playlists = []
 
 
 def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
