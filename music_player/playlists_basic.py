@@ -19,8 +19,8 @@ from music_player.playlist_model import Playlist
 
 def _ensure_playlists(state: PlayerState) -> None:
     """Internal helper to ensure state.playlists exists."""
-    # TODO: implement
-    raise NotImplementedError
+    if state.playlists is None:
+        state.playlists = []
 
 
 def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
@@ -28,8 +28,32 @@ def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     Internal helper: find a playlist by number (1-based) or by name (case-insensitive).
     Used by multiple S2 stories.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    selector = (selector or "").strip()
+    if not selector:
+        print("[pl] Missing playlist name or number.")
+        return None
+
+    # Try numeric index first
+    try:
+        idx = int(selector) - 1
+    except ValueError:
+        idx = None
+
+    if idx is not None:
+        if 0 <= idx < len(state.playlists):
+            return state.playlists[idx]
+        print("[pl] Playlist index out of range.")
+        return None
+
+    # Name match
+    lowered = selector.lower()
+    for pl in state.playlists:
+        if pl.name.lower() == lowered:
+            return pl
+
+    print(f"[pl] Playlist '{selector}' not found.")
+    return None
 
 
 def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
@@ -41,7 +65,7 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     raise NotImplementedError
 
 
-# --- S2-01: create, rename, delete playlists --------------------------------------
+# S2-01: create, rename, delete playlists
 
 
 def create_playlist(state: PlayerState, name: str) -> None:
@@ -54,8 +78,22 @@ def create_playlist(state: PlayerState, name: str) -> None:
       - Optionally set active_playlist_index if none is active.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    name = (name or "").strip()
+    if not name:
+        print("[pl] Usage: /pl.new <name>")
+        return
+
+    for pl in state.playlists:
+        if pl.name.lower() == name.lower():
+            print(f"[pl] A playlist named '{name}' already exists.")
+            return
+
+    new_pl = Playlist(name=name)
+    state.playlists.append(new_pl)
+    if state.active_playlist_index is None:
+        state.active_playlist_index = 0
+    print(f"[pl] Created playlist '{name}'.")
 
 
 def rename_playlist(state: PlayerState, selector: str, new_name: str) -> None:
@@ -67,8 +105,24 @@ def rename_playlist(state: PlayerState, selector: str, new_name: str) -> None:
       - Validate new_name is non-empty and not already taken.
       - Update playlist.name and print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    new_name = (new_name or "").strip()
+    if not new_name:
+        print("[pl] Usage: /pl.rename <old> <new>")
+        return
+
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    for other in state.playlists:
+        if other is not pl and other.name.lower() == new_name.lower():
+            print(f"[pl] Another playlist already has the name '{new_name}'.")
+            return
+
+    old_name = pl.name
+    pl.name = new_name
+    print(f"[pl] Renamed playlist '{old_name}' -> '{new_name}'.")
 
 
 def delete_playlist(state: PlayerState, selector: str) -> None:
@@ -81,11 +135,24 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
       - Adjust active_playlist_index if necessary.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    idx = state.playlists.index(pl)
+    del state.playlists[idx]
+
+    if state.active_playlist_index is not None:
+        if idx < state.active_playlist_index:
+            state.active_playlist_index -= 1
+        elif idx == state.active_playlist_index:
+            state.active_playlist_index = None if not state.playlists else 0
+
+    print(f"[pl] Deleted playlist '{pl.name}'.")
 
 
-# --- S2-05, S2-06, S2-10: list, open, show contents ------------------------------
+# S2-05, S2-06, S2-10: list, open, show contents
 
 
 def list_playlists(state: PlayerState) -> None:

@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from music_player.library import Track
 from music_player.audio_backend import AudioEngine
+from music_player.playlist_model import Playlist
 
 
 class PlayerState:
@@ -12,6 +13,9 @@ class PlayerState:
     All modules (core, queue, seek, audio) read from and write to this single object.
     '''
     def __init__(self, tracks: List[Track], audio_engine: AudioEngine) -> None:
+        # Main library – never lost, used when not in playlist mode
+        self.library_tracks: List[Track] = tracks
+
         # Playlist / queue of tracks to play
         self.tracks: List[Track] = tracks # List of all discovered tracks
         self.current_index: int = 0 # Index of the currently playing/selected track
@@ -28,6 +32,10 @@ class PlayerState:
 
         # Backend audio engine
         self.audio_engine: AudioEngine = audio_engine # Reference to the audio engine output handler
+
+        # Sprint 2: playlists
+        self.playlists: List[Playlist] = []
+        self.active_playlist_index: int | None = None
 
     @property
     def current_track(self) -> Optional[Track]:
