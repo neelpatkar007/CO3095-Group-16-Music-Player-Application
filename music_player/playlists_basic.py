@@ -207,6 +207,13 @@ def open_playlist(state: PlayerState, selector: str) -> None:
       - Set as active.
       - Print tracks with numbers and durations.
     """
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    print(f"[pl] Opened playlist '{pl.name}':")
+    _print_playlist_contents(pl)
 
 
 def show_current_playlist(state: PlayerState) -> None:
