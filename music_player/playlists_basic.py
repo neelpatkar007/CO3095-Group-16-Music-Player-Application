@@ -262,6 +262,19 @@ def show_current_playlist(state: PlayerState) -> None:
     print(f"[pl] Current playlist '{pl.name}':")
     _print_playlist_contents(pl)
 
+def play_playlist(state: PlayerState, selector: str) -> None:
+    """
+    Explicit command for playing a specific playlist:
+    - resolves the playlist
+    - sets it as the active queue
+    - starts playback from the first track
+    """
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+    _activate_playlist_queue(state, pl, auto_play=True)
+
 def _print_playlist_contents(pl: Playlist) -> None:
     """
     This is a helper function that prints the contents of a playlist,
