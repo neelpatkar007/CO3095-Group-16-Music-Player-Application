@@ -226,6 +226,11 @@ def show_current_playlist(state: PlayerState) -> None:
     raise NotImplementedError
 
 def _print_playlist_contents(pl: Playlist) -> None:
+    """
+    This is a helper function that prints the contents of a playlist,
+    showing each track's index, title, and duration in mm:ss format.
+    If the playlist has no tracks, prints an '(empty)' marker instead.
+    """
     if not pl.tracks:
         print("  (empty)")
         return
