@@ -6,6 +6,8 @@ from typing import List, Tuple
 
 from music_player.config import MUSIC_DIR, SUPPORTED_EXTENSIONS
 
+# Optional dependency: mutagen for reading audio metadata
+# If the user does not have mutagen installed
 try:
     import mutagen
     HAS_MUTAGEN = True
@@ -19,7 +21,10 @@ except Exception:
 
 @dataclass
 class Track:
-    """Simple representation of an audio track."""
+    """
+    Simple representation of an audio track.
+    Used to pass song information between library, and UI.
+    """
     path: Path
     title: str
     artist: str = "Unknown"
@@ -27,7 +32,10 @@ class Track:
 
     @property
     def display_name(self) -> str:
-        """Return formatted display name of the track."""
+        """
+        Return a formatted display name of the track (e.g. "Song Title - Artist").
+        """
+        # Only show artist if available and not empty
         if self.artist:
             return f"{self.title} – {self.artist}"
         return self.title
@@ -42,12 +50,14 @@ def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
       - "Unknown" for artist
       - None for duration
 
-    if metadata cannot be retrieved.
+    if the metadata cannot be retrieved.
     """
+    # Defaults based on filename
     title = path.stem
     artist = "Unknown"
     duration: float | None = None
 
+    # If the mutagen library is not available, return defaults
     if not HAS_MUTAGEN:
         return title, artist, duration
 
@@ -55,7 +65,7 @@ def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
     if audio is None:
         return title, artist, duration
 
-    # Duration
+    # Extract Duration
     info = getattr(audio, "info", None)
     if info is not None and hasattr(info, "length"):
         try:
@@ -63,17 +73,18 @@ def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
         except Exception:
             duration = None
 
-    # Tags (format-dependent)
+    # Extract Tags (format-dependent)
     tags = getattr(audio, "tags", None)
     if tags:
-        # Title
+        # Check for Title ("TIT2")
         if "TIT2" in tags:
             try:
+                # Force to string in case of a weird tag types
                 title = str(tags["TIT2"])
             except Exception:
                 pass
 
-        # Artist
+        # Check for Artist
         if "TPE1" in tags:
             try:
                 artist = str(tags["TPE1"])
@@ -90,31 +101,38 @@ def discover_tracks() -> List[Track]:
     If mutagen is available:
         - read real metadata
 
-    Otherwise fallback to:
+    Otherwise, fallback to:
         - title = filename stem
         - artist = "Unknown"
         - duration = 180.0 (3 minutes)
     """
     tracks: List[Track] = []
 
+    # Make sure MUSIC_DIR folder exists
     if not MUSIC_DIR.exists():
         print(
             f"[library] WARNING: MUSIC_DIR '{MUSIC_DIR}' does not exist."
         )
         return tracks
 
+    # Gives all files in the directory
+    # They are sorted to ensure consistent order
     for path in sorted(MUSIC_DIR.iterdir()):
+
+        # Skip directories and non-files
         if not path.is_file():
             continue
 
+        # Skip any unsupported file extensions (such as .jpg, .txt, etc)
         if path.suffix.lower() not in SUPPORTED_EXTENSIONS:
             continue
 
+        # Extract metadata from file or use defaults
         title, artist, duration = _read_metadata(path)
 
-        # Default duration for Sprint 1
+        # Default duration for Sprint 1 if the scan failed
         if duration is None:
-            duration = 180.0
+            duration = 180.0 # Default to 3 minutes
 
         track = Track(
             path=path,
