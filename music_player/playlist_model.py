@@ -35,8 +35,7 @@ class Playlist:
     @property
     def num_tracks(self) -> int:
         """Number of tracks (S2-05, S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        return len(self.tracks)
 
     @property
     def total_duration_seconds(self) -> float:
