@@ -15,6 +15,7 @@ from typing import Optional
 
 from music_player.player_state import PlayerState
 from music_player.playlist_model import Playlist
+from music_player.time_utils import format_mm_ss
 
 
 def _ensure_playlists(state: PlayerState) -> None:
@@ -206,8 +207,6 @@ def open_playlist(state: PlayerState, selector: str) -> None:
       - Set as active.
       - Print tracks with numbers and durations.
     """
-    # TODO: implement
-    raise NotImplementedError
 
 
 def show_current_playlist(state: PlayerState) -> None:
@@ -218,3 +217,12 @@ def show_current_playlist(state: PlayerState) -> None:
     """
     # TODO: implement
     raise NotImplementedError
+
+def _print_playlist_contents(pl: Playlist) -> None:
+    if not pl.tracks:
+        print("  (empty)")
+        return
+
+    for idx, track in enumerate(pl.tracks, start=1):
+        dur = format_mm_ss(track.duration_seconds)
+        print(f"{idx:02d}. {track.display_name} [{dur}]")
