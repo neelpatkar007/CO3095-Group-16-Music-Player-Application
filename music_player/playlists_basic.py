@@ -78,8 +78,22 @@ def create_playlist(state: PlayerState, name: str) -> None:
       - Optionally set active_playlist_index if none is active.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    name = (name or "").strip()
+    if not name:
+        print("[pl] Usage: /pl.new <name>")
+        return
+
+    for pl in state.playlists:
+        if pl.name.lower() == name.lower():
+            print(f"[pl] A playlist named '{name}' already exists.")
+            return
+
+    new_pl = Playlist(name=name)
+    state.playlists.append(new_pl)
+    if state.active_playlist_index is None:
+        state.active_playlist_index = 0
+    print(f"[pl] Created playlist '{name}'.")
 
 
 def rename_playlist(state: PlayerState, selector: str, new_name: str) -> None:
