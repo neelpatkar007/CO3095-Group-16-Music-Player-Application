@@ -105,8 +105,24 @@ def rename_playlist(state: PlayerState, selector: str, new_name: str) -> None:
       - Validate new_name is non-empty and not already taken.
       - Update playlist.name and print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    new_name = (new_name or "").strip()
+    if not new_name:
+        print("[pl] Usage: /pl.rename <old> <new>")
+        return
+
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    for other in state.playlists:
+        if other is not pl and other.name.lower() == new_name.lower():
+            print(f"[pl] Another playlist already has the name '{new_name}'.")
+            return
+
+    old_name = pl.name
+    pl.name = new_name
+    print(f"[pl] Renamed playlist '{old_name}' -> '{new_name}'.")
 
 
 def delete_playlist(state: PlayerState, selector: str) -> None:
