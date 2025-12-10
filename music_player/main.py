@@ -138,6 +138,13 @@ def handle_command(state: PlayerState, command: str) -> bool:
             print("[main] Usage: /pl.del <name|index>")
         else:
             playlists_basic.delete_playlist(state, args[0])
+    elif base == "/pl.list":
+        playlists_basic.list_playlists(state)
+    elif base == "/pl.open":
+        if not args:
+            print("[main] Usage: /pl.open <name|index>")
+        else:
+            playlists_basic.open_playlist(state, args[0])
     # Unknown command
     else:
         print("Unknown command. Try /help")

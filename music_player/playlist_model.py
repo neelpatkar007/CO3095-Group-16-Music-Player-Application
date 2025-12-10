@@ -35,25 +35,32 @@ class Playlist:
     @property
     def num_tracks(self) -> int:
         """Number of tracks (S2-05, S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        return len(self.tracks)
 
     @property
     def total_duration_seconds(self) -> float:
-        """Total duration in seconds for all tracks (S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        """Total duration as in seconds (S2-05, S2-10)."""
+        total = 0.0
+        for t in self.tracks:
+            if t.duration_seconds is not None:
+                total += t.duration_seconds
+        return total
 
     @property
     def total_duration_mm_ss(self) -> str:
-        """Total duration as mm:ss string (S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        """Total duration as mm:ss string (S2-05, S2-10)."""
+        if not self.tracks:
+            return "00:00"
+        return format_mm_ss(self.total_duration_seconds)
 
     def summary_line(self, index: int | None = None, active: bool = False) -> str:
         """
         Helper for listing playlists (S2-05, S2-10).
         Shows index, name, number of tracks and total time.
         """
-        # TODO: implement
-        raise NotImplementedError
+        idx_part = f"{index:02d}" if index is not None else "--"
+        active_marker = "*" if active else " "
+        return (
+            f"{active_marker} {idx_part}  {self.name:<20}  "
+            f"{self.num_tracks:3d} tracks  {self.total_duration_mm_ss}"
+        )

@@ -15,6 +15,7 @@ from typing import Optional
 
 from music_player.player_state import PlayerState
 from music_player.playlist_model import Playlist
+from music_player.time_utils import format_mm_ss
 
 
 def _ensure_playlists(state: PlayerState) -> None:
@@ -61,8 +62,12 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     Internal helper: set active_playlist_index based on playlist instance.
     Used when opening / selecting playlists.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    try:
+        idx = state.playlists.index(playlist)
+    except ValueError:
+        return
+    state.active_playlist_index = idx
 
 
 # S2-01: create, rename, delete playlists
@@ -161,8 +166,38 @@ def list_playlists(state: PlayerState) -> None:
       - Print all playlists with index, name, number of tracks and total duration.
       - Mark active playlist with a special marker.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+
+    if state is None:
+        print("[pl] Internal Error: State is missing.")
+        return
+    if getattr(state, 'playlists', None) is None:
+        return
+    if not isinstance(state.playlists, list):
+        print("[pl] Error: Playlist data is corrupted.")
+        return
+    if not state.playlists:
+        print("[pl] No playlists defined.")
+        return
+
+    print("[pl] Playlists:")
+    for idx, pl in enumerate(state.playlists, start=1):
+
+        if pl is None:
+            print(f"   {idx}. <Error: Invalid Playlist>")
+            continue
+
+        is_active = False
+        current_index = idx - 1
+
+        if state.active_playlist_index is not None:
+            if state.active_playlist_index == current_index:
+                is_active = True
+
+        if hasattr(pl, 'summary_line'):
+            print(pl.summary_line(index=idx, active=is_active))
+        else:
+            print(f"   {idx}. {pl.name} {'*' if is_active else ''}")
 
 
 def open_playlist(state: PlayerState, selector: str) -> None:
@@ -172,8 +207,13 @@ def open_playlist(state: PlayerState, selector: str) -> None:
       - Set as active.
       - Print tracks with numbers and durations.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    print(f"[pl] Opened playlist '{pl.name}':")
+    _print_playlist_contents(pl)
 
 
 def show_current_playlist(state: PlayerState) -> None:
@@ -184,3 +224,17 @@ def show_current_playlist(state: PlayerState) -> None:
     """
     # TODO: implement
     raise NotImplementedError
+
+def _print_playlist_contents(pl: Playlist) -> None:
+    """
+    This is a helper function that prints the contents of a playlist,
+    showing each track's index, title, and duration in mm:ss format.
+    If the playlist has no tracks, prints an '(empty)' marker instead.
+    """
+    if not pl.tracks:
+        print("  (empty)")
+        return
+
+    for idx, track in enumerate(pl.tracks, start=1):
+        dur = format_mm_ss(track.duration_seconds)
+        print(f"{idx:02d}. {track.display_name} [{dur}]")
