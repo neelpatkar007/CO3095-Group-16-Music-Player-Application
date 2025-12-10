@@ -39,15 +39,18 @@ class Playlist:
 
     @property
     def total_duration_seconds(self) -> float:
-        """Total duration in seconds for all tracks (S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        total = 0.0
+        for t in self.tracks:
+            if t.duration_seconds is not None:
+                total += t.duration_seconds
+        return total
 
     @property
     def total_duration_mm_ss(self) -> str:
-        """Total duration as mm:ss string (S2-10)."""
-        # TODO: implement
-        raise NotImplementedError
+        """Total duration as mm:ss string (S2-05, S2-10)."""
+        if not self.tracks:
+            return "00:00"
+        return format_mm_ss(self.total_duration_seconds)
 
     def summary_line(self, index: int | None = None, active: bool = False) -> str:
         """
