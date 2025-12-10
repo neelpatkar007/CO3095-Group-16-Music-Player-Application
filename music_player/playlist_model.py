@@ -39,6 +39,7 @@ class Playlist:
 
     @property
     def total_duration_seconds(self) -> float:
+        """Total duration as in seconds (S2-05, S2-10)."""
         total = 0.0
         for t in self.tracks:
             if t.duration_seconds is not None:
