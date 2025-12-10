@@ -65,7 +65,7 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     raise NotImplementedError
 
 
-# --- S2-01: create, rename, delete playlists --------------------------------------
+# S2-01: create, rename, delete playlists
 
 
 def create_playlist(state: PlayerState, name: str) -> None:
@@ -135,11 +135,24 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
       - Adjust active_playlist_index if necessary.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+
+    idx = state.playlists.index(pl)
+    del state.playlists[idx]
+
+    if state.active_playlist_index is not None:
+        if idx < state.active_playlist_index:
+            state.active_playlist_index -= 1
+        elif idx == state.active_playlist_index:
+            state.active_playlist_index = None if not state.playlists else 0
+
+    print(f"[pl] Deleted playlist '{pl.name}'.")
 
 
-# --- S2-05, S2-06, S2-10: list, open, show contents ------------------------------
+# S2-05, S2-06, S2-10: list, open, show contents
 
 
 def list_playlists(state: PlayerState) -> None:
