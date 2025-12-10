@@ -222,8 +222,14 @@ def show_current_playlist(state: PlayerState) -> None:
       - If an active playlist exists, print its contents.
       - Otherwise print guidance.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    if state.active_playlist_index is None or not state.playlists:
+        print("[pl] No active playlist. Use /pl.open <name|index>.")
+        return
+
+    pl = state.playlists[state.active_playlist_index]
+    print(f"[pl] Current playlist '{pl.name}':")
+    _print_playlist_contents(pl)
 
 def _print_playlist_contents(pl: Playlist) -> None:
     """
