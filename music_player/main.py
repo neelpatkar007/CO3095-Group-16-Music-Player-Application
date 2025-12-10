@@ -157,34 +157,43 @@ def main() -> None:
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
     # Startup display welcome message and available commands summary
-    print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /seek, /volume <val>, /mute, /unmute, /rw, /ff, /help, /quit")
+    print("Music Player – Sprint 2")
+    print(
+        "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
+        "/info /progress /bar /list /help /quit"
+    )
+    print(
+        "Playlists: /pl.new /pl.rename /pl.del /pl.list /pl.open /pl.show "
+        "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy"
+    )
+    print("Library: /search /songs /artists /albums /scan")
 
-    last_time = time.time() # For tracking delta time
+    # start background playback thread
+    stop_event = threading.Event()
+    playback_thread = threading.Thread(
+        target=_playback_worker,
+        args=(state, stop_event),
+        daemon=True,
+    )
+    playback_thread.start()
+    # Get user command input
+    try:
+        while True:
+            try:
+                command = input("> ")
+            except (EOFError, KeyboardInterrupt):
+                # Exit on Ctrl+C or Ctrl+D commands
+                break
+            # Handle the command and check if we should quit
+            if not handle_command(state, command):
+                break
+    finally:
+        # Stop background playback loop
+        stop_event.set()
+        playback_thread.join(timeout=1.0)
 
-
-    while True:
-        # Calculate elapsed time since last loop iteration
-        now = time.time()
-        delta = now - last_time
-        last_time = now
-
-        # Update playback position based on elapsed time
-        player_core.update_playback(state, delta)
-
-        # Get user command input
-        try:
-            command = input("> ")
-        except (EOFError, KeyboardInterrupt):
-            # Exit on Ctrl+C or Ctrl+D commands
-            break
-        # Handle the command and check if we should quit
-        if not handle_command(state, command):
-            break
-
-    # Cleanup on exit
-    state.audio_engine.stop() # Ensure audio is stopped on exit of app
-
+        # Ensure audio is stopped
+        state.audio_engine.stop()
 
 if __name__ == "__main__":
     main()
