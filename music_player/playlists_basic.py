@@ -61,8 +61,12 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     Internal helper: set active_playlist_index based on playlist instance.
     Used when opening / selecting playlists.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    try:
+        idx = state.playlists.index(playlist)
+    except ValueError:
+        return
+    state.active_playlist_index = idx
 
 
 # S2-01: create, rename, delete playlists
