@@ -161,8 +161,15 @@ def list_playlists(state: PlayerState) -> None:
       - Print all playlists with index, name, number of tracks and total duration.
       - Mark active playlist with a special marker.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    if not state.playlists:
+        print("[pl] No playlists defined.")
+        return
+
+    print("[pl] Playlists:")
+    for idx, pl in enumerate(state.playlists, start=1):
+        active = state.active_playlist_index == idx - 1
+        print(pl.summary_line(index=idx, active=active))
 
 
 def open_playlist(state: PlayerState, selector: str) -> None:
