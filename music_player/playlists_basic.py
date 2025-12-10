@@ -13,6 +13,7 @@ This module handles the basic playlist lifecycle and listing.
 from __future__ import annotations
 from typing import Optional
 
+from music_player import player_core
 from music_player.player_state import PlayerState
 from music_player.playlist_model import Playlist
 from music_player.time_utils import format_mm_ss
@@ -68,6 +69,33 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     except ValueError:
         return
     state.active_playlist_index = idx
+
+def _activate_playlist_queue(
+    state: PlayerState,
+    playlist: Playlist,
+    auto_play: bool = True,
+) -> None:
+    """
+    Make the given playlist the current playback queue.
+    Sets state.tracks to the playlist's tracks.
+    Resets current_index and position.
+    Keeps a reference to the original library in state.library_tracks.
+    """
+    _ensure_playlists(state)
+
+    # Ensure library_tracks is initialised
+    if not hasattr(state, "library_tracks"):
+        state.library_tracks = state.tracks
+
+    _set_active_by_playlist(state, playlist)
+
+    # Queue is now the playlist tracks
+    state.tracks = playlist.tracks
+    state.current_index = 0
+    state.position_seconds = 0.0
+
+    if auto_play:
+        player_core.play(state)
 
 
 # S2-01: create, rename, delete playlists
@@ -214,6 +242,9 @@ def open_playlist(state: PlayerState, selector: str) -> None:
 
     print(f"[pl] Opened playlist '{pl.name}':")
     _print_playlist_contents(pl)
+
+    # Make it the active queue and start playback
+    _activate_playlist_queue(state, pl, auto_play=True)
 
 
 def show_current_playlist(state: PlayerState) -> None:
