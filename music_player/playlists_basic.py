@@ -28,8 +28,32 @@ def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     Internal helper: find a playlist by number (1-based) or by name (case-insensitive).
     Used by multiple S2 stories.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    selector = (selector or "").strip()
+    if not selector:
+        print("[pl] Missing playlist name or number.")
+        return None
+
+    # Try numeric index first
+    try:
+        idx = int(selector) - 1
+    except ValueError:
+        idx = None
+
+    if idx is not None:
+        if 0 <= idx < len(state.playlists):
+            return state.playlists[idx]
+        print("[pl] Playlist index out of range.")
+        return None
+
+    # Name match
+    lowered = selector.lower()
+    for pl in state.playlists:
+        if pl.name.lower() == lowered:
+            return pl
+
+    print(f"[pl] Playlist '{selector}' not found.")
+    return None
 
 
 def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
