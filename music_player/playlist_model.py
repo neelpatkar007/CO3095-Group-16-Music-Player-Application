@@ -57,5 +57,9 @@ class Playlist:
         Helper for listing playlists (S2-05, S2-10).
         Shows index, name, number of tracks and total time.
         """
-        # TODO: implement
-        raise NotImplementedError
+        idx_part = f"{index:02d}" if index is not None else "--"
+        active_marker = "*" if active else " "
+        return (
+            f"{active_marker} {idx_part}  {self.name:<20}  "
+            f"{self.num_tracks:3d} tracks  {self.total_duration_mm_ss}"
+        )
