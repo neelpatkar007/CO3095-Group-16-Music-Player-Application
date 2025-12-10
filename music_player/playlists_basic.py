@@ -166,14 +166,37 @@ def list_playlists(state: PlayerState) -> None:
       - Mark active playlist with a special marker.
     """
     _ensure_playlists(state)
+
+    if state is None:
+        print("[pl] Internal Error: State is missing.")
+        return
+    if getattr(state, 'playlists', None) is None:
+        return
+    if not isinstance(state.playlists, list):
+        print("[pl] Error: Playlist data is corrupted.")
+        return
     if not state.playlists:
         print("[pl] No playlists defined.")
         return
 
     print("[pl] Playlists:")
     for idx, pl in enumerate(state.playlists, start=1):
-        active = state.active_playlist_index == idx - 1
-        print(pl.summary_line(index=idx, active=active))
+
+        if pl is None:
+            print(f"   {idx}. <Error: Invalid Playlist>")
+            continue
+
+        is_active = False
+        current_index = idx - 1
+
+        if state.active_playlist_index is not None:
+            if state.active_playlist_index == current_index:
+                is_active = True
+
+        if hasattr(pl, 'summary_line'):
+            print(pl.summary_line(index=idx, active=is_active))
+        else:
+            print(f"   {idx}. {pl.name} {'*' if is_active else ''}")
 
 
 def open_playlist(state: PlayerState, selector: str) -> None:
