@@ -275,6 +275,19 @@ def play_playlist(state: PlayerState, selector: str) -> None:
         return
     _activate_playlist_queue(state, pl, auto_play=True)
 
+def play_active_playlist(state: PlayerState) -> None:
+    """
+    Play whatever playlist is currently marked active.
+    Used by /pl.play with no arguments.
+    """
+    _ensure_playlists(state)
+    if state.active_playlist_index is None or not state.playlists:
+        print("[pl] No active playlist. Use /pl.open or /pl.play <name>.")
+        return
+
+    pl = state.playlists[state.active_playlist_index]
+    _activate_playlist_queue(state, pl, auto_play=True)
+
 def _print_playlist_contents(pl: Playlist) -> None:
     """
     This is a helper function that prints the contents of a playlist,
