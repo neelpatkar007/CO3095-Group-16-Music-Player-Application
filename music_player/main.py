@@ -145,6 +145,17 @@ def handle_command(state: PlayerState, command: str) -> bool:
             print("[main] Usage: /pl.open <name|index>")
         else:
             playlists_basic.open_playlist(state, args[0])
+    elif base == "/pl.show":
+        playlists_basic.show_current_playlist(state)
+    elif base == "/pl.play":
+        # /pl.play    plays the active playlist
+        # /pl.play X  plays the named/indexed playlist (X)
+        if args:
+            playlists_basic.play_playlist(state, args[0])
+        else:
+            playlists_basic.play_active_playlist(state)
+    elif base == "/pl.close":
+        playlists_basic.close_playlist(state)
     # Unknown command
     else:
         print("Unknown command. Try /help")
