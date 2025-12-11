@@ -92,6 +92,10 @@ def _activate_playlist_queue(
         print("[pl] Error: Playlist is None.")
         return
 
+    if not playlist.tracks:
+        print("[pl] Warning: Playlist is empty.")
+        return
+
     if not hasattr(playlist, "tracks"):
         print("[pl] Error: Playlist invalid.")
         return
