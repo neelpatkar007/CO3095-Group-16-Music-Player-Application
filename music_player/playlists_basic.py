@@ -76,6 +76,7 @@ def _activate_playlist_queue(
     auto_play: bool = True,
 ) -> None:
     """
+    S2-06:
     Make the given playlist the current playback queue.
     Sets state.tracks to the playlist's tracks.
     Resets current_index and position.
@@ -83,9 +84,28 @@ def _activate_playlist_queue(
     """
     _ensure_playlists(state)
 
+    if state is None:
+        print("[pl] Error: State is None.")
+        return
+
+    if playlist is None:
+        print("[pl] Error: Playlist is None.")
+        return
+
+    if not hasattr(playlist, "tracks"):
+        print("[pl] Error: Playlist invalid.")
+        return
+
+    if not isinstance(playlist.tracks, list):
+        print("[pl] Error: Playlist tracks corrupted.")
+        return
+
     # Ensure library_tracks is initialised
     if not hasattr(state, "library_tracks"):
         state.library_tracks = state.tracks
+    else:
+        if state.library_tracks is None:
+             state.library_tracks = []
 
     _set_active_by_playlist(state, playlist)
 
@@ -94,8 +114,12 @@ def _activate_playlist_queue(
     state.current_index = 0
     state.position_seconds = 0.0
 
+    # Auto Play Logic
     if auto_play:
-        player_core.play(state)
+        if hasattr(player_core, "play"):
+             player_core.play(state)
+        else:
+             print("[pl] Error: Player core not available.")
 
 
 # S2-01: create, rename, delete playlists
@@ -264,6 +288,7 @@ def show_current_playlist(state: PlayerState) -> None:
 
 def play_playlist(state: PlayerState, selector: str) -> None:
     """
+    S2-06:
     Explicit command for playing a specific playlist:
     - resolves the playlist
     - sets it as the active queue
@@ -277,6 +302,7 @@ def play_playlist(state: PlayerState, selector: str) -> None:
 
 def play_active_playlist(state: PlayerState) -> None:
     """
+    S2-06:
     Play whatever playlist is currently marked active.
     Used by /pl.play with no arguments.
     """
@@ -290,6 +316,7 @@ def play_active_playlist(state: PlayerState) -> None:
 
 def close_playlist(state: PlayerState) -> None:
     """
+    S2-06
     Return to the main library queue.
 
     - resets state.tracks back to state.library_tracks
