@@ -28,6 +28,9 @@ def search_library(state: PlayerState, query: str) -> None:
     if not isinstance(state.tracks, list):
         print("[lib] Error: Library tracks data is corrupted.")
         return
+    if not state.tracks:
+        print("[lib] Library is empty.")
+        return
 
 
 
