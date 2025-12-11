@@ -13,6 +13,7 @@ This module handles the basic playlist lifecycle and listing.
 from __future__ import annotations
 from typing import Optional
 
+from music_player import player_core
 from music_player.player_state import PlayerState
 from music_player.playlist_model import Playlist
 from music_player.time_utils import format_mm_ss
@@ -68,6 +69,61 @@ def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     except ValueError:
         return
     state.active_playlist_index = idx
+
+def _activate_playlist_queue(
+    state: PlayerState,
+    playlist: Playlist,
+    auto_play: bool = True,
+) -> None:
+    """
+    S2-06:
+    Make the given playlist the current playback queue.
+    Sets state.tracks to the playlist's tracks.
+    Resets current_index and position.
+    Keeps a reference to the original library in state.library_tracks.
+    """
+    _ensure_playlists(state)
+
+    if state is None:
+        print("[pl] Error: State is None.")
+        return
+
+    if playlist is None:
+        print("[pl] Error: Playlist is None.")
+        return
+
+    if not playlist.tracks:
+        print("[pl] Warning: Playlist is empty.")
+        return
+
+    if not hasattr(playlist, "tracks"):
+        print("[pl] Error: Playlist invalid.")
+        return
+
+    if not isinstance(playlist.tracks, list):
+        print("[pl] Error: Playlist tracks corrupted.")
+        return
+
+    # Ensure library_tracks is initialised
+    if not hasattr(state, "library_tracks"):
+        state.library_tracks = state.tracks
+    else:
+        if state.library_tracks is None:
+             state.library_tracks = []
+
+    _set_active_by_playlist(state, playlist)
+
+    # Queue is now the playlist tracks
+    state.tracks = playlist.tracks
+    state.current_index = 0
+    state.position_seconds = 0.0
+
+    # Auto Play Logic
+    if auto_play:
+        if hasattr(player_core, "play"):
+             player_core.play(state)
+        else:
+             print("[pl] Error: Player core not available.")
 
 
 # S2-01: create, rename, delete playlists
@@ -215,6 +271,9 @@ def open_playlist(state: PlayerState, selector: str) -> None:
     print(f"[pl] Opened playlist '{pl.name}':")
     _print_playlist_contents(pl)
 
+    # Make it the active queue and start playback
+    _activate_playlist_queue(state, pl, auto_play=True)
+
 
 def show_current_playlist(state: PlayerState) -> None:
     """
@@ -222,8 +281,70 @@ def show_current_playlist(state: PlayerState) -> None:
       - If an active playlist exists, print its contents.
       - Otherwise print guidance.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    if state.active_playlist_index is None or not state.playlists:
+        print("[pl] No active playlist. Use /pl.open <name|index>.")
+        return
+
+    pl = state.playlists[state.active_playlist_index]
+    print(f"[pl] Current playlist '{pl.name}':")
+    _print_playlist_contents(pl)
+
+def play_playlist(state: PlayerState, selector: str) -> None:
+    """
+    S2-06:
+    Explicit command for playing a specific playlist:
+    - resolves the playlist
+    - sets it as the active queue
+    - starts playback from the first track
+    """
+    _ensure_playlists(state)
+    pl = _resolve_playlist(state, selector)
+    if pl is None:
+        return
+    _activate_playlist_queue(state, pl, auto_play=True)
+
+def play_active_playlist(state: PlayerState) -> None:
+    """
+    S2-06:
+    Play whatever playlist is currently marked active.
+    Used by /pl.play with no arguments.
+    """
+    _ensure_playlists(state)
+    if state.active_playlist_index is None or not state.playlists:
+        print("[pl] No active playlist. Use /pl.open or /pl.play <name>.")
+        return
+
+    pl = state.playlists[state.active_playlist_index]
+    _activate_playlist_queue(state, pl, auto_play=True)
+
+def close_playlist(state: PlayerState) -> None:
+    """
+    S2-06
+    Return to the main library queue.
+
+    - resets state.tracks back to state.library_tracks
+    - clears active_playlist_index
+    - stops playback and resets position
+    """
+    # If there's no library there's nowhere to go back to
+    if not hasattr(state, "library_tracks"):
+        print("[pl] No main library to return to.")
+        return
+
+    if state.tracks is state.library_tracks:
+        # Already in main library
+        state.active_playlist_index = None
+        print("[pl] Already in main library.")
+        return
+
+    # Stop current playback and restore the main library as the queue
+    player_core.stop(state)
+    state.tracks = state.library_tracks
+    state.current_index = 0
+    state.position_seconds = 0.0
+    state.active_playlist_index = None
+    print("[pl] Closed playlist; returned to main library queue.")
 
 def _print_playlist_contents(pl: Playlist) -> None:
     """
