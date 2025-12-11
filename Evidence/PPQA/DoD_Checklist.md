@@ -1,8 +1,8 @@
 # Definition of Done (DoD) – Music Player Application
 
-Version: 1.2 
+Version: 1.3 
 
-Date: 2025-11-13 
+Date: 2025-12-11 
 
 Purpose:
 To define objective criteria for user stories, sprints and the final project so that all deliverables meet the project’s quality, testing, and documentation standards in compliance with CMMI Level 2.
@@ -19,10 +19,6 @@ To define objective criteria for user stories, sprints and the final project so 
 |                         | Functions contain docstrings/inline comments.                        | YES/NO |
 |                         | Code runs on lab machines without external dependencies.             | YES/NO |
 |                         | All relevant CIs committed and versioned.                            | YES/NO |
-| Testing                 | Unit tests (black-box and white-box) created and pass locally.       | YES/NO |
-|                         | Symbolic and concolic tests created and executed successfully.       | YES/NO |
-|                         | Minimum 85 % coverage achieved (verified in `coverage_report.csv`).  | YES/NO |
-|                         | No critical or major defects open.                                   | YES/NO |
 | Quality Assurance       | Peer review and DoD checklist completed.                             | YES/NO |
 |                         | Evidence uploaded to `/evidence/MA` and `/evidence/PPQA`.            | YES/NO |
 | Documentation           | Help/CLI documentation updated for new commands in `README.md`.      | YES/NO |
@@ -41,6 +37,10 @@ To define objective criteria for user stories, sprints and the final project so 
 | Configuration Management | All branches merged, reviewed, tagged (e.g., `v0.x.0`), and logged in `Tag_Log.md`. | YES/NO |
 | Quality Assurance        | Scrum Master completed sprint review.                                               | YES/NO |
 | CMMI Evidence            | All six process areas (REQM, PP, PMC, CM, MA, PPQA) updated.                        | YES/NO |
+| Testing                 | Unit tests (black-box and white-box) created and pass locally                       | YES/NO |
+|                         | Symbolic and concolic tests created and executed successfully                       | YES/NO |
+|                         | Minimum 85 % coverage achieved (verified in `coverage_report.csv`).                 | YES/NO |
+|                         | No critical or major defects open.                                                  | YES/NO |
 
 
 

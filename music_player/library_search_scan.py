@@ -25,7 +25,7 @@ def _print_tracks_table(tracks: List[Track]) -> None:
     raise NotImplementedError
 
 
-# --- S2-03 & S2-04 ---------------------------------------------------------------
+# S2-03 & S2-04
 
 
 def search_library(state: PlayerState, query: str) -> None:
@@ -67,7 +67,7 @@ def view_albums_table(state: PlayerState) -> None:
     raise NotImplementedError
 
 
-# --- S2-09 -----------------------------------------------------------------------
+# S2-09
 
 
 def rescan_for_new_tracks(state: PlayerState) -> None:
