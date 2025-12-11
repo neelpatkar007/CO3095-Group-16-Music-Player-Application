@@ -288,6 +288,33 @@ def play_active_playlist(state: PlayerState) -> None:
     pl = state.playlists[state.active_playlist_index]
     _activate_playlist_queue(state, pl, auto_play=True)
 
+def close_playlist(state: PlayerState) -> None:
+    """
+    Return to the main library queue.
+
+    - resets state.tracks back to state.library_tracks
+    - clears active_playlist_index
+    - stops playback and resets position
+    """
+    # If there's no library there's nowhere to go back to
+    if not hasattr(state, "library_tracks"):
+        print("[pl] No main library to return to.")
+        return
+
+    if state.tracks is state.library_tracks:
+        # Already in main library
+        state.active_playlist_index = None
+        print("[pl] Already in main library.")
+        return
+
+    # Stop current playback and restore the main library as the queue
+    player_core.stop(state)
+    state.tracks = state.library_tracks
+    state.current_index = 0
+    state.position_seconds = 0.0
+    state.active_playlist_index = None
+    print("[pl] Closed playlist; returned to main library queue.")
+
 def _print_playlist_contents(pl: Playlist) -> None:
     """
     This is a helper function that prints the contents of a playlist,
