@@ -25,6 +25,9 @@ def search_library(state: PlayerState, query: str) -> None:
     if state is None or not hasattr(state, "tracks"):
         print("[lib] Error: Library state is not available.")
         return
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
 
 
 
