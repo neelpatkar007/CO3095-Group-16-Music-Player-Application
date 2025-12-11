@@ -35,6 +35,30 @@ def search_library(state: PlayerState, query: str) -> None:
     if not query:
         print("[lib] Usage: /search <text>")
         return
+    results: List[Track] = []
+    for t in state.tracks:
+        if t is None:
+            continue
+
+        title = (getattr(t, "title", "") or "").lower()
+        artist = (getattr(t, "artist", "") or "").lower()
+
+        filename = ""
+        if getattr(t, "path", None) is not None:
+            filename = t.path.name.lower()
+
+        if (
+                query in title
+                or query in artist
+                or query in filename
+        ):
+            results.append(t)
+
+    if not results:
+        print("[lib] No matches found.")
+
+    print(f"[lib] Search results for '{query}':")
+    _print_tracks_table(results)
 
 
 
