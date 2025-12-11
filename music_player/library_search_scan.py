@@ -31,6 +31,10 @@ def search_library(state: PlayerState, query: str) -> None:
     if not state.tracks:
         print("[lib] Library is empty.")
         return
+    query = (query or "").strip().lower()
+    if not query:
+        print("[lib] Usage: /search <text>")
+        return
 
 
 
