@@ -156,6 +156,13 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+
+    # Code for Merge 2 Playlists (S2-11)
+    elif base == "/pl.merge":
+        if len(args) < 2:
+            print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
+
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
