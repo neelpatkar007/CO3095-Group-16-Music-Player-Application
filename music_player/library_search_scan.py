@@ -54,6 +54,15 @@ def view_artists_table(state: PlayerState) -> None:
     if not by_artist:
         print("[lib] No artist information available.")
         return
+    print(f"{'Artist':<25}  {'Tracks':>6}  {'Time':>8}")
+    print("-" * 45)
+    for artist, tracks in sorted(by_artist.items()):
+        count = len(tracks)
+        total = 0.0
+        for t in tracks:
+            if t and t.duration_seconds is not None:
+                total += t.duration_seconds
+        print(f"{artist:<25}  {count:6d}  {format_mm_ss(total):>8}")
 
 
 def view_albums_table(state: PlayerState) -> None:
