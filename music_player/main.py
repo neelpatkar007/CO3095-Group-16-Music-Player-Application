@@ -161,7 +161,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.merge":
         if len(args) < 2:
             print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
-
+        else:
+            target, source = args[0], args[1]
+            dedupe = True
+            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+                dedupe = False
+            playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
 
     # Unknown command
     else:
