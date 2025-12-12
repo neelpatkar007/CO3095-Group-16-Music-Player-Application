@@ -37,27 +37,37 @@ def merge_playlists(
       - If dedupe=True, skip tracks already present in target.
       - Print summary (how many added, whether deduped).
     """
+    # Ensure playlist structures exist before operating
     _ensure_playlists(state)
 
+    # Resolve target and source playlists
     target = _get_playlist(state, target_selector)
     if target is None:
         return
+
+    # Resolve source playlist
     source = _get_playlist(state, source_selector)
     if source is None:
         return
 
+    # Prevent the merging of a playlist into itself
     if target is source:
         print("[pl] Cannot merge a playlist into itself.")
         return
 
     added = 0
     for track in source.tracks:
+        # Skip adding tracks that already exist when deduplication is enabled
         if dedupe and track in target.tracks:
             continue
+        # Append the track. And track how many were added.
         target.tracks.append(track)
         added += 1
 
+    # Build human-readable deduplication status
     dedupe_text = "with duplicates removed" if dedupe else "including duplicates"
+
+    # Final confirmation message of merge summary
     print(
         f"[pl] Merged {added} tracks from '{source.name}' into "
         f"'{target.name}' ({dedupe_text})."
