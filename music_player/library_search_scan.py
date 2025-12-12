@@ -1,12 +1,3 @@
-"""
-Backbone: Sprint 2 – library_search_scan
-
-Stories:
-- S2-03: Search library by title, artist, file name
-- S2-04: View songs/albums/artists in clear text tables
-- S2-09: Scan music folder for new files
-"""
-
 from __future__ import annotations
 from collections import defaultdict
 from typing import List
