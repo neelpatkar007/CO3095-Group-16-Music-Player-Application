@@ -9,15 +9,18 @@ from music_player.time_utils import format_mm_ss
 
 
 def _print_tracks_table(tracks: List[Track]) -> None:
-    """
-    Shared helper to print a table of tracks (S2-04).
-    Columns: No, Title, Artist, Time.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if not tracks:
+        print("  (no tracks)")
+        return
 
+    print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
+    print("-" * 65)
+    for idx, t in enumerate(tracks, start=1):
+        title = (t.title or "")[:30]
+        artist = (t.artist or "")[:20]
+        dur = format_mm_ss(t.duration_seconds)
+        print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
 
-# S2-03 & S2-04
 
 
 def search_library(state: PlayerState, query: str) -> None:
