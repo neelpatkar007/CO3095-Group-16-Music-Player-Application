@@ -1,5 +1,6 @@
 import threading
 import time
+import library_search_scan
 
 from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
@@ -156,6 +157,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+    # Library search & views (S2-03, S2-04, S2-09)
+    elif base == "/search":
+        q = " ".join(args) if args else ""
+        library_search_scan.search_library(state, q)
     # Unknown command
     else:
         print("Unknown command. Try /help")
