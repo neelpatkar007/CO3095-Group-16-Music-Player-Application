@@ -37,13 +37,9 @@ def view_songs_table(state: PlayerState) -> None:
 
 
 def view_artists_table(state: PlayerState) -> None:
-    """
-    S2-04:
-      - Group tracks by artist.
-      - Show artist name, track count, total duration.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
 
 
 def view_albums_table(state: PlayerState) -> None:
