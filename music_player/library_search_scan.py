@@ -32,12 +32,8 @@ def search_library(state: PlayerState, query: str) -> None:
 
 
 def view_songs_table(state: PlayerState) -> None:
-    """
-    S2-04:
-      - Use _print_tracks_table to show all library tracks.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    print("[lib] Songs (library):")
+    _print_tracks_table(state.tracks)
 
 
 def view_artists_table(state: PlayerState) -> None:
