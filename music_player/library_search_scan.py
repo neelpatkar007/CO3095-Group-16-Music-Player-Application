@@ -43,6 +43,9 @@ def view_artists_table(state: PlayerState) -> None:
     if not isinstance(state.tracks, list):
         print("[lib] Error: Library tracks data is corrupted.")
         return
+    if not state.tracks:
+        print("[lib] Library is empty.")
+        return
 
 
 def view_albums_table(state: PlayerState) -> None:
