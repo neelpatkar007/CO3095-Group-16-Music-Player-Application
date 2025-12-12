@@ -37,8 +37,21 @@ def merge_playlists(
       - If dedupe=True, skip tracks already present in target.
       - Print summary (how many added, whether deduped).
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+
+    target = _get_playlist(state, target_selector)
+    if target is None:
+        return
+    source = _get_playlist(state, source_selector)
+    if source is None:
+        return
+
+    if target is source:
+        print("[pl] Cannot merge a playlist into itself.")
+        return
+
+
+    )
 
 
 def copy_playlist(
