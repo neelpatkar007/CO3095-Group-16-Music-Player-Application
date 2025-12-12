@@ -50,6 +50,17 @@ def merge_playlists(
         print("[pl] Cannot merge a playlist into itself.")
         return
 
+    added = 0
+    for track in source.tracks:
+        if dedupe and track in target.tracks:
+            continue
+        target.tracks.append(track)
+        added += 1
+
+    dedupe_text = "with duplicates removed" if dedupe else "including duplicates"
+    print(
+        f"[pl] Merged {added} tracks from '{source.name}' into "
+        f"'{target.name}' ({dedupe_text})."
 
     )
 
