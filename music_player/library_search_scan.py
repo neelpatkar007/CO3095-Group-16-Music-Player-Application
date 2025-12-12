@@ -46,6 +46,14 @@ def view_artists_table(state: PlayerState) -> None:
     if not state.tracks:
         print("[lib] Library is empty.")
         return
+    by_artist: dict[str, List[Track]] = defaultdict(list)
+    for t in state.tracks:
+        if not t or not getattr(t, "artist", None):
+            continue
+        by_artist[t.artist].append(t)
+    if not by_artist:
+        print("[lib] No artist information available.")
+        return
 
 
 def view_albums_table(state: PlayerState) -> None:
