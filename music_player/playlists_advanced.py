@@ -54,5 +54,14 @@ def copy_playlist(
       - Append to state.playlists.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    new_name = (new_name or "").strip()
+    if not new_name:
+        print("[pl] Usage: /pl.copy <source> <new-name>")
+        return
+
+    source = _get_playlist(state, source_selector)
+    if source is None:
+        return
+
+
