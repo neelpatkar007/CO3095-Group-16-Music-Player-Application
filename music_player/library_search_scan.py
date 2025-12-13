@@ -66,14 +66,19 @@ def view_artists_table(state: PlayerState) -> None:
 
 
 def view_albums_table(state: PlayerState) -> None:
-    """
-    S2-04:
-      - Approximate album by parent folder name of each track.
-      - Show album (folder), number of tracks, total duration.
-    """
-    # TODO: implement
-    raise NotImplementedError
-
+    by_album: dict[str, List[Track]] = defaultdict(list)
+    for t in state.tracks:
+        album = t.path.parent.name or "(no folder)"
+        by_album[album].append(t)
+    print(f"{'Album (folder)':<25}  {'Tracks':>6}  {'Time':>8}")
+    print("-" * 45)
+    for album, tracks in sorted(by_album.items()):
+        count = len(tracks)
+        total = 0.0
+        for t in tracks:
+            if t.duration_seconds is not None:
+                total += t.duration_seconds
+        print(f"{album:<25}  {count:6d}  {format_mm_ss(total):>8}")
 
 # S2-09
 
