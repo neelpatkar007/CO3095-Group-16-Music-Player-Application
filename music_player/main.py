@@ -156,6 +156,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+    elif base == "/artists":
+        library_search_scan.view_artists_table(state)
+    elif base == "/albums":
+        library_search_scan.view_albums_table(state)
     # Unknown command
     else:
         print("Unknown command. Try /help")
