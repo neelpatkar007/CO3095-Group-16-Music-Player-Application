@@ -155,7 +155,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
-        playlists_basic.close_playlist(state)
+            playlists_basic.close_playlist(state)
+    elif base == "/search":
+        q = "".join(args) if args else ""
+        library_search_scan.search_library(state,q)
+    elif base == "/songs":
+        library_search_scan.view_songs_table(state)
     elif base == "/artists":
         library_search_scan.view_artists_table(state)
     elif base == "/albums":
