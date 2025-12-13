@@ -156,6 +156,21 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+
+    # Code for Merge 2 Playlists (S2-11)
+    elif base == "/pl.merge":
+        # Requires at least a target and a source playlist name
+        if len(args) < 2:
+            print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
+        else:
+            target, source = args[0], args[1]
+            # By default, dedupe is set to True
+            dedupe = True
+            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+                dedupe = False
+            # Perform the merge using advanced playlist function
+            playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
