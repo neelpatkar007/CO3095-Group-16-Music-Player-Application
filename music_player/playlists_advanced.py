@@ -88,5 +88,26 @@ def copy_playlist(
       - Append to state.playlists.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    new_name = (new_name or "").strip()
+    # Validation for new_name
+    if not new_name:
+        print("[pl] Usage: /pl.copy <source> <new-name>")
+        return
+
+    # Look up source playlist to copy from
+    source = _get_playlist(state, source_selector)
+    if source is None:
+        # _get_playlist already prints error
+        return
+
+    # Check for name conflict
+    for pl in state.playlists:
+        if pl.name.lower() == new_name.lower():
+            print(f"[pl] A playlist named '{new_name}' already exists.")
+            return
+
+    cloned = Playlist(name=new_name, tracks=list(source.tracks))
+    state.playlists.append(cloned)
+    print(f"[pl] Copied playlist '{source.name}' -> '{new_name}'.")
+

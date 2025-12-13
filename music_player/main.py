@@ -157,6 +157,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
 
+    # Code for copy of playlist (S2-12)
+    elif base == "/pl.copy":
+        # Require source and new playlist name
+        if len(args) < 2:
+            print("[main] Usage: /pl.copy <source> <new-name>")
+        else:
+            source, new_name = args[0], " ".join(args[1:])
+            # Delegate the actual copying to playlists_advanced module
+            playlists_advanced.copy_playlist(state, source, new_name)
     # Code for Merge 2 Playlists (S2-11)
     elif base == "/pl.merge":
         # Requires at least a target and a source playlist name
