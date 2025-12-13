@@ -166,6 +166,19 @@ def handle_command(state: PlayerState, command: str) -> bool:
             source, new_name = args[0], " ".join(args[1:])
             # Delegate the actual copying to playlists_advanced module
             playlists_advanced.copy_playlist(state, source, new_name)
+    # Code for Merge 2 Playlists (S2-11)
+    elif base == "/pl.merge":
+        # Requires at least a target and a source playlist name
+        if len(args) < 2:
+            print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
+        else:
+            target, source = args[0], args[1]
+            # By default, dedupe is set to True
+            dedupe = True
+            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+                dedupe = False
+            # Perform the merge using advanced playlist function
+            playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
 
     # Unknown command
     else:
