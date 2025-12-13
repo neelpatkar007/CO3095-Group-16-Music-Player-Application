@@ -22,13 +22,47 @@ def _print_tracks_table(tracks: List[Track]) -> None:
 
 
 def search_library(state: PlayerState, query: str) -> None:
-    """
-    S2-03:
-      - Case-insensitive search across title, artist, and file name.
-      - Print results using _print_tracks_table.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
+
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
+
+    if not state.tracks:
+        print("[lib] Library is empty.")
+        return
+
+    query = (query or "").strip().lower()
+    if not query:
+        print("[lib] Usage: /search <text>")
+        return
+
+    results: List[Track] = []
+    for t in state.tracks:
+        if t is None:
+            continue
+
+        title = (getattr(t, "title", "") or "").lower()
+        artist = (getattr(t, "artist", "") or "").lower()
+
+        filename = ""
+        if getattr(t, "path", None) is not None:
+            filename = t.path.name.lower()
+
+        if (
+            query in title
+            or query in artist
+            or query in filename
+        ):
+            results.append(t)
+
+    if not results:
+        print("[lib] No matches found.")
+
+    print(f"[lib] Search results for '{query}':")
+    _print_tracks_table(results)
 
 
 def view_songs_table(state: PlayerState) -> None:
