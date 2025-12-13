@@ -156,6 +156,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+
+    # Code for copy of playlist (S2-12)
+    elif base == "/pl.copy":
+        if len(args) < 2:
+            print("[main] Usage: /pl.copy <source> <new-name>")
+        else:
+            source, new_name = args[0], " ".join(args[1:])
+            playlists_advanced.copy_playlist(state, source, new_name)
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
