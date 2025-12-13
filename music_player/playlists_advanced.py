@@ -64,4 +64,12 @@ def copy_playlist(
     if source is None:
         return
 
+    for pl in state.playlists:
+        if pl.name.lower() == new_name.lower():
+            print(f"[pl] A playlist named '{new_name}' already exists.")
+            return
+
+    cloned = Playlist(name=new_name, tracks=list(source.tracks))
+    state.playlists.append(cloned)
+    print(f"[pl] Copied playlist '{source.name}' -> '{new_name}'.")
 
