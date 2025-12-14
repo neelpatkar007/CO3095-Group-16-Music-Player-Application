@@ -51,7 +51,7 @@ def add_track_from_library(state: PlayerState, playlist_selector: str, library_i
 def remove_track_from_playlist(state: PlayerState, playlist_selector: str, playlist_index_str: str) -> None:
     info = _get_playlist(state, playlist_selector)
     if info is None: return
-    _, pl = info
+    pl_index, pl = info
 
     if not pl.tracks:
         print(f"[pl] Playlist '{pl.name}' is already empty.")
@@ -69,6 +69,14 @@ def remove_track_from_playlist(state: PlayerState, playlist_selector: str, playl
     if idx >= len(pl.tracks):
         print(f"[pl] Error: Playlist index {idx + 1} out of range.")
         return
+
+    # Active Playlist Logic (High Complexity)
+    is_active = (state.active_playlist_index == pl_index)
+    if is_active:
+        if idx < state.current_index:
+            state.current_index -= 1
+        elif idx == state.current_index:
+            pass
 
     track = pl.tracks.pop(idx)
     print(f"[pl] Removed '{track.display_name}' from playlist '{pl.name}'.")
@@ -100,6 +108,17 @@ def move_track_within_playlist(state: PlayerState, playlist_selector: str, from_
     if from_idx == to_idx:
         print("[pl] Source and destination are the same.")
         return
+
+    # Active Playlist Logic (High Complexity)
+    is_active = (state.active_playlist_index == pl_index)
+    if is_active:
+        current = state.current_index
+        if current == from_idx:
+            state.current_index = to_idx
+        elif from_idx < current and to_idx >= current:
+            state.current_index -= 1
+        elif from_idx > current and to_idx <= current:
+            state.current_index += 1
 
     track = pl.tracks.pop(from_idx)
     pl.tracks.insert(to_idx, track)
