@@ -72,3 +72,35 @@ def remove_track_from_playlist(state: PlayerState, playlist_selector: str, playl
 
     track = pl.tracks.pop(idx)
     print(f"[pl] Removed '{track.display_name}' from playlist '{pl.name}'.")
+
+
+def move_track_within_playlist(state: PlayerState, playlist_selector: str, from_index_str: str,
+                               to_index_str: str) -> None:
+    info = _get_playlist(state, playlist_selector)
+    if info is None: return
+    pl_index, pl = info
+
+    if len(pl.tracks) < 2:
+        print("[pl] Not enough tracks to reorder.")
+        return
+
+    try:
+        from_idx = int(from_index_str) - 1
+        to_idx = int(to_index_str) - 1
+    except (TypeError, ValueError):
+        print("[pl] Usage: /pl.move <playlist> <from> <to>")
+        return
+
+    if not (0 <= from_idx < len(pl.tracks)):
+        print("[pl] 'from' index out of range.")
+        return
+    if not (0 <= to_idx < len(pl.tracks)):
+        print("[pl] 'to' index out of range.")
+        return
+    if from_idx == to_idx:
+        print("[pl] Source and destination are the same.")
+        return
+
+    track = pl.tracks.pop(from_idx)
+    pl.tracks.insert(to_idx, track)
+    print(f"[pl] Moved '{track.display_name}' in playlist '{pl.name}' from position {from_idx + 1} to {to_idx + 1}.")
