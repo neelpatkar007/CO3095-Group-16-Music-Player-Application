@@ -173,6 +173,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
             source, new_name = args[0], " ".join(args[1:])
             # Delegate the actual copying to playlists_advanced module
             playlists_advanced.copy_playlist(state, source, new_name)
+    # Code to remove track from playlist (S2-08)
+    elif base == "/pl.remove":
+        # Usage: /pl.remove <playlist_name> <playlist_index>
+        if len(args) < 2:
+            print("[pl] Usage: /pl.remove <playlist> <playlist-index>")
+        else:
+            playlists_edit.remove_track_from_library(state, args[0], args[1])
+
+
     # Code for Merge 2 Playlists (S2-11)
     elif base == "/pl.merge":
         # Requires at least a target and a source playlist name
