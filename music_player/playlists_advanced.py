@@ -37,8 +37,42 @@ def merge_playlists(
       - If dedupe=True, skip tracks already present in target.
       - Print summary (how many added, whether deduped).
     """
-    # TODO: implement
-    raise NotImplementedError
+    # Ensure playlist structures exist before operating
+    _ensure_playlists(state)
+
+    # Resolve target and source playlists
+    target = _get_playlist(state, target_selector)
+    if target is None:
+        return
+
+    # Resolve source playlist
+    source = _get_playlist(state, source_selector)
+    if source is None:
+        return
+
+    # Prevent the merging of a playlist into itself
+    if target is source:
+        print("[pl] Cannot merge a playlist into itself.")
+        return
+
+    added = 0
+    for track in source.tracks:
+        # Skip adding tracks that already exist when deduplication is enabled
+        if dedupe and track in target.tracks:
+            continue
+        # Append the track. And track how many were added.
+        target.tracks.append(track)
+        added += 1
+
+    # Build human-readable deduplication status
+    dedupe_text = "with duplicates removed" if dedupe else "including duplicates"
+
+    # Final confirmation message of merge summary
+    print(
+        f"[pl] Merged {added} tracks from '{source.name}' into "
+        f"'{target.name}' ({dedupe_text})."
+
+    )
 
 
 def copy_playlist(
@@ -54,5 +88,26 @@ def copy_playlist(
       - Append to state.playlists.
       - Print confirmation.
     """
-    # TODO: implement
-    raise NotImplementedError
+    _ensure_playlists(state)
+    new_name = (new_name or "").strip()
+    # Validation for new_name
+    if not new_name:
+        print("[pl] Usage: /pl.copy <source> <new-name>")
+        return
+
+    # Look up source playlist to copy from
+    source = _get_playlist(state, source_selector)
+    if source is None:
+        # _get_playlist already prints error
+        return
+
+    # Check for name conflict
+    for pl in state.playlists:
+        if pl.name.lower() == new_name.lower():
+            print(f"[pl] A playlist named '{new_name}' already exists.")
+            return
+
+    cloned = Playlist(name=new_name, tracks=list(source.tracks))
+    state.playlists.append(cloned)
+    print(f"[pl] Copied playlist '{source.name}' -> '{new_name}'.")
+
