@@ -107,3 +107,8 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
         print("[lib] No new tracks found.")
         return
 
+    state.tracks.extend(new_tracks)
+    if len(new_tracks) > 50:
+        print(f"[lib] Bulk imported {len(new_tracks)} new tracks into the library.")
+    else:
+        print(f"[lib] Added {len(new_tracks)} new track(s) to the library.")
