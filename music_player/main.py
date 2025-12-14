@@ -5,15 +5,14 @@ from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
 from music_player.player_state import PlayerState
 
-# Import all modules that handle specific commands
 from music_player import (
-    player_core,            # Handles core playback logic
-    player_queue,           # Handles playlist navigation
-    player_help,            # Handles displaying the help messages
-    player_ui,              # Handles UI (visual output)
-    player_seek,            # Handles seeking within tracks
-    player_audio,           # Handles volume and mute controls
-    player_shortcuts,       # Handles keyboard shortcuts (single-key commands)
+    player_core,
+    player_queue,
+    player_help,
+    player_ui,
+    player_seek,
+    player_audio,
+    player_shortcuts,
 )
 
 # Sprint 2 modules
@@ -28,7 +27,11 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
 
-    It calls player_core.update_playback(state, delta_seconds) 10 times per second.
+    This is what makes autoplay work even when the user is not
+    typing any commands.
+
+    - It calls player_core.update_playback(state, delta_seconds)
+      around 10 times per second.
     """
     last = time.time()
 
@@ -36,12 +39,14 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
         now = time.time()
         delta = now - last
         last = now
-        # advances state.position_seconds while playing
-        # detects end-of-track
-        # auto-advances in playlists
+
+        # This will:
+        # - advance state.position_seconds while playing
+        # - detect end-of-track
+        # - auto-advance in playlists (your S2 behaviour)
         player_core.update_playback(state, delta)
 
-        # Sleep
+        # Sleep a little so we don't spin too fast
         time.sleep(0.1)
 
 def handle_command(state: PlayerState, command: str) -> bool:
@@ -123,7 +128,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_help.print_help(topic)
 
     # SPRINT 2 COMMANDS:
-    # Playlists basic (S2-01, S2-02, S2-05, S2-06, S2-07, S2-08, S2-10, )
+    # Playlists basic (S2-01, S2-05, S2-06, S2-10)
     elif base == "/pl.new":
         name = " ".join(args) if args else ""
         playlists_basic.create_playlist(state, name)
@@ -148,49 +153,64 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.show":
         playlists_basic.show_current_playlist(state)
     elif base == "/pl.play":
-        # /pl.play    plays the active playlist
-        # /pl.play X  plays the named/indexed playlist (X)
+        # /pl.play          -> play active playlist
+        # /pl.play MyMix    -> play named/indexed playlist
         if args:
             playlists_basic.play_playlist(state, args[0])
         else:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
-    #Code to add track from library (S2-07)
+
+    # Playlist edit (S2-02, S2-07, S2-08)
     elif base == "/pl.add":
-        # Usage: /pl.add <playlist_name> <song_index>
         if len(args) < 2:
-            print("[pl] Usage: /pl.add <playlist> <library-index>")
+            print("[main] Usage: /pl.add <playlist> <library-index>")
         else:
             playlists_edit.add_track_from_library(state, args[0], args[1])
-
-    # Code for copy of playlist (S2-12)
-    elif base == "/pl.copy":
-        # Require source and new playlist name
+    elif base == "/pl.remove":
         if len(args) < 2:
-            print("[main] Usage: /pl.copy <source> <new-name>")
+            print("[main] Usage: /pl.remove <playlist> <playlist-index>")
         else:
-            source, new_name = args[0], " ".join(args[1:])
-            # Delegate the actual copying to playlists_advanced module
-            playlists_advanced.copy_playlist(state, source, new_name)
-    # Code for Merge 2 Playlists (S2-11)
+            playlists_edit.remove_track_from_playlist(state, args[0], args[1])
+    elif base == "/pl.move":
+        if len(args) < 3:
+            print("[main] Usage: /pl.move <playlist> <from> <to>")
+        else:
+            playlists_edit.move_track_within_playlist(state, args[0], args[1], args[2])
+
+    # Playlist advanced (S2-11, S2-12)
     elif base == "/pl.merge":
-        # Requires at least a target and a source playlist name
         if len(args) < 2:
             print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
         else:
             target, source = args[0], args[1]
-            # By default, dedupe is set to True
             dedupe = True
             if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
                 dedupe = False
-            # Perform the merge using advanced playlist function
             playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
+    elif base == "/pl.copy":
+        if len(args) < 2:
+            print("[main] Usage: /pl.copy <source> <new-name>")
+        else:
+            source, new_name = args[0], " ".join(args[1:])
+            playlists_advanced.copy_playlist(state, source, new_name)
 
-    # Unknown command
+    # Library search & views (S2-03, S2-04, S2-09)
+    elif base == "/search":
+        q = " ".join(args) if args else ""
+        library_search_scan.search_library(state, q)
+    elif base == "/songs":
+        library_search_scan.view_songs_table(state)
+    elif base == "/artists":
+        library_search_scan.view_artists_table(state)
+    elif base == "/albums":
+        library_search_scan.view_albums_table(state)
+    elif base == "/scan":
+        library_search_scan.rescan_for_new_tracks(state)
+
     else:
         print("Unknown command. Try /help")
-
     return True
 
 
@@ -243,6 +263,7 @@ def main() -> None:
 
         # Ensure audio is stopped
         state.audio_engine.stop()
+
 
 if __name__ == "__main__":
     main()
