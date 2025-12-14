@@ -102,3 +102,8 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
         ):
             continue
         new_tracks.append(t)
+
+    if not new_tracks:
+        print("[lib] No new tracks found.")
+        return
+
