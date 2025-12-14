@@ -5,3 +5,6 @@
 * Raiyan Alam
 * Sanil Panchal
 * Samuel Ameyaw
+
+## About the Project:
+A command-line music player application developed as part of the CO3095 Software Measurement and Quality Assurance module at the University of Leicester. 
