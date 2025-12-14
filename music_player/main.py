@@ -190,6 +190,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
             if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
                 dedupe = False
             playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
+    elif base == "/scan":
+        library_search_scan.rescan_for_new_tracks(state)
     elif base == "/pl.copy":
         if len(args) < 2:
             print("[main] Usage: /pl.copy <source> <new-name>")
