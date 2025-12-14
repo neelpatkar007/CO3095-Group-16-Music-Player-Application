@@ -123,7 +123,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_help.print_help(topic)
 
     # SPRINT 2 COMMANDS:
-    # Playlists basic (S2-01, S2-05, S2-06, S2-10)
+    # Playlists basic (S2-01, S2-02, S2-05, S2-06, S2-07, S2-08, S2-10, )
     elif base == "/pl.new":
         name = " ".join(args) if args else ""
         playlists_basic.create_playlist(state, name)
@@ -156,6 +156,13 @@ def handle_command(state: PlayerState, command: str) -> bool:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
         playlists_basic.close_playlist(state)
+    #Code to add track from library (S2-07)
+    elif base == "/pl.add":
+        # Usage: /pl.add <playlist_name> <song_index>
+        if len(args) < 2:
+            print("[pl] Usage: /pl.add <playlist> <library-index>")
+        else:
+            playlists_edit.add_track_from_library(state, args[0], args[1])
 
     # Code for copy of playlist (S2-12)
     elif base == "/pl.copy":
