@@ -4,6 +4,7 @@ from music_player.player_state import PlayerState
 from music_player.playlists_basic import _ensure_playlists, _resolve_playlist
 from music_player.library import Track
 
+
 def _get_playlist(state: PlayerState, selector: str) -> Optional[tuple[int, object]]:
     _ensure_playlists(state)
     pl = _resolve_playlist(state, selector)
@@ -13,6 +14,7 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[tuple[int, obje
         return None
     idx = state.playlists.index(pl)
     return idx, pl
+
 
 def add_track_from_library(state: PlayerState, playlist_selector: str, library_index_str: str) -> None:
     source_tracks: List[Track] = []
@@ -44,3 +46,29 @@ def add_track_from_library(state: PlayerState, playlist_selector: str, library_i
     track = source_tracks[lib_idx]
     pl.tracks.append(track)
     print(f"[pl] Added '{track.display_name}' to playlist '{pl.name}'.")
+
+
+def remove_track_from_playlist(state: PlayerState, playlist_selector: str, playlist_index_str: str) -> None:
+    info = _get_playlist(state, playlist_selector)
+    if info is None: return
+    _, pl = info
+
+    if not pl.tracks:
+        print(f"[pl] Playlist '{pl.name}' is already empty.")
+        return
+
+    try:
+        idx = int(playlist_index_str) - 1
+    except (TypeError, ValueError):
+        print("[pl] Usage: /pl.remove <playlist> <playlist-index>")
+        return
+
+    if idx < 0:
+        print("[pl] Error: Song numbers must be positive.")
+        return
+    if idx >= len(pl.tracks):
+        print(f"[pl] Error: Playlist index {idx + 1} out of range.")
+        return
+
+    track = pl.tracks.pop(idx)
+    print(f"[pl] Removed '{track.display_name}' from playlist '{pl.name}'.")
