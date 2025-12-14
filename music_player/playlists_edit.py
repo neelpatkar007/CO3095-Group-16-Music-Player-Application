@@ -43,3 +43,4 @@ def add_track_from_library(state: PlayerState, playlist_selector: str, library_i
 
     track = source_tracks[lib_idx]
     pl.tracks.append(track)
+    print(f"[pl] Added '{track.display_name}' to playlist '{pl.name}'.")
