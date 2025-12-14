@@ -89,3 +89,16 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
     if not discovered:
         print("[lib] No tracks found on disk.")
         return
+
+    new_tracks: List[Track] = []
+    for t in discovered:
+        if t is None or not getattr(t, "path", None):
+            continue
+        if t.path in current_paths:
+            continue
+        if (
+                getattr(t, "duration_seconds", None) is not None
+                and t.duration_seconds <= 0
+        ):
+            continue
+        new_tracks.append(t)
