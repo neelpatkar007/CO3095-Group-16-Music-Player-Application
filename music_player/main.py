@@ -179,6 +179,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
                 dedupe = False
             # Perform the merge using advanced playlist function
             playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
+    elif base == "/scan":
+        library_search_scan.rescan_for_new_tracks(state)
 
     # Unknown command
     else:
