@@ -78,13 +78,13 @@ def add_track_from_library(
 
 
 def remove_track_from_playlist(state: PlayerState, playlist_selector: str, playlist_index_str: str) -> None:
-    # Stub for Branch 2 to prevent import errors
+    # Stub to prevent import errors
     print("[pl] Command not yet implemented in this branch.")
     pass
 
 
 def move_track_within_playlist(state: PlayerState, playlist_selector: str, from_index_str: str,
                                to_index_str: str) -> None:
-    # Stub for Branch 2 to prevent import errors
+    # Stub to prevent import errors
     print("[pl] Command not yet implemented in this branch.")
     pass
