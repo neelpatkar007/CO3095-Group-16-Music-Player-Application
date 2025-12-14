@@ -180,7 +180,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
             print("[pl] Usage: /pl.remove <playlist> <playlist-index>")
         else:
             playlists_edit.remove_track_from_library(state, args[0], args[1])
-
+    elif base == "/pl.move":
+        # Usage: /pl.move <playlist_name> <from_index> <to_index>
+        if len(args) < 3:
+            print("[pl] Usage: /pl.move <playlist> <from> <to>")
+        else:
+            playlists_edit.move_track_within_playlist(state, args[0], args[1], args[2])
 
     # Code for Merge 2 Playlists (S2-11)
     elif base == "/pl.merge":
