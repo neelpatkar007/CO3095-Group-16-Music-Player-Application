@@ -74,3 +74,6 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
     if state is None or not hasattr(state, "tracks"):
         print("[lib] Error: Library state is not available.")
         return
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
