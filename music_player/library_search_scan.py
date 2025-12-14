@@ -77,3 +77,10 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
     if not isinstance(state.tracks, list):
         print("[lib] Error: Library tracks data is corrupted.")
         return
+    print("[lib] Scanning for new tracks...")
+
+    current_paths = {
+        t.path
+        for t in state.tracks
+        if t is not None and getattr(t, "path", None) is not None
+    }
