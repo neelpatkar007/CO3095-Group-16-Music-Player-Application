@@ -84,3 +84,8 @@ def rescan_for_new_tracks(state: PlayerState) -> None:
         for t in state.tracks
         if t is not None and getattr(t, "path", None) is not None
     }
+    discovered = discover_tracks()
+
+    if not discovered:
+        print("[lib] No tracks found on disk.")
+        return
