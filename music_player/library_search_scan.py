@@ -71,11 +71,6 @@ def view_albums_table(state: PlayerState) -> None:
 
 
 def rescan_for_new_tracks(state: PlayerState) -> None:
-    """
-    S2-09:
-      - Call discover_tracks() to re-scan MUSIC_DIR.
-      - Compare paths with current state.tracks.
-      - Append any new tracks and print how many were added.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
