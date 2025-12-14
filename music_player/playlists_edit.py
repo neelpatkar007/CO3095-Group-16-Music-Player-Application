@@ -21,6 +21,7 @@ def add_track_from_library(state: PlayerState, playlist_selector: str, library_i
     elif state.tracks:
         source_tracks = state.tracks
     else:
+        print("[pl] Main library is empty, nothing to add.")
         return
 
     info = _get_playlist(state, playlist_selector)
@@ -30,11 +31,15 @@ def add_track_from_library(state: PlayerState, playlist_selector: str, library_i
     try:
         lib_idx = int(library_index_str) - 1
     except (TypeError, ValueError):
+        print("[pl] Usage: /pl.add <playlist> <library-index>")
         return
 
-    # Validation checks added
-    if lib_idx < 0: return
-    if lib_idx >= len(source_tracks): return
+    if lib_idx < 0:
+        print("[pl] Error: Song numbers must be positive.")
+        return
+    if lib_idx >= len(source_tracks):
+        print(f"[pl] Error: Library index {lib_idx + 1} out of range.")
+        return
 
     track = source_tracks[lib_idx]
     pl.tracks.append(track)
