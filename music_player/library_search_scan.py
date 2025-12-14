@@ -1,11 +1,3 @@
-"""
-Backbone: Sprint 2 – library_search_scan
-
-Stories:
-- S2-03: Search library by title, artist, file name
-- S2-04: View songs/albums/artists in clear text tables
-- S2-09: Scan music folder for new files
-"""
 
 from __future__ import annotations
 from collections import defaultdict
@@ -17,25 +9,60 @@ from music_player.time_utils import format_mm_ss
 
 
 def _print_tracks_table(tracks: List[Track]) -> None:
-    """
-    Shared helper to print a table of tracks (S2-04).
-    Columns: No, Title, Artist, Time.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if not tracks:
+        print("  (no tracks)")
+        return
 
+    print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
+    print("-" * 65)
+    for idx, t in enumerate(tracks, start=1):
+        title = (t.title or "")[:30]
+        artist = (t.artist or "")[:20]
+        dur = format_mm_ss(t.duration_seconds)
+        print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
 
-# S2-03 & S2-04
 
 
 def search_library(state: PlayerState, query: str) -> None:
-    """
-    S2-03:
-      - Case-insensitive search across title, artist, and file name.
-      - Print results using _print_tracks_table.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    # Basic state validation
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
+    if not state.tracks:
+        print("[lib] Library is empty.")
+        return
+    query = (query or "").strip().lower()
+    if not query:
+        print("[lib] Usage: /search <text>")
+        return
+    results: List[Track] = []
+    for t in state.tracks:
+        if t is None:
+            continue
+
+        title = (getattr(t, "title", "") or "").lower()
+        artist = (getattr(t, "artist", "") or "").lower()
+
+        filename = ""
+        if getattr(t, "path", None) is not None:
+            filename = t.path.name.lower()
+
+        if (
+                query in title
+                or query in artist
+                or query in filename
+        ):
+            results.append(t)
+
+    if not results:
+        print("[lib] No matches found.")
+
+    print(f"[lib] Search results for '{query}':")
+    _print_tracks_table(results)
+
 
 
 def view_songs_table(state: PlayerState) -> None:

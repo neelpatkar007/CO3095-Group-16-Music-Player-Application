@@ -1,5 +1,6 @@
 import threading
 import time
+import library_search_scan
 
 from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
@@ -200,6 +201,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/search":
         q = " ".join(args) if args else ""
         library_search_scan.search_library(state, q)
+    # Unknown command
     elif base == "/songs":
         library_search_scan.view_songs_table(state)
     elif base == "/artists":
