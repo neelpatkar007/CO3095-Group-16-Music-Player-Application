@@ -34,6 +34,28 @@ def search_library(state: PlayerState, query: str) -> None:
         print("[lib] Library is empty.")
         return
 
+
+    print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
+    print("-" * 65)
+    for idx, t in enumerate(tracks, start=1):
+        title = (t.title or "")[:30]
+        artist = (t.artist or "")[:20]
+        dur = format_mm_ss(t.duration_seconds)
+        print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
+
+
+
+def search_library(state: PlayerState, query: str) -> None:
+    # Basic state validation
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
+    if not state.tracks:
+        print("[lib] Library is empty.")
+        return
     query = (query or "").strip().lower()
     if not query:
         print("[lib] Usage: /search <text>")
@@ -55,6 +77,9 @@ def search_library(state: PlayerState, query: str) -> None:
             query in title
             or query in artist
             or query in filename
+                query in title
+                or query in artist
+                or query in filename
         ):
             results.append(t)
 
@@ -63,6 +88,7 @@ def search_library(state: PlayerState, query: str) -> None:
 
     print(f"[lib] Search results for '{query}':")
     _print_tracks_table(results)
+
 
 
 def view_songs_table(state: PlayerState) -> None:
@@ -118,11 +144,44 @@ def view_albums_table(state: PlayerState) -> None:
 
 
 def rescan_for_new_tracks(state: PlayerState) -> None:
-    """
-    S2-09:
-      - Call discover_tracks() to re-scan MUSIC_DIR.
-      - Compare paths with current state.tracks.
-      - Append any new tracks and print how many were added.
-    """
-    # TODO: implement
-    raise NotImplementedError
+    if state is None or not hasattr(state, "tracks"):
+        print("[lib] Error: Library state is not available.")
+        return
+    if not isinstance(state.tracks, list):
+        print("[lib] Error: Library tracks data is corrupted.")
+        return
+    print("[lib] Scanning for new tracks...")
+
+    current_paths = {
+        t.path
+        for t in state.tracks
+        if t is not None and getattr(t, "path", None) is not None
+    }
+    discovered = discover_tracks()
+
+    if not discovered:
+        print("[lib] No tracks found on disk.")
+        return
+
+    new_tracks: List[Track] = []
+    for t in discovered:
+        if t is None or not getattr(t, "path", None):
+            continue
+        if t.path in current_paths:
+            continue
+        if (
+                getattr(t, "duration_seconds", None) is not None
+                and t.duration_seconds <= 0
+        ):
+            continue
+        new_tracks.append(t)
+
+    if not new_tracks:
+        print("[lib] No new tracks found.")
+        return
+
+    state.tracks.extend(new_tracks)
+    if len(new_tracks) > 50:
+        print(f"[lib] Bulk imported {len(new_tracks)} new tracks into the library.")
+    else:
+        print(f"[lib] Added {len(new_tracks)} new track(s) to the library.")
