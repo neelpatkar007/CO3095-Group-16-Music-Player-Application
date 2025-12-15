@@ -24,10 +24,10 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
 
 
 def merge_playlists(
-    state: PlayerState,
-    target_selector: str,
-    source_selector: str,
-    dedupe: bool = True,
+        state: PlayerState,
+        target_selector: str,
+        source_selector: str,
+        dedupe: bool = True,
 ) -> None:
     """
     S2-11:
@@ -39,6 +39,16 @@ def merge_playlists(
     """
     # Ensure playlist structures exist before operating
     _ensure_playlists(state)
+
+    # Check 1: Validate target selector input
+    if not target_selector or not target_selector.strip():
+        print("[pl] Target selector cannot be empty.")
+        return
+
+    # Check 2: Validate source selector input
+    if not source_selector or not source_selector.strip():
+        print("[pl] Source selector cannot be empty.")
+        return
 
     # Resolve target and source playlists
     target = _get_playlist(state, target_selector)
@@ -55,8 +65,22 @@ def merge_playlists(
         print("[pl] Cannot merge a playlist into itself.")
         return
 
+    # Empty Source Check
+    # Check 3: Warn if source is empty (prevents useless looping)
+    if not source.tracks:
+        print(f"[pl] Source playlist '{source.name}' is empty.")
+        return
+
     added = 0
+    skipped_corrupt = 0
+
     for track in source.tracks:
+        # Data Integrity Check
+        # Check 4: Skip tracks that might be corrupted (or missing title)
+        if not track.title:
+            skipped_corrupt += 1
+            continue
+
         # Skip adding tracks that already exist when deduplication is enabled
         if dedupe and track in target.tracks:
             continue
@@ -71,7 +95,6 @@ def merge_playlists(
     print(
         f"[pl] Merged {added} tracks from '{source.name}' into "
         f"'{target.name}' ({dedupe_text})."
-
     )
 
 
