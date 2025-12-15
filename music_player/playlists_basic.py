@@ -215,6 +215,18 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
 
 # S2-05, S2-06, S2-10: list, open, show contents
 
+def _get_playlist_summary(pl: Playlist) -> tuple[int, float]:
+    """
+    S2-10 Helper: Calculates the total number of songs and total duration.
+    Returns: (track_count, total_duration_seconds)
+    """
+    if not pl.tracks:
+        return 0, 0.0
+
+    track_count = 0
+    total_duration = 0.0
+
+
 
 def list_playlists(state: PlayerState) -> None:
     """
