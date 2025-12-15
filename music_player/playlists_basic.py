@@ -226,6 +226,14 @@ def _get_playlist_summary(pl: Playlist) -> tuple[int, float]:
     track_count = 0
     total_duration = 0.0
 
+    for track in pl.tracks:
+        track_count += 1
+        # Check if duration_seconds is valid before summing
+        if hasattr(track, 'duration_seconds') and isinstance(track.duration_seconds,
+                                                             (int, float)) and track.duration_seconds >= 0:
+            total_duration += track.duration_seconds
+
+    return track_count, total_duration
 
 
 def list_playlists(state: PlayerState) -> None:
