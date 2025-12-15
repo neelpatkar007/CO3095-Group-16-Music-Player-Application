@@ -161,7 +161,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             playlists_basic.play_active_playlist(state)
     elif base == "/pl.close":
-        playlists_basic.close_playlist(state)
+            playlists_basic.close_playlist(state)
 
     # Playlist edit (S2-02, S2-07, S2-08)
     elif base == "/pl.add":
