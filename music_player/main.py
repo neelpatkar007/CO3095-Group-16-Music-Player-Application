@@ -1,6 +1,5 @@
 import threading
 import time
-import library_search_scan
 
 from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
@@ -44,7 +43,7 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
         # This will:
         # - advance state.position_seconds while playing
         # - detect end-of-track
-        # - auto-advance in playlists (your S2 behaviour)
+        # - auto-advance in playlists
         player_core.update_playback(state, delta)
 
         # Sleep a little so we don't spin too fast
@@ -203,7 +202,6 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/search":
         q = " ".join(args) if args else ""
         library_search_scan.search_library(state, q)
-    # Unknown command
     elif base == "/songs":
         library_search_scan.view_songs_table(state)
     elif base == "/artists":
@@ -213,6 +211,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/scan":
         library_search_scan.rescan_for_new_tracks(state)
 
+    # Unknown command
     else:
         print("Unknown command. Try /help")
     return True
