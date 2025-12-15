@@ -8,6 +8,9 @@ from music_player.time_utils import format_mm_ss
 
 
 def _print_tracks_table(tracks: List[Track]) -> None:
+    """
+    S2-04: Prints a formatted table of track info (Number, Title, Artist, Time).
+    """
     if not tracks:
         print("  (no tracks)")
         return
@@ -20,32 +23,12 @@ def _print_tracks_table(tracks: List[Track]) -> None:
         dur = format_mm_ss(t.duration_seconds)
         print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
 
+# S2-03 & S2-04: search & views
 
 def search_library(state: PlayerState, query: str) -> None:
-    if state is None or not hasattr(state, "tracks"):
-        print("[lib] Error: Library state is not available.")
-        return
-
-    if not isinstance(state.tracks, list):
-        print("[lib] Error: Library tracks data is corrupted.")
-        return
-
-    if not state.tracks:
-        print("[lib] Library is empty.")
-        return
-
-
-    print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
-    print("-" * 65)
-    for idx, t in enumerate(tracks, start=1):
-        title = (t.title or "")[:30]
-        artist = (t.artist or "")[:20]
-        dur = format_mm_ss(t.duration_seconds)
-        print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
-
-
-
-def search_library(state: PlayerState, query: str) -> None:
+    """
+    S2-03: search by title, artist, or filename.
+    """
     # Basic state validation
     if state is None or not hasattr(state, "tracks"):
         print("[lib] Error: Library state is not available.")
@@ -77,9 +60,6 @@ def search_library(state: PlayerState, query: str) -> None:
             query in title
             or query in artist
             or query in filename
-                query in title
-                or query in artist
-                or query in filename
         ):
             results.append(t)
 
@@ -92,11 +72,17 @@ def search_library(state: PlayerState, query: str) -> None:
 
 
 def view_songs_table(state: PlayerState) -> None:
+    """
+    S2-04: view songs in a clear text table.
+    """
     print("[lib] Songs (library):")
     _print_tracks_table(state.tracks)
 
 
 def view_artists_table(state: PlayerState) -> None:
+    """
+    S2-04: aggregate by artist.
+    """
     if state is None or not hasattr(state, "tracks"):
         print("[lib] Error: Library state is not available.")
         return
@@ -126,6 +112,9 @@ def view_artists_table(state: PlayerState) -> None:
 
 
 def view_albums_table(state: PlayerState) -> None:
+    """
+    S2-04: approximate album by directory name containing the track.
+    """
     by_album: dict[str, List[Track]] = defaultdict(list)
     for t in state.tracks:
         album = t.path.parent.name or "(no folder)"
@@ -140,10 +129,13 @@ def view_albums_table(state: PlayerState) -> None:
                 total += t.duration_seconds
         print(f"{album:<25}  {count:6d}  {format_mm_ss(total):>8}")
 
-# S2-09
+# S2-09: scan for new files
 
 
 def rescan_for_new_tracks(state: PlayerState) -> None:
+    """
+    S2-09: scan the music folder for NEW files and add them to the library.
+    """
     if state is None or not hasattr(state, "tracks"):
         print("[lib] Error: Library state is not available.")
         return
