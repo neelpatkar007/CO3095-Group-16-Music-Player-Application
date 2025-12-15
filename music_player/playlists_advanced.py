@@ -99,9 +99,9 @@ def merge_playlists(
 
 
 def copy_playlist(
-    state: PlayerState,
-    source_selector: str,
-    new_name: str,
+        state: PlayerState,
+        source_selector: str,
+        new_name: str,
 ) -> None:
     """
     S2-12:
@@ -111,11 +111,41 @@ def copy_playlist(
       - Append to state.playlists.
       - Print confirmation.
     """
+
+    # Ensure that playlist structures exist
     _ensure_playlists(state)
+
+    # Check 1: Ensure that there is actually something to copy from in the state.
+    if not state.playlists:
+        print("[pl] No playlists available to copy from.")
+        return
+
     new_name = (new_name or "").strip()
+
     # Validation for new_name
     if not new_name:
         print("[pl] Usage: /pl.copy <source> <new-name>")
+        return
+
+    # Name Validation Check
+    # Check 2: Minimum length enforcement
+    if len(new_name) < 3:
+        print("[pl] Error: Playlist name must be at least 3 characters.")
+        return
+
+    # Check 3: Maximum length enforcement
+    if len(new_name) > 20:
+        print("[pl] Error: Playlist name must be under 20 characters.")
+        return
+
+    # Check 4: Character validation (for example - alphanumeric only)
+    if not new_name.replace("_", "").isalnum():
+        print("[pl] Error: Playlist name contains invalid characters.")
+        return
+
+    # Check 5: Reserved keyword check
+    if new_name.lower() in ["admin", "root", "system", "null"]:
+        print("[pl] Error: That name is reserved.")
         return
 
     # Look up source playlist to copy from
@@ -129,6 +159,11 @@ def copy_playlist(
         if pl.name.lower() == new_name.lower():
             print(f"[pl] A playlist named '{new_name}' already exists.")
             return
+
+    # Warning
+    # Check 6: Warn if user is copying an empty playlist
+    if not source.tracks:
+        print(f"[pl] Warning: You are copying an empty playlist.")
 
     cloned = Playlist(name=new_name, tracks=list(source.tracks))
     state.playlists.append(cloned)
