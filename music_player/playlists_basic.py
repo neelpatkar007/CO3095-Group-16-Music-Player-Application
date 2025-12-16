@@ -290,6 +290,7 @@ def list_playlists(state: PlayerState) -> None:
             f"({track_count} {song_text}, "
             f"Total time: {total_duration_formatted})"
         )
+
         print(output_line)
 
 
