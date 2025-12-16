@@ -17,11 +17,25 @@ def _print_tracks_table(tracks: List[Track]) -> None:
 
     print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
     print("-" * 65)
+
+    printed = 0
     for idx, t in enumerate(tracks, start=1):
-        title = (t.title or "")[:30]
-        artist = (t.artist or "")[:20]
-        dur = format_mm_ss(t.duration_seconds)
+        if t is None:
+            continue
+
+        title_val = getattr(t, "title", "") or ""
+        artist_val = getattr(t, "artist", "") or ""
+        dur_val = getattr(t, "duration_seconds", None)
+
+        title = str(title_val)[:30]
+        artist = str(artist_val)[:20]
+        dur = format_mm_ss(dur_val)
+
         print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
+        printed += 1
+
+    if printed == 0:
+        print("  (no tracks)")
 
 # S2-03 & S2-04: search & views
 
