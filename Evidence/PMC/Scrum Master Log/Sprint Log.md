@@ -27,7 +27,7 @@
 |        |               | Monitored progress against the sprint goal                         |                   |                 |
 |        |               | Maintained and updated the sprint board                            |                   |                 |
 |        |               | Ensured all user stories met the Definition of Done before closure |                   |                 |
-|        |               | Supported team communication and helped remove blockers            |                   |                 |
+|        |               | Supported team communication and helped remove obstacles            |                   |                 |
 
 ---
 
@@ -48,7 +48,7 @@
 |        | the sprint with high test coverage.                   | stories into smaller tasks.                            | Sprint 1 met its goals successfully.           |
 |        | The team collaborated effectively throughout.         | More frequent mid-sprint check-ins to adjust scope if  |                                                |
 |        |                                                       | priorities changed.                                    |                                                |
-| 2      | All 12 user stories were completed within the sprint, | Earlier identification of potential risks and blockers | The team showed strong improvement in delivery |
+| 2      | All 12 user stories were completed within the sprint, | Earlier identification of potential risks and obstacles | The team showed strong improvement in delivery |
 |        | achieving the planned 40 story points.                | to allow quicker mitigation.                           | speed and collaboration compared to Sprint 1.  |
 |        | Team communication and collaboration improved.        | More time allocated to refining estimates.             | Sprint 2 successfully met all objectives.      |
 
