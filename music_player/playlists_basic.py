@@ -215,6 +215,29 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
 
 # S2-05, S2-06, S2-10: list, open, show contents
 
+def _get_playlist_summary(pl: Playlist) -> tuple[int, float]:
+    """
+    S2-10 Helper: Calculates the total number of songs and total duration.
+    Returns: (track_count, total_duration_seconds)
+    """
+    if not pl.tracks:
+        return 0, 0.0
+
+    track_count = 0
+    total_duration = 0.0
+
+    for track in pl.tracks:
+        track_count += 1
+        # Check if duration_seconds is valid before summing
+        if hasattr(track, 'duration_seconds') and isinstance(track.duration_seconds,
+                                                             (int, float)) and track.duration_seconds >= 0:
+            total_duration += track.duration_seconds
+
+    return track_count, total_duration
+
+
+# S2-05, S2-06, S2-10: list, open, show contents
+
 
 def list_playlists(state: PlayerState) -> None:
     """
@@ -250,10 +273,24 @@ def list_playlists(state: PlayerState) -> None:
             if state.active_playlist_index == current_index:
                 is_active = True
 
-        if hasattr(pl, 'summary_line'):
-            print(pl.summary_line(index=idx, active=is_active))
-        else:
-            print(f"   {idx}. {pl.name} {'*' if is_active else ''}")
+        # 1. Calculate the metrics using the new helper function
+        track_count, total_duration_seconds = _get_playlist_summary(pl)
+
+        # 2. Format duration
+        total_duration_formatted = format_mm_ss(total_duration_seconds)
+
+        # 3. Build the output line
+        active_marker = '*' if is_active else ' '
+
+        # Determine song/songs pluralisation
+        song_text = 'song' if track_count == 1 else 'songs'
+
+        output_line = (
+            f"   {idx}. {pl.name}{active_marker} "
+            f"({track_count} {song_text}, "
+            f"Total time: {total_duration_formatted})"
+        )
+        print(output_line)
 
 
 def open_playlist(state: PlayerState, selector: str) -> None:
