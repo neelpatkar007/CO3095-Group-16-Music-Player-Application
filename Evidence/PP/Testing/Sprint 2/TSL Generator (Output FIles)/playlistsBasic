@@ -1,0 +1,116 @@
+
+Test Case 1  		<error>
+   Player State :  None/Null State
+
+
+Test Case 2  		<single>  (follows [if])
+   Playlist Selector (Target) :  Empty Selector
+
+
+Test Case 3  		<error>  (follows [if])
+   Playlist Selector (Target) :  Non-existent Name
+
+
+Test Case 4  		<error>  (follows [if])
+   Playlist Selector (Target) :  Index Out of Bounds
+
+
+Test Case 5  		<error>  (follows [if])
+   New Name Input :  Empty Name
+
+
+Test Case 6  		<error>  (follows [if])
+   New Name Input :  Existing Name
+
+
+Test Case 7  		<single>  (follows [if])
+   Target Playlist Condition :  Playlist Empty
+
+
+Test Case 8  		(Key = 1.1.6.1.3.)
+   Function                   :  Create Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  (Ignored)
+   New Name Input             :  Valid Unique Name
+   Target Playlist Condition  :  (Ignored)
+
+
+Test Case 9  		(Key = 2.1.1.1.2.)
+   Function                   :  Rename Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Name
+   New Name Input             :  Valid Unique Name
+   Target Playlist Condition  :  Playlist Has Tracks
+
+
+Test Case 10 		(Key = 2.1.1.1.3.)
+   Function                   :  Rename Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Name
+   New Name Input             :  Valid Unique Name
+   Target Playlist Condition  :  (Ignored)
+
+
+Test Case 11 		(Key = 2.1.2.1.2.)
+   Function                   :  Rename Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Index
+   New Name Input             :  Valid Unique Name
+   Target Playlist Condition  :  Playlist Has Tracks
+
+
+Test Case 12 		(Key = 2.1.2.1.3.)
+   Function                   :  Rename Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Index
+   New Name Input             :  Valid Unique Name
+   Target Playlist Condition  :  (Ignored)
+
+
+Test Case 13 		(Key = 3.1.1.4.2.)
+   Function                   :  Delete Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Name
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  Playlist Has Tracks
+
+
+Test Case 14 		(Key = 3.1.1.4.3.)
+   Function                   :  Delete Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Name
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  (Ignored)
+
+
+Test Case 15 		(Key = 3.1.2.4.2.)
+   Function                   :  Delete Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Index
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  Playlist Has Tracks
+
+
+Test Case 16 		(Key = 3.1.2.4.3.)
+   Function                   :  Delete Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Index
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  (Ignored)
+
+
+Test Case 17 		(Key = 4.1.1.4.2.)
+   Function                   :  Open/Play Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Name
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  Playlist Has Tracks
+
+
+Test Case 18 		(Key = 4.1.2.4.2.)
+   Function                   :  Open/Play Playlist
+   Player State               :  Valid State
+   Playlist Selector (Target) :  Valid Index
+   New Name Input             :  (Ignored)
+   Target Playlist Condition  :  Playlist Has Tracks
+

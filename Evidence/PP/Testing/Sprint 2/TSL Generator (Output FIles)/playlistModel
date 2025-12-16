@@ -1,0 +1,76 @@
+
+Test Case 1  		<single>
+   Name Input :  Empty String
+
+
+Test Case 2  		<error>
+   Name Input :  None
+
+
+Test Case 3  		<error>
+   Tracks Initialization :  None
+
+
+Test Case 4  		(Key = 1.1.1.4.1.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Default (Empty List)
+   Track Durations (in list)  :  (Ignored)
+   Active State (for summary) :  True
+
+
+Test Case 5  		(Key = 1.1.1.4.2.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Default (Empty List)
+   Track Durations (in list)  :  (Ignored)
+   Active State (for summary) :  False
+
+
+Test Case 6  		(Key = 1.1.2.1.1.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  All have valid duration
+   Active State (for summary) :  True
+
+
+Test Case 7  		(Key = 1.1.2.1.2.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  All have valid duration
+   Active State (for summary) :  False
+
+
+Test Case 8  		(Key = 1.1.2.2.1.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  Mixed valid/None durations
+   Active State (for summary) :  True
+
+
+Test Case 9  		(Key = 1.1.2.2.2.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  Mixed valid/None durations
+   Active State (for summary) :  False
+
+
+Test Case 10 		(Key = 1.1.2.3.1.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  All None
+   Active State (for summary) :  True
+
+
+Test Case 11 		(Key = 1.1.2.3.2.)
+   Test Function              :  Playlist Model Instantiation
+   Name Input                 :  Valid Name
+   Tracks Initialization      :  Provided List (Populated)
+   Track Durations (in list)  :  All None
+   Active State (for summary) :  False
+
