@@ -1,40 +1,38 @@
 # Tag Log – Music Player Application
 
-Version: 1.1  
-Date: 2025-11-13   
-Applies To: All contributors to this repository
+Version: 1.2 
+Date: 2025-12-17  
+To: All Contributors
 
-Purpose: Record and describe all repository tags (baselines) created during the project to comply with CMMI Level 2 – Configuration Management (CM)
 
----
+Goal: We can use this log to track every "baseline" (official release) of our code. This is required for CMMI Level 2 audit to prove that our releases are stable versions and traceable.
 
-## 1. Overview
 
-Each tag represents a configuration baseline at a specific point in the project life cycle.  
-Tags are applied at the end of each sprint and correspond to stable, reviewed builds that passed all QA and coverage requirements.
+## 1. Overview of How we use Tags
+Each tag is basically a "save point" and we create one at the end of every Sprint to mark a stable version of the music player app that has passed all the tests. 
+We use the following versioning format which is: v<Major>.<Minor>.<Patch>.
 
-Tag format:  
-`v<major>.<minor>.<patch>`  
-- Major – major milestone or final release  
-- Minor – sprint-level release  
-- Patch – hotfix or minor adjustment
+- Major e.g. v1.0.0 – Will be a major milestone or the final release  
+- Minor e.g. v0.1.0 – A standard sprint-level release  
+- Patch e.g. v0.1.1 – Are quick fixes, hotfixes or minor adjustment if we do find any bugs after a sprint release
 
----
 
-## 2. Tag History Table
+## 2. Tag History Log
 
-| Tag  | Date Created | Sprint | Commit Hash | Created By | Description / Contents     | QA Status | Evidence Links |
-|------|--------------|--------|-------------|------------|----------------------------|----------|----------------|
-| v0.1 | 04/12/2025   | 1      |   77bce81          | Raiyan805  | Completed Sprint 1 Release | Verified |     https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1           |
+| Tag  | Date       | Sprint | Commit Hash | Author    | Description / Contents     | QA Status   | Evidence Links                                                                                |
+|------|------------|--------|-------------|-----------|----------------------------|-------------|-----------------------------------------------------------------------------------------------|
+| v0.1 | 04/12/2025 | 1      | 77bce81     | Raiyan805 | Completed Sprint 1 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1   |
 
----
 
-## 3. Tag Creation & Maintenance
 
-1. All acceptance criteria for the sprint are met and verified. 
-2. The tag cannot be created directly on untested branches.
-3. 85 %+ coverage across all test types.  
-4. Merge all approved feature branches.  
-5. Create the tag (using `git tag` command)
-6. Record the tag in this file
-7. Retrospective changes must generate a new patch tag (e.g., v0.2.1).
+## 3. Process of How to do Tag Creation & Maintenance
+Before you create a tag, make sure that you have followed and met these rules so we don't break the project's versioning and stability:
+1. Completion: All acceptance criteria for the sprint must be 100% complete.
+2. Location: Never tag a feature branch - only tag `main` after the merge.
+3. Quality Gate: We need at least an 85% test coverage across the board.
+4. Steps:
+    - Merge all approved Pull Requests into `main`.
+    - Run the tests one last time to ensure everything works.
+    - Run the git tag command (git tag v0.x.0) and push it.
+    - Update the table in Section 2 immediately after tagging is done.
+5. Any Corrections: If any releases are messed up, do not delete the tag and instead fix the bug, merge it, and create a Patch tag (for example v0.1.1).

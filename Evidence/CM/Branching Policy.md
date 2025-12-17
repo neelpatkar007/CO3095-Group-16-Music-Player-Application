@@ -1,78 +1,69 @@
-# Branching Policy – Music Player Application
+# Branching Policy for Music Player Application
 
-Version: 1.1  
-Date: 2025-11-13   
-Applies To: All contributors to this repository
+Version: 1.2
+Date: 2025-12-17
+To: All Contributors
 
----
 
-## 1. Purpose
-To establish a consistent, auditable process for managing source code versions and changes throughout the project, to meet CMMI Level 2 – Configuration Management (CM).
+## 1. Goal
+We need a stricter version control process to meet the CMMI Level 2 - Configuration Management (CM) requirements. This is to ensure that we have a clear and auditable trail for every single line of code that's written.
 
----
 
-## 2. Branching Model Overview
-- Default Branch: `main` – always stable and deployable.
-- Development Branches: Created per user story or feature.
-- Tagging: Semantic Versioning used per sprint (e.g., `v0.1.0`, `v0.2.0`).
-- Branch Retention: Feature branches are not deleted after merge (evidence of process and traceability).
+## 2. Branching Strategy
+- Default Branch (main): This should always be stable and deployable as this is our production code.
+- Development Branches: Create a new branch for every single user story or feature or bug fix.
+- Tagging: Semantic versioning used per sprint (e.g., v0.1.0, v0.2.0).
+- Retention Rules: Do not delete any branches after merging as we must keep these as evidence of the process and traceability during the audit.
 
----
 
-## 3. Branch Naming Convention
-- feature/<sprint-id>-<story-id>-<short-description>
-- bugfix/<sprint-id>-<story-id>-<short-description>
-- Examples:
+## 3. Branches Naming Conventions
+Each branch should link to a specific GitHub Issue (user story) for traceability and use the following format:
+The format is: <type>/<sprint-id>-<story-id>-<short-description>
+- Some Examples:
   - feature/S1-04-volume-control 
   - feature/S3-08-like-songs 
   - bugfix/S1-08-seek-edgecase
 
-Each branch must correspond to an open GitHub Issue (user story) for traceability.
-
----
 
 ## 4. Workflow Rules
+1. Start: Must always branch off `main`.
+2. Commit: Commits must be made often. The commit message must start with the ID:
+    - [S1-04] Implement volume clamp (0–100)
+    - [S2-09] Fix scanner duplicate handling
+3. Pull Request (PR): Push branch and open a Pull Request when you meet the Definition of Done
+4. Review: You will need a peer review from at least one group member before you can merge.
+5. Merge: Merge the branch into `main`
+6. Tagging: We tag the release at the end of each sprint:
+   - Sprint 1 -> `v0.1.0`
+   - Sprint 2 -> `v0.2.0`
+   - Sprint 3 -> `v0.3.0`
+   - Sprint 4 -> `v1.0.0`
+7. Cleanup: As mentioned in Section 2, we will leave the remote branches for proof for the final report.
 
-1. Create branch from `main` when starting a story.  
-2. Commit often with clear messages following:
-   - [S1-04] Implement volume clamp (0–100)
-   - [S2-09] Fix scanner duplicate handling
-3. Push branch and open a Pull Request (PR) once all Definition-of-Done criteria met.
-4. Peer review by at least one other group member before merging.
-5. Merge into `main`.
-6. Tag new version on successful sprint completion:
-- Sprint 1 → `v0.1.0`
-- Sprint 2 → `v0.2.0`
-- Sprint 3 → `v0.3.0`
-- Sprint 4 → `v1.0.0`
-7. Retain branch for report and demonstration.
 
-## 5. Access Control and Reviews
-- Branch Protection: `main` requires Pull Request review and at least 85 % test coverage.
-- Reviewer Assignment: Scrum Master assigns reviewers based on feature area.
-- Approval Required: 1 reviewer + Scrum Master.
+## 5. Branch Protection, Access Control and Reviews
+We have locked the `main` branch to prevent any accidental changes or breakages to the code.
+- Direct Pushing: Do not push any code directly to `main`. All changes must come from a Pull Request.
+- Quality Gate: Ensure that all tests do pass with at least an 85 % coverage before merging.
+- Approvals: Requires at least 1 reviewer to approve. 
 
----
 
-## 6. Configuration Baselines
-- Each sprint release (tagged version) forms a baseline.
-- Artefacts captured at baseline:
-  - Source code snapshot (tag)
-  - Test coverage reported in `/Evidence/MA/coverage_report.xlsx`
-  - Evidence folder (REQM, PP, PMC, CM, MA, PPQA)
-  - EVM & COCOMO artefacts
+## 6. Configuration Baselines ("Snapshot")
+- At the end of each sprint, we create a baseline. We do this by ensuring the following things are updated and committed before tagging:
+    - All the source code (via git tag)
+    - Test coverage report in: `/Evidence/MA/coverage_report.xlsx`
+    - The evidence folder updates: (REQM, PP, PMC, CM, MA, PPQA).
+    - Finally, EVM & COCOMO I and II tracking sheets.
 
----
 
 ## 7. Change Control
-- Any modification to an implemented story must go through:
-1. Updated Issue comment on Projects Board (reason + approval).
-2. New branch referencing original story ID.
-3. Updated traceability in `/Evidence/REQM/requirements_traceability.xlsx`.
+- If any modifications are needed to be made to a user story that has already been merged or implemented, then:
+    1. Post a new comment on the original GitHub Issue on the Project Board and explain why the change is needed and get approval.
+    2. Create a new branch referencing the original story ID - for example - feature/S1-04-volume-control-v2.
+    3. Ensure to update the traceability matrix in `/Evidence/REQM/requirements_traceability.xlsx`.
 
----
 
-## 8. Tools
-- Version Control: Git + GitHub
-- Code Review: GitHub Pull Requests  
+## 8. Tool Stack
+- Version Control (VCS): Git + GitHub
+- Code Reviews: GitHub Pull Requests  
 - Issue Tracking: GitHub Projects Board

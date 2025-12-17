@@ -1,56 +1,59 @@
 # Definition of Done (DoD) – Music Player Application
 
-Version: 1.2 
-
-Date: 2025-11-13 
+Version: 1.3
+Date: 2025-12-17
+To: All Team Members
 
 Purpose:
-To define objective criteria for user stories, sprints and the final project so that all deliverables meet the project’s quality, testing, and documentation standards in compliance with CMMI Level 2.
+We use this checklist to stop us from saying "Im done" when the code is actually broken or undocumented. If you cannot check every box below, do not open a Pull Request. This is how we ensure we pass the CMMI Level 2 audit. 
 
 
 ## 1. Story-Level Completion Criteria
+Before you mark a GitHub issue as done, check these:
 
-| Area                    | Criterion                                                            | Status |
-|-------------------------|----------------------------------------------------------------------|--------|
-| Requirements            | Story acceptance criteria implemented exactly as defined.            | YES/NO |
-|                         | Story linked to GitHub issue with correct ID (e.g., S2-05).          | YES/NO |
-|                         | `requirements_traceability.csv` updated with code and test links.    | YES/NO |
-| Design & Implementation | Code follows naming conventions and PEP-8 style.                     | YES/NO |
-|                         | Functions contain docstrings/inline comments.                        | YES/NO |
-|                         | Code runs on lab machines without external dependencies.             | YES/NO |
-|                         | All relevant CIs committed and versioned.                            | YES/NO |
-| Testing                 | Unit tests (black-box and white-box) created and pass locally.       | YES/NO |
-|                         | Symbolic and concolic tests created and executed successfully.       | YES/NO |
-|                         | Minimum 85 % coverage achieved (verified in `coverage_report.csv`).  | YES/NO |
-|                         | No critical or major defects open.                                   | YES/NO |
-| Quality Assurance       | Peer review and DoD checklist completed.                             | YES/NO |
-|                         | Evidence uploaded to `/evidence/MA` and `/evidence/PPQA`.            | YES/NO |
-| Documentation           | Help/CLI documentation updated for new commands in `README.md`.      | YES/NO |
-|                         | Evidence links included in `requirements_traceability.csv`.          | YES/NO |
-|                         | Tagged release committed                                             | YES/NO |
+| Area                    | Criterion                                                                        | Status |
+|-------------------------|----------------------------------------------------------------------------------|--------|
+| Requirements            | Did you meet the acceptance criteria exactly as they are defined?                | YES/NO |
+|                         | Is the GitHub issue linked to the correct ID (e.g., S2-05)?                      | YES/NO |
+|                         | Did you update the `requirements_traceability.csv` with the new code/test links? | YES/NO |
+| Design & Implementation | Does the code follow our naming conventions and PEP-8 style?                     | YES/NO |
+|                         | Do functions contain clear docstrings/inline comments?                           | YES/NO |
+|                         | Does the code run on Lab Machines (without external dependencies)?               | YES/NO |
+|                         | Are all relevant Configuration Items (CIs) are committed and versioned?          | YES/NO |
+| Testing                 | Do unit tests (black-box and white-box) pass locally?                            | YES/NO |
+|                         | Did you run the Symbolic and Concolic tests successfully?                        | YES/NO |
+|                         | Is coverage at least 85% achieved (verified in `coverage_report.csv`)?           | YES/NO |
+|                         | Are all major/critical bugs fixed?                                               | YES/NO |
+| Quality Assurance       | Peer review finished and DoD checklist filled out?                               | YES/NO |
+|                         | Did you upload evidence to `/evidence/MA` and `/evidence/PPQA`?                  | YES/NO |
+| Documentation           | Did the update the Help/CLI documentation in `README.md`?                        | YES/NO |
+|                         | Are the evidence links pasted into `requirements_traceability.csv`?              | YES/NO |
+|                         | Is the release tag committed?                                                    | YES/NO |
 
 
 
 ## 2. Sprint-Level Completion Criteria
+We only declare the Sprint "Over" when:
 
-| Area                     | Criterion                                                                           | Status |
-|--------------------------|-------------------------------------------------------------------------------------|--------|
-| Planning                 | Sprint plan approved and PERT diagram updated.                                      | YES/NO |
-| Monitoring               | Burndown, Velocity, and EVM reports completed.                                      | YES/NO |
-| Measurement              | Coverage and metrics reports filed in `/evidence/MA/`.                              | YES/NO |
-| Configuration Management | All branches merged, reviewed, tagged (e.g., `v0.x.0`), and logged in `Tag_Log.md`. | YES/NO |
-| Quality Assurance        | Scrum Master completed sprint review.                                               | YES/NO |
-| CMMI Evidence            | All six process areas (REQM, PP, PMC, CM, MA, PPQA) updated.                        | YES/NO |
+| Area                               | Criterion                                                            | Status |
+|------------------------------------|----------------------------------------------------------------------|--------|
+| Planning                           | Is the Sprint plan approved and PERT diagram updated?                | YES/NO |
+| Metrics                            | Are the Burndown, Velocity, and EVM reports completed?               | YES/NO |
+| Measurement                        | Are the final Coverage and metrics reports filed in `/evidence/MA/`. | YES/NO |
+| Configuration Management (Release) | Are all the branches merged, reviewed, Tagged (e.g., `v0.x.0`)?      | YES/NO |
+|                                    | Did you log the new tag in `Tag_Log.md`.                             | YES/NO |
+| Reviews                            | Has the Scrum Master completed and signed off on the sprint review.  | YES/NO |
+| CMMI Evidence                      | Did we update all six process areas (REQM, PP, PMC, CM, MA, PPQA)?   | YES/NO |
 
 
 
-## 3. Final Project DoD
+## 3. Final Project Checklist DoD
 
-| Deliverable   | Criterion                                                               | Status |
-|---------------|-------------------------------------------------------------------------|--------|
-| Codebase      | Fully functional on lab machine; all four sprints merged into `main`.   | YES/NO |
-| Testing       | All planned tests implemented and ≥ 85 % passed.                        | YES/NO |
-| Documentation | README, Report (Sections A & B), and Video completed.                   | YES/NO |
-| Evidence      | CMMI folders complete with evidence included.                           | YES/NO |
-| Release       | Final tag `v1.0.0` created and recorded in `Tag_Log.md`.                | YES/NO |
+| Deliverable       | Criterion                                                             | Status |
+|-------------------|-----------------------------------------------------------------------|--------|
+| The Code          | Fully functional on lab machine. All four sprints merged into `main`. | YES/NO |
+| Testing           | All planned tests implemented and coverage is ≥ 85 %.                 | YES/NO |
+| The Documentation | README, Report (Sections A & B), and Video Demonstration are done.    | YES/NO |
+| The Evidence      | CMMI folders are full and completed with evidence.                    | YES/NO |
+| The Release       | Final tag `v1.0.0` created and recorded in `Tag_Log.md`.              | YES/NO |
 
