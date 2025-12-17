@@ -21,7 +21,7 @@ from music_player.time_utils import format_mm_ss
 
 def _ensure_playlists(state: PlayerState) -> None:
     """Internal helper to ensure state.playlists exists."""
-    if state.playlists is None:
+    if state is not None and state.playlists is None:
         state.playlists = []
 
 
@@ -82,11 +82,10 @@ def _activate_playlist_queue(
     Resets current_index and position.
     Keeps a reference to the original library in state.library_tracks.
     """
-    _ensure_playlists(state)
-
     if state is None:
         print("[pl] Error: State is None.")
         return
+    _ensure_playlists(state)
 
     if playlist is None:
         print("[pl] Error: Playlist is None.")
@@ -388,7 +387,7 @@ def _print_playlist_contents(pl: Playlist) -> None:
     """
     This is a helper function that prints the contents of a playlist,
     showing each track's index, title, and duration in mm:ss format.
-    If the playlist has no tracks, prints an '(empty)' marker instead.
+    If the playlist has no tracks, prints "(empty)" instead.
     """
     if not pl.tracks:
         print("  (empty)")
