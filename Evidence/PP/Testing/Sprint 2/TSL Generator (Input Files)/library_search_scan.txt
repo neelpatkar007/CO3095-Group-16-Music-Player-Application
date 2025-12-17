@@ -1,0 +1,26 @@
+# TSL Specification for library_search_scan.py
+# Covers: search_library, rescan_for_new_tracks.
+
+Function:
+    Search Library.            [property OpSearch, IsSearch]
+    Rescan Files.              [property OpScan, IsScan]
+    View Tables.               [property OpView]
+
+Library State:
+    Valid and Populated.       [property LibValid]
+    Empty List.                [single]
+    None/Corrupted.            [error]
+
+Search Query:
+    Matches Title.             [if IsSearch] [if LibValid]
+    Matches Artist.            [if IsSearch] [if LibValid]
+    Matches Filename.          [if IsSearch] [if LibValid]
+    No Match.                  [if IsSearch] [if LibValid]
+    Empty String.              [if IsSearch] [error]
+    (Ignored).                 [if !IsSearch]
+
+File System State (For Rescan):
+    No files on disk.          [if IsScan] [single]
+    Files exist same as Lib.   [if IsScan] [if LibValid]
+    New files available.       [if IsScan] [if LibValid]
+    (Ignored).                 [if !IsScan]
