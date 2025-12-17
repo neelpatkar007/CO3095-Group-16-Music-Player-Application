@@ -1,0 +1,94 @@
+
+Test Case 1  		<error>
+   Player State :  None
+
+
+Test Case 2  		<error>  (follows [if])
+   Target Playlist Selector :  Invalid/Missing
+
+
+Test Case 3  		<error>  (follows [if])
+   Main Library Content :  Library Empty
+
+
+Test Case 4  		<error>
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Non-numeric/Garbage
+
+
+Test Case 5  		<error>
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Empty String
+
+
+Test Case 6  		<error>
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Zero or Negative
+
+
+Test Case 7  		<error>
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Out of Bounds (High)
+
+
+Test Case 8  		<single>  (follows [if])
+   Index 2 Input (Destination for Move) :  Same as Index 1
+
+
+Test Case 9  		<error>  (follows [if])
+   Index 2 Input (Destination for Move) :  Non-numeric
+
+
+Test Case 10 		<error>  (follows [if])
+   Index 2 Input (Destination for Move) :  Out of Bounds
+
+
+Test Case 11 		<error>  (follows [if])
+   Playlist Tracks Integrity :  Tracks list is None
+
+
+Test Case 12 		(Key = 1.1.1.2.1.5.2.)
+   Function                                                    :  Add Track from Lib
+   Player State                                                :  Valid State
+   Target Playlist Selector                                    :  Valid Playlist
+   Main Library Content                                        :  Library Populated
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Valid Positive Int
+   Index 2 Input (Destination for Move)                        :  (Ignored)
+   Playlist Tracks Integrity                                   :  Tracks list Valid
+
+
+Test Case 13 		(Key = 2.1.1.2.1.5.2.)
+   Function                                                    :  Remove Track from PL
+   Player State                                                :  Valid State
+   Target Playlist Selector                                    :  Valid Playlist
+   Main Library Content                                        :  Library Populated
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Valid Positive Int
+   Index 2 Input (Destination for Move)                        :  (Ignored)
+   Playlist Tracks Integrity                                   :  Tracks list Valid
+
+
+Test Case 14 		(Key = 2.1.1.3.1.5.2.)
+   Function                                                    :  Remove Track from PL
+   Player State                                                :  Valid State
+   Target Playlist Selector                                    :  Valid Playlist
+   Main Library Content                                        :  (Ignored)
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Valid Positive Int
+   Index 2 Input (Destination for Move)                        :  (Ignored)
+   Playlist Tracks Integrity                                   :  Tracks list Valid
+
+
+Test Case 15 		(Key = 3.1.1.2.1.1.2.)
+   Function                                                    :  Move Track in PL
+   Player State                                                :  Valid State
+   Target Playlist Selector                                    :  Valid Playlist
+   Main Library Content                                        :  Library Populated
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Valid Positive Int
+   Index 2 Input (Destination for Move)                        :  Valid Positive Int
+   Playlist Tracks Integrity                                   :  Tracks list Valid
+
+
+Test Case 16 		(Key = 3.1.1.3.1.1.2.)
+   Function                                                    :  Move Track in PL
+   Player State                                                :  Valid State
+   Target Playlist Selector                                    :  Valid Playlist
+   Main Library Content                                        :  (Ignored)
+   Index 1 Input (Lib Index for Add, PL Index for Remove/Move) :  Valid Positive Int
+   Index 2 Input (Destination for Move)                        :  Valid Positive Int
+   Playlist Tracks Integrity                                   :  Tracks list Valid
+

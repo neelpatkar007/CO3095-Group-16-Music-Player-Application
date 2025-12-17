@@ -1,0 +1,38 @@
+# TSL Specification for playlists_edit.py
+# Covers: add, remove, and move tracks.
+
+Function:
+    Add Track from Lib.        [property OpAdd, UsesLib]
+    Remove Track from PL.      [property OpRemove]
+    Move Track in PL.          [property OpMove, IsMove]
+
+Player State:
+    Valid State.               [property ValidState]
+    None.                      [error]
+
+Target Playlist Selector:
+    Valid Playlist.            [if ValidState] [property ValidPL]
+    Invalid/Missing.           [if ValidState] [error]
+
+Main Library Content:
+    Library Empty.             [if UsesLib] [if ValidState] [error]
+    Library Populated.         [if UsesLib] [if ValidState]
+    (Ignored).                 [if !UsesLib]
+
+Index 1 Input (Lib Index for Add, PL Index for Remove/Move):
+    Valid Positive Int.        [property ValidIdx1]
+    Non-numeric/Garbage.       [error]
+    Empty String.              [error]
+    Zero or Negative.          [error]
+    Out of Bounds (High).      [error]
+
+Index 2 Input (Destination for Move):
+    Valid Positive Int.        [if IsMove] [property ValidIdx2]
+    Same as Index 1.           [if IsMove] [if ValidIdx1] [single]
+    Non-numeric.               [if IsMove] [error]
+    Out of Bounds.             [if IsMove] [error]
+    (Ignored).                 [if !IsMove]
+
+Playlist Tracks Integrity:
+    Tracks list is None.       [if ValidPL] [error]
+    Tracks list Valid.         [if ValidPL]
