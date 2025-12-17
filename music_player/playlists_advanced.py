@@ -19,8 +19,31 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     """
     Helper: resolve Playlist for advanced operations (merge/copy).
     """
-    # TODO: implement
-    raise NotImplementedError
+    if state is None or not hasattr(state, "playlists"):
+        print("[pl] Error: Playlist state is not available.")
+        return None
+
+    if not selector or not selector.strip():
+        print("[pl] Error: Playlist selector cannot be empty.")
+        return None
+
+    selector = selector.strip()
+
+    # Index selector
+    if selector.isdigit():
+        idx = int(selector) - 1
+        if idx < 0 or idx >= len(state.playlists):
+            print("[pl] Error: Playlist index out of range.")
+            return None
+        return state.playlists[idx]
+
+    # Name selector
+    for pl in state.playlists:
+        if pl.name.lower() == selector.lower():
+            return pl
+
+    print(f"[pl] Error: Playlist '{selector}' not found.")
+    return None
 
 
 def merge_playlists(
@@ -111,6 +134,15 @@ def copy_playlist(
       - Append to state.playlists.
       - Print confirmation.
     """
+    # Defensive Check: Ensure new_name is actually a string before processing
+    if not isinstance(new_name, str):
+        print("[pl] Error: Playlist name must be a string.")
+        return
+
+    reserved = {"help", "quit", "exit"}
+    if new_name.strip().lower() in reserved:
+        print("[pl] Error: name is reserved.")
+        return
 
     # Ensure that playlist structures exist
     _ensure_playlists(state)
@@ -168,4 +200,3 @@ def copy_playlist(
     cloned = Playlist(name=new_name, tracks=list(source.tracks))
     state.playlists.append(cloned)
     print(f"[pl] Copied playlist '{source.name}' -> '{new_name}'.")
-
