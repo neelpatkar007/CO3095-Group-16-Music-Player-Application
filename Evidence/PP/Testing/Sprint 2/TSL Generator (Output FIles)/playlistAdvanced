@@ -1,0 +1,71 @@
+
+Test Case 1  		<error>  (follows [if])
+   Target Selector (Merge Only) :  Empty Target
+
+
+Test Case 2  		<error>  (follows [if])
+   Target Selector (Merge Only) :  Invalid Target
+
+
+Test Case 3  		<error>
+   Source Selector :  Empty Source String
+
+
+Test Case 4  		<error>
+   Source Selector :  Invalid Source (Missing)
+
+
+Test Case 5  		<error>  (follows [if])
+   Source Selector :  Same as Target
+
+
+Test Case 6  		<single>  (follows [if])
+   Source Playlist Content :  Empty (No tracks)
+
+
+Test Case 7  		<error>  (follows [if])
+   New Name (Copy Only) :  Too Short (<3 chars)
+
+
+Test Case 8  		<error>  (follows [if])
+   New Name (Copy Only) :  Too Long (>20 chars)
+
+
+Test Case 9  		<error>  (follows [if])
+   New Name (Copy Only) :  Reserved Word
+
+
+Test Case 10 		<error>  (follows [if])
+   New Name (Copy Only) :  Invalid Characters
+
+
+Test Case 11 		<error>  (follows [if])
+   New Name (Copy Only) :  Duplicate Name
+
+
+Test Case 12 		(Key = 1.1.1.2.7.1.)
+   Function                     :  Merge Playlists
+   Target Selector (Merge Only) :  Valid Target
+   Source Selector              :  Valid Source
+   Source Playlist Content      :  Populated
+   New Name (Copy Only)         :  (Ignored)
+   Deduplication (Merge Only)   :  True
+
+
+Test Case 13 		(Key = 1.1.1.2.7.2.)
+   Function                     :  Merge Playlists
+   Target Selector (Merge Only) :  Valid Target
+   Source Selector              :  Valid Source
+   Source Playlist Content      :  Populated
+   New Name (Copy Only)         :  (Ignored)
+   Deduplication (Merge Only)   :  False
+
+
+Test Case 14 		(Key = 2.4.1.2.1.3.)
+   Function                     :  Copy Playlist
+   Target Selector (Merge Only) :  (Ignored)
+   Source Selector              :  Valid Source
+   Source Playlist Content      :  Populated
+   New Name (Copy Only)         :  Valid Name
+   Deduplication (Merge Only)   :  (Ignored)
+
