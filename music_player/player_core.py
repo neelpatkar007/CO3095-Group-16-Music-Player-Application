@@ -13,7 +13,7 @@ from music_player.player_state import PlayerState
 
 def play(state: PlayerState) -> None:
     """
-    Start or resume playback from the current position.
+    Start or resume playback from the current position stored in the state.
 
     S1-01: user can start/resume a song.
     S1-12: this must not block the CLI; background updating will be
@@ -24,7 +24,7 @@ def play(state: PlayerState) -> None:
         print("[core] No tracks loaded.")
         return
 
-    # Already playing
+    # Check if audio is already playing
     if state.is_playing and not state.is_paused:
         print("[core] Already playing.")
         return
@@ -37,7 +37,7 @@ def play(state: PlayerState) -> None:
         print(f"[core] Resumed: {track.display_name}")
         return
 
-    # Fresh play
+    # Fresh play from the current position
     state.audio_engine.play(track.path, start_pos=state.position_seconds)
     state.is_playing = True
     state.is_paused = False
@@ -50,6 +50,7 @@ def pause(state: PlayerState) -> None:
 
     S1-01.
     """
+    # Nothing to pause if not playing or already paused
     if not state.is_playing or state.is_paused:
         print("[core] Nothing to pause.")
         return
@@ -62,10 +63,11 @@ def pause(state: PlayerState) -> None:
 
 def stop(state: PlayerState) -> None:
     """
-    Stop playback and reset position to 0.
+    Stop playback and reset position to 0 (start of track).
 
     S1-01.
     """
+    # Nothing to stop if not playing or paused
     if not state.is_playing and not state.is_paused:
         print("[core] Nothing is playing.")
         return
@@ -73,7 +75,7 @@ def stop(state: PlayerState) -> None:
     state.audio_engine.stop()
     state.is_playing = False
     state.is_paused = False
-    state.position_seconds = 0.0
+    state.position_seconds = 0.0 # Reset position to start of track
     print("[core] Stopped.")
 
 
@@ -84,19 +86,41 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
     Called periodically from the CLI loop so that playback continues
     while the user types commands (S1-12).
 
+    Extended for Sprint 2:
+    - If the current queue is a playlist (state.tracks is not state.library_tracks),
+      automatically advance to the next track when the current one finishes.
+    - If using the main library queue, keep original behaviour (stop at end).
     """
+    # Skip if time delta is invalid
     if delta_seconds <= 0:
         return
+    # Only update position if currently playing
     if not state.is_playing or state.is_paused:
         return
-
+    # Advance position
     state.position_seconds += delta_seconds
-
+    # Check if track duration is known and if we have passed it
     track = state.current_track
     if track and track.duration_seconds is not None:
         if state.position_seconds >= track.duration_seconds:
             # End of track reached – stop.
             state.position_seconds = track.duration_seconds
-            state.is_playing = False
-            state.audio_engine.stop()
-            print("[core] Track finished.")
+
+            # Decide whether to auto-advance or stop
+            is_playlist_queue = hasattr(state, "library_tracks") and (
+                state.tracks is not state.library_tracks
+            )
+
+            if is_playlist_queue:
+                # Auto-advance within playlist queue
+                from music_player import player_queue
+
+                # Reset position and move to next track; next_track()
+                # will keep state.is_playing True and start the engine.
+                state.position_seconds = 0.0
+                player_queue.next_track(state)
+            else:
+                # Original behaviour for main library queue: just stop.
+                state.is_playing = False
+                state.audio_engine.stop()
+                print("[core] Track finished.")

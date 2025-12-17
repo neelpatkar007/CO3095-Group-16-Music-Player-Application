@@ -8,8 +8,10 @@ Sprint 1:
 
 from pathlib import Path
 
-# Folder that contains all songs for the player to read from.
+# Folder (root directory) that contains all songs for the player to read from.
+# Expects a 'songs' folder in the current working directory.
+
 MUSIC_DIR: Path = Path("songs")
 
-# Supported audio file extensions.
+# Whitelists all audio file formats.
 SUPPORTED_EXTENSIONS = {".mp3", ".wav", ".ogg", ".flac", ".m4a"}

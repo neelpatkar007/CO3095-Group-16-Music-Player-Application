@@ -15,21 +15,29 @@ except ImportError:  # pragma: no cover
 
 def handle_keypress(state: PlayerState, key: str) -> None:
     """
-    Interpret a keyboard key and trigger the corresponding action
-    (play/pause/stop/mute) (S1-07).
+    Interpret a keyboard key press (p, s, m) and trigger the corresponding action
+    (play/pause/stop/mute) in the player core or audio module (S1-07).
     """
     key = key.lower()
+
+    # Play/Pause Toggle
     if key == "p":
-        # Toggle play/pause based on current state
+        # Toggle play/pause based on current state. If playing, pause; if paused/stopped, play.
         if state.is_playing:
             player_core.pause(state)
         else:
             player_core.play(state)
+
+    # Stop Playback
     elif key == "s":
-        # Stop playback
+        # Stop playback and reset position
         player_core.stop(state)
+
+    # Mute Toggle
     elif key == "m":
-        # Toggle mute via the audio module
+        # Toggle mute via the player_audio module
         player_audio.toggle_mute(state)
+
+    # Unrecognised Key
     else:
         print(f"[shortcuts] No action bound to key '{key}'")

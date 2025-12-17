@@ -8,6 +8,11 @@ User Story:
 from music_player.player_state import PlayerState
 
 def next_track(state: PlayerState) -> None:
+    '''
+    Advance to the next track in the playlist.
+    Wrap around to the first track if at the end.
+    Automatically starts playback if currently playing.
+    '''
     if not state.tracks:
         print("[queue] No tracks available.")
         return
@@ -15,13 +20,18 @@ def next_track(state: PlayerState) -> None:
     if n == 0:
         print("[queue] Library empty.")
         return
+
+    # Normalise current index
     old = state.current_index
     if old is None:
         old = 0
+    # Checks to ensure index is in bounds
     if old < 0:
         old = 0
     if old >= n:
         old = n - 1
+
+    # Determine new index
     single = n == 1
     if single:
         new = 0
@@ -31,16 +41,23 @@ def next_track(state: PlayerState) -> None:
             new = 0
         else:
             new = cand
+
+    # Check for wrap and change
     wrapped = new == 0 and old != 0
     changed = new != old
+
+    # Update state and track
     state.current_index = new
-    state.position_seconds = 0.0
+    state.position_seconds = 0.0 # Reset position
     track = state.current_track
     if track is None:
         print("[queue] Selected track missing.")
         return
+
+    # Handle playback
     if state.is_playing:
         try:
+            # Stop current playing track before starting new one
             engine = state.audio_engine
             try:
                 busy = False
@@ -53,6 +70,8 @@ def next_track(state: PlayerState) -> None:
                     engine.stop()
                 except Exception:
                     pass
+
+            # Start playback of new track from beginning
             try:
                 engine.play(track.path, start_pos=0.0)
             except Exception as e:
@@ -79,6 +98,8 @@ def next_track(state: PlayerState) -> None:
             print(f"[queue] Playback failed: {e}")
             state.is_playing = False
             state.is_paused = False
+
+    # Handle Playback Paused or Stopped
     elif state.is_paused:
         if wrapped:
             print(f"[queue] Wrapped to next (paused): {track.display_name}")
@@ -87,6 +108,7 @@ def next_track(state: PlayerState) -> None:
         else:
             print(f"[queue] Selected (paused): {track.display_name}")
     else:
+        # Update messages for stopped state
         if wrapped:
             print(f"[queue] Wrapped to next: {track.display_name}")
         elif changed:
@@ -95,6 +117,11 @@ def next_track(state: PlayerState) -> None:
             print(f"[queue] Selected: {track.display_name}")
 
 def previous_track(state: PlayerState) -> None:
+    '''
+    Moves playback index to the previous track in the playlist.
+    Wrap around to the last track if at the beginning.
+    Automatically starts playback if currently playing.
+    '''
     if not state.tracks:
         print("[queue] No tracks available.")
         return
@@ -118,16 +145,24 @@ def previous_track(state: PlayerState) -> None:
             new = n - 1
         else:
             new = cand
+
+    # Check for wrap and change
     wrapped = new == n - 1 and old == 0
     changed = new != old
+
+    # Update State and Track
     state.current_index = new
-    state.position_seconds = 0.0
+    state.position_seconds = 0.0 # Reset playback position
+
     track = state.current_track
     if track is None:
         print("[queue] Selected track missing.")
         return
+
+    # Handle Playback Playing
     if state.is_playing:
         try:
+            # Stop current playing track before starting new one
             engine = state.audio_engine
             try:
                 busy = False
@@ -140,6 +175,8 @@ def previous_track(state: PlayerState) -> None:
                     engine.stop()
                 except Exception:
                     pass
+
+            # Start playback of new track from beginning with error handling
             try:
                 engine.play(track.path, start_pos=0.0)
             except Exception as e:
@@ -156,6 +193,8 @@ def previous_track(state: PlayerState) -> None:
                     return
             state.is_playing = True
             state.is_paused = False
+
+            # Print appropriate message
             if wrapped:
                 print(f"[queue] Wrapped to prev: {track.display_name}")
             elif changed:
@@ -166,7 +205,10 @@ def previous_track(state: PlayerState) -> None:
             print(f"[queue] Playback failed: {e}")
             state.is_playing = False
             state.is_paused = False
+
+    # Handle Playback Paused or Stopped
     elif state.is_paused:
+        # Update messages for paused state
         if wrapped:
             print(f"[queue] Wrapped to prev (paused): {track.display_name}")
         elif changed:
@@ -174,6 +216,7 @@ def previous_track(state: PlayerState) -> None:
         else:
             print(f"[queue] Selected (paused): {track.display_name}")
     else:
+        # Update messages for stopped state
         if wrapped:
             print(f"[queue] Wrapped to prev: {track.display_name}")
         elif changed:
