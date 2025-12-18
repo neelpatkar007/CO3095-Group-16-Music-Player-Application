@@ -24,3 +24,9 @@ def test_case_0(capsys):
     capsys.readouterr()
 
 
+def test_case_1(capsys):
+    t0 = _make_track(title="Song", artist="Artist", filename="a.mp3", dur=120.0)
+    sut._print_tracks_table([t0])
+    capsys.readouterr()
+
+
