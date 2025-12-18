@@ -37,4 +37,3 @@ def test_stmt_search_view_rescan(capsys, mock_scanner):
     # Rescan
     sut.rescan_for_new_tracks(state)
     assert "Added" in capsys.readouterr().out
-test_white
