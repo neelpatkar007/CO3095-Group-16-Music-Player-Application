@@ -56,3 +56,10 @@ def test_case_6(capsys):
     st = DummyState([])
     sut.search_library(st, "abc")
     capsys.readouterr()
+
+
+def test_case_7(capsys):
+    st = DummyState([_make_track()])
+    sut.search_library(st, "")
+    sut.search_library(st, "   ")
+    capsys.readouterr()
