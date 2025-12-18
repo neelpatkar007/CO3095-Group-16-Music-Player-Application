@@ -36,3 +36,10 @@ def test_case_2(capsys):
     capsys.readouterr()
 
 
+def test_case_3(capsys):
+    sut.search_library(None, "abc")
+    capsys.readouterr()
+
+
+
+
