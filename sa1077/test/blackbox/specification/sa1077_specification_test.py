@@ -45,3 +45,8 @@ def make_state(volume: int = 30, muted: bool = False) -> PlayerState:
     state.is_muted = muted
     return state
 
+def make_state_ui(tracks, current_index: int = 0) -> PlayerState:
+    state = PlayerState(tracks=tracks, audio_engine=DummyEngine())
+    state.current_index = current_index
+    return state
+
