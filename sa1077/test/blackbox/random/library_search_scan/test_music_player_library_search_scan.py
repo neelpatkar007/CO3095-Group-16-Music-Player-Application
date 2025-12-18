@@ -52,3 +52,7 @@ def test_case_5(capsys):
     capsys.readouterr()
 
 
+def test_case_6(capsys):
+    st = DummyState([])
+    sut.search_library(st, "abc")
+    capsys.readouterr()
