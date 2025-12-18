@@ -38,3 +38,10 @@ class DummyEngine:
         return False
 
 
+def make_state(volume: int = 30, muted: bool = False) -> PlayerState:
+    engine = DummyEngine()
+    state = PlayerState(tracks=[], audio_engine=engine)
+    state.volume = volume
+    state.is_muted = muted
+    return state
+
