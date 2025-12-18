@@ -19,13 +19,22 @@ from music_player.player_help import print_help
     ],
 )
 def test_help_known_topics(cmd, expected_snippet, capsys):
+    """
+        Specification Test: Parameterised Command Verification.
+        Uses Equivalence Partitioning (EP) to verify that all primary command strings
+        retrieve their corresponding documentation snippets correctly.
+        """
     print_help(cmd)
     out = capsys.readouterr().out
     assert expected_snippet in out
 
 
 def test_help_unknown_topic_else_branch(capsys):
-    # Hits the final "else" branch: unknown command
+    """
+        Statement Test: Logic Fallback Path.
+        Specifically targets the final 'else' statement to ensure the system
+        provides helpful feedback when a command is not recognised.
+        """
     print_help("/definitely_not_a_command")
     out = capsys.readouterr().out
     assert "not recognised" in out
@@ -33,10 +42,10 @@ def test_help_unknown_topic_else_branch(capsys):
 
 def test_stmt_help_no_command_prints_general_help(capsys):
     """
-    Statement test:
-    - Executes the branch where no command is provided.
-    - Covers printing the general help header and list.
-    """
+        Statement Test: Default General Path.
+        Executes the initial lines of the function responsible for displaying
+        the full command library and header.
+        """
     print_help()
     out = capsys.readouterr().out
     assert "Available Commands" in out
@@ -46,10 +55,10 @@ def test_stmt_help_no_command_prints_general_help(capsys):
 
 def test_stmt_help_specific_command_with_slash(capsys):
     """
-    Statement test:
-    - Executes the branch for a specific command that already
-      starts with '/', such as '/play'.
-    """
+        Statement Test: Standard Command Lookup.
+        Executes the execution path for commands already starting with '/',
+        verifying standard dictionary lookup logic.
+        """
     print_help("/play")
     out = capsys.readouterr().out
     assert "[Help] /play" in out
@@ -58,10 +67,10 @@ def test_stmt_help_specific_command_with_slash(capsys):
 
 def test_stmt_help_specific_command_without_slash(capsys):
     """
-    Statement test:
-    - Executes the branch where a command is provided without '/'
-      and must be normalized internally to '/pause'.
-    """
+        Statement Test: Input Normalisation logic.
+        Executes the code lines that detect a missing '/' prefix and
+        automatically format the string for a successful lookup.
+        """
     print_help("pause")
     out = capsys.readouterr().out
     assert "[Help] /pause" in out
@@ -70,9 +79,10 @@ def test_stmt_help_specific_command_without_slash(capsys):
 
 def test_stmt_help_unknown_command(capsys):
     """
-    Statement test:
-    - Executes the fallback branch for unknown commands.
-    """
+        Statement Test: Robustness Handling.
+        Ensures that unrecognised alphanumeric strings are safely processed
+        by the error-trapping lines of the function.
+        """
     print_help("madeup")
     out = capsys.readouterr().out
 

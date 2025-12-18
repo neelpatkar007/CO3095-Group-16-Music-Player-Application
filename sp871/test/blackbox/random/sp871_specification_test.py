@@ -9,9 +9,12 @@ from music_player.player_audio import change_volume
 from music_player.player_queue import next_track, previous_track
 
 
-# A fake audio engine that doesn't actually play sound.
-# We use this to check if the volume logic is working without needing real audio.
+# --- Test Doubles (Mocks & Stubs) for Backend Isolation ---
 class DummyEngine:
+    """
+        Mock Object: Records volume and mute state changes without audio hardware.
+        Used to verify that the Backend-to-Audio-Engine interface functions correctly.
+        """
     def __init__(self):
         self.last_volume = None
         self.muted = False
@@ -26,6 +29,7 @@ class DummyEngine:
 
 # Helper function to quickly set up a player state with a specific volume/mute setting
 def make_state_vol(volume: int = 30, muted: bool = False) -> PlayerState:
+    """Factory helper to initialise player state with specific volume parameters."""
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
     state.volume = volume

@@ -8,6 +8,7 @@ from music_player.player_audio import (
 
 
 class DummyEngine:
+    """Mock audio engine used to verify mute state transitions and volume memory."""
     def __init__(self):
         self.last_volume = None
         self.muted = False
@@ -20,13 +21,15 @@ class DummyEngine:
 
 
 def make_state():
+    """Factory helper to initialise a PlayerState with a clean test double engine."""
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
 def test_branch_toggle_mute_mutes_when_unmuted(capsys):
     """
-    Branch test:
-    - Covers the branch where is_muted is initially False.
-    """
+        Branch Test: Transition to Muted.
+        Exercises the branch where is_muted is False, verifying that the
+        current volume is cached in 'saved_volume' before silencing.
+        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 
@@ -45,9 +48,10 @@ def test_branch_toggle_mute_mutes_when_unmuted(capsys):
 
 def test_branch_toggle_mute_unmutes_when_muted(capsys):
     """
-    Branch test:
-    - Covers the branch where is_muted is True and we restore saved_volume.
-    """
+        Branch Test: Transition to Unmuted.
+        Exercises the branch where is_muted is True, ensuring the 'saved_volume'
+        is correctly restored to both the state and the audio engine.
+        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 
@@ -66,9 +70,10 @@ def test_branch_toggle_mute_unmutes_when_muted(capsys):
 
 def test_branch_handle_mute_mutes_when_unmuted(capsys):
     """
-    Branch test:
-    - For '/mute' when is_muted is False.
-    """
+        Branch Test: Command-based Muting.
+        Verifies the specific branch for the '/mute' string command
+        when the player is in an active (unmuted) state.
+        """
     state = make_state()
     state.is_muted = False
 
@@ -81,9 +86,10 @@ def test_branch_handle_mute_mutes_when_unmuted(capsys):
 
 def test_branch_handle_mute_command_mute_when_already_muted(capsys):
     """
-    Branch test:
-    - '/mute' when is_muted is already True -> 'Already muted'.
-    """
+        Branch Test: Mute Redundancy.
+        Exercises the decision path for the '/mute' command when the
+        player is already muted, ensuring no state corruption occurs.
+        """
     state = make_state()
     state.is_muted = True
 
@@ -95,9 +101,10 @@ def test_branch_handle_mute_command_mute_when_already_muted(capsys):
 
 def test_branch_handle_mute_command_unmute_when_muted(capsys):
     """
-    Branch test:
-    - '/unmute' when is_muted is True.
-    """
+        Branch Test: Command-based Unmuting.
+        Verifies the specific branch for the '/unmute' string command
+        when the player is in a silenced (muted) state.
+        """
     state = make_state()
     state.is_muted = True
     state.saved_volume = state.volume
@@ -111,9 +118,10 @@ def test_branch_handle_mute_command_unmute_when_muted(capsys):
 
 def test_branch_handle_mute_command_unmute_when_already_unmuted(capsys):
     """
-    Branch test:
-    - '/unmute' when is_muted is False -> 'Already unmuted'.
-    """
+        Branch Test: Unmute Redundancy.
+        Exercises the decision path for '/unmute' when the player is
+        already active, verifying the appropriate console feedback.
+        """
     state = make_state()
     state.is_muted = False
 
@@ -125,9 +133,10 @@ def test_branch_handle_mute_command_unmute_when_already_unmuted(capsys):
 
 def test_branch_handle_mute_command_unknown(capsys):
     """
-    Branch test:
-    - Exercises the final else: unknown mute command.
-    """
+        Branch Test: Default/Error Branch.
+        Exercises the final 'else' statement in the command handler
+        to verify resilience against unrecognised mute commands.
+        """
     state = make_state()
 
     handle_mute_command(state, "/something-else")

@@ -7,6 +7,7 @@ import music_player.player_queue as module_1
 
 @pytest.mark.xfail(strict=True)
 def test_case_0():
+    # Robustness check: Ensuring that 'next_track' logic rejects malformed string input as a PlayerState.
     str_0 = "Ia}khqS"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.next_track(player_state_0)
@@ -14,6 +15,7 @@ def test_case_0():
 
 @pytest.mark.xfail(strict=True)
 def test_case_1():
+    # Sanitisation testing: Verifying that 'previous_track' triggers an error when the state contains invalid tab characters.
     str_0 = "*qFja;UFu\trIi$;4O8"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.previous_track(player_state_0)
@@ -21,6 +23,7 @@ def test_case_1():
 
 @pytest.mark.xfail(strict=True)
 def test_case_2():
+    # Repeating robustness check for arbitrary string-based states to ensure consistent error-trap execution.
     str_0 = "Ia}khqS"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.previous_track(player_state_0)
@@ -28,6 +31,7 @@ def test_case_2():
 
 @pytest.mark.xfail(strict=True)
 def test_case_3():
+    # Negative testing: Checking the previous track handler's resilience against short, non-standard state descriptors.
     str_0 = "M-h"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.previous_track(player_state_0)
@@ -35,6 +39,7 @@ def test_case_3():
 
 @pytest.mark.xfail(strict=True)
 def test_case_4():
+    # Verifying that the queue controller correctly identifies and rejects uninitialised string 'tracks'.
     str_0 = "Jjf"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.previous_track(player_state_0)
@@ -42,12 +47,14 @@ def test_case_4():
 
 @pytest.mark.xfail(strict=True)
 def test_case_5():
+    # Stress testing: Passing complex alphanumeric strings to ensure the 'next' branch handles data-type mismatches.
     str_0 = "lMr?\\w^T%Q4B"
     player_state_0 = module_0.PlayerState(str_0, str_0)
     module_1.next_track(player_state_0)
 
 
 def test_case_6():
+    # Lower Boundary check: Verifying that calling 'previous' on a null-initialised queue maintains stability.
     none_type_0 = None
     list_0 = [none_type_0]
     player_state_0 = module_0.PlayerState(list_0, list_0)
@@ -56,6 +63,7 @@ def test_case_6():
 
 @pytest.mark.xfail(strict=True)
 def test_case_7():
+    # Sequence testing: Verifying the internal pointer arithmetic when navigating backwards through a 4-item tracklist.
     str_0 = "n0}Jot5z\rw5+c"
     none_type_0 = None
     list_0 = [str_0, str_0, str_0, none_type_0]
@@ -66,6 +74,7 @@ def test_case_7():
 
 
 def test_case_8():
+    # Integration check: Verifying that moving 'next' then 'previous' returns the queue pointer to the original index.
     none_type_0 = None
     list_0 = [none_type_0]
     player_state_0 = module_0.PlayerState(list_0, list_0)
@@ -74,17 +83,21 @@ def test_case_8():
 
 
 def test_case_9():
+    # Circular Logic Verification: Testing full wrap-around functionality in both directions.
     none_type_0 = None
     list_0 = [none_type_0, none_type_0, none_type_0, none_type_0]
     player_state_0 = module_0.PlayerState(list_0, none_type_0)
+    # Backward wrap-around to tail.
     none_type_1 = module_1.previous_track(player_state_0)
     assert player_state_0.current_index == 3
+    # Forward wrap-around back to head (Index 0).
     none_type_2 = module_1.next_track(player_state_0)
     assert player_state_0.current_index == 0
 
 
 @pytest.mark.xfail(strict=True)
 def test_case_10():
+    # State transition check: Ensuring that sequential navigation does not corrupt index markers after a wrap-around event.
     str_0 = "n6Sown+#om^ad$ U lp"
     none_type_0 = None
     list_0 = [str_0, str_0, str_0, none_type_0]

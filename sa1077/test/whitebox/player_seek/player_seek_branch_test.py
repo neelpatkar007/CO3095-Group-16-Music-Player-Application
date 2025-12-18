@@ -8,6 +8,7 @@ from music_player.time_utils import format_mm_ss
 
 
 def make_state_with_track(duration: float = 180.0) -> PlayerState:
+    """Utility factory to initialise a consistent PlayerState with a fixed track duration."""
     engine = AudioEngine()
     track = Track(
         path=None,  # type: ignore[arg-type]
@@ -22,7 +23,7 @@ def make_state_with_track(duration: float = 180.0) -> PlayerState:
 
 class TestGetProgressBranch:
     def test_branch_get_progress_with_track(self):
-        """B1: Branch where current_track is a valid Track."""
+        """Branch B1: Valid Track Case. Exercises the logic path where a track is actively loaded."""
         state = make_state_with_track(200.0)
         state.position_seconds = 42.0
 
@@ -32,20 +33,20 @@ class TestGetProgressBranch:
         assert total == 200.0
 
     def test_branch_get_progress_without_valid_track(self):
-        """B2: Branch where there is no valid current_track."""
+        """Branch B2: Null Track Case. Exercises the 'else' logic when the current track is missing."""
         engine = AudioEngine()
         state = PlayerState(tracks=[], audio_engine=engine)
 
         pos, total = get_progress(state)
 
-        # hardened logic: position returned, total is None
+        # Logic verification: ensures current position is returned while total remains None
         assert pos == state.position_seconds
         assert total is None
 
 
 class TestSeekToBranch:
     def test_branch_seek_to_seconds_normal_in_range(self, capsys):
-        """B3: numeric seconds, within range."""
+        """Branch B3: Numeric In-Range Seek. Standard success path for numeric input within duration bounds."""
         state = make_state_with_track(100.0)
 
         seek_to(state, 30.0)
@@ -55,7 +56,7 @@ class TestSeekToBranch:
         assert format_mm_ss(state.position_seconds) == "00:30"
 
     def test_branch_seek_to_clamps_below_zero(self):
-        """B4: numeric seconds below 0 -> clamped to 0."""
+        """Branch B4: Lower Bound Decision. Forces the branch that clamps negative seek times to 0.0."""
         state = make_state_with_track(60.0)
 
         seek_to(state, -10.0)
@@ -63,7 +64,7 @@ class TestSeekToBranch:
         assert state.position_seconds == pytest.approx(0.0)
 
     def test_branch_seek_to_clamps_above_duration(self):
-        """B5: numeric seconds above duration -> clamped to duration."""
+        """Branch B5: Upper Bound Decision. Forces the branch that clamps excessive seek times to the track end."""
         state = make_state_with_track(60.0)
 
         seek_to(state, 100.0)
@@ -71,7 +72,7 @@ class TestSeekToBranch:
         assert state.position_seconds == pytest.approx(60.0)
 
     def test_branch_seek_to_with_mmss_string(self):
-        """B6: string 'mm:ss' path via parse_timecode."""
+        """Branch B6: Timecode String Path. Exercises the branch that parses and processes 'mm:ss' formatted inputs."""
         state = make_state_with_track(200.0)
 
         seek_to(state, "01:30")  # 90 seconds
@@ -79,7 +80,7 @@ class TestSeekToBranch:
         assert state.position_seconds == pytest.approx(90.0)
 
     def test_branch_seek_to_when_no_track_loaded_prints_warning(self, capsys):
-        """B7: branch where current_track is None -> 'No track loaded.'"""
+        """Branch B7: Empty Library Guard. Triggers the error-handling branch when seeking without a loaded track."""
         engine = AudioEngine()
         state = PlayerState(tracks=[], audio_engine=engine)
 
@@ -91,7 +92,7 @@ class TestSeekToBranch:
 
 class TestNudgeBranch:
     def test_branch_nudge_forward_with_clamp(self):
-        """B8: nudge forward to beyond duration -> clamp at duration."""
+        """Branch B8: Forward Nudge Boundary. Verifies the decision logic for forward nudges exceeding track duration."""
         state = make_state_with_track(60.0)
         state.position_seconds = 58.0
 
@@ -100,7 +101,7 @@ class TestNudgeBranch:
         assert state.position_seconds == pytest.approx(60.0)
 
     def test_branch_nudge_backward_with_clamp(self):
-        """B9: nudge backward below 0 -> clamp at 0."""
+        """Branch B9: Backward Nudge Boundary. Verifies the decision logic for backward nudges dropping below 0.0."""
         state = make_state_with_track(60.0)
         state.position_seconds = 2.0
 

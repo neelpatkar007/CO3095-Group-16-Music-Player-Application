@@ -7,6 +7,7 @@ from music_player.player_audio import (
 
 
 class DummyEngine:
+    """Mock engine to verify statement execution without hardware dependencies."""
     def __init__(self):
         self.last_volume = None
         self.muted = False
@@ -19,23 +20,24 @@ class DummyEngine:
 
 
 def make_state():
+    """Initialises a clean PlayerState for individual statement tests."""
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
 def test_stmt_change_volume_state_none_does_not_crash():
     """
-    Statement test:
-    - Covers the early-return path when state is None.
-    - Ensures no exception is raised.
-    """
+        Statement Test: Null Object Guard.
+        Executes the very first lines of the function to verify the
+        early-return logic when no state object is provided.
+        """
     change_volume(None, "50")  # type: ignore[arg-type]
 
 
 def test_stmt_change_volume_empty_input_prints_current_volume(capsys):
     """
-    Statement test:
-    - Covers the branch where the input string is empty.
-    - Ensures current volume is printed.
-    """
+        Statement Test: Empty String Handling.
+        Covers the specific lines responsible for printing the current
+        volume level when no new value is supplied.
+        """
     state = make_state()
     state.volume = 42
 
@@ -46,10 +48,10 @@ def test_stmt_change_volume_empty_input_prints_current_volume(capsys):
 
 def test_stmt_change_volume_valid_not_muted_updates_engine(capsys):
     """
-    Statement test:
-    - Covers the main 'happy path' where the new volume is valid
-      and the state is not muted.
-    """
+        Statement Test: Standard Update Path.
+        Executes the 'Happy Path' lines where a valid integer is processed
+        and passed directly to the audio engine.
+        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 
@@ -63,10 +65,10 @@ def test_stmt_change_volume_valid_not_muted_updates_engine(capsys):
 
 def test_stmt_change_volume_while_muted_unmutes_and_updates(capsys):
     """
-    Statement test:
-    - Covers the path where the player is muted and we change volume,
-      causing unmute + saved_volume reset.
-    """
+        Statement Test: Mute-Reset Logic.
+        Executes the cleanup statements that reset the 'is_muted' flag
+        and clear the 'saved_volume' memory when a volume change occurs.
+        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
     state.volume = 20

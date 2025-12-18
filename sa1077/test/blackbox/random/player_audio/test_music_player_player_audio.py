@@ -7,6 +7,7 @@ import music_player.player_audio as module_1
 
 @pytest.mark.xfail(strict=True)
 def test_case_0():
+    # Robustness check: Ensuring bool inputs don't crash the volume engine.
     bool_0 = True
     player_state_0 = module_0.PlayerState(bool_0, bool_0)
     module_1.change_volume(player_state_0, bool_0)
@@ -14,6 +15,7 @@ def test_case_0():
 
 @pytest.mark.xfail(strict=True)
 def test_case_1():
+    # Negative Testing: Verifying error handling for null states and empty tracklists.
     none_type_0 = None
     module_1.change_volume(none_type_0, none_type_0)
     list_0 = []
@@ -26,12 +28,14 @@ def test_case_1():
 
 @pytest.mark.xfail(strict=True)
 def test_case_2():
+    # Verifying type safety: Ensuring raw bytes aren't accepted as a valid player state.
     bytes_0 = b"'\xa8X\xa7"
     player_state_0 = module_0.PlayerState(bytes_0, bytes_0)
     module_1.toggle_mute(player_state_0)
 
 
 def test_case_3():
+    # Checking for graceful failures when passing byte strings to volume controllers.
     bytes_0 = b"\xd1{g\x8fz\xdb"
     str_0 = "w!r;"
     none_type_0 = module_1.change_volume(bytes_0, str_0)
@@ -41,11 +45,13 @@ def test_case_3():
 
 @pytest.mark.xfail(strict=True)
 def test_case_4():
+    # Robustness: Testing the mute handler against incorrect integer input.
     int_0 = 1131
     module_1.handle_mute_command(int_0, int_0)
 
 
 def test_case_5():
+    # Testing sanitisation: Verifying how the system handles multiline strings and nulls.
     none_type_0 = None
     str_0 = "v"
     module_1.handle_mute_command(none_type_0, str_0)
@@ -58,6 +64,7 @@ def test_case_5():
 
 
 def test_case_6():
+    # Branch check: Validating audio commands when the library (list_0) is empty.
     list_0 = []
     player_state_0 = module_0.PlayerState(list_0, list_0)
     str_0 = "ee"
@@ -66,6 +73,7 @@ def test_case_6():
 
 
 def test_case_7():
+    # Boundary Testing: Checking behaviour with large floats and negative integers.
     int_0 = -1132
     bool_0 = True
     str_0 = "\n ^ Stopplaback And &ee sison toTX.P\n    SL-01.\n   C"
@@ -76,6 +84,7 @@ def test_case_7():
 
 @pytest.mark.xfail(strict=True)
 def test_case_8():
+    # Verifying that the mute toggle doesn't crash after a standard volume change.
     int_0 = 2937
     str_0 = "[kK"
     player_state_0 = module_0.PlayerState(int_0, str_0)
@@ -85,6 +94,7 @@ def test_case_8():
 
 @pytest.mark.xfail(strict=True)
 def test_case_9():
+    # Robustness: Testing if volume logic can handle receiving the state object itself as an argument.
     list_0 = []
     player_state_0 = module_0.PlayerState(list_0, list_0)
     none_type_0 = module_1.change_volume(player_state_0, list_0)
@@ -93,6 +103,7 @@ def test_case_9():
 
 
 def test_case_10():
+    # Validating command parsing for mute operations with complex string paths.
     bytes_0 = b"\xd1{g\x8fz\xdb"
     str_0 = "/dvnbUTe"
     module_1.change_volume(bytes_0, str_0)
@@ -100,6 +111,7 @@ def test_case_10():
 
 
 def test_case_11():
+    # Ensuring that the handle_mute_command rejects empty lists as mute parameters.
     list_0 = []
     player_state_0 = module_0.PlayerState(list_0, list_0)
     str_0 = "GxJ\\S"
@@ -108,6 +120,7 @@ def test_case_11():
 
 
 def test_case_12():
+    # Stress Testing: Checking volume change logic against multiple rapid command inputs.
     bytes_0 = b"\xd1{g\x8fz\xdb"
     str_0 = "w!r;"
     module_1.change_volume(bytes_0, str_0)
@@ -115,6 +128,7 @@ def test_case_12():
 
 
 def test_case_13():
+    # Verifying that standard mute commands function correctly with an empty library state.
     list_0 = []
     player_state_0 = module_0.PlayerState(list_0, list_0)
     str_0 = "Nf("

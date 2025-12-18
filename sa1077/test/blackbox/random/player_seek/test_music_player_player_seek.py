@@ -6,6 +6,7 @@ import music_player.player_seek as module_1
 
 
 def test_case_0():
+    # Robustness check: Verifying if get_progress handles a PlayerState initialized with nested lists and raw bytes instead of standard library data.
     bytes_0 = b"\xff1\x0c="
     bool_0 = True
     dict_0 = {}
@@ -17,6 +18,7 @@ def test_case_0():
 
 
 def test_case_1():
+    # Null-state testing: Ensuring the progress bar rendering returns a placeholder string '[Time null]' when the player state is uninitialized.
     bool_0 = False
     player_state_0 = module_0.PlayerState(bool_0, bool_0)
     str_0 = module_1.render_progress_bar(player_state_0)
@@ -24,6 +26,7 @@ def test_case_1():
 
 
 def test_case_2():
+    # Type-check verification: Testing if the seek_to function can handle a 'set' object as a seek target without crashing the application.
     bool_0 = False
     set_0 = set()
     player_state_0 = module_0.PlayerState(bool_0, set_0)
@@ -31,6 +34,7 @@ def test_case_2():
 
 
 def test_case_3():
+    # Integration check: Verifying that nudging a null state doesn't corrupt the progress bar output, ensuring it remains as '[Time null]'.
     bool_0 = False
     player_state_0 = module_0.PlayerState(bool_0, bool_0)
     module_1.nudge(player_state_0, bool_0)
@@ -39,6 +43,7 @@ def test_case_3():
 
 
 def test_case_4():
+    # Sequence testing: Seeking with a boolean value and then attempting to nudge the state using the resulting progress tuple to find edge-case failures.
     bool_0 = False
     player_state_0 = module_0.PlayerState(bool_0, bool_0)
     module_1.seek_to(player_state_0, bool_0)
@@ -48,6 +53,7 @@ def test_case_4():
 
 
 def test_case_5():
+    # Stress testing the seek controller: Passing 'None' and 'Tuples' as seek parameters to verify the system's resilience against non-numeric inputs.
     bool_0 = False
     player_state_0 = module_0.PlayerState(bool_0, bool_0)
     tuple_0 = module_1.get_progress(player_state_0)

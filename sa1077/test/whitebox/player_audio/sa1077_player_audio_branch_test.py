@@ -7,6 +7,7 @@ from music_player.player_audio import (
 
 
 class DummyEngine:
+    """Mock audio engine used to verify volume and mute state transitions."""
     def __init__(self):
         self.last_volume = None
         self.muted = False
@@ -19,14 +20,15 @@ class DummyEngine:
 
 
 def make_state():
+    """Factory helper to initialise a consistent PlayerState for branch testing."""
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
 def test_branch_change_volume_non_numeric_input(capsys):
     """
-    Branch test for change_volume:
-    - Forces the ValueError path when int() fails,
-      exercising the 'must be a number' error branch.
-    """
+        Branch Test: ValueError Exception Path.
+        Forces the execution of the error-handling branch when int() conversion fails
+        due to non-numeric string input.
+        """
     state = make_state()
 
     change_volume(state, "abc")
@@ -37,9 +39,10 @@ def test_branch_change_volume_non_numeric_input(capsys):
 
 def test_branch_change_volume_out_of_range_low(capsys):
     """
-    Branch test:
-    - Input below 0 triggers 'between 0 and 100' branch.
-    """
+        Branch Test: Lower Boundary Range Check.
+        Exercises the decision path triggered when a numeric input is below the
+        allowable 0-100 threshold.
+        """
     state = make_state()
 
     change_volume(state, "-1")
@@ -50,9 +53,10 @@ def test_branch_change_volume_out_of_range_low(capsys):
 
 def test_branch_change_volume_out_of_range_high(capsys):
     """
-    Branch test:
-    - Input above 100 triggers the same 'between 0 and 100' branch.
-    """
+        Branch Test: Upper Boundary Range Check.
+        Exercises the same range-validation branch using an input exceeding
+        the maximum volume limit.
+        """
     state = make_state()
 
     change_volume(state, "101")
@@ -63,10 +67,10 @@ def test_branch_change_volume_out_of_range_high(capsys):
 
 def test_branch_change_volume_while_muted_unmutes_and_sets_volume(capsys):
     """
-    Branch test:
-    - Specifically targets the branch where is_muted is True and
-      change_volume must unmute and clear saved_volume.
-    """
+        Branch Test: Mute State Auto-Correction.
+        Specifically targets the logic fork where the player is currently muted.
+        Verifies the branch that clears saved_volume and updates the engine status.
+        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 

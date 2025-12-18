@@ -14,6 +14,10 @@ from music_player.player_state import PlayerState
 
 
 class DummyEngine:
+    """
+        Mock Object: Simulates the audio engine to verify that the queue
+        controller triggers the correct hardware-level calls.
+        """
     def __init__(self):
         self.play_calls = []
         self.stop_calls = 0
@@ -30,6 +34,7 @@ class DummyEngine:
 
 
 def make_track(name: str):
+    """Utility helper to initialise a Track object with consistent metadata."""
     return SimpleNamespace(
         path=Path(f"{name}.mp3"),
         display_name=name,
@@ -38,7 +43,11 @@ def make_track(name: str):
 
 
 def test_stmt_next_track_no_tracks(capsys):
-    """S1: Execute the early-return path when there are no tracks."""
+    """
+        Statement Test S1: Early Return Logic.
+        Executes the initial lines of the next_track function to verify
+        safety guards when the library is empty.
+        """
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
 
@@ -48,7 +57,11 @@ def test_stmt_next_track_no_tracks(capsys):
 
 
 def test_stmt_next_track_single_track_stopped(capsys):
-    """S2: Single track; ensure normal flow without auto-play."""
+    """
+        Statement Test S2: Standard Index Initialisation.
+        Covers the execution path for a single-item queue, ensuring the
+        index remains stable at zero while the player is stopped.
+        """
     engine = DummyEngine()
     track = make_track("One")
     state = PlayerState(tracks=[track], audio_engine=engine)
@@ -66,7 +79,11 @@ def test_stmt_next_track_single_track_stopped(capsys):
 
 
 def test_stmt_next_track_multi_track_while_playing(capsys):
-    """S3: Move to next track and trigger engine.play() when playing."""
+    """
+        Statement Test S3: Active State Propagation.
+        Executes the specific code statements responsible for triggering the
+        audio engine when a track change occurs during playback.
+        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -83,7 +100,11 @@ def test_stmt_next_track_multi_track_while_playing(capsys):
 
 
 def test_stmt_previous_track_basic_wrap(capsys):
-    """S4: Execute previous_track including wrap-around behaviour at least once."""
+    """
+        Statement Test S4: Circular Logic Execution.
+        Executes the wrap-around statements in previous_track to verify
+        index arithmetic at the list boundaries.
+        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")

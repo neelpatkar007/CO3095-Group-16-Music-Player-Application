@@ -5,20 +5,24 @@ import music_player.time_utils as module_0
 
 
 def test_case_0():
+    # Robustness check: Verifying that format_mm_ss handles NoneType by returning the placeholder '??:??'.
     none_type_0 = None
     str_0 = module_0.format_mm_ss(none_type_0)
     assert str_0 == "??:??"
+    # Negative testing: Checking if parse_timecode handles an empty string input without throwing an exception.
     str_1 = ""
     module_0.parse_timecode(str_1)
 
 
 def test_case_1():
+    # Type validation: Testing how the formatter interprets boolean values when passed as time durations.
     bool_0 = False
     str_0 = module_0.format_mm_ss(bool_0)
     assert str_0 == "00:00"
 
 
 def test_case_2():
+    # Round-trip verification: Ensuring that a formatted '00:00' string correctly parses back to a float value of 0.0.
     bool_0 = False
     str_0 = module_0.format_mm_ss(bool_0)
     assert str_0 == "00:00"
@@ -27,11 +31,13 @@ def test_case_2():
 
 
 def test_case_3():
+    # Stress testing: Passing malformed alphanumeric strings with tabs to verify the parser's error handling.
     str_0 = "xVSd6\tE"
     module_0.parse_timecode(str_0)
 
 
 def test_case_4():
+    # Boundary testing: Verifying that negative float durations trigger the '??:??' error display in the UI.
     bool_0 = False
     str_0 = module_0.format_mm_ss(bool_0)
     assert str_0 == "00:00"
@@ -40,10 +46,12 @@ def test_case_4():
     assert str_1 == "??:??"
     float_1 = module_0.parse_timecode(str_0)
     assert float_1 == pytest.approx(0.0, abs=0.01, rel=0.01)
+    # Sanitisation check: Testing the parser against arbitrary symbol strings to ensure system resilience.
     str_2 = "~>%"
     module_0.parse_timecode(str_2)
 
 
 def test_case_5():
+    # Robustness testing: Checking if the timecode parser can gracefully reject raw byte inputs.
     bytes_0 = b"M"
     module_0.parse_timecode(bytes_0)

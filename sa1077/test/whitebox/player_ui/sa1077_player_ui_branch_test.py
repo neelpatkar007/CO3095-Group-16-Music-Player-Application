@@ -10,21 +10,20 @@ from music_player.library import Track
 
 
 class DummyEngine:
-    """Minimal stub to construct a PlayerState without real audio."""
+    """Minimal test double (stub) used to isolate UI rendering logic from audio hardware."""
     pass
 
 
 def make_state_with_tracks(tracks):
+    """Utility helper to initialise a PlayerState with a specific set of track metadata."""
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
 
 def test_branch_now_playing_paused_status(capsys):
     """
-    Branch test:
-    - Forces the 'Paused' branch of the status selection.
-    - Condition chain:
-        if is_playing -> else if is_paused -> else (Stopped)
-      We specifically hit the 'is_paused' case here.
-    """
+        Branch Test: 'Paused' Logic Fork.
+        Exercises the specific decision path in print_now_playing where is_playing is False
+        but is_paused is True, ensuring the 'Paused:' prefix is correctly applied.
+        """
     track = Track(
         path=Path("a.mp3"),
         title="Song",
@@ -43,10 +42,10 @@ def test_branch_now_playing_paused_status(capsys):
 
 def test_branch_now_playing_stopped_status(capsys):
     """
-    Branch test:
-    - Forces the 'Stopped' branch.
-    - Both is_playing and is_paused are False.
-    """
+        Branch Test: 'Stopped' Default Logic.
+        Forces the final 'else' branch in the status selection chain by setting both
+        playing and paused flags to False.
+        """
     track = Track(
         path=Path("a.mp3"),
         title="Song",
@@ -64,10 +63,10 @@ def test_branch_now_playing_stopped_status(capsys):
 
 def test_branch_progress_with_track_and_total(capsys):
     """
-    Branch test:
-    - Forces the branch where a track exists and has a known duration.
-    - Ensures both position and total are formatted and printed.
-    """
+        Branch Test: Valid Duration Path.
+        Verifies the branch where a track exists and its duration is fully known,
+        triggering the formatting of both current position and total time.
+        """
     track = Track(
         path=Path("a.mp3"),
         title="Timed",
@@ -84,10 +83,10 @@ def test_branch_progress_with_track_and_total(capsys):
 
 def test_branch_progress_bar_clamps_and_percentage(capsys):
     """
-    Branch test:
-    - Forces clamping/percentage logic by passing a high position.
-      Position beyond duration => 100% bar.
-    """
+        Branch Test: Upper-Boundary Clamping Logic.
+        Forces the decision path that handles positions exceeding the track duration.
+        The logic must clamp the result to 100% to maintain visual integrity.
+        """
     track = Track(
         path=Path("end.mp3"),
         title="End",
