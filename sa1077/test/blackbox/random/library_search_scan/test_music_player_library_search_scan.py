@@ -97,3 +97,13 @@ def test_case_12(capsys):
     st = DummyState([None, _make_track(), _make_track(title="", artist="", filename="x.mp3", dur=None)])
     sut.view_songs_table(st)
     capsys.readouterr()
+
+
+def test_case_13(capsys):
+    st = DummyState([
+        _make_track(title="T1", artist="", filename="x.mp3", dur=10.0),
+        _make_track(title="T2", artist=None, filename="y.mp3", dur=20.0),  # type: ignore[arg-type]
+        _make_track(title="T3", artist="A", filename="z.mp3", dur=30.0),
+    ])
+    sut.view_artists_table(st)
+    capsys.readouterr()
