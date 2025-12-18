@@ -149,3 +149,9 @@ def test_case_17(capsys):
     capsys.readouterr()
 
 
+def test_case_18(capsys):
+    st = SimpleNamespace(tracks="oops")
+    sut.rescan_for_new_tracks(st)
+    capsys.readouterr()
+
+
