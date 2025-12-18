@@ -92,3 +92,12 @@ def test_bb_change_volume_error_non_numeric(capsys):
     assert "[audio] Error: Volume must be a number.\n" in out
     assert state.volume == 30
 
+
+def test_bb_change_volume_error_range_low(capsys):
+    # Frame F3
+    state = make_state(volume=30, muted=False)
+    change_volume(state, "-1")
+    out = capsys.readouterr().out
+    assert "between 0 and 100" in out
+    assert state.volume == 30
+
