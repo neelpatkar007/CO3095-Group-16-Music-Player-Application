@@ -30,3 +30,9 @@ def test_case_1(capsys):
     capsys.readouterr()
 
 
+def test_case_2(capsys):
+    t0 = SimpleNamespace(title=None, artist=None, duration_seconds=None, path=None)
+    sut._print_tracks_table([t0])
+    capsys.readouterr()
+
+
