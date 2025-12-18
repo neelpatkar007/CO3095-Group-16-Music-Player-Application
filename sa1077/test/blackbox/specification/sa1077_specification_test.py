@@ -74,3 +74,12 @@ def make_state_with_track(duration: float) -> PlayerState:
     state.position_seconds = 0.0
     return state
 
+def test_bb_change_volume_show_current_from_empty_input(capsys):
+    # Frame F1
+    state = make_state(volume=42, muted=False)
+    change_volume(state, "")
+    out = capsys.readouterr().out
+    assert "Current Volume: 42%" in out
+    assert state.volume == 42
+    assert state.is_muted is False
+
