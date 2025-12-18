@@ -116,3 +116,44 @@ def test_case_14(capsys):
     st = DummyState([t0, t1, t2])
     sut.view_albums_table(st)
     capsys.readouterr()
+
+
+def test_case_15(monkeypatch, capsys):
+    st = DummyState([_make_track(filename="existing.mp3")])
+
+    def fake_discover_tracks():
+        return [
+            _make_track(filename="existing.mp3", dur=100.0),
+            _make_track(filename="new.mp3", dur=100.0),
+            _make_track(filename="bad.mp3", dur=0.0),
+        ]
+    monkeypatch.setattr(sut, "discover_tracks", fake_discover_tracks)
+    sut.rescan_for_new_tracks(st)
+    out = capsys.readouterr().out
+    assert "Scanning for new tracks" in out
+    assert any(getattr(t, "path", None) and t.path.name == "new.mp3" for t in st.tracks)
+
+
+def test_case_16(monkeypatch, capsys):
+    st = DummyState([_make_track(filename="existing.mp3")])
+
+    monkeypatch.setattr(sut, "discover_tracks", lambda: [])
+    sut.rescan_for_new_tracks(st)
+
+    out = capsys.readouterr().out
+    assert "No tracks found on disk" in out
+
+
+def test_case_17(capsys):
+    sut.rescan_for_new_tracks(SimpleNamespace())
+    capsys.readouterr()
+
+
+def test_case_18(capsys):
+    st = SimpleNamespace(tracks="oops")
+    sut.rescan_for_new_tracks(st)
+    capsys.readouterr()
+
+
+
+
