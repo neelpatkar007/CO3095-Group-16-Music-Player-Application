@@ -19,4 +19,8 @@ def _make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
         path=Path(filename),
     )
 
+def test_case_0(capsys):
+    sut._print_tracks_table([])
+    capsys.readouterr()
+
 
