@@ -134,3 +134,13 @@ def test_case_15(monkeypatch, capsys):
     assert any(getattr(t, "path", None) and t.path.name == "new.mp3" for t in st.tracks)
 
 
+def test_case_16(monkeypatch, capsys):
+    st = DummyState([_make_track(filename="existing.mp3")])
+
+    monkeypatch.setattr(sut, "discover_tracks", lambda: [])
+    sut.rescan_for_new_tracks(st)
+
+    out = capsys.readouterr().out
+    assert "No tracks found on disk" in out
+
+
