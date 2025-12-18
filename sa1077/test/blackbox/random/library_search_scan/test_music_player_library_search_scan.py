@@ -46,3 +46,9 @@ def test_case_4(capsys):
     capsys.readouterr()
 
 
+def test_case_5(capsys):
+    st = SimpleNamespace(tracks="not-a-list")
+    sut.search_library(st, "abc")
+    capsys.readouterr()
+
+
