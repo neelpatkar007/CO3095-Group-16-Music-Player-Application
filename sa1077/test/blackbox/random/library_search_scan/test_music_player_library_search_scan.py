@@ -144,3 +144,8 @@ def test_case_16(monkeypatch, capsys):
     assert "No tracks found on disk" in out
 
 
+def test_case_17(capsys):
+    sut.rescan_for_new_tracks(SimpleNamespace())
+    capsys.readouterr()
+
+
