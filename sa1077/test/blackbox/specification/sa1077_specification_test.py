@@ -50,3 +50,12 @@ def make_state_ui(tracks, current_index: int = 0) -> PlayerState:
     state.current_index = current_index
     return state
 
+
+def make_track(title: str = "Song", artist: str = "Unknown", duration: float = 180.0) -> Track:
+    return Track(
+        path=Path(f"{title}.mp3"),
+        title=title,
+        artist=artist,
+        duration_seconds=duration,
+    )
+
