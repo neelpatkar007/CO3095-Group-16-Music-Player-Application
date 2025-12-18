@@ -93,3 +93,7 @@ def test_case_11(capsys):
     capsys.readouterr()
 
 
+def test_case_12(capsys):
+    st = DummyState([None, _make_track(), _make_track(title="", artist="", filename="x.mp3", dur=None)])
+    sut.view_songs_table(st)
+    capsys.readouterr()
