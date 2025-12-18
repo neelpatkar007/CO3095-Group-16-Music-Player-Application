@@ -78,3 +78,9 @@ def test_case_9(capsys):
     sut.search_library(st, "west")
     capsys.readouterr()
 
+
+def test_case_10(capsys):
+    t0 = _make_track(title="S", artist="A", filename="MySongFile.MP3", dur=90.0)
+    st = DummyState([t0])
+    sut.search_library(st, "mysongfile")
+    capsys.readouterr()
