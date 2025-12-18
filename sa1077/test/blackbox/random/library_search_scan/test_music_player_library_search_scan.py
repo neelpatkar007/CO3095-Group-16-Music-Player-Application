@@ -70,3 +70,11 @@ def test_case_8(capsys):
     st = DummyState([t0])
     sut.search_library(st, "hello")
     capsys.readouterr()
+
+
+def test_case_9(capsys):
+    t0 = _make_track(title="S", artist="Kanye West", filename="a.mp3", dur=90.0)
+    st = DummyState([t0])
+    sut.search_library(st, "west")
+    capsys.readouterr()
+
