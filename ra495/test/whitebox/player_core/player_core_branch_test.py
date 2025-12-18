@@ -9,6 +9,10 @@ from music_player.player_state import PlayerState
 
 
 class DummyEngine:
+    """
+    Minimal stub to isolate the Core logic from the actual Audio Engine.
+    Allows us to verify if .play(), .pause(), etc. are called without playing real audio.
+    """
     def __init__(self):
         self.play_calls = []
         self.paused = False
@@ -29,6 +33,9 @@ class DummyEngine:
 
 
 def make_state_with_track(duration: float = 180.0):
+    """
+    Helper to create a fresh PlayerState with a single track for each test.
+    """
     engine = DummyEngine()
     track = SimpleNamespace(
         path=Path("dummy.mp3"),
@@ -39,8 +46,20 @@ def make_state_with_track(duration: float = 180.0):
     state.current_index = 0
     return state, track, engine
 
+# White box testing - branch coverage
+# These tests ensure every logical branch within the core
+# playback functions is executed at least once.
 def test_play_branch_no_tracks(capsys):
-    """Branch: no tracks -> warning branch taken."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if not state.tracks:` Empty Library branch.
+
+        Explanation:
+        We initialise a state with an empty track list.
+        This forces the code to
+        enter the guard clause that warns the user and returns early.
+    """
+
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
 
@@ -50,7 +69,15 @@ def test_play_branch_no_tracks(capsys):
 
 
 def test_play_branch_already_playing_does_not_restart(capsys):
-    """Branch: state.is_playing and not paused -> 'Already playing' branch."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if state.is_playing:` Already Playing branch.
+
+        Explanation:
+        We set `is_playing=True`.
+        This forces the code to enter the branch that
+        prints 'Already playing' instead of restarting the track.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = True
     state.is_paused = False
@@ -62,7 +89,16 @@ def test_play_branch_already_playing_does_not_restart(capsys):
 
 
 def test_play_branch_resume_from_pause(capsys):
-    """Branch: paused -> resume() branch."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `elif state.is_paused:` Resume branch.
+
+        Explanation:
+        We set `is_paused=True`.
+        The code bypasses the 'playing' check but catches
+        on the 'paused' check, entering the specific
+        branch that calls `resume()`.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = False
     state.is_paused = True
@@ -76,7 +112,16 @@ def test_play_branch_resume_from_pause(capsys):
 
 
 def test_play_branch_fresh_start(capsys):
-    """Branch: not playing and not paused -> fresh start branch."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `else:` Fresh Start branch.
+
+        Explanation:
+        Both `is_playing` and `is_paused` are False.
+        This forces the code to fall
+        through to the default branch, which handles starting a
+        fresh track via `engine.play()`.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = False
     state.is_paused = False
@@ -90,7 +135,15 @@ def test_play_branch_fresh_start(capsys):
     assert state.is_paused is False
 
 def test_pause_branch_nothing_to_pause(capsys):
-    """Branch: not playing or already paused -> 'Nothing to pause'."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if not state.is_playing:` Failure branch.
+
+        Explanation:
+        We verify the branch that handles invalid requests.
+        If nothing is playing,
+        the code enters the guard clause and prints a warning.
+        """
     state, track, engine = make_state_with_track()
     state.is_playing = False
     state.is_paused = False
@@ -102,7 +155,16 @@ def test_pause_branch_nothing_to_pause(capsys):
 
 
 def test_pause_branch_success(capsys):
-    """Branch: playing and not paused -> actual pause."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `else:` Success branch.
+
+        Explanation:
+        We set `is_playing=True`.
+        The guard clause evaluates to False, forcing
+        execution into the main body where `engine.pause()`
+        is called.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = True
     state.is_paused = False
@@ -115,7 +177,16 @@ def test_pause_branch_success(capsys):
     assert state.is_paused is True
 
 def test_stop_branch_nothing_is_playing(capsys):
-    """Branch: neither playing nor paused -> 'Nothing is playing'."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if not is_playing and not is_paused:`
+        Already Stopped branch.
+
+        Explanation:
+        We ensure the code handles the case where the
+        player is already stopped.
+        This triggers the early return branch.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = False
     state.is_paused = False
@@ -127,7 +198,14 @@ def test_stop_branch_nothing_is_playing(capsys):
 
 
 def test_stop_branch_from_playing(capsys):
-    """Branch: playing -> stop and reset position."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `is_playing` logic path within Stop.
+
+        Explanation:
+        Verifies that stopping works correctly when the
+        system is currently playing.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = True
     state.is_paused = False
@@ -143,7 +221,15 @@ def test_stop_branch_from_playing(capsys):
 
 
 def test_stop_branch_from_paused(capsys):
-    """Branch: paused (not playing) -> stop and reset position."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `is_paused` logic path within Stop.
+
+        Explanation:
+        Verifies that stopping works correctly when the
+        system is currently paused
+        which is distinct from 'playing' in the boolean logic.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = False
     state.is_paused = True
@@ -156,7 +242,15 @@ def test_stop_branch_from_paused(capsys):
     assert state.position_seconds == pytest.approx(0.0)
 
 def test_update_playback_branch_ignores_non_positive_delta():
-    """Branch: delta <= 0 -> early return, no position change."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if delta_time <= 0:` guard branch.
+
+        Explanation:
+        We pass a zero delta. The code should detect
+        this condition and
+        skip the update logic.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = True
     pos_before = state.position_seconds
@@ -166,7 +260,14 @@ def test_update_playback_branch_ignores_non_positive_delta():
 
 
 def test_update_playback_branch_ignores_when_not_playing():
-    """Branch: not playing -> ignore even if delta > 0."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if not state.is_playing:` guard branch.
+
+        Explanation:
+        Even if delta is positive, we should not update if
+        the player is Stopped.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = False
 
@@ -175,7 +276,16 @@ def test_update_playback_branch_ignores_when_not_playing():
 
 
 def test_update_playback_branch_ignores_when_paused():
-    """Branch: paused -> ignore updates even if playing flag is True."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if state.is_paused:` guard branch.
+
+        Explanation:
+        Even if `is_playing` might be conceptually true
+        depending on implementation,
+        if `is_paused` is explicitly True, we must enter
+        the branch that skips updates.
+    """
     state, track, engine = make_state_with_track()
     state.is_playing = True
     state.is_paused = True
@@ -185,7 +295,16 @@ def test_update_playback_branch_ignores_when_paused():
 
 
 def test_update_playback_branch_advances_and_finishes(capsys):
-    """Branch: playing, not paused, delta>0 and position passes duration."""
+    """
+        Technique: White-Box Branch Coverage.
+        Target Branch: The `if position >= duration:` Track Complete branch.
+
+        Explanation:
+        We simulate time passing such that `position + delta > duration`.
+        This forces the `if` condition to be True, entering
+        the branch
+        that handles track completion - stopping the engine.
+    """
     state, track, engine = make_state_with_track(duration=10.0)
     state.is_playing = True
     state.is_paused = False

@@ -10,29 +10,48 @@ class DummyEngine:
 
 
 def make_state(tracks):
+    '''Helped to create a fresh PlayerState for each test. '''
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
+
+# White box statement tests
+# These tests ensure that specific return statements within the current_track property are executed
+# at least once
 
 def test_current_track_statement_empty_library():
     """
-    Statement test:
-    - Execute the function when the library is empty.
-    - Ensures the 'if' is evaluated and the 'return None' line is executed.
+    White box Statement coverage
+    Target - 'return None' statement when index is invalid or list is empty
+
+    Explanation:
+    We initialise the state with an empty track list. This is to force the
+    code to evaluate the validation check and execute the specific line that returns
+    'None'
+
     """
     state = make_state([])
+
+    # Access the property to trigger the code execution
     _ = state.current_track  # just to execute the property
+
+    # Verification to ensure the statement returning None was executed
     assert state.current_track is None
 
 
 def test_current_track_statement_valid_index():
     """
-    Statement test:
-    - Execute the function when there is at least one track
-      and the index is valid.
-    - Ensures the 'if' body line is executed.
+    White box statement coverage
+    Target - 'return self.tracks[self.current_index]' statement
+
+    Explanation:
+    We provide a valid track and a valid index of 0 to
+    force the code to pass any validation checks and execute
+    the specific line that retrieves and returns
+    the actual track object.
+
     """
     track = types.SimpleNamespace(title="Track 1")
     state = make_state([track])
     state.current_index = 0
 
-    # This executes the true branch and returns the track
+    # Verification to ensure the statement returning the track object was executed
     assert state.current_track is track

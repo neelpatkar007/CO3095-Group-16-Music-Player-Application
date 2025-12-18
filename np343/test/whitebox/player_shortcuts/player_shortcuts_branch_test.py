@@ -10,16 +10,22 @@ class DummyEngine:
 
 
 def make_state() -> PlayerState:
+    '''Helped to create a fresh PlayerState for each test'''
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
 
-# BRANCH TESTS FOR handle_keypress
+# White-box testing - branch coverage - These tests ensure that each control branch (if/elif/else) in
+# the handle_keypress function is executed at least once.
 
 def test_branch_key_p_triggers_play_when_not_playing(monkeypatch):
     """
-    Branch test:
-    - key == 'p' AND state.is_playing == False
-    - Should take the inner 'else' branch -> player_core.play(...)
+    White box branch coverage
+    The target branch is the nested 'else' block inside the 'p' key check
+
+    Logic:
+    1. Input - Key 'p' is pressed
+    2. Condition - is_playing is False
+    3. Expected Path - Enters 'if key == 'p', fails 'if is_playing', goes to 'else' - calls play()
     """
     state = make_state()
     state.is_playing = False
@@ -37,15 +43,21 @@ def test_branch_key_p_triggers_play_when_not_playing(monkeypatch):
 
     handle_keypress(state, "p")
 
+    # Assert - that the play() branch was taken
     assert calls.get("play") is True
+    # Assert - that the pause() branch was not taken
     assert "pause" not in calls
 
 
 def test_branch_key_p_triggers_pause_when_playing(monkeypatch):
     """
-    Branch test:
-    - key == 'p' AND state.is_playing == True
-    - Should take the inner 'if' branch -> player_core.pause(...)
+    White box branch coverage
+    The target branch is the nested 'if' block inside the 'p' key check
+
+    Logic:
+    1. Input - Key 'p' is pressed
+    2. Condition - is_playing is True
+    3. Expected Path - Enters 'if key == 'p', passes 'if is_playing' - calls pause()
     """
     state = make_state()
     state.is_playing = True
@@ -63,14 +75,20 @@ def test_branch_key_p_triggers_pause_when_playing(monkeypatch):
 
     handle_keypress(state, "p")
 
+    # Assert - that the pause() branch was taken
     assert calls.get("pause") is True
+    # Assert - that the play() branch was not taken
     assert "play" not in calls
 
 
 def test_branch_key_s_triggers_stop(monkeypatch):
     """
-    Branch test:
-    - key == 's' hits the 'elif key == "s"' branch.
+    White box branch coverage
+    The target branch is the 'elif key == "s"' branch
+
+    Logic:
+    1. Input - Key 's' is pressed
+    2. Expected Path - Skips 'p', matches "s"' - calls stop()
     """
     state = make_state()
     calls = {}
@@ -87,8 +105,12 @@ def test_branch_key_s_triggers_stop(monkeypatch):
 
 def test_branch_key_m_triggers_toggle_mute(monkeypatch):
     """
-    Branch test:
-    - key == 'm' hits the 'elif key == "m"' branch.
+    White box branch coverage
+    The target branch is the 'elif key == "m"' branch
+
+    Logic:
+    1. Input - Key 'm' is pressed
+    2. Expected Path - Skips 'p' and 's', matches "m"' - calls toggle_mute()
     """
     state = make_state()
     calls = {}
@@ -108,8 +130,12 @@ def test_branch_key_m_triggers_toggle_mute(monkeypatch):
 
 def test_branch_unknown_key_prints_message(capsys):
     """
-    Branch test:
-    - key not in {'p', 's', 'm'} hits the final 'else' branch.
+    White box branch coverage
+    The target branch is the final 'else' block (catch-all for unknown keys)
+
+    Logic:
+    1. Input - Key 'X' is pressed (matches no known keys)
+    2. Expected Path - Fails all 'if' and 'elif' checks - hits final 'else' - prints warning message
     """
     state = make_state()
 

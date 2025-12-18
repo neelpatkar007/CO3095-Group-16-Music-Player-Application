@@ -13,6 +13,9 @@ from music_player.player_ui import (
 
 
 class DummyEngine:
+    """
+    Minimal stub used to isolate Black-Box tests from hardware dependencies.
+    """
     def __init__(self):
         self.play_calls = 0
         self.paused = False
@@ -33,6 +36,9 @@ class DummyEngine:
 
 
 def make_state(has_track: bool, current_state: str) -> PlayerState:
+    """
+    Helper: to set up specific states for State Transition Testing.
+    """
     engine = DummyEngine()
     tracks = []
     if has_track:
@@ -67,8 +73,15 @@ def make_track(title: str = "Song", artist: str = "Unknown", duration: float = 1
         duration_seconds=duration,
     )
 
+# Black Box testing of Player Core state transitions
+# These tests verify that the system correctly transitions between finite states -
+# Stopped, Playing, Paused - based on specific input events - play, pause, stop.
 
 def test_bb_play_no_tracks(capsys):
+    """
+        Technique: Black-Box State Transition Testing (Invalid Transition).
+        State: Stopped (Empty Library) - > Input : Play - > Outcome: Warning (No State Change).
+    """
     # P1
     state = make_state(has_track=False, current_state="Stopped")
     play(state)
@@ -78,6 +91,10 @@ def test_bb_play_no_tracks(capsys):
 
 
 def test_bb_play_from_stopped_starts_playing(capsys):
+    """
+        Technique: Black-Box State Transition Testing (Valid Transition).
+        State: Stopped -> Input: Play -> State: Playing.
+    """
     # P2
     state = make_state(has_track=True, current_state="Stopped")
     play(state)
@@ -88,6 +105,10 @@ def test_bb_play_from_stopped_starts_playing(capsys):
 
 
 def test_bb_play_when_already_playing(capsys):
+    """
+    Technique: Black-Box State Transition Testing (No Transition).
+    State: Playing -> Input: Play -> State: Playing (Warning issued).
+    """
     # P3
     state = make_state(has_track=True, current_state="Playing")
     play(state)
@@ -97,6 +118,10 @@ def test_bb_play_when_already_playing(capsys):
 
 
 def test_bb_play_from_paused_resumes(capsys):
+    """
+    Technique: Black-Box State Transition Testing (Valid Transition).
+    State: Paused -> Input: Play -> State: Playing (Resumed).
+    """
     # P4
     state = make_state(has_track=True, current_state="Paused")
     play(state)
@@ -107,6 +132,10 @@ def test_bb_play_from_paused_resumes(capsys):
 
 
 def test_bb_pause_from_playing(capsys):
+    """
+    Technique: Black-Box State Transition Testing (Valid Transition).
+    State: Playing -> Input: Pause -> State: Paused.
+    """
     # P5
     state = make_state(has_track=True, current_state="Playing")
     pause(state)
@@ -117,6 +146,10 @@ def test_bb_pause_from_playing(capsys):
 
 
 def test_bb_pause_when_nothing_playing(capsys):
+    """
+    Technique: Black-Box State Transition Testing (Invalid Transition).
+    State: Stopped -> Input: Pause -> Outcome: Warning (No State Change).
+    """
     # P6
     state = make_state(has_track=True, current_state="Stopped")
     pause(state)
@@ -126,6 +159,10 @@ def test_bb_pause_when_nothing_playing(capsys):
 
 
 def test_bb_stop_from_playing(capsys):
+    """
+    Technique: Black-Box State Transition Testing (Valid Transition).
+    State: Playing -> Input: Stop -> State: Stopped (Position Reset).
+    """
     # P7
     state = make_state(has_track=True, current_state="Playing")
     state.position_seconds = 10.0
@@ -138,13 +175,25 @@ def test_bb_stop_from_playing(capsys):
 
 
 def test_bb_stop_when_already_stopped(capsys):
+    """
+    Technique: Black-Box State Transition Testing (No Transition).
+    State: Stopped -> Input: Stop -> State: Stopped (Warning issued).
+    """
     # P8
     state = make_state(has_track=True, current_state="Stopped")
     stop(state)
     out = capsys.readouterr().out
     assert "Nothing is playing" in out
 
+# Black box testing : equivalence partitioning and boundary value analysis
+# These tests verify the UI logic by partitioning inputs into valid/invalid classes -
+# Empty, Single, Multiple -  and testing boundary conditions - Out of range indices.
 def test_ui_list_empty_library_warns(capsys):
+    """
+    Technique: Black-Box Equivalence Partitioning.
+    Partition: Empty List (Invalid).
+    Expectation: Warning message.
+    """
     # L1
     state = make_state_indicator(tracks=[])
     print_playlist_with_indicator(state)
@@ -153,6 +202,11 @@ def test_ui_list_empty_library_warns(capsys):
 
 
 def test_ui_list_single_track_shows_note_and_indicator(capsys):
+    """
+    Technique: Black-Box Boundary Value Analysis.
+    Boundary: Minimum valid list size (1).
+    Expectation: Correct formatted output and note.
+    """
     # L2
     track = make_track(title="Solo")
     state = make_state_indicator(tracks=[track])
@@ -167,6 +221,11 @@ def test_ui_list_single_track_shows_note_and_indicator(capsys):
 
 
 def test_ui_list_out_of_range_index_is_clamped(capsys):
+    """
+    Technique: Black-Box Boundary Value Analysis.
+    Boundary: Index > List Length (Upper Bound Violation).
+    Expectation: System should clamp to the last valid index instead of crashing.
+    """
     # L3: current_index too large => clamped to last track
     tracks = [
         make_track(title="T1"),
@@ -184,6 +243,11 @@ def test_ui_list_out_of_range_index_is_clamped(capsys):
 
 
 def test_ui_list_warns_on_missing_titles(capsys):
+    """
+    Technique: Black-Box Equivalence Partitioning - Error Guessing
+    Partition: Invalid Data - Missing attributes.
+    Expectation: Graceful failure or warning message.
+    """
     class FakeTrack:
         def __init__(self, display_name: str):
             self.display_name = display_name
@@ -200,6 +264,11 @@ def test_ui_list_warns_on_missing_titles(capsys):
     assert "[ui] Warning: Library is in an invalid state." in out
 
 def test_ui_info_no_track_selected(capsys):
+    """
+    Technique  : Black-Box Equivalence Partitioning.
+    Partition : 'None' Selection State.
+    Expectation : "No track selected" message.
+    """
     # INF1
     state = make_state_indicator(tracks=[])  # current_track is None
     print_now_playing(state)
@@ -208,6 +277,11 @@ def test_ui_info_no_track_selected(capsys):
 
 
 def test_ui_info_shows_playing_status_and_metadata(capsys):
+    """
+    Technique: Black-Box Equivalence Partitioning.
+    Partition: Valid Active State.
+    Expectation: Correctly formatted metadata string.
+    """
     # INF2
     track = make_track(title="Hello", artist="World", duration=180.0)
     state = make_state_indicator(tracks=[track])
