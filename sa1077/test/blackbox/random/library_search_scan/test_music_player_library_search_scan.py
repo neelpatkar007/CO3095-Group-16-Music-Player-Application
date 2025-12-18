@@ -63,3 +63,10 @@ def test_case_7(capsys):
     sut.search_library(st, "")
     sut.search_library(st, "   ")
     capsys.readouterr()
+
+
+def test_case_8(capsys):
+    t0 = _make_track(title="Hello World", artist="X", filename="a.mp3", dur=90.0)
+    st = DummyState([t0])
+    sut.search_library(st, "hello")
+    capsys.readouterr()
