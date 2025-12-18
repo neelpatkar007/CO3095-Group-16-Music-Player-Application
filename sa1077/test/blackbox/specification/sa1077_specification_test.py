@@ -83,3 +83,12 @@ def test_bb_change_volume_show_current_from_empty_input(capsys):
     assert state.volume == 42
     assert state.is_muted is False
 
+
+def test_bb_change_volume_error_non_numeric(capsys):
+    # Frame F2
+    state = make_state(volume=30, muted=False)
+    change_volume(state, "abc")
+    out = capsys.readouterr().out
+    assert "[audio] Error: Volume must be a number.\n" in out
+    assert state.volume == 30
+
