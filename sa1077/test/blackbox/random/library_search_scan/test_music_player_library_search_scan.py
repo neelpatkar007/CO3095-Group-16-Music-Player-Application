@@ -41,5 +41,8 @@ def test_case_3(capsys):
     capsys.readouterr()
 
 
+def test_case_4(capsys):
+    sut.search_library(SimpleNamespace(), "abc")
+    capsys.readouterr()
 
 
