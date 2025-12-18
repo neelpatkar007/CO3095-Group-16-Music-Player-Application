@@ -59,3 +59,18 @@ def make_track(title: str = "Song", artist: str = "Unknown", duration: float = 1
         duration_seconds=duration,
     )
 
+def make_state_with_track(duration: float) -> PlayerState:
+    """Helper used by the tests to build a valid PlayerState."""
+
+    track = Track(
+        path=Path("dummy.mp3"),
+        title="Dummy",
+        artist="A",
+        duration_seconds=duration,
+    )
+    engine = DummyEngine()
+    state = PlayerState(tracks=[track], audio_engine=engine)
+    state.current_index = 0
+    state.position_seconds = 0.0
+    return state
+
