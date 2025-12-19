@@ -25,6 +25,7 @@ We use the following versioning format which is: v<Major>.<Minor>.<Patch>.
 
 
 
+
 ## 3. Process of How to do Tag Creation & Maintenance
 Before you create a tag, make sure that you have followed and met these rules so we don't break the project's versioning and stability:
 1. Completion: All acceptance criteria for the sprint must be 100% complete.
