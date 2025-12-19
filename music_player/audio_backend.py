@@ -5,7 +5,6 @@ from pathlib import Path
 # If pygame is not installed, or it fails, then the code falls back to a simulated mode.
 try:
     import pygame
-
     pygame.mixer.init()
     HAS_PYGAME = True
 except Exception:
@@ -181,13 +180,13 @@ class AudioEngine:
             # Reloads the current track and starts from the new position.
             pygame.mixer.music.load(str(self.current_path))
             pygame.mixer.music.play(loops=0, start=seconds)
-
+            
             # Re-apply the correct volume (or silence) after reloaded the track
             if self.muted:
                 pygame.mixer.music.set_volume(0.0)
             else:
                 self.set_volume(self.volume)
-
+            
             print(f"[audio] SEEK (real) -> {seconds:.1f}s")
         except Exception as e:
             print(f"[audio] ERROR seeking: {e}")

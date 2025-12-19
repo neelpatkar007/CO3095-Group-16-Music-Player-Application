@@ -1,0 +1,275 @@
+
+Test Case 1  		<single>
+   Library State :  Empty List
+
+
+Test Case 2  		<error>
+   Library State :  None/Corrupted
+
+
+Test Case 3  		<error>  (follows [if])
+   Search Query :  Empty String
+
+
+Test Case 4  		<single>  (follows [if])
+   File System State (For Rescan) :  No files on disk
+
+
+Test Case 5  		(Key = 1.1.1.2.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 6  		(Key = 1.1.1.3.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  New files available
+
+
+Test Case 7  		(Key = 1.1.1.4.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 8  		(Key = 1.1.2.2.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 9  		(Key = 1.1.2.3.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  New files available
+
+
+Test Case 10 		(Key = 1.1.2.4.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 11 		(Key = 1.1.3.2.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 12 		(Key = 1.1.3.3.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  New files available
+
+
+Test Case 13 		(Key = 1.1.3.4.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 14 		(Key = 1.1.4.2.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 15 		(Key = 1.1.4.3.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  New files available
+
+
+Test Case 16 		(Key = 1.1.4.4.)
+   Function                       :  Search Library
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 17 		(Key = 2.1.1.2.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 18 		(Key = 2.1.1.3.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  New files available
+
+
+Test Case 19 		(Key = 2.1.2.2.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 20 		(Key = 2.1.2.3.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  New files available
+
+
+Test Case 21 		(Key = 2.1.3.2.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 22 		(Key = 2.1.3.3.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  New files available
+
+
+Test Case 23 		(Key = 2.1.4.2.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 24 		(Key = 2.1.4.3.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  New files available
+
+
+Test Case 25 		(Key = 2.1.6.2.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  (Ignored)
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 26 		(Key = 2.1.6.3.)
+   Function                       :  Rescan Files
+   Library State                  :  Valid and Populated
+   Search Query                   :  (Ignored)
+   File System State (For Rescan) :  New files available
+
+
+Test Case 27 		(Key = 3.1.1.2.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 28 		(Key = 3.1.1.3.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  New files available
+
+
+Test Case 29 		(Key = 3.1.1.4.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Title
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 30 		(Key = 3.1.2.2.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 31 		(Key = 3.1.2.3.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  New files available
+
+
+Test Case 32 		(Key = 3.1.2.4.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Artist
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 33 		(Key = 3.1.3.2.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 34 		(Key = 3.1.3.3.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  New files available
+
+
+Test Case 35 		(Key = 3.1.3.4.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  Matches Filename
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 36 		(Key = 3.1.4.2.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 37 		(Key = 3.1.4.3.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  New files available
+
+
+Test Case 38 		(Key = 3.1.4.4.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  No Match
+   File System State (For Rescan) :  (Ignored)
+
+
+Test Case 39 		(Key = 3.1.6.2.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  (Ignored)
+   File System State (For Rescan) :  Files exist same as Lib
+
+
+Test Case 40 		(Key = 3.1.6.3.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  (Ignored)
+   File System State (For Rescan) :  New files available
+
+
+Test Case 41 		(Key = 3.1.6.4.)
+   Function                       :  View Tables
+   Library State                  :  Valid and Populated
+   Search Query                   :  (Ignored)
+   File System State (For Rescan) :  (Ignored)
+

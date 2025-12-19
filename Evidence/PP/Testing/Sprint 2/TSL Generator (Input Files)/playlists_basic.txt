@@ -1,0 +1,31 @@
+# TSL Specification for playlists_basic.py
+# Covers: create, rename, delete, and open.
+
+Function:
+    Create Playlist.           [property OpCreate, NeedsName]
+    Rename Playlist.           [property OpRename, NeedsName, NeedsSelector]
+    Delete Playlist.           [property OpDelete, NeedsSelector]
+    Open/Play Playlist.        [property OpOpen, NeedsSelector, IsOpen]
+
+Player State:
+    Valid State.               [property ValidState]
+    None/Null State.           [error]
+
+Playlist Selector (Target):
+    Valid Name.                [if ValidState] [if NeedsSelector] [property ValidSel]
+    Valid Index.               [if ValidState] [if NeedsSelector] [property ValidSel]
+    Empty Selector.            [if NeedsSelector] [single]
+    Non-existent Name.         [if ValidState] [if NeedsSelector] [error]
+    Index Out of Bounds.       [if ValidState] [if NeedsSelector] [error]
+    (Ignored).                 [if !NeedsSelector]
+
+New Name Input:
+    Valid Unique Name.         [if NeedsName]
+    Empty Name.                [if NeedsName] [error]
+    Existing Name.             [if NeedsName] [error]
+    (Ignored).                 [if !NeedsName]
+
+Target Playlist Condition:
+    Playlist Empty.            [if IsOpen] [if ValidSel] [single]
+    Playlist Has Tracks.       [if IsOpen] [if ValidSel]
+    (Ignored).                 [if !IsOpen]

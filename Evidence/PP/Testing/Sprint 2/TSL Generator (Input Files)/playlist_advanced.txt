@@ -1,0 +1,36 @@
+# TSL Specification for playlists_advanced.py
+# Covers: merge_playlists, copy_playlist.
+
+Function:
+    Merge Playlists.           [property OpMerge, IsMerge]
+    Copy Playlist.             [property OpCopy, IsCopy]
+
+Target Selector (Merge Only):
+    Valid Target.              [if IsMerge] [property HasTarget]
+    Empty Target.              [if IsMerge] [error]
+    Invalid Target.            [if IsMerge] [error]
+    (Ignored).                 [if !IsMerge]
+
+Source Selector:
+    Valid Source.              [property HasSource]
+    Empty Source String.       [error]
+    Invalid Source (Missing).  [error]
+    Same as Target.            [if IsMerge] [if HasTarget] [error]
+
+Source Playlist Content:
+    Empty (No tracks).         [if HasSource] [single]
+    Populated.                 [if HasSource] [property SourceContent]
+
+New Name (Copy Only):
+    Valid Name.                [if IsCopy]
+    Too Short (<3 chars).      [if IsCopy] [error]
+    Too Long (>20 chars).      [if IsCopy] [error]
+    Reserved Word.             [if IsCopy] [error]
+    Invalid Characters.        [if IsCopy] [error]
+    Duplicate Name.            [if IsCopy] [error]
+    (Ignored).                 [if !IsCopy]
+
+Deduplication (Merge Only):
+    True.                      [if IsMerge]
+    False.                     [if IsMerge]
+    (Ignored).                 [if !IsMerge]

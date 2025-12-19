@@ -1,3 +1,4 @@
+import threading
 import time
 
 from music_player.audio_backend import AudioEngine
@@ -14,106 +15,257 @@ from music_player import (
     player_shortcuts,
 )
 
+# Sprint 2 modules
+from music_player import (
+    playlists_basic,
+    playlists_edit,
+    playlists_advanced,
+    library_search_scan,
+)
+
+def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
+    """
+    Background loop that periodically advances playback time.
+
+    This is what makes autoplay work even when the user is not
+    typing any commands.
+
+    - It calls player_core.update_playback(state, delta_seconds)
+      around 10 times per second.
+    """
+    last = time.time()
+
+    while not stop_event.is_set():
+        now = time.time()
+        delta = now - last
+        last = now
+
+        # This will:
+        # - advance state.position_seconds while playing
+        # - detect end-of-track
+        # - auto-advance in playlists
+        player_core.update_playback(state, delta)
+
+        # Sleep a little so we don't spin too fast
+        time.sleep(0.1)
 
 def handle_command(state: PlayerState, command: str) -> bool:
     """
     Simple command dispatcher backbone.
+    Parses user input and calls appropriate handlers.
     Returns False if the application should quit.
     """
     raw = command.strip()
-    
+    if not raw:
+        return True
+
     # S1-07 keyboard shortcuts (single letters)
+    # Check for single-letter keyboard shortcuts (p, s, m)
     if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
         player_shortcuts.handle_keypress(state, raw)
         return True
 
-    cmd = raw.lower()
-    parts = cmd.split()
-    base = parts[0] if parts else ""
-    arg = parts[1] if len(parts) > 1 else ""
+    # Split keeping original case for arguments but lowercasing the base command
+    # Normalise the command for easier parsing
+    parts = raw.split()
+    base = parts[0].lower() if parts else "" # Base command (/play)
+    args = parts[1:] # Argument (volume level 30, or seek time)
 
-    if cmd in ("/quit", "/exit", "q"):
+    if base in ("/quit", "/exit", "q"):
         return False
-    
-    # Standard Controls
-    if cmd == "/play":
+
+    # SPRINT 1 COMMANDS
+
+    # Standard Playback Controls
+    if base == "/play":
         player_core.play(state)
-    elif cmd == "/pause":
+    elif base == "/pause":
         player_core.pause(state)
-    elif cmd == "/stop":
+    elif base == "/stop":
         player_core.stop(state)
-    elif cmd == "/next":
+    elif base == "/next":
         player_queue.next_track(state)
-    elif cmd == "/prev":
+    elif base == "/prev":
         player_queue.previous_track(state)
-    
-    # UI / Info
-    elif cmd == "/info":
+
+    # UI / Info (player_ui.py)
+    elif base == "/info":
         player_ui.print_now_playing(state)
-    elif cmd == "/progress":
+    elif base == "/progress":
         player_ui.print_progress(state)
-    elif cmd == "/bar":
+    elif base == "/bar":
         player_ui.print_progress_bar(state)
-    elif cmd == "/list":
+    elif base == "/list":
         player_ui.print_playlist_with_indicator(state)
-    elif cmd == "/list":
-        player_ui.print_playlist_with_indicator(state)
-    
-    # Seek / RW / FF (S1-08)
+
+    # Seek / RW / FF (S1-08) (player_seek.py)
     elif base == "/rw":
+        # Rewind 5 seconds
         player_seek.nudge(state, -5.0)
     elif base == "/ff":
+        # Fast-forward 5 seconds
         player_seek.nudge(state, 5.0)
     elif base == "/seek":
-        if not arg:
+        if not args:
             print("[main] Usage: /seek <mm:ss or seconds>")
         else:
-            player_seek.seek_to(state, arg)
-            
-    # Volume & Mute (S1-04 & S1-09)
-    elif base == "/volume" or base == "/vol":
-        player_audio.change_volume(state, arg)
+            # Seek to a specified time
+            player_seek.seek_to(state, " ".join(args))
+
+    # Volume & Mute (S1-04 & S1-09) (player_audio.py)
+    elif base in {"/volume", "/vol"}:
+        val = args[0] if args else ""
+        # Change volume to specified level (/volume 30 or /volume 75)
+        player_audio.change_volume(state, val)
     elif base == "/mute":
         player_audio.handle_mute_command(state, "/mute")
     elif base == "/unmute":
         player_audio.handle_mute_command(state, "/unmute")
 
-    # Help
+    # Help Commands (player_help.py)
     elif base.startswith("/help"):
-        topic = parts[1] if len(parts) == 2 else None
+        topic = args[0] if len(args) == 1 else None
         player_help.print_help(topic)
 
+    # SPRINT 2 COMMANDS:
+    # Playlists basic (S2-01, S2-05, S2-06, S2-10)
+    elif base == "/pl.new":
+        name = " ".join(args) if args else ""
+        playlists_basic.create_playlist(state, name)
+    elif base == "/pl.rename":
+        if len(args) < 2:
+            print("[main] Usage: /pl.rename <old> <new>")
+        else:
+            old, new = args[0], " ".join(args[1:])
+            playlists_basic.rename_playlist(state, old, new)
+    elif base == "/pl.del":
+        if not args:
+            print("[main] Usage: /pl.del <name|index>")
+        else:
+            playlists_basic.delete_playlist(state, args[0])
+    elif base == "/pl.list":
+        playlists_basic.list_playlists(state)
+    elif base == "/pl.open":
+        if not args:
+            print("[main] Usage: /pl.open <name|index>")
+        else:
+            playlists_basic.open_playlist(state, args[0])
+    elif base == "/pl.show":
+        playlists_basic.show_current_playlist(state)
+    elif base == "/pl.play":
+        # /pl.play          -> play active playlist
+        # /pl.play MyMix    -> play named/indexed playlist
+        if args:
+            playlists_basic.play_playlist(state, args[0])
+        else:
+            playlists_basic.play_active_playlist(state)
+    elif base == "/pl.close":
+            playlists_basic.close_playlist(state)
+
+    # Playlist edit (S2-02, S2-07, S2-08)
+    elif base == "/pl.add":
+        if len(args) < 2:
+            print("[main] Usage: /pl.add <playlist> <library-index>")
+        else:
+            playlists_edit.add_track_from_library(state, args[0], args[1])
+    elif base == "/pl.remove":
+        if len(args) < 2:
+            print("[main] Usage: /pl.remove <playlist> <playlist-index>")
+        else:
+            playlists_edit.remove_track_from_playlist(state, args[0], args[1])
+    elif base == "/pl.move":
+        if len(args) < 3:
+            print("[main] Usage: /pl.move <playlist> <from> <to>")
+        else:
+            playlists_edit.move_track_within_playlist(state, args[0], args[1], args[2])
+
+    # Playlist advanced (S2-11, S2-12)
+    elif base == "/pl.merge":
+        if len(args) < 2:
+            print("[main] Usage: /pl.merge <target> <source> [dedupe|all]")
+        else:
+            target, source = args[0], args[1]
+            dedupe = True
+            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+                dedupe = False
+            playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
+    elif base == "/scan":
+        library_search_scan.rescan_for_new_tracks(state)
+    elif base == "/pl.copy":
+        if len(args) < 2:
+            print("[main] Usage: /pl.copy <source> <new-name>")
+        else:
+            source, new_name = args[0], " ".join(args[1:])
+            playlists_advanced.copy_playlist(state, source, new_name)
+
+    # Library search & views (S2-03, S2-04, S2-09)
+    elif base == "/search":
+        q = " ".join(args) if args else ""
+        library_search_scan.search_library(state, q)
+    elif base == "/songs":
+        library_search_scan.view_songs_table(state)
+    elif base == "/artists":
+        library_search_scan.view_artists_table(state)
+    elif base == "/albums":
+        library_search_scan.view_albums_table(state)
+    elif base == "/scan":
+        library_search_scan.rescan_for_new_tracks(state)
+
+    # Unknown command
     else:
         print("Unknown command. Try /help")
-
     return True
 
 
 def main() -> None:
+    '''
+    Main execution loop for the music player application.
+    Initialises components, discovers tracks, and enters the command loop.
+    '''
+    # Initialise audio engine and discover tracks
     audio_engine = AudioEngine()
     tracks = discover_tracks()
+    # Initialise player state with discovered tracks and audio engine
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
-    print("Music Player – Sprint 1 Backbone")
-    print("Commands: /play, /pause, /stop, /next, /prev, /info, /progress, /bar, /list, /seek, /volume <val>, /mute, /unmute, /rw, /ff, /help, /quit")
+    # Startup display welcome message and available commands summary
+    print("Music Player – Sprint 2")
+    print(
+        "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
+        "/info /progress /bar /list /help /quit"
+    )
+    print(
+        "Playlists: /pl.new /pl.rename /pl.del /pl.list /pl.open /pl.show "
+        "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy"
+    )
+    print("Library: /search /songs /artists /albums /scan")
 
-    last_time = time.time()
+    # start background playback thread
+    stop_event = threading.Event()
+    playback_thread = threading.Thread(
+        target=_playback_worker,
+        args=(state, stop_event),
+        daemon=True,
+    )
+    playback_thread.start()
+    # Get user command input
+    try:
+        while True:
+            try:
+                command = input("> ")
+            except (EOFError, KeyboardInterrupt):
+                # Exit on Ctrl+C or Ctrl+D commands
+                break
+            # Handle the command and check if we should quit
+            if not handle_command(state, command):
+                break
+    finally:
+        # Stop background playback loop
+        stop_event.set()
+        playback_thread.join(timeout=1.0)
 
-    while True:
-        now = time.time()
-        delta = now - last_time
-        last_time = now
-        player_core.update_playback(state, delta)
-
-        try:
-            command = input("> ")
-        except (EOFError, KeyboardInterrupt):
-            break
-
-        if not handle_command(state, command):
-            break
-
-    state.audio_engine.stop()
+        # Ensure audio is stopped
+        state.audio_engine.stop()
 
 
 if __name__ == "__main__":
