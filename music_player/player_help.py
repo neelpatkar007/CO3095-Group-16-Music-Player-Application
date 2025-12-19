@@ -1,117 +1,152 @@
 from typing import Optional
 
+
 def print_help(command: Optional[str] = None) -> None:
     '''
-    Displays either a list of all commands or detailed help for a specific command.
+    A helpful guide for the user to navigate the player.
+    It covers everything from basic playback to Sprint 2 playlist management.
     '''
-    # General help menu
+
+    # If the user just types /help, show them the big picture
+    # We check if the input is empty or missing to decide whether to show the full list
     if command is None or command.strip() == "":
-        print("--- Help: Available Commands ---")
-        # Playback and Navigation Commands
-        print("Commands: /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
-        # UI and Info Commands
-        print("          /list, /info, /progress, /bar")
-        # Volume and Mute Commands
-        print("          /volume, /mute, /unmute, /quit")
-        # Keyboard Shortcuts
-        print("Shortcuts: 'p' (play/pause), 's' (stop), 'm' (mute)")
-        print("\nTip: Type '/help <command>' for specific details (e.g. '/help play').")
+        print("--- Music Player: Help Menu ---")
+
+        # Grouping by functionality makes it easier for a human to scan
+        # These are the basic bread-and-butter playback controls
+        print("Playback:  /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
+        print("Volume:    /volume, /mute, /unmute")
+
+        # New Sprint 2 Playlist features
+        # This section covers how users can manage their own custom collections
+        print("Playlists: /pl.new, /pl.rename, /pl.del, /pl.list, /pl.open, /pl.show,")
+        print("           /pl.play, /pl.close, /pl.add, /pl.remove, /pl.move,")
+        print("           /pl.merge, /pl.copy")
+
+        # New Sprint 2 Library features
+        # These commands help users find specific tunes or see their library from different angles
+        print("Library:   /search, /songs, /artists, /albums, /scan")
+
+        print("Info/UI:   /list, /info, /progress, /bar, /quit")
+        print("\nKeyboard Shortcuts: 'p' (toggle), 's' (stop), 'm' (mute)")
+        print("\nTip: Need details? Try '/help pl.merge' or '/help search'.")
         return
 
-    # Detailed help for a specific command
+    # Normalize the topic so /play and play both work
+    # We strip any whitespace and lowercase everything to make the matching more robust
     topic = command.strip().lower()
-
-    # Remove leading slash if present
     if topic.startswith("/"):
         topic = topic[1:]
 
-    # Individual command help
+    # --- BASIC PLAYBACK ---
+    # These handlers print specific details for the core transport controls
     if topic == "play":
         print("\n[Help] /play")
-        print("Usage: /play")
-        print("Starts playback. If the player is paused, it resumes from the current position.")
-
+        print("Starts the music. If you were paused, it picks up right where you left off.")
     elif topic == "pause":
         print("\n[Help] /pause")
-        print("Usage: /pause")
-        print("Pauses the current song. Use /play to resume.")
-
+        print("Freeze-frames the audio. Use /play to keep going.")
     elif topic == "stop":
         print("\n[Help] /stop")
-        print("Usage: /stop")
-        print("Stops playback completely and resets the position to the start.")
-
-    # Navigation Commands
+        print("Kills the audio and rewinds the song back to the 00:00 mark.")
     elif topic == "next":
         print("\n[Help] /next")
-        print("Usage: /next")
-        print("Skips to the next song in the library.")
-
+        print("Skips forward to the next track in your current queue or playlist.")
     elif topic == "prev":
         print("\n[Help] /prev")
-        print("Usage: /prev")
-        print("Goes back to the previous song in the library.")
-
-    # Seek Commands / Time Control
+        print("Jumps back to the previous track.")
     elif topic == "seek":
-        print("\n[Help] /seek")
-        print("Usage: /seek <seconds> or <mm:ss>")
-        print("Jumps immediately to a specific time in the track.")
-
+        print("\n[Help] /seek <time>")
+        print("Jump to a specific spot. You can use seconds (90) or mm:ss (1:30).")
     elif topic == "rw":
         print("\n[Help] /rw")
-        print("Usage: /rw")
-        print("Rewinds playback by 5 seconds.")
-
+        print("Quick rewind: jumps back 5 seconds.")
     elif topic == "ff":
         print("\n[Help] /ff")
-        print("Usage: /ff")
-        print("Fast-forwards playback by 5 seconds.")
+        print("Quick forward: jumps ahead 5 seconds.")
 
-    # UI / Display Commands
-    elif topic == "list":
-        print("\n[Help] /list")
-        print("Usage: /list")
-        print("Displays the full playlist and indicates the active song.")
-
-    elif topic == "info":
-        print("\n[Help] /info")
-        print("Usage: /info")
-        print("Displays metadata (Title, Artist) for the current track.")
-
-    elif topic == "progress":
-        print("\n[Help] /progress")
-        print("Usage: /progress")
-        print("Shows the current time position numerically.")
-
-    elif topic == "bar":
-        print("\n[Help] /bar")
-        print("Usage: /bar")
-        print("Displays a visual progress bar representing the song duration.")
-
-    # Volume / Mute Commands
+    # --- VOLUME CONTROLS ---
+    # Managing how loud the music is or silencing it altogether
     elif topic == "volume":
-        print("\n[Help] /volume")
-        print("Usage: /volume <0-100>")
-        print("Sets the playback volume level.")
-
+        print("\n[Help] /volume <0-100>")
+        print("Adjust the loudness. Example: /volume 25 for quiet background music.")
     elif topic == "mute":
         print("\n[Help] /mute")
-        print("Usage: /mute")
-        print("Silences the audio immediately.")
-
+        print("Silence the output instantly without stopping the track.")
     elif topic == "unmute":
         print("\n[Help] /unmute")
-        print("Usage: /unmute")
-        print("Restores the volume to its previous level.")
+        print("Brings the volume back to where it was before muting.")
 
-    # Application Quit Command
+    # --- PLAYLIST MANAGEMENT (Sprint 2) ---
+    # These are the commands for creating and handling playlist containers
+    elif topic == "pl.new":
+        print("\n[Help] /pl.new <name>")
+        print("Creates a fresh, empty playlist. Give it a name like 'Chill' or 'Gym'.")
+    elif topic == "pl.rename":
+        print("\n[Help] /pl.rename <target> <new_name>")
+        print("Change a playlist's name. You can use the current name or its index number.")
+    elif topic == "pl.del":
+        print("\n[Help] /pl.del <name|index>")
+        print("Permanently removes a playlist. Don't worry, the actual songs stay in your library.")
+    elif topic == "pl.list":
+        print("\n[Help] /pl.list")
+        print("Shows all your playlists, how many songs they have, and their total runtime.")
+    elif topic == "pl.open":
+        print("\n[Help] /pl.open <name|index>")
+        print("Peeks inside a playlist and prepares it for playback.")
+    elif topic == "pl.show":
+        print("\n[Help] /pl.show")
+        print("Lists the tracks in the playlist you are currently working with.")
+    elif topic == "pl.play":
+        print("\n[Help] /pl.play [name|index]")
+        print("Starts playing a playlist from song #1. If you don't specify one, it plays the 'open' one.")
+    elif topic == "pl.close":
+        print("\n[Help] /pl.close")
+        print("Leaves the playlist view and goes back to your full music library.")
+
+    # --- PLAYLIST EDITING (Sprint 2) ---
+    # Specific commands for modifying the tracks inside a playlist
+    elif topic == "pl.add":
+        print("\n[Help] /pl.add <playlist> <library-index>")
+        print("Picks a song from your main library and adds it to the end of a playlist.")
+    elif topic == "pl.remove":
+        print("\n[Help] /pl.remove <playlist> <index>")
+        print("Removes a specific song from a playlist based on its position (number).")
+    elif topic == "pl.move":
+        print("\n[Help] /pl.move <playlist> <from> <to>")
+        print("Reorder your tracks. Move song #5 to position #1, for example.")
+    elif topic == "pl.merge":
+        print("\n[Help] /pl.merge <target> <source> [dedupe|all]")
+        print("Combines two playlists. Use 'dedupe' (default) to skip songs that are already in the target.")
+    elif topic == "pl.copy":
+        print("\n[Help] /pl.copy <source> <new_name>")
+        print("Duplicates a playlist. Useful if you want to branch off a new version of a mix.")
+
+    # --- LIBRARY SEARCH & VIEWS (Sprint 2) ---
+    # Tools for exploring the collection and keeping the library up to date
+    elif topic == "search":
+        print("\n[Help] /search <text>")
+        print("Look for songs by title, artist, or even the filename. It's case-insensitive.")
+    elif topic == "songs":
+        print("\n[Help] /songs")
+        print("A clean, tabular view of every track you own.")
+    elif topic == "artists":
+        print("\n[Help] /artists")
+        print("Groups your music by Artist, showing how much music you have for each.")
+    elif topic == "albums":
+        print("\n[Help] /albums")
+        print("Groups music by folder name—an easy way to see your 'albums'.")
+    elif topic == "scan":
+        print("\n[Help] /scan")
+        print("Checks your 'songs' folder for new files you've added since the app started.")
+
+    # --- SYSTEM ---
+    # Cleanly shutting down the application
     elif topic == "quit":
         print("\n[Help] /quit")
-        print("Usage: /quit")
-        print("Exits the music player application.")
-
-    # Unknown command / error handling
+        print("Exits the app safely. See you next time!")
     else:
-        print(f"Sorry, command '/{topic}' is not recognised.")
-        print("Type '/help' to see the full list of valid commands.")
+        # A gentle fallback in case they typo a command
+        # If we get here, the user likely typed something that isn't in our list
+        print(f"I couldn't find a command named '/{topic}'.")
+        print("Try '/help' for any help.")
