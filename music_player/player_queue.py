@@ -5,8 +5,8 @@ User Story:
  - S3-01: Shuffle
  - S3-02: Loop
  - S3-03: History tracking
- - S3-04: Add/Remove from queue (Fixed)
- - S3-05: Play Next (Fixed)
+ - S3-04: Add/Remove from queue
+ - S3-05: Play Next
  - S3-06: Clear Queue
 """
 
