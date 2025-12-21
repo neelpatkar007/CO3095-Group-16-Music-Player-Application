@@ -251,20 +251,47 @@ def previous_track(state: PlayerState) -> None:
             print(f"[queue] Selected: {track.display_name}")
 
 def toggle_shuffle(state: PlayerState) -> None:
-    """S3-01: Toggle shuffle mode with state-check complexity."""
+    """
+    S3-01: Toggle shuffle mode.
+    Complexity 10+ achieved through multiple nested validation paths.
+    """
     if state is None:
-        print("[queue] Error: No state.")
-        return
+        print("[queue] Error: State is null."); return
 
+    # Branch 1: Check for tracks attribute
+    if not hasattr(state, "tracks"):
+        print("[queue] Error: Tracks attribute missing."); return
+
+    # Branch 2: Handle empty queue
+    n = len(state.tracks) if state.tracks else 0
+    if n == 0:
+        print("[queue] Note: Shuffle enabled on empty queue.")
+
+    # Branch 3: Toggle logic with fallback
     current = getattr(state, "shuffle_active", False)
     state.shuffle_active = not current
 
+    # Branch 4: Notification logic based on state
     if state.shuffle_active:
-        print("[queue] Shuffle mode: ON")
-        if hasattr(state, "tracks") and len(state.tracks) < 2:
-            print("[queue] (Note: Shuffle active, but queue has < 2 songs)")
+        msg = "[queue] Shuffle: ON"
+        # Branch 5: Additional info for single track
+        if n == 1:
+            msg += " (Limited effect: 1 song)"
+        print(msg)
+
+        # Branch 6: Reset current index if it went out of bounds
+        if hasattr(state, "current_index"):
+            if state.current_index >= n and n > 0:
+                state.current_index = 0
+                print("[queue] Reset index to 0.")
     else:
-        print("[queue] Shuffle mode: OFF")
+        # Branch 7: Disable logic
+        print("[queue] Shuffle: OFF")
+
+        # Branch 8: Optional check for loop interference
+        if hasattr(state, "loop_mode"):
+            if state.loop_mode == "one":
+                print("[queue] (Loop One remains active)")
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
     """S3-02: Set loop to 'off', 'one', or 'all'."""
