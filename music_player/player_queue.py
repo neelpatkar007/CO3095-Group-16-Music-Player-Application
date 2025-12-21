@@ -44,10 +44,15 @@ def next_track(state: PlayerState) -> None:
     if single:
         new = 0
     elif state.shuffle_active and n > 1:
-        # S3-01: Shuffle logic from repo 123
-        new = old
-        while new == old:
-            new = random.randint(0, n - 1)
+        # S3-01: Enhanced shuffle logic with index validation
+        if n == 2:
+            new = 1 if old == 0 else 0
+        else:
+            new = old
+            attempts = 0
+            while new == old and attempts < 10:
+                new = random.randint(0, n - 1)
+                attempts += 1
     else:
         # Normal sequential logic
         cand = old + 1
@@ -246,10 +251,20 @@ def previous_track(state: PlayerState) -> None:
             print(f"[queue] Selected: {track.display_name}")
 
 def toggle_shuffle(state: PlayerState) -> None:
-    """S3-01: Toggle shuffle mode."""
-    state.shuffle_active = not state.shuffle_active
-    status = "ON" if state.shuffle_active else "OFF"
-    print(f"[queue] Shuffle mode: {status}")
+    """S3-01: Toggle shuffle mode with state-check complexity."""
+    if state is None:
+        print("[queue] Error: No state.")
+        return
+
+    current = getattr(state, "shuffle_active", False)
+    state.shuffle_active = not current
+
+    if state.shuffle_active:
+        print("[queue] Shuffle mode: ON")
+        if hasattr(state, "tracks") and len(state.tracks) < 2:
+            print("[queue] (Note: Shuffle active, but queue has < 2 songs)")
+    else:
+        print("[queue] Shuffle mode: OFF")
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
     """S3-02: Set loop to 'off', 'one', or 'all'."""
