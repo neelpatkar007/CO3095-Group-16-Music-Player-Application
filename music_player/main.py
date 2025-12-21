@@ -1,3 +1,9 @@
+import os
+import warnings
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")
+
 import threading
 import time
 
@@ -21,6 +27,11 @@ from music_player import (
     playlists_edit,
     playlists_advanced,
     library_search_scan,
+)
+
+# Sprint 3 module
+from music_player import (
+    player_metrics
 )
 
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
@@ -211,6 +222,34 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/scan":
         library_search_scan.rescan_for_new_tracks(state)
 
+    # SPRINT 3 COMMANDS
+
+    # S3-01: Shuffle
+
+    # S3-02: Loop
+
+    # S3-03: View Queue/History
+
+    # S3-04: Add to Queue
+
+    # S3-04: Remove from Queue
+
+    # S3-05: Play Next
+
+    # S3-06: Clear Queue
+
+    # S3-07: Playback Speed
+
+    # S3-08: Like/Unlike
+
+    # S3-09: View Liked
+
+    # S3-10: Sort Playlist
+
+    # S3-11: Most Played
+
+    # S3-12: Sleep Timer
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
@@ -228,17 +267,23 @@ def main() -> None:
     # Initialise player state with discovered tracks and audio engine
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
+    # Load previously held metric data from start up (the JSON file)
+    player_metrics.load_data(state)
+
     # Startup display welcome message and available commands summary
-    print("Music Player – Sprint 2")
+    print("Music Player – Sprint 3")
     print(
         "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
-        "/info /progress /bar /list /help /quit"
+        "/info /progress /bar /list /help /quit /speed /sleep"
+    )
+    print(
+        "Queue: /queue /q.add /q.remove /playnext /q.clear /shuffle /loop"
     )
     print(
         "Playlists: /pl.new /pl.rename /pl.del /pl.list /pl.open /pl.show "
-        "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy"
+        "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort"
     )
-    print("Library: /search /songs /artists /albums /scan")
+    print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top")
 
     # start background playback thread
     stop_event = threading.Event()
