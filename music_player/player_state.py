@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional
+from typing import List, Optional, Set, Dict
 
 from music_player.library import Track
 from music_player.audio_backend import AudioEngine
@@ -36,6 +36,17 @@ class PlayerState:
         # Sprint 2: playlists
         self.playlists: List[Playlist] = []
         self.active_playlist_index: int | None = None
+
+        # S3-01 & S3-02: Shuffle and Loop
+
+        # S3-03: History
+
+        # S3-07: Playback Speed
+
+        # S3-12: Sleep Timer
+
+        # S3-08 & S3-11: Likes and Counts
+
 
     @property
     def current_track(self) -> Optional[Track]:
