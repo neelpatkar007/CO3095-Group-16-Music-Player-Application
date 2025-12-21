@@ -10,7 +10,7 @@ User Story:
  - S3-06: Clear Queue
 """
 
-# python
+import random
 from music_player.player_state import PlayerState
 from music_player.library import Track
 
@@ -43,7 +43,13 @@ def next_track(state: PlayerState) -> None:
     single = n == 1
     if single:
         new = 0
+    elif state.shuffle_active and n > 1:
+        # S3-01: Shuffle logic from repo 123
+        new = old
+        while new == old:
+            new = random.randint(0, n - 1)
     else:
+        # Normal sequential logic
         cand = old + 1
         if cand >= n:
             new = 0
@@ -51,7 +57,7 @@ def next_track(state: PlayerState) -> None:
             new = cand
 
     # Check for wrap and change
-    wrapped = new == 0 and old != 0
+    wrapped = new == 0 and old != 0 and not state.shuffle_active
     changed = new != old
 
     # Update state and track
@@ -96,7 +102,10 @@ def next_track(state: PlayerState) -> None:
                     return
             state.is_playing = True
             state.is_paused = False
-            if wrapped:
+
+            if state.shuffle_active:
+                print(f"[queue] Shuffled to: {track.display_name}")
+            elif wrapped:
                 print(f"[queue] Wrapped to next: {track.display_name}")
             elif changed:
                 print(f"[queue] Next: {track.display_name}")
@@ -109,7 +118,9 @@ def next_track(state: PlayerState) -> None:
 
     # Handle Playback Paused or Stopped
     elif state.is_paused:
-        if wrapped:
+        if state.shuffle_active:
+             print(f"[queue] Shuffled to (paused): {track.display_name}")
+        elif wrapped:
             print(f"[queue] Wrapped to next (paused): {track.display_name}")
         elif changed:
             print(f"[queue] Selected next (paused): {track.display_name}")
@@ -117,7 +128,9 @@ def next_track(state: PlayerState) -> None:
             print(f"[queue] Selected (paused): {track.display_name}")
     else:
         # Update messages for stopped state
-        if wrapped:
+        if state.shuffle_active:
+            print(f"[queue] Shuffled to: {track.display_name}")
+        elif wrapped:
             print(f"[queue] Wrapped to next: {track.display_name}")
         elif changed:
             print(f"[queue] Selected next: {track.display_name}")
@@ -234,6 +247,9 @@ def previous_track(state: PlayerState) -> None:
 
 def toggle_shuffle(state: PlayerState) -> None:
     """S3-01: Toggle shuffle mode."""
+    state.shuffle_active = not state.shuffle_active
+    status = "ON" if state.shuffle_active else "OFF"
+    print(f"[queue] Shuffle mode: {status}")
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
     """S3-02: Set loop to 'off', 'one', or 'all'."""
