@@ -5,6 +5,8 @@ Core playback operations.
 User Stories:
  - S1-01: play, pause and stop songs
  - S1-12: keep player running in the background (non-blocking playback)
+ - S3-07: Set playback speed
+ - S3-12: Set a sleep timer
 """
 from __future__ import annotations
 # from player_state import PlayerState
@@ -124,3 +126,10 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
                 state.is_playing = False
                 state.audio_engine.stop()
                 print("[core] Track finished.")
+
+def set_sleep_timer(state: PlayerState, minutes: float) -> None:
+    """S3-12: Set a sleep timer."""
+
+def set_playback_speed(state: PlayerState, speed: float) -> None:
+    """S3-07: Set playback speed (0.5x to 2.0x)."""
+
