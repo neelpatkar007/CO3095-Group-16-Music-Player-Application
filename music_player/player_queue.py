@@ -12,6 +12,8 @@ User Story:
 
 # python
 from music_player.player_state import PlayerState
+from music_player.library import Track
+
 
 def next_track(state: PlayerState) -> None:
     '''
