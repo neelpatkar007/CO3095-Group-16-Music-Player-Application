@@ -2,6 +2,12 @@
 Module: player_queue
 User Story:
  - S1-02: skip to the next or previous song.
+ - S3-01: Shuffle
+ - S3-02: Loop
+ - S3-03: History tracking
+ - S3-04: Add/Remove from queue (Fixed)
+ - S3-05: Play Next (Fixed)
+ - S3-06: Clear Queue
 """
 
 # python
@@ -223,3 +229,35 @@ def previous_track(state: PlayerState) -> None:
             print(f"[queue] Selected prev: {track.display_name}")
         else:
             print(f"[queue] Selected: {track.display_name}")
+
+def toggle_shuffle(state: PlayerState) -> None:
+    """S3-01: Toggle shuffle mode."""
+
+def set_loop_mode(state: PlayerState, mode: str) -> None:
+    """S3-02: Set loop to 'off', 'one', or 'all'."""
+
+def _find_track(state: PlayerState, query: str) -> Track | None:
+    """Helper: Find track by Index (1-based) OR Name."""
+
+def add_to_queue(state: PlayerState, query: str) -> None:
+    """S3-04: Add songs to the end of the current queue (Decoupled)."""
+
+def play_next(state: PlayerState, query: str) -> None:
+    """S3-05: Queue a specific song to play next (Decoupled)."""
+
+def remove_from_queue(state: PlayerState, query: str) -> None:
+    """S3-04: Remove a song from the queue by Index or Name."""
+
+def clear_queue(state: PlayerState) -> None:
+    """S3-06: Clear the queue (keep playing current song)."""
+
+def show_queue(state: PlayerState) -> None:
+    """S3-03: View queue (starting from current track) and history."""
+
+def _ensure_queue_decoupled(state: PlayerState) -> None:
+    """
+    Internal Helper:
+    If the current play queue IS the main library or a playlist then
+    create a copy of it before modifying so that temporary queue
+    changes from editing the actual Library/Playlist.
+    """
