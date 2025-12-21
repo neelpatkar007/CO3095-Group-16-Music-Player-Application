@@ -396,3 +396,8 @@ def _print_playlist_contents(pl: Playlist) -> None:
     for idx, track in enumerate(pl.tracks, start=1):
         dur = format_mm_ss(track.duration_seconds)
         print(f"{idx:02d}. {track.display_name} [{dur}]")
+
+def sort_playlist(state: PlayerState, selector: str, criteria: str) -> None:
+    """
+    S3-10: Sort playlist by 'artist', 'title', or 'duration'.
+    """
