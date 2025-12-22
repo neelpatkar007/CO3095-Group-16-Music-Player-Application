@@ -395,6 +395,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
         return
 
     if not hasattr(state, "library_tracks") or not state.library_tracks:
+        print("[queue] Error: Library is empty or missing.")
+        return
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
