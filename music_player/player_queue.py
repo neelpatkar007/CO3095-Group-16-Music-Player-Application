@@ -413,6 +413,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
 
     _ensure_queue_decoupled(state)
 
+    try:
+        state.tracks.append(found)
 
 
 def play_next(state: PlayerState, query: str) -> None:
