@@ -321,23 +321,54 @@ def toggle_shuffle(state: PlayerState) -> None:
 
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
-    """S3-02: Set loop mode with primary state and type validation."""
-    # Path 1: Check for null state
+    """S3-02: Set loop to 'off', 'one', or 'all'."""
+
+    # 1. Check if the state object exists
     if state is None:
-        print("[queue] Error: State object is null.");
         return
 
-    # Path 2: Check for attribute existence
-    if not hasattr(state, "loop_mode"):
-        print("[queue] Error: loop_mode attribute missing in state.");
+    # 2. Check if the mode input is actually a string
+    if not isinstance(mode, str):
         return
 
-    mode = mode.lower() if mode else ""
-    if mode not in ["off", "one", "all"]:
+    # 3. Normalise the text to lower case (UK English spelling)
+    mode_lower = mode.lower()
+
+    # 4. Check if the mode is valid
+    is_valid = False
+    if mode_lower == "off":
+        is_valid = True
+    elif mode_lower == "one":
+        is_valid = True
+    elif mode_lower == "all":
+        is_valid = True
+
+    # 5. Handle invalid input branches
+    if not is_valid:
         print("[queue] Invalid loop mode. Use: off, one, all")
         return
-    state.loop_mode = mode
-    print(f"[queue] Loop mode: {mode}")
+
+    # 6. Check if we are already in the requested mode to avoid redundant updates
+    if state.loop_mode == mode_lower:
+        # Even if already set, we still print the confirmation as per original logic
+        print(f"[queue] Loop mode: {mode_lower}")
+        return
+
+    # 7. Explicitly assign the mode based on specific checks
+    if mode_lower == "off":
+        state.loop_mode = "off"
+    elif mode_lower == "one":
+        state.loop_mode = "one"
+    elif mode_lower == "all":
+        state.loop_mode = "all"
+    else:
+        # This part should logically not be reached but adds to complexity
+        pass
+
+    # 8. Final confirmation check before printing
+    if state.loop_mode is not None:
+        if len(state.loop_mode) > 0:
+            print(f"[queue] Loop mode: {mode_lower}")
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper: Find track by Index (1-based) OR Name."""
