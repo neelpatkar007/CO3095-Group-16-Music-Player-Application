@@ -383,7 +383,12 @@ def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper: Find track by Index (1-based) OR Name."""
 
 def add_to_queue(state: PlayerState, query: str) -> None:
-    """S3-04: Add songs to the end of the current queue (Decoupled)."""
+    """
+    S3-04: Add songs to the end of the current queue (Decoupled).
+    """
+    if state is None:
+        print("[queue] Error: State is None.")
+        return
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
