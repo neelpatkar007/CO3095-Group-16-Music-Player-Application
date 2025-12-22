@@ -43,10 +43,12 @@ def next_track(state: PlayerState) -> None:
             state.history = []
         state.history.append(state.current_track)
 
-    # Determine new index
-    single = n == 1
-    if single:
-        new = 0
+    # --- S3-02: Loop One Logic ---
+    if hasattr(state, "loop_mode") and state.loop_mode == "one":
+        new = old
+        wrapped = False
+        changed = False
+    # -----------------------------
     elif state.shuffle_active and n > 1:
         # S3-01: Shuffle logic with duplicate avoidance
         if n == 2:
@@ -57,17 +59,23 @@ def next_track(state: PlayerState) -> None:
             while new == old and attempts < 15:
                 new = random.randint(0, n - 1)
                 attempts += 1
+        wrapped = False
+        changed = new != old
     else:
-        # Normal sequential logic
+        # Normal sequential logic + S3-02: Loop All/Off
         cand = old + 1
         if cand >= n:
-            new = 0
+            if hasattr(state, "loop_mode") and state.loop_mode == "all":
+                new = 0
+                wrapped = True
+            else:
+                print("[queue] End of playlist.")
+                state.is_playing = False
+                return # Stop at end
         else:
             new = cand
-
-    # Check for wrap and change
-    wrapped = new == 0 and old != 0 and not state.shuffle_active
-    changed = new != old
+            wrapped = False
+        changed = new != old
 
     # Update state and track
     state.current_index = new
@@ -112,7 +120,9 @@ def next_track(state: PlayerState) -> None:
             state.is_playing = True
             state.is_paused = False
 
-            if state.shuffle_active:
+            if hasattr(state, "loop_mode") and state.loop_mode == "one":
+                print(f"[queue] Looping: {track.display_name}")
+            elif state.shuffle_active:
                 print(f"[queue] Shuffled to: {track.display_name}")
             elif wrapped:
                 print(f"[queue] Wrapped to next: {track.display_name}")
@@ -311,6 +321,12 @@ def toggle_shuffle(state: PlayerState) -> None:
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
     """S3-02: Set loop to 'off', 'one', or 'all'."""
+    mode = mode.lower()
+    if mode not in ["off", "one", "all"]:
+        print("[queue] Invalid loop mode. Use: off, one, all")
+        return
+    state.loop_mode = mode
+    print(f"[queue] Loop mode: {mode}")
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper: Find track by Index (1-based) OR Name."""
