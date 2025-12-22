@@ -173,9 +173,11 @@ def previous_track(state: PlayerState) -> None:
     if old is None:
         old = 0
 
-    # S3-01: Shuffle-aware Previous logic (History Retrieval)
-    # This uses a Stack:
-    if state.shuffle_active and hasattr(state, "history") and len(state.history) > 0:
+    # --- S3-02: Loop-Aware Previous Logic ---
+    if hasattr(state, "loop_mode") and state.loop_mode == "one":
+        new = old  # Stay on current track
+        wrapped = False
+    elif state.shuffle_active and hasattr(state, "history") and len(state.history) > 0:
         last_track = state.history.pop() # Retrieve the last played song
 
         new_idx = None
@@ -188,16 +190,23 @@ def previous_track(state: PlayerState) -> None:
             new = new_idx
         else:
             new = old - 1 if old > 0 else n - 1
+        wrapped = False
     else:
-        # Normal Previous logic
+        # Normal sequential logic
         cand = old - 1
         if cand < 0:
-            new = n - 1
+            if hasattr(state, "loop_mode") and state.loop_mode == "all":
+                new = n - 1
+                wrapped = True
+            else:
+                print("[queue] Beginning of playlist.")
+                new = 0 # Stay at first track
+                wrapped = False
         else:
             new = cand
+            wrapped = False
 
-    # Check for wrap and change
-    wrapped = new == n - 1 and old == 0 and not state.shuffle_active
+    # Check for change
     changed = new != old
 
     # Update State and Track
