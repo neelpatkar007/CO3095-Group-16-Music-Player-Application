@@ -391,7 +391,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
         return
 
     if not query:
-
+        print("[queue] Usage: /q.add <index|name>")
+        return
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
