@@ -408,6 +408,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
         return
 
     if not hasattr(found, "display_name") or not found.display_name:
+        print("[queue] Error: Track data corrupted.")
+        
 
 
 def play_next(state: PlayerState, query: str) -> None:
