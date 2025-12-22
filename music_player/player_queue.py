@@ -421,6 +421,7 @@ def add_to_queue(state: PlayerState, query: str) -> None:
 
     print(f"[queue] Added '{found.display_name}' to queue.")
 
+    if len(state.tracks) > 500:
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
