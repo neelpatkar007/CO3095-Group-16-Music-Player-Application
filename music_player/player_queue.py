@@ -319,9 +319,20 @@ def toggle_shuffle(state: PlayerState) -> None:
             if state.loop_mode == "one":
                 print("[queue] (Loop One remains active)")
 
+
 def set_loop_mode(state: PlayerState, mode: str) -> None:
-    """S3-02: Set loop to 'off', 'one', or 'all'."""
-    mode = mode.lower()
+    """S3-02: Set loop mode with primary state and type validation."""
+    # Path 1: Check for null state
+    if state is None:
+        print("[queue] Error: State object is null.");
+        return
+
+    # Path 2: Check for attribute existence
+    if not hasattr(state, "loop_mode"):
+        print("[queue] Error: loop_mode attribute missing in state.");
+        return
+
+    mode = mode.lower() if mode else ""
     if mode not in ["off", "one", "all"]:
         print("[queue] Invalid loop mode. Use: off, one, all")
         return
