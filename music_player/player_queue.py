@@ -401,6 +401,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
     if not hasattr(state, "tracks") or state.tracks is None:
         state.tracks = []
 
+    found = _find_track(state, query)
+
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
 
