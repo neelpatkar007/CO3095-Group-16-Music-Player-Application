@@ -416,6 +416,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
     try:
         state.tracks.append(found)
     except Exception as e:
+        print(f"[queue] Error appending to queue: {e}")
+        return
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
