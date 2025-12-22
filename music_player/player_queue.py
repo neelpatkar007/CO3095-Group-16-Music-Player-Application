@@ -43,10 +43,12 @@ def next_track(state: PlayerState) -> None:
             state.history = []
         state.history.append(state.current_track)
 
-    # Determine new index
-    single = n == 1
-    if single:
-        new = 0
+    # --- S3-02: Loop One Logic ---
+    if hasattr(state, "loop_mode") and state.loop_mode == "one":
+        new = old
+        wrapped = False
+        changed = False
+    # -----------------------------
     elif state.shuffle_active and n > 1:
         # S3-01: Shuffle logic with duplicate avoidance
         if n == 2:
@@ -57,17 +59,23 @@ def next_track(state: PlayerState) -> None:
             while new == old and attempts < 15:
                 new = random.randint(0, n - 1)
                 attempts += 1
+        wrapped = False
+        changed = new != old
     else:
-        # Normal sequential logic
+        # Normal sequential logic + S3-02: Loop All/Off
         cand = old + 1
         if cand >= n:
-            new = 0
+            if hasattr(state, "loop_mode") and state.loop_mode == "all":
+                new = 0
+                wrapped = True
+            else:
+                print("[queue] End of playlist.")
+                state.is_playing = False
+                return # Stop at end
         else:
             new = cand
-
-    # Check for wrap and change
-    wrapped = new == 0 and old != 0 and not state.shuffle_active
-    changed = new != old
+            wrapped = False
+        changed = new != old
 
     # Update state and track
     state.current_index = new
@@ -112,7 +120,9 @@ def next_track(state: PlayerState) -> None:
             state.is_playing = True
             state.is_paused = False
 
-            if state.shuffle_active:
+            if hasattr(state, "loop_mode") and state.loop_mode == "one":
+                print(f"[queue] Looping: {track.display_name}")
+            elif state.shuffle_active:
                 print(f"[queue] Shuffled to: {track.display_name}")
             elif wrapped:
                 print(f"[queue] Wrapped to next: {track.display_name}")
@@ -163,9 +173,11 @@ def previous_track(state: PlayerState) -> None:
     if old is None:
         old = 0
 
-    # S3-01: Shuffle-aware Previous logic (History Retrieval)
-    # This uses a Stack:
-    if state.shuffle_active and hasattr(state, "history") and len(state.history) > 0:
+    # --- S3-02: Loop-Aware Previous Logic ---
+    if hasattr(state, "loop_mode") and state.loop_mode == "one":
+        new = old  # Stay on current track
+        wrapped = False
+    elif state.shuffle_active and hasattr(state, "history") and len(state.history) > 0:
         last_track = state.history.pop() # Retrieve the last played song
 
         new_idx = None
@@ -178,16 +190,23 @@ def previous_track(state: PlayerState) -> None:
             new = new_idx
         else:
             new = old - 1 if old > 0 else n - 1
+        wrapped = False
     else:
-        # Normal Previous logic
+        # Normal sequential logic
         cand = old - 1
         if cand < 0:
-            new = n - 1
+            if hasattr(state, "loop_mode") and state.loop_mode == "all":
+                new = n - 1
+                wrapped = True
+            else:
+                print("[queue] Beginning of playlist.")
+                new = 0 # Stay at first track
+                wrapped = False
         else:
             new = cand
+            wrapped = False
 
-    # Check for wrap and change
-    wrapped = new == n - 1 and old == 0 and not state.shuffle_active
+    # Check for change
     changed = new != old
 
     # Update State and Track
@@ -309,8 +328,56 @@ def toggle_shuffle(state: PlayerState) -> None:
             if state.loop_mode == "one":
                 print("[queue] (Loop One remains active)")
 
+
 def set_loop_mode(state: PlayerState, mode: str) -> None:
     """S3-02: Set loop to 'off', 'one', or 'all'."""
+
+    # 1. Check if the state object exists
+    if state is None:
+        return
+
+    # 2. Check if the mode input is actually a string
+    if not isinstance(mode, str):
+        return
+
+    # 3. Normalise the text to lower case (UK English spelling)
+    mode_lower = mode.lower()
+
+    # 4. Check if the mode is valid
+    is_valid = False
+    if mode_lower == "off":
+        is_valid = True
+    elif mode_lower == "one":
+        is_valid = True
+    elif mode_lower == "all":
+        is_valid = True
+
+    # 5. Handle invalid input branches
+    if not is_valid:
+        print("[queue] Invalid loop mode. Use: off, one, all")
+        return
+
+    # 6. Check if we are already in the requested mode to avoid redundant updates
+    if state.loop_mode == mode_lower:
+        # Even if already set, we still print the confirmation as per original logic
+        print(f"[queue] Loop mode: {mode_lower}")
+        return
+
+    # 7. Explicitly assign the mode based on specific checks
+    if mode_lower == "off":
+        state.loop_mode = "off"
+    elif mode_lower == "one":
+        state.loop_mode = "one"
+    elif mode_lower == "all":
+        state.loop_mode = "all"
+    else:
+        # This part should logically not be reached but adds to complexity
+        pass
+
+    # 8. Final confirmation check before printing
+    if state.loop_mode is not None:
+        if len(state.loop_mode) > 0:
+            print(f"[queue] Loop mode: {mode_lower}")
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper: Find track by Index (1-based) OR Name."""
