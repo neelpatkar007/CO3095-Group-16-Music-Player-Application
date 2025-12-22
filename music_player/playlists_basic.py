@@ -401,19 +401,50 @@ def sort_playlist(state: PlayerState, selector: str, criteria: str) -> None:
     """
     S3-10: Sort playlist by 'artist', 'title', or 'duration'.
     """
+    if state is None:
+        print("[pl] Error: State is None.")
+        return
+    if not selector or not selector.strip():
+        print("[pl] Error: Selector cannot be empty.")
+        return
+    if not criteria or not isinstance(criteria, str):
+        print("[pl] Error: Sort criteria must be a valid string.")
+        return
     pl = _resolve_playlist(state, selector)
-    if pl is None: return
-
+    if pl is None:
+        return
+    if not hasattr(pl, "tracks") or pl.tracks is None:
+        print("[pl] Error: Playlist tracks corrupted.")
+        return
+    if not pl.tracks:
+        print(f"[pl] Playlist '{pl.name}' is empty, nothing to sort.")
+        return
     criteria = criteria.lower().strip()
-
     if criteria == "title":
-        pl.tracks.sort(key=lambda t: t.title.lower())
+        try:
+            pl.tracks.sort(
+                key=lambda t: t.title.lower() if (t and hasattr(t, "title") and t.title) else ""
+            )
+        except Exception as e:
+            print(f"[pl] Error sorting by title: {e}")
+            return
     elif criteria == "artist":
-        pl.tracks.sort(key=lambda t: t.artist.lower())
+        try:
+            pl.tracks.sort(
+                key=lambda t: t.artist.lower() if (t and hasattr(t, "artist") and t.artist) else "unknown"
+            )
+        except Exception as e:
+            print(f"[pl] Error sorting by artist: {e}")
+            return
     elif criteria == "duration":
-        pl.tracks.sort(key=lambda t: (t.duration_seconds or 0))
+        try:
+            pl.tracks.sort(
+                key=lambda t: t.duration_seconds if (t and hasattr(t, "duration_seconds") and t.duration_seconds is not None) else 0.0
+            )
+        except Exception as e:
+            print(f"[pl] Error sorting by duration: {e}")
+            return
     else:
         print("[pl] Invalid sort criteria. Use: title, artist, duration")
         return
-
     print(f"[pl] Sorted playlist '{pl.name}' by {criteria}.")
