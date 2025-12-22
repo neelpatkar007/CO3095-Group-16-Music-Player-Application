@@ -230,6 +230,11 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_queue.toggle_shuffle(state)
 
     # S3-02: Loop
+    elif base == "/loop":
+        if not args:
+            print("[main] Usage: /loop <off|one|all>")
+        else:
+            player_queue.set_loop_mode(state, args[0])
 
     # S3-03: View Queue/History
 
