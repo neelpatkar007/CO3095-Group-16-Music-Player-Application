@@ -245,6 +245,11 @@ def handle_command(state: PlayerState, command: str) -> bool:
     # S3-09: View Liked
 
     # S3-10: Sort Playlist
+    elif base == "/pl.sort":
+        if len(args) < 2:
+            print("Usage: /pl.sort <playlist> <artist|title|duration>")
+        else:
+            playlists_basic.sort_playlist(state, args[0], args[1])
 
     # S3-11: Most Played
 
