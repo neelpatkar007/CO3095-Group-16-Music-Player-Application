@@ -401,3 +401,19 @@ def sort_playlist(state: PlayerState, selector: str, criteria: str) -> None:
     """
     S3-10: Sort playlist by 'artist', 'title', or 'duration'.
     """
+    pl = _resolve_playlist(state, selector)
+    if pl is None: return
+
+    criteria = criteria.lower().strip()
+
+    if criteria == "title":
+        pl.tracks.sort(key=lambda t: t.title.lower())
+    elif criteria == "artist":
+        pl.tracks.sort(key=lambda t: t.artist.lower())
+    elif criteria == "duration":
+        pl.tracks.sort(key=lambda t: (t.duration_seconds or 0))
+    else:
+        print("[pl] Invalid sort criteria. Use: title, artist, duration")
+        return
+
+    print(f"[pl] Sorted playlist '{pl.name}' by {criteria}.")
