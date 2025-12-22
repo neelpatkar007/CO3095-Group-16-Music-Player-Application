@@ -407,6 +407,9 @@ def add_to_queue(state: PlayerState, query: str) -> None:
         print(f"[queue] Song '{query}' not found in Library.")
         return
 
+    if not hasattr(found, "display_name") or not found.display_name:
+
+
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
 
