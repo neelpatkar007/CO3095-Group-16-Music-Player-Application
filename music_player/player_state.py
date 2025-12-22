@@ -38,6 +38,7 @@ class PlayerState:
         self.active_playlist_index: int | None = None
 
         # S3-01 & S3-02: Shuffle and Loop
+        self.shuffle_active: bool = False
 
         # S3-03: History
 

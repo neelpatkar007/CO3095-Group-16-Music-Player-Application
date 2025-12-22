@@ -83,6 +83,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     args = parts[1:] # Argument (volume level 30, or seek time)
 
     if base in ("/quit", "/exit", "q"):
+        player_metrics.save_data(state)
         return False
 
     # SPRINT 1 COMMANDS
@@ -224,7 +225,9 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # SPRINT 3 COMMANDS
 
-    # S3-01: Shuffle
+    # S3-01: Shuffle (Sunny)
+    elif base == "/shuffle":
+        player_queue.toggle_shuffle(state)
 
     # S3-02: Loop
 
