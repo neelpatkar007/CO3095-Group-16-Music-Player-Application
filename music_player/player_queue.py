@@ -430,6 +430,7 @@ def clear_queue(state: PlayerState) -> None:
         print("[queue] Error: Queue failed to clear.")
 
     if not state.is_playing and not state.is_paused:
+        print("[queue] (Player is stopped)")
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
