@@ -423,6 +423,10 @@ def play_next(state: PlayerState, query: str) -> None:
         print(f"[queue] Insertion failed: {e}")
         return
 
+    if state.tracks[insert_idx] != found:
+        print("[queue] Error: Track did not insert correctly.")
+        return
+
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
