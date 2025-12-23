@@ -248,7 +248,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # S3-07: Playback Speed
 
-    # S3-08: Like/Unlike
+    elif base == "/like":
+        player_metrics.toggle_like(state)
 
     # S3-09: View Liked
 
