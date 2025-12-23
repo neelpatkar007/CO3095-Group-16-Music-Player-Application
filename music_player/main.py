@@ -198,7 +198,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             target, source = args[0], args[1]
             dedupe = True
-            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+            if len(args) >= 2 and args[2].lower() in {"all", "keepdups"}:
                 dedupe = False
             playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
     elif base == "/scan":
@@ -266,6 +266,11 @@ def handle_command(state: PlayerState, command: str) -> bool:
     # S3-11: Most Played
 
     # S3-12: Sleep Timer
+    elif base == "/sleep":
+        try:
+            player_core.set_sleep_timer(state, float(args[0]))
+        except (IndexError, ValueError):
+            print("Usage: /sleep <minutes>")
 
     # Unknown command
     else:
