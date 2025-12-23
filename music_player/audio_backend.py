@@ -76,7 +76,7 @@ class AudioEngine:
                 # Point playback to the temp file
                 playback_path = self.temp_file
 
-                # 5. Adjust Start Position
+                # Adjust Start Position
                 playback_start = start_pos / speed
 
             except Exception as e:
@@ -85,7 +85,7 @@ class AudioEngine:
                 playback_start = start_pos
                 self.current_speed = 1.0
 
-        # Sent to the appropriate backend - Real or Simulated.
+        # Sent to the appropriate backend (Real or Simulated)
         if HAS_PYGAME:
             self._play_real(path, start_pos)
         else:
@@ -182,7 +182,7 @@ class AudioEngine:
             else:
                 self.set_volume(self.volume)
 
-            print(f"[audio] PLAY (real) {path.name} from {start_pos:.1f}s")
+            print(f"[audio] PLAY (real) {path.name} from {start_pos:.1f}s (Speed: {self.current_speed}x)")
         except Exception as e:
             # If there is an error or file not found, it catches it out.
             print(f"[audio] ERROR playing {path}: {e}")
