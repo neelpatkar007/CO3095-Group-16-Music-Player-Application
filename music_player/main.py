@@ -198,7 +198,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             target, source = args[0], args[1]
             dedupe = True
-            if len(args) >= 3 and args[2].lower() in {"all", "keepdups"}:
+            if len(args) >= 2 and args[2].lower() in {"all", "keepdups"}:
                 dedupe = False
             playlists_advanced.merge_playlists(state, target, source, dedupe=dedupe)
     elif base == "/scan":
@@ -241,24 +241,46 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_queue.show_queue(state)
 
     # S3-04: Add to Queue
-
+    elif base == "/q.add":
+        player_queue.add_to_queue(state, " ".join(args))
     # S3-04: Remove from Queue
-
+    elif base == "/q.remove":
+        player_queue.remove_from_queue(state, " ".join(args))
     # S3-05: Play Next
-
+    elif base == "/playnext":
+        player_queue.play_next(state, " ".join(args))
     # S3-06: Clear Queue
-
+    elif base == "/q.clear":
+        player_queue.clear_queue(state)
     # S3-07: Playback Speed
-
-    # S3-08: Like/Unlike
+    elif base == "/speed":
+        try:
+            player_core.set_playback_speed(state, float(args[0]))
+        except (IndexError, ValueError):
+            print("Usage: /speed <0.5 - 2.0>")
+    # S3-08: Like a song
+    elif base == "/like":
+        player_metrics.toggle_like(state)
 
     # S3-09: View Liked
-
+    elif base == "/likes":
+        player_metrics.show_liked_songs(state)
     # S3-10: Sort Playlist
+    elif base == "/pl.sort":
+        if len(args) < 2:
+            print("Usage: /pl.sort <playlist> <artist|title|duration>")
+        else:
+            playlists_basic.sort_playlist(state, args[0], args[1])
 
-    # S3-11: Most Played
+    elif base == "/top":
+        player_metrics.show_top_tracks(state)
 
     # S3-12: Sleep Timer
+    elif base == "/sleep":
+        try:
+            player_core.set_sleep_timer(state, float(args[0]))
+        except (IndexError, ValueError):
+            print("Usage: /sleep <minutes>")
 
     # Unknown command
     else:

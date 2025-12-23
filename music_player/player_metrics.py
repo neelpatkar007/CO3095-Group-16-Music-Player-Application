@@ -13,24 +13,167 @@ DATA_FILE = Path("player_data.json")
 
 def load_data(state: PlayerState) -> None:
     """Load likes and play counts from JSON."""
+    if not DATA_FILE.exists():
+        return
+    try:
+        with open(DATA_FILE, "r") as f:
+            data = json.load(f)
+            state.liked_tracks = set(data.get("likes", []))
+            state.play_counts = data.get("counts", {})
+    except Exception as e:
+        print(f"[metrics] Error loading data: {e}")
 
 def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
+    data = {
+        "likes": list(state.liked_tracks),
+        "counts": state.play_counts
+    }
+    try:
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f)
+    except Exception as e:
+        print(f"[metrics] Error saving data: {e}")
 
 def toggle_like(state: PlayerState) -> None:
-    """
-    S3-08: Like or unlike the current song.
-    """
+    if state is None:
+        print("[metrics] Error: State is None.")
+
+    if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
+        state.liked_tracks = set()
+
+    if not isinstance(state.liked_tracks, set):
+        print("[metrics] Error: Liked tracks data corrupted.")
+        return
+
+    track = state.current_track
+    if track is None:
+        print("[metrics] No track playing.")
+        return
+
+    if not hasattr(track, "path") or track.path is None:
+        print("[metrics] Error: Track has no valid path.")
+        return
+
+    path_str = str(track.path)
+    if not path_str.strip():
+        print("[metrics] Error: Track path is empty.")
+        return
+
+    if path_str in state.liked_tracks:
+        state.liked_tracks.remove(path_str)
+
+        if path_str in state.liked_tracks:
+            print("[metrics] Error: Failed to remove like.")
+            return
+
+        print(f"[metrics] Unliked '{track.display_name}'.")
+
+    else:
+        state.liked_tracks.add(path_str)
+
+        if path_str not in state.liked_tracks:
+            print("[metrics] Error: Failed to add like.")
+            return
+
+        print(f"[metrics] Liked '{track.display_name}'.")
+
+    save_data(state)
 
 def record_play(state: PlayerState) -> None:
-    """S3-11 Helper: Increment play count for current track."""
+    track = state.current_track
+    if not track: return
+    path_str = str(track.path)
+    state.play_counts[path_str] = state.play_counts.get(path_str, 0) + 1
+    save_data(state)
 
 def show_liked_songs(state: PlayerState) -> None:
     """
     S3-09: View all liked songs.
     """
+    print("[metrics] --- Liked Songs ---")
+
+    if state is None:
+        print("[metrics] Error: State is missing.")
+        return
+    if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
+        print("  (No liked songs data)")
+        return
+    if not state.liked_tracks:
+        print("  (No liked songs yet)")
+        return
+    if not hasattr(state, "library_tracks") or state.library_tracks is None:
+        print("[metrics] Error: Library tracks missing.")
+        return
+    if not isinstance(state.library_tracks, list):
+        print("[metrics] Error: Library data corrupted.")
+        return
+
+    found_count = 0
+
+    for t in state.library_tracks:
+        if t is None:
+            continue
+        if not hasattr(t, "path") or t.path is None:
+            continue
+        path_str = str(t.path)
+        if path_str in state.liked_tracks:
+            name = getattr(t, "display_name", "Unknown Title")
+            if not name:
+                name = "Unknown Title"
+            print(f"  ♥ {name}")
+            found_count += 1
+    if found_count == 0:
+        print("  (Liked songs not found in current library scan)")
 
 def show_top_tracks(state: PlayerState) -> None:
-    """
-    S3-11: Show most played songs.
-    """
+     if state is None:
+        print("[metrics] Error: State is None.")
+        return
+
+     if not hasattr(state, "play_counts") or state.play_counts is None:
+         print("[metrics] No play history data available.")
+         return
+
+     if not isinstance(state.play_counts, dict):
+         print("[metrics] Error: Play counts corrupted.")
+         return
+
+     if not state.play_counts:
+         print("[metrics] No play history yet.")
+         return
+
+     if not hasattr(state, "library_tracks") or not state.library_tracks:
+         print("[metrics] Warning: Library empty, cannot resolve song names.")
+
+     try:
+         sorted_items = sorted(state.play_counts.items(), key=lambda x: x[1], reverse=True)
+     except Exception:
+         print("[metrics] Error sorting play history.")
+         return
+
+     print("[metrics] --- Top Played Songs ---")
+
+     for i, (path_str, count) in enumerate(sorted_items):
+         if i >= 10:
+             break
+
+         if not isinstance(count, int) or count <= 0:
+             continue
+
+         name = "Unknown"
+         found_in_lib = False
+
+         if state.library_tracks:
+             for t in state.library_tracks:
+                 if t is None: continue
+
+                 if str(t.path) == path_str:
+                     name = t.display_name
+                     found_in_lib = True
+                     break
+
+         if not found_in_lib:
+             name = f"Unknown (File: {path_str})"
+
+         print(f"  {count} plays: {name}")
