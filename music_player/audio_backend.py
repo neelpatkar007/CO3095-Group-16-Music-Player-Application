@@ -224,17 +224,21 @@ class AudioEngine:
     def _seek_real(self, seconds: float) -> None:
         assert pygame is not None
         try:
-            # Reloads the current track and starts from the new position.
-            pygame.mixer.music.load(str(self.current_path))
-            pygame.mixer.music.play(loops=0, start=seconds)
-            
-            # Re-apply the correct volume (or silence) after reloaded the track
+            actual_pos = seconds / self.current_speed
+
+            target_file = self.current_path
+            if self.current_speed != 1.0 and self.temp_file.exists():
+                target_file = self.temp_file
+
+            pygame.mixer.music.load(str(target_file))
+            pygame.mixer.music.play(loops=0, start=actual_pos)
+
             if self.muted:
                 pygame.mixer.music.set_volume(0.0)
             else:
                 self.set_volume(self.volume)
-            
-            print(f"[audio] SEEK (real) -> {seconds:.1f}s")
+
+            print(f"[audio] SEEK -> {seconds:.1f}s")
         except Exception as e:
             print(f"[audio] ERROR seeking: {e}")
 
