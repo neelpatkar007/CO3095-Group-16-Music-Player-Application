@@ -392,6 +392,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     print("[queue] --- History ---")
     if not state.history:
         print("  (Empty)")
+    else:
+        for t in state.history[-5:]:
+            print(f"  [Played] {t.display_name}")
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
