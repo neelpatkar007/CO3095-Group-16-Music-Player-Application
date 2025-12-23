@@ -443,6 +443,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
         print("[queue] Usage: /q.remove <index|name>")
         return
 
+    _ensure_queue_decoupled(state)
+
+
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
