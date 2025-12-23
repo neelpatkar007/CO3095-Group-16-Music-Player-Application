@@ -464,6 +464,8 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
             print("[queue] Error parsing index.")
             return
 
+    query_lower = query.lower()
+
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
