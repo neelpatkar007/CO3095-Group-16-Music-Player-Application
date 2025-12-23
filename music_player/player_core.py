@@ -94,6 +94,13 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
       automatically advance to the next track when the current one finishes.
     - If using the main library queue, keep original behaviour (stop at end).
     """
+    # S3-12: Check Sleep Timer
+    if hasattr(state, "sleep_deadline") and state.sleep_deadline and time.time() > state.sleep_deadline:
+        print("\n[timer] Sleep timer reached. Stopping playback.")
+        stop(state)
+        state.sleep_deadline = None # Reset
+        return
+
     # Skip if time delta is invalid
     if delta_seconds <= 0:
         return
@@ -127,6 +134,7 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
                 state.is_playing = False
                 state.audio_engine.stop()
                 print("[core] Track finished.")
+
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """S3-12: Set a sleep timer."""
