@@ -242,7 +242,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/q.add":
         player_queue.add_to_queue(state, " ".join(args))
     # S3-04: Remove from Queue
-
+    elif base == "/q.remove":
+        player_queue.remove_from_queue(state, " ".join(args))
     # S3-05: Play Next
 
     # S3-06: Clear Queue
