@@ -472,6 +472,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
         if query_lower in t.display_name.lower():
             removed = state.tracks.pop(i)
 
+            if i < state.current_index:
+                state.current_index -= 1
+
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
