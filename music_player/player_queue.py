@@ -447,6 +447,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
     if query.isdigit():
         try:
+            idx = int(query) - 1
+            if 0 <= idx < len(state.tracks):
+
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
