@@ -23,6 +23,8 @@ def next_track(state: PlayerState) -> None:
     if not state.tracks:
         print("[queue] No tracks available.")
         return
+    if state.current_track:
+        state.history.append(state.current_track)
     n = len(state.tracks)
     if n == 0:
         print("[queue] Library empty.")
