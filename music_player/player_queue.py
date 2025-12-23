@@ -396,6 +396,8 @@ def clear_queue(state: PlayerState) -> None:
     S3-06: Clear the queue (keep playing current song).
     """
     if state is None:
+        print("[queue] Error: State is None.")
+        return
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
