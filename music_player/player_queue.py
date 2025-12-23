@@ -404,6 +404,8 @@ def clear_queue(state: PlayerState) -> None:
         state.tracks = []
         return
 
+    if not state.tracks:
+
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
 
