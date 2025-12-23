@@ -524,7 +524,45 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     print(f"[queue] '{query}' not found in current queue.")
 
 def clear_queue(state: PlayerState) -> None:
-    """S3-06: Clear the queue (keep playing current song)."""
+    """
+    S3-06: Clear the queue (keep playing current song).
+    """
+    if state is None:
+        print("[queue] Error: State is None.")
+        return
+
+    if not hasattr(state, "tracks") or state.tracks is None:
+        print("[queue] Queue is already missing.")
+        state.tracks = []
+        return
+
+    if not state.tracks:
+        print("[queue] Queue is already empty.")
+        return
+
+    _ensure_queue_decoupled(state)
+
+    current = None
+    if 0 <= state.current_index < len(state.tracks):
+        current = state.tracks[state.current_index]
+
+    if current:
+        if not hasattr(current, "display_name"):
+            print("[queue] Warning: Current track data seems corrupted.")
+
+        state.tracks = [current]
+        state.current_index = 0
+        print("[queue] Queue cleared (current song retained).")
+    else:
+        state.tracks = []
+        state.current_index = 0
+        print("[queue] Queue completely cleared.")
+
+    if len(state.tracks) > 1:
+        print("[queue] Error: Queue failed to clear.")
+
+    if not state.is_playing and not state.is_paused:
+        print("[queue] (Player is stopped)")
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
