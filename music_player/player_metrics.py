@@ -42,3 +42,7 @@ def show_top_tracks(state: PlayerState) -> None:
      if not hasattr(state, "play_counts") or state.play_counts is None:
          print("[metrics] No play history data available.")
          return
+
+     if not isinstance(state.play_counts, dict):
+         print("[metrics] Error: Play counts corrupted.")
+         return
