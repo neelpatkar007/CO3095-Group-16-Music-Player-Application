@@ -20,7 +20,9 @@ def save_data(state: PlayerState) -> None:
 def toggle_like(state: PlayerState) -> None:
     if state is None:
         print("[metrics] Error: State is None.")
-        return
+
+    if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
+        state.liked_tracks = set()
 
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
