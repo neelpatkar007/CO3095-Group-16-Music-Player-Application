@@ -436,6 +436,8 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     if state is None: return
 
     if not state.tracks:
+        print("[queue] Queue is empty.")
+        return
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
