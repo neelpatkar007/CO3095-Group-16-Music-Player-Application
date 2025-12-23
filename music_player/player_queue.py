@@ -449,6 +449,7 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
         try:
             idx = int(query) - 1
             if 0 <= idx < len(state.tracks):
+                removed = state.tracks.pop(idx)
 
 
 def clear_queue(state: PlayerState) -> None:
