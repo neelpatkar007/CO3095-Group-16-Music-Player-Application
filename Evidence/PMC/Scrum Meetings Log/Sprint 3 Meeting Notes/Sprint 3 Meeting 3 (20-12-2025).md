@@ -1,0 +1,5 @@
+Sprint 3 – Meeting 2
+
+Date: 20 December 2025
+Time: 05:00 PM – 08:00 PM
+
