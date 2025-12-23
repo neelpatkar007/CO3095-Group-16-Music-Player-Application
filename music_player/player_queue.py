@@ -382,7 +382,17 @@ def set_loop_mode(state: PlayerState, mode: str) -> None:
             print(f"[queue] Loop mode: {mode_lower}")
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
-    """Helper: Find track by Index (1-based) OR Name."""
+    """Helper Function: Find track by Index or Name."""
+    query = query.strip()
+    if query.isdigit():
+        idx = int(query) - 1
+        if 0 <= idx < len(state.library_tracks):
+            return state.library_tracks[idx]
+    query_lower = query.lower()
+    for t in state.library_tracks:
+        if query_lower in t.display_name.lower():
+            return t
+    return None
 
 def add_to_queue(state: PlayerState, query: str) -> None:
     """
