@@ -427,6 +427,7 @@ def clear_queue(state: PlayerState) -> None:
         print("[queue] Queue completely cleared.")
 
     if len(state.tracks) > 1:
+        print("[queue] Error: Queue failed to clear.")
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
