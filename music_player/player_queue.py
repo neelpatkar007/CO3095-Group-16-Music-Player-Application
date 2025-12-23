@@ -457,7 +457,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
                 name = getattr(removed, "display_name", "Unknown")
                 print(f"[queue] Removed '{name}' from queue.")
                 return
-
+            else:
+                print("[queue] Index out of range.")
+                return
 
 
 
