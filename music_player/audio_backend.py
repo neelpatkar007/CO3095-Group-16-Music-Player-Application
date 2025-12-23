@@ -87,7 +87,7 @@ class AudioEngine:
 
         # Sent to the appropriate backend (Real or Simulated)
         if HAS_PYGAME:
-            self._play_real(path, start_pos)
+            self._play_real(playback_path, playback_start)
         else:
             self._play_simulated(path, start_pos)
 

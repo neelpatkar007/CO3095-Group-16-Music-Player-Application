@@ -16,10 +16,6 @@ from music_player import player_queue, player_metrics
 def play(state: PlayerState) -> None:
     """
     Start or resume playback from the current position stored in the state.
-
-    S1-01: user can start/resume a song.
-    S1-12: this must not block the CLI; background updating will be
-           handled via update_playback in the main loop.
     """
     track = state.current_track
     if track is None:
@@ -47,12 +43,7 @@ def play(state: PlayerState) -> None:
 
 
 def pause(state: PlayerState) -> None:
-    """
-    Pause playback without resetting position.
-
-    S1-01.
-    """
-    # Nothing to pause if not playing or already paused
+    """Pause playback without resetting position."""
     if not state.is_playing or state.is_paused:
         print("[core] Nothing to pause.")
         return
@@ -64,12 +55,7 @@ def pause(state: PlayerState) -> None:
 
 
 def stop(state: PlayerState) -> None:
-    """
-    Stop playback and reset position to 0 (start of track).
-
-    S1-01.
-    """
-    # Nothing to stop if not playing or paused
+    """Stop playback and reset position to 0."""
     if not state.is_playing and not state.is_paused:
         print("[core] Nothing is playing.")
         return
@@ -77,7 +63,7 @@ def stop(state: PlayerState) -> None:
     state.audio_engine.stop()
     state.is_playing = False
     state.is_paused = False
-    state.position_seconds = 0.0 # Reset position to start of track
+    state.position_seconds = 0.0
     print("[core] Stopped.")
 
 
@@ -99,6 +85,7 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
             state.position_seconds = track.duration_seconds
             player_queue.next_track(state)
 
+
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """S3-12: Set a sleep timer."""
 
@@ -114,13 +101,12 @@ def set_playback_speed(state: PlayerState, speed: float) -> None:
     if hasattr(state, "playback_speed") and state.playback_speed == speed:
         print(f"[core] Speed is already {speed}x.")
         return
-    old_speed = getattr(state, "playback_speed", 1.0)
+
     state.playback_speed = speed
     print(f"[core] Playback speed set to {speed}x.")
     if state.is_playing:
         print("[core] Applying speed change...")
+        state.is_playing = False
         play(state)
     elif state.is_paused:
         print("[core] New speed will apply when you resume playback.")
-
-
