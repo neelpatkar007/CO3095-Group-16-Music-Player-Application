@@ -251,6 +251,11 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/q.clear":
         player_queue.clear_queue(state)
     # S3-07: Playback Speed
+    elif base == "/speed":
+        try:
+            player_core.set_playback_speed(state, float(args[0]))
+        except (IndexError, ValueError):
+            print("Usage: /speed <0.5 - 2.0>")
 
     # S3-08: Like/Unlike
 
