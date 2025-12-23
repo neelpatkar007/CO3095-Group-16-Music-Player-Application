@@ -5,13 +5,21 @@ from pathlib import Path
 # If pygame is not installed, or it fails, then the code falls back to a simulated mode.
 try:
     import pygame
-    pygame.mixer.init()
+    pygame.mixer.init(frequency=44100)
     HAS_PYGAME = True
 except Exception:
     pygame = None
     HAS_PYGAME = False
     print("[audio] pygame not available – using simulated audio backend.")
 
+# Pydub check (Required for real speed change)
+try:
+    from pydub import AudioSegment
+
+    HAS_PYDUB = True
+except ImportError:
+    HAS_PYDUB = False
+    print("[audio] pydub not found. Speed changes will be simulated.")
 
 class AudioEngine:
     '''
@@ -30,17 +38,56 @@ class AudioEngine:
         self.volume: int = 100
         self.muted: bool = False
 
-    def play(self, path: Path, start_pos: float = 0.0) -> None:
+        # Track the current speed to adjust seek times correctly
+        self.current_speed: float = 1.0
+
+        # Temporary file for speed-modified audio
+        self.temp_file = Path("temp_speed_audio.mp3")
+
+    def play(self, path: Path, start_pos: float = 0.0, speed: float = 1.0) -> None:
         '''
         Loads and starts to play an audio file from a specific position.
         '''
         self.current_path = path
         self.playing = True
         self.paused = False
+        self.current_speed = speed
 
-        # Sent to the appropriate backend - Real or Simulated.
+        # Determine which file to play (Original or Temp)
+        playback_path = path
+        playback_start = start_pos
+
+        # Logic for Real Speed Change
+        if HAS_PYDUB and speed != 1.0:
+            try:
+                print(f"[audio] Processing audio for {speed}x speed... (this may take a moment)")
+
+                # Load original audio
+                seg = AudioSegment.from_file(path)
+
+                # Change Speed
+                new_rate = int(seg.frame_rate * speed)
+                processed = seg._spawn(seg.raw_data, overrides={'frame_rate': new_rate})
+                processed = processed.set_frame_rate(44100)
+
+                # Export to temp file
+                processed.export(self.temp_file, format="mp3")
+
+                # Point playback to the temp file
+                playback_path = self.temp_file
+
+                # Adjust Start Position
+                playback_start = start_pos / speed
+
+            except Exception as e:
+                print(f"[audio] Error processing speed: {e}. Falling back to 1.0x.")
+                playback_path = path
+                playback_start = start_pos
+                self.current_speed = 1.0
+
+        # Sent to the appropriate backend (Real or Simulated)
         if HAS_PYGAME:
-            self._play_real(path, start_pos)
+            self._play_real(playback_path, playback_start)
         else:
             self._play_simulated(path, start_pos)
 
@@ -135,7 +182,7 @@ class AudioEngine:
             else:
                 self.set_volume(self.volume)
 
-            print(f"[audio] PLAY (real) {path.name} from {start_pos:.1f}s")
+            print(f"[audio] PLAY (real) {path.name} from {start_pos:.1f}s (Speed: {self.current_speed}x)")
         except Exception as e:
             # If there is an error or file not found, it catches it out.
             print(f"[audio] ERROR playing {path}: {e}")
@@ -177,17 +224,21 @@ class AudioEngine:
     def _seek_real(self, seconds: float) -> None:
         assert pygame is not None
         try:
-            # Reloads the current track and starts from the new position.
-            pygame.mixer.music.load(str(self.current_path))
-            pygame.mixer.music.play(loops=0, start=seconds)
-            
-            # Re-apply the correct volume (or silence) after reloaded the track
+            actual_pos = seconds / self.current_speed
+
+            target_file = self.current_path
+            if self.current_speed != 1.0 and self.temp_file.exists():
+                target_file = self.temp_file
+
+            pygame.mixer.music.load(str(target_file))
+            pygame.mixer.music.play(loops=0, start=actual_pos)
+
             if self.muted:
                 pygame.mixer.music.set_volume(0.0)
             else:
                 self.set_volume(self.volume)
-            
-            print(f"[audio] SEEK (real) -> {seconds:.1f}s")
+
+            print(f"[audio] SEEK -> {seconds:.1f}s")
         except Exception as e:
             print(f"[audio] ERROR seeking: {e}")
 
