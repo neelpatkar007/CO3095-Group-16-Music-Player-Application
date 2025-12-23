@@ -427,6 +427,9 @@ def play_next(state: PlayerState, query: str) -> None:
         print("[queue] Error: Track did not insert correctly.")
         return
 
+    print(f"[queue] Queued next: '{found.display_name}'.")
+
+
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
