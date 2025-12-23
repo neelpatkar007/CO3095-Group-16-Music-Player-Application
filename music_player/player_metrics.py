@@ -91,6 +91,18 @@ def show_liked_songs(state: PlayerState) -> None:
     """
     S3-09: View all liked songs.
     """
+    print("[metrics] --- Liked Songs ---")
+    if not state.liked_tracks:
+        print("  (No liked songs yet)")
+        return
+
+    found = False
+    for t in state.library_tracks:
+        if str(t.path) in state.liked_tracks:
+            print(f"  ♥ {t.display_name}")
+            found = True
+    if not found:
+        print("  (Liked songs not found in current library scan)")
 
 def show_top_tracks(state: PlayerState) -> None:
      if state is None:
