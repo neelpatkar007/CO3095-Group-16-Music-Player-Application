@@ -398,6 +398,8 @@ def play_next(state: PlayerState, query: str) -> None:
         return
 
     if not isinstance(state.tracks, list):
+        print("[queue] Error: Queue corrupted.")
+        state.tracks = []
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
