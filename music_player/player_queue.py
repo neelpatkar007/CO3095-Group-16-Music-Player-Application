@@ -404,6 +404,8 @@ def play_next(state: PlayerState, query: str) -> None:
     found = _find_track(state, query)
 
     if not found:
+        print(f"[queue] Song '{query}' not found in Library.")
+        return
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
