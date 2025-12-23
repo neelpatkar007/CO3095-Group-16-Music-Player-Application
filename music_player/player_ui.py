@@ -96,10 +96,10 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
     if state is None:
         return
 
-    # Validation check - Ensure track list is a list of track objects
-    tracks = state.tracks
+    tracks = state.library_tracks
+
     if not isinstance(tracks, list) or not all(
-        isinstance(t, Track) for t in tracks
+            isinstance(t, Track) for t in tracks
     ):
         print("[ui] Warning: Library is in an invalid state.")
         return
@@ -108,32 +108,28 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
         print("[ui] Warning: Library is empty.")
         return
 
-    # Ensure current index is within bounds (valid before use)
-    if state.current_index < 0:
-        state.current_index = 0
-    elif state.current_index >= len(tracks):
-        state.current_index = len(tracks) - 1
-
-    # Metadata warning (Optional UI warning)
+    # Metadata warning
     if any(not t.display_name for t in tracks):
         print("[ui] Warning: Some tracks have missing titles.")
 
-    # Single-track warning (Optional UI warning)
+    # Single-track warning
     if len(tracks) == 1:
         print("[ui] Note: Only one track in the library.")
 
-    # Iterate and print each track with indicator
+    # Iterate and print Master Library
     for idx, track in enumerate(tracks):
-        if idx == state.current_index:
+        # Check if this specific track object is the one currently playing
+        current = state.current_track
+
+        if current and track == current:
             # Determine indicator marker based on playback status
             if state.is_playing:
-                marker = "▶" # Playing Indicator
+                marker = "▶"  # Playing Indicator
             elif state.is_paused:
-                marker = "‖" # Paused Indicator
+                marker = "‖"  # Paused Indicator
             else:
-                marker = "•" # Stopped Indicator
+                marker = "•"  # Stopped Indicator
         else:
-            marker = " " # No Indicator
+            marker = " "  # No Indicator
 
-        # Example output: ▶ 01: Song Title - Artist Name
         print(f"{marker} {idx + 1:02d}: {track.display_name}")
