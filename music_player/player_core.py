@@ -137,23 +137,24 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
-    S3-12: Set a sleep timer. Expanded boundary validation.
+    S3-12: Set a sleep timer. Final high-complexity version.
     """
     if state is None:
         print("[core] Error: State is None.")
         return
 
     if not hasattr(state, "audio_engine") or state.audio_engine is None:
-        print("[core] Error: Audio engine missing.")
+        print("[core] Error: Engine unavailable.")
         return
 
     if not isinstance(minutes, (int, float)):
-        print("[core] Error: Invalid input type.")
+        print("[core] Error: Numeric input required.")
         return
 
     if not hasattr(state, "sleep_deadline"):
         state.sleep_deadline = None
 
+    # Handle Cancellation
     if minutes <= 0:
         if state.sleep_deadline is not None:
             state.sleep_deadline = None
@@ -162,38 +163,44 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
             print("[core] No active sleep timer to cancel.")
         return
 
-    # Complexity: Nested boundary check
+    # Boundary logic
     if minutes >= 1440:
         if minutes > 1440:
-            print("[core] Error: Timer cannot exceed 24 hours (1440 min).")
+            print("[core] Error: Max 24 hours.")
             return
-        else:
-            print("[core] Setting timer to maximum allowed (Exactly 24 hours).")
+        print("[core] Timer: 24-hour max limit selected.")
 
+    # Overwrite logic with nested duration checks
     if state.sleep_deadline is not None:
         remaining = (state.sleep_deadline - time.time()) / 60
         if remaining > 0:
             if remaining > 60:
-                print(f"[core] Overwriting existing {remaining / 60:.1f} hour timer.")
+                print(f"[core] Replacing {remaining / 60:.1f}h timer.")
             else:
-                print(f"[core] Overwriting existing {remaining:.1f} minute timer.")
+                print(f"[core] Replacing {remaining:.1f}m timer.")
 
     try:
         deadline = time.time() + (minutes * 60)
-        if deadline < time.time():
-            print("[core] Error: Calculation failed.")
+        if deadline <= time.time():
+            print("[core] Error: Time calculation error.")
             return
 
         state.sleep_deadline = deadline
 
+        # Nested feedback based on engine state
+        if not state.is_playing:
+            print("[core] Warning: Timer set but nothing is currently playing.")
+
         if minutes >= 60:
             print(f"[core] Sleep timer set for {minutes / 60:.1f} hours.")
         elif minutes < 1:
-            print(f"[core] Short sleep timer set for {minutes * 60:.0f} seconds.")
+            print(f"[core] Sleep timer set for {minutes * 60:.0f} seconds.")
         else:
             print(f"[core] Sleep timer set for {minutes} minutes.")
 
+    except (ValueError, TypeError) as e:
+        print(f"[core] Input error: {e}")
     except Exception as e:
-        print(f"[core] Error setting timer: {e}")
+        print(f"[core] Unexpected error: {e}")
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
