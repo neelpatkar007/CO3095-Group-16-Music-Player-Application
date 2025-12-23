@@ -46,6 +46,7 @@ class PlayerState:
         # S3-07: Playback Speed
 
         # S3-12: Sleep Timer
+        self.sleep_deadline: float | None = None  # Timestamp to stop
 
         # S3-08 & S3-11: Likes and Counts
 
