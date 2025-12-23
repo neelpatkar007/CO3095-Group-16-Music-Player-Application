@@ -246,6 +246,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # S3-06: Clear Queue
     elif base == "/q.clear":
+        player_queue.clear_queue(state)
     # S3-07: Playback Speed
 
     # S3-08: Like/Unlike
