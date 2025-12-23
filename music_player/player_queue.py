@@ -412,6 +412,9 @@ def play_next(state: PlayerState, query: str) -> None:
     current_len = len(state.tracks)
     insert_idx = state.current_index + 1
 
+    if insert_idx < 0:
+        insert_idx = 0
+
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
