@@ -257,7 +257,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
         except (IndexError, ValueError):
             print("Usage: /speed <0.5 - 2.0>")
 
-    # S3-08: Like/Unlike
+    elif base == "/like":
+        player_metrics.toggle_like(state)
 
     # S3-09: View Liked
 
