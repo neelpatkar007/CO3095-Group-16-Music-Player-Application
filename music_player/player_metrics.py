@@ -28,6 +28,11 @@ def toggle_like(state: PlayerState) -> None:
         print("[metrics] Error: Liked tracks data corrupted.")
         return
 
+    track = state.current_track
+    if track is None:
+        print("[metrics] No track playing.")
+        return
+
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
 
