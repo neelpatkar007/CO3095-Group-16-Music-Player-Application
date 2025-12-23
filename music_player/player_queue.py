@@ -411,6 +411,8 @@ def clear_queue(state: PlayerState) -> None:
     _ensure_queue_decoupled(state)
 
     current = None
+    if 0 <= state.current_index < len(state.tracks):
+        current = state.tracks[state.current_index]
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
