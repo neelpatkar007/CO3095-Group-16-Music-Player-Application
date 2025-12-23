@@ -414,6 +414,8 @@ def play_next(state: PlayerState, query: str) -> None:
 
     if insert_idx < 0:
         insert_idx = 0
+    elif insert_idx > current_len:
+        insert_idx = current_len
 
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
