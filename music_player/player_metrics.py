@@ -42,6 +42,26 @@ def toggle_like(state: PlayerState) -> None:
         print("[metrics] Error: Track path is empty.")
         return
 
+    if path_str in state.liked_tracks:
+        state.liked_tracks.remove(path_str)
+
+        if path_str in state.liked_tracks:
+            print("[metrics] Error: Failed to remove like.")
+            return
+
+        print(f"[metrics] Unliked '{track.display_name}'.")
+
+    else:
+        state.liked_tracks.add(path_str)
+
+        if path_str not in state.liked_tracks:
+            print("[metrics] Error: Failed to add like.")
+            return
+
+        print(f"[metrics] Liked '{track.display_name}'.")
+
+    save_data(state)
+
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
 
