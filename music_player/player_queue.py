@@ -50,7 +50,6 @@ def next_track(state: PlayerState) -> None:
         new = old
         wrapped = False
         changed = False
-    # -----------------------------
     elif state.shuffle_active and n > 1:
         # S3-01: Shuffle logic with duplicate avoidance
         if n == 2:
