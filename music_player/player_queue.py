@@ -386,7 +386,12 @@ def add_to_queue(state: PlayerState, query: str) -> None:
     """S3-04: Add songs to the end of the current queue (Decoupled)."""
 
 def play_next(state: PlayerState, query: str) -> None:
-    """S3-05: Queue a specific song to play next (Decoupled)."""
+    """
+    S3-05: Queue a specific song to play next (Decoupled).
+    """
+    if state is None:
+        print("[queue] Error: State is None.")
+        return
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
