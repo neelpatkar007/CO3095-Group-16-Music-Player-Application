@@ -389,6 +389,14 @@ def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
+    """
+    S3-04: Remove a song from the queue by Index or Name.
+    """
+
+def clear_queue(state: PlayerState) -> None:
+    """S3-06: Clear the queue (keep playing current song)."""
+
+def show_queue(state: PlayerState) -> None:
     print("[queue] --- History ---")
     if not state.history:
         print("  (Empty)")
@@ -420,26 +428,6 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
     if state.shuffle_active:
         print("\n  (Note: Shuffle is ON, playing order is randomized)")
-
-def clear_queue(state: PlayerState) -> None:
-    """S3-06: Clear the queue (keep playing current song)."""
-
-def show_queue(state: PlayerState) -> None:
-    print("[queue] --- History ---")
-    if not state.history:
-        print("  (Empty)")
-    else:
-        for t in state.history[-5:]:
-            print(f"  [Played] {t.display_name}")
-
-    print("\n[queue] --- Up Next ---")
-    if not state.tracks:
-        print("  (Empty)")
-        return
-
-    if state.current_index >= len(state.tracks):
-        print("  (End of queue)")
-        return
 
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
