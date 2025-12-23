@@ -48,6 +48,8 @@ class PlayerState:
         # S3-12: Sleep Timer
         self.sleep_deadline: float | None = None  # Timestamp to stop
 
+        self.play_counts: Dict[str, int] = {}
+
         self.liked_tracks: Set[str] = set()
 
     @property

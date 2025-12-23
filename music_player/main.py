@@ -269,7 +269,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             playlists_basic.sort_playlist(state, args[0], args[1])
 
-    # S3-11: Most Played
+    elif base == "/top":
+        player_metrics.show_top_tracks(state)
 
     # S3-12: Sleep Timer
     elif base == "/sleep":
