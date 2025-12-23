@@ -14,19 +14,21 @@ Date: 17/12/2025
 
 ## 2. Sprint Log Table
 
-| Sprint  | Scrum Master   | Description / What you did                                          | Sprint Start Date  | Sprint End Date   |
-|---------|----------------|---------------------------------------------------------------------|--------------------|-------------------|
-| 1       | Neel Patkar    | Facilitated sprint planning, daily stand-ups, and sprint review.    | 12/11/2025         | 03/12/2025        |
-|         |                | Tracked progress against the sprint goal                            |                    |                   |
-|         |                | Maintained and updated the sprint board                             |                    |                   |
-|         |                | Ensured all user stories met the Definition of Done before closure  |                    |                   |
-|         |                |                                                                     |                    |                   |
-| 2       | Sanil Panchal  | Facilitated sprint planning, daily stand-ups, and sprint review.    | 04/12/2025         | 15/12/2025        |
-|         |                | Monitored progress against the sprint goal                          |                    |                   |
-|         |                | Maintained and updated the sprint board                             |                    |                   |
-|         |                | Ensured all user stories met the Definition of Done before closure  |                    |                   |
-|         |                | Supported team communication and helped remove obstacles            |                    |                   |
-
+| Sprint | Scrum Master   | Description / What you did                                          | Sprint Start Date  | Sprint End Date   |
+|--------|----------------|---------------------------------------------------------------------|--------------------|-------------------|
+| 1      | Neel Patkar    | Facilitated sprint planning, daily stand-ups, and sprint review.    | 12/11/2025         | 03/12/2025        |
+|        |                | Tracked progress against the sprint goal                            |                    |                   |
+|        |                | Maintained and updated the sprint board                             |                    |                   |
+|        |                | Ensured all user stories met the Definition of Done before closure  |                    |                   |
+|        |                |                                                                     |                    |                   |
+| 2      | Sanil Panchal  | Facilitated sprint planning, daily stand-ups, and sprint review.    | 04/12/2025         | 15/12/2025        |
+|        |                | Monitored progress against the sprint goal                          |                    |                   |
+|        |                | Maintained and updated the sprint board                             |                    |                   |
+|        |                | Ensured all user stories met the Definition of Done before closure  |                    |                   |
+|        |                | Supported team communication and helped remove obstacles            |                    |                   |
+|        |                |                                                                     |                    |                   |
+| 3      |                |                                                                     |                    |                   |
+|        |                |                                                                     |                    |                   |
 
 ## 3. Sprint Metrics
 
