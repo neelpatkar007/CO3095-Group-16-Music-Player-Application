@@ -13,6 +13,15 @@ DATA_FILE = Path("player_data.json")
 
 def load_data(state: PlayerState) -> None:
     """Load likes and play counts from JSON."""
+    if not DATA_FILE.exists():
+        return
+    try:
+        with open(DATA_FILE, "r") as f:
+            data = json.load(f)
+            state.liked_tracks = set(data.get("likes", []))
+            state.play_counts = data.get("counts", {})
+    except Exception as e:
+        print(f"[metrics] Error loading data: {e}")
 
 def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
