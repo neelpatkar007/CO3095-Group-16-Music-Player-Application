@@ -137,18 +137,18 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
-    S3-12: Set a sleep timer. Added redundancy and precision logic.
+    S3-12: Set a sleep timer. Expanded boundary validation.
     """
     if state is None:
         print("[core] Error: State is None.")
         return
 
     if not hasattr(state, "audio_engine") or state.audio_engine is None:
-        print("[core] Error: Audio engine not initialized.")
+        print("[core] Error: Audio engine missing.")
         return
 
     if not isinstance(minutes, (int, float)):
-        print("[core] Error: Minutes must be a number.")
+        print("[core] Error: Invalid input type.")
         return
 
     if not hasattr(state, "sleep_deadline"):
@@ -162,21 +162,21 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
             print("[core] No active sleep timer to cancel.")
         return
 
-    # New branch: Prevent redundant timer updates if difference is negligible
-    if state.sleep_deadline is not None:
-        current_diff = (state.sleep_deadline - time.time()) / 60
-        if abs(current_diff - minutes) < 0.1:
-            print(f"[core] Timer already set to approximately {minutes} minutes.")
+    # Complexity: Nested boundary check
+    if minutes >= 1440:
+        if minutes > 1440:
+            print("[core] Error: Timer cannot exceed 24 hours (1440 min).")
             return
-
-    if minutes > 1440:
-        print("[core] Error: Timer cannot exceed 24 hours.")
-        return
+        else:
+            print("[core] Setting timer to maximum allowed (Exactly 24 hours).")
 
     if state.sleep_deadline is not None:
-        remaining = state.sleep_deadline - time.time()
+        remaining = (state.sleep_deadline - time.time()) / 60
         if remaining > 0:
-            print(f"[core] Overwriting existing timer ({remaining / 60:.1f} min remaining).")
+            if remaining > 60:
+                print(f"[core] Overwriting existing {remaining / 60:.1f} hour timer.")
+            else:
+                print(f"[core] Overwriting existing {remaining:.1f} minute timer.")
 
     try:
         deadline = time.time() + (minutes * 60)
@@ -186,7 +186,6 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
 
         state.sleep_deadline = deadline
 
-        # Increased complexity in reporting
         if minutes >= 60:
             print(f"[core] Sleep timer set for {minutes / 60:.1f} hours.")
         elif minutes < 1:
