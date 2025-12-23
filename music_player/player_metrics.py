@@ -46,3 +46,7 @@ def show_top_tracks(state: PlayerState) -> None:
      if not isinstance(state.play_counts, dict):
          print("[metrics] Error: Play counts corrupted.")
          return
+
+     if not state.play_counts:
+         print("[metrics] No play history yet.")
+         return
