@@ -237,6 +237,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
             player_queue.set_loop_mode(state, args[0])
 
     # S3-03: View Queue/History
+    elif base == "/queue":
+        player_queue.show_queue(state)
 
     # S3-04: Add to Queue
     elif base == "/q.add":

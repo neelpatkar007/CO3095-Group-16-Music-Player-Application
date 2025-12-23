@@ -23,6 +23,8 @@ def next_track(state: PlayerState) -> None:
     if not state.tracks:
         print("[queue] No tracks available.")
         return
+    if state.current_track:
+        state.history.append(state.current_track)
     n = len(state.tracks)
     if n == 0:
         print("[queue] Library empty.")
@@ -565,7 +567,37 @@ def clear_queue(state: PlayerState) -> None:
         print("[queue] (Player is stopped)")
 
 def show_queue(state: PlayerState) -> None:
-    """S3-03: View queue (starting from current track) and history."""
+    print("[queue] --- History ---")
+    if not state.history:
+        print("  (Empty)")
+    else:
+        for t in state.history[-5:]:
+            print(f"  [Played] {t.display_name}")
+
+    print("\n[queue] --- Up Next ---")
+    if not state.tracks:
+        print("  (Empty)")
+
+    if state.current_index >= len(state.tracks):
+        print("  (End of queue)")
+        return
+
+    for i in range(state.current_index, len(state.tracks)):
+        track = state.tracks[i]
+        marker = " "
+
+        if i == state.current_index:
+            if state.is_playing:
+                marker = "▶"
+            elif state.is_paused:
+                marker = "‖"
+            else:
+                marker = "•"
+
+        print(f"  {marker} {i + 1}. {track.display_name}")
+
+    if state.shuffle_active:
+        print("\n  (Note: Shuffle is ON, playing order is randomized)")
 
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
