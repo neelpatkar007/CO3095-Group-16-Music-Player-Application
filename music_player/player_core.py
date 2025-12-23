@@ -132,4 +132,23 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
 
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
+    if state is None: return
+    if not isinstance(speed, (int, float)):
+        print("[core] Error: Speed must be a number.")
+        return
+    if speed < 0.5 or speed > 2.0:
+        print("[core] Speed must be between 0.5x and 2.0x.")
+        return
+    if hasattr(state, "playback_speed") and state.playback_speed == speed:
+        print(f"[core] Speed is already {speed}x.")
+        return
+    old_speed = getattr(state, "playback_speed", 1.0)
+    state.playback_speed = speed
+    print(f"[core] Playback speed set to {speed}x.")
+    if state.is_playing:
+        print("[core] Applying speed change...")
+        play(state)
+    elif state.is_paused:
+        print("[core] New speed will apply when you resume playback.")
+
 
