@@ -245,7 +245,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/q.remove":
         player_queue.remove_from_queue(state, " ".join(args))
     # S3-05: Play Next
-
+    elif base == "/playnext":
+        player_queue.play_next(state, " ".join(args))
     # S3-06: Clear Queue
 
     # S3-07: Playback Speed

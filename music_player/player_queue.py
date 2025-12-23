@@ -426,7 +426,50 @@ def add_to_queue(state: PlayerState, query: str) -> None:
 
 
 def play_next(state: PlayerState, query: str) -> None:
-    """S3-05: Queue a specific song to play next (Decoupled)."""
+    """
+    S3-05: Queue a specific song to play next (Decoupled).
+    """
+    if state is None:
+        print("[queue] Error: State is None.")
+        return
+
+    if not query:
+        print("[queue] Usage: /playnext <index|name>")
+        return
+
+    if not isinstance(state.tracks, list):
+        print("[queue] Error: Queue corrupted.")
+        state.tracks = []
+
+    found = _find_track(state, query)
+
+    if not found:
+        print(f"[queue] Song '{query}' not found in Library.")
+        return
+
+    _ensure_queue_decoupled(state)
+
+    current_len = len(state.tracks)
+    insert_idx = state.current_index + 1
+
+    if insert_idx < 0:
+        insert_idx = 0
+    elif insert_idx > current_len:
+        insert_idx = current_len
+
+    try:
+        state.tracks.insert(insert_idx, found)
+    except Exception as e:
+        print(f"[queue] Insertion failed: {e}")
+        return
+
+    if state.tracks[insert_idx] != found:
+        print("[queue] Error: Track did not insert correctly.")
+        return
+
+    print(f"[queue] Queued next: '{found.display_name}'.")
+
+
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """
