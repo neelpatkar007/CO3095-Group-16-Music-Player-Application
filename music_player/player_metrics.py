@@ -37,6 +37,11 @@ def toggle_like(state: PlayerState) -> None:
         print("[metrics] Error: Track has no valid path.")
         return
 
+    path_str = str(track.path)
+    if not path_str.strip():
+        print("[metrics] Error: Track path is empty.")
+        return
+
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
 
