@@ -399,6 +399,8 @@ def clear_queue(state: PlayerState) -> None:
         print("[queue] Error: State is None.")
         return
 
+    if not hasattr(state, "tracks") or state.tracks is None:
+
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
 
