@@ -401,6 +401,8 @@ def play_next(state: PlayerState, query: str) -> None:
         print("[queue] Error: Queue corrupted.")
         state.tracks = []
 
+    found = _find_track(state, query)
+
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
 
