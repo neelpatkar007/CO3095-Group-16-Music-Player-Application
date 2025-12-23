@@ -92,16 +92,38 @@ def show_liked_songs(state: PlayerState) -> None:
     S3-09: View all liked songs.
     """
     print("[metrics] --- Liked Songs ---")
+
+    if state is None:
+        print("[metrics] Error: State is missing.")
+        return
+    if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
+        print("  (No liked songs data)")
+        return
     if not state.liked_tracks:
         print("  (No liked songs yet)")
         return
+    if not hasattr(state, "library_tracks") or state.library_tracks is None:
+        print("[metrics] Error: Library tracks missing.")
+        return
+    if not isinstance(state.library_tracks, list):
+        print("[metrics] Error: Library data corrupted.")
+        return
 
-    found = False
+    found_count = 0
+
     for t in state.library_tracks:
-        if str(t.path) in state.liked_tracks:
-            print(f"  ♥ {t.display_name}")
-            found = True
-    if not found:
+        if t is None:
+            continue
+        if not hasattr(t, "path") or t.path is None:
+            continue
+        path_str = str(t.path)
+        if path_str in state.liked_tracks:
+            name = getattr(t, "display_name", "Unknown Title")
+            if not name:
+                name = "Unknown Title"
+            print(f"  ♥ {name}")
+            found_count += 1
+    if found_count == 0:
         print("  (Liked songs not found in current library scan)")
 
 def show_top_tracks(state: PlayerState) -> None:
