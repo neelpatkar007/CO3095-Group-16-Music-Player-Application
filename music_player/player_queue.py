@@ -419,6 +419,9 @@ def play_next(state: PlayerState, query: str) -> None:
 
     try:
         state.tracks.insert(insert_idx, found)
+    except Exception as e:
+        print(f"[queue] Insertion failed: {e}")
+        return
 
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
