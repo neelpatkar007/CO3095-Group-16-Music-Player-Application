@@ -429,7 +429,11 @@ def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
-    """S3-04: Remove a song from the queue by Index or Name."""
+    """
+    S3-04: Remove a song from the queue by Index or Name.
+    """
+
+    if state is None: return
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
