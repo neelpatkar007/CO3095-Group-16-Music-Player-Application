@@ -25,6 +25,15 @@ def load_data(state: PlayerState) -> None:
 
 def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
+    data = {
+        "likes": list(state.liked_tracks),
+        "counts": state.play_counts
+    }
+    try:
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f)
+    except Exception as e:
+        print(f"[metrics] Error saving data: {e}")
 
 def toggle_like(state: PlayerState) -> None:
     if state is None:
