@@ -416,6 +416,7 @@ def clear_queue(state: PlayerState) -> None:
 
     if current:
         if not hasattr(current, "display_name"):
+            print("[queue] Warning: Current track data seems corrupted.")
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
