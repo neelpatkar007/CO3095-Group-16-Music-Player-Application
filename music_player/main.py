@@ -256,7 +256,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
             player_core.set_playback_speed(state, float(args[0]))
         except (IndexError, ValueError):
             print("Usage: /speed <0.5 - 2.0>")
-
+    # S3-08: Like a song
     elif base == "/like":
         player_metrics.toggle_like(state)
 
