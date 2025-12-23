@@ -8,9 +8,9 @@ User Stories:
  - S3-07: Set playback speed
  - S3-12: Set a sleep timer
 """
-from __future__ import annotations
-# from player_state import PlayerState
+import time
 from music_player.player_state import PlayerState
+from music_player import player_queue, player_metrics
 
 
 def play(state: PlayerState) -> None:
@@ -40,10 +40,10 @@ def play(state: PlayerState) -> None:
         return
 
     # Fresh play from the current position
-    state.audio_engine.play(track.path, start_pos=state.position_seconds)
+    state.audio_engine.play(track.path, start_pos=state.position_seconds, speed=state.playback_speed)
     state.is_playing = True
     state.is_paused = False
-    print(f"[core] Playing: {track.display_name}")
+    print(f"[core] Playing: {track.display_name} ({state.playback_speed}x)")
 
 
 def pause(state: PlayerState) -> None:
@@ -82,50 +82,22 @@ def stop(state: PlayerState) -> None:
 
 
 def update_playback(state: PlayerState, delta_seconds: float) -> None:
-    """
-    Advance the playback position based on elapsed time.
-
-    Called periodically from the CLI loop so that playback continues
-    while the user types commands (S1-12).
-
-    Extended for Sprint 2:
-    - If the current queue is a playlist (state.tracks is not state.library_tracks),
-      automatically advance to the next track when the current one finishes.
-    - If using the main library queue, keep original behaviour (stop at end).
-    """
-    # Skip if time delta is invalid
-    if delta_seconds <= 0:
-        return
-    # Only update position if currently playing
+    # Skip if not playing
     if not state.is_playing or state.is_paused:
         return
-    # Advance position
-    state.position_seconds += delta_seconds
-    # Check if track duration is known and if we have passed it
+
+    # S3-07: Apply Playback Speed
+    adjusted_delta = delta_seconds * state.playback_speed
+
+    state.position_seconds += adjusted_delta
+
     track = state.current_track
     if track and track.duration_seconds is not None:
         if state.position_seconds >= track.duration_seconds:
-            # End of track reached – stop.
+            # Track Finished
+            player_metrics.record_play(state)
             state.position_seconds = track.duration_seconds
-
-            # Decide whether to auto-advance or stop
-            is_playlist_queue = hasattr(state, "library_tracks") and (
-                state.tracks is not state.library_tracks
-            )
-
-            if is_playlist_queue:
-                # Auto-advance within playlist queue
-                from music_player import player_queue
-
-                # Reset position and move to next track; next_track()
-                # will keep state.is_playing True and start the engine.
-                state.position_seconds = 0.0
-                player_queue.next_track(state)
-            else:
-                # Original behaviour for main library queue: just stop.
-                state.is_playing = False
-                state.audio_engine.stop()
-                print("[core] Track finished.")
+            player_queue.next_track(state)
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """S3-12: Set a sleep timer."""
