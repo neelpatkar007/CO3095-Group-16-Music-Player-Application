@@ -44,7 +44,7 @@ class PlayerState:
         # S3-03: History
 
         # S3-07: Playback Speed
-
+        self.playback_speed: float = 1.0
         # S3-12: Sleep Timer
 
         # S3-08 & S3-11: Likes and Counts
