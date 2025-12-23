@@ -47,7 +47,7 @@ class PlayerState:
 
         # S3-12: Sleep Timer
 
-        # S3-08 & S3-11: Likes and Counts
+        self.play_counts: Dict[str, int] = {}
 
 
     @property
