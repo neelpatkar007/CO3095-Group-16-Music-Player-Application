@@ -5,13 +5,21 @@ from pathlib import Path
 # If pygame is not installed, or it fails, then the code falls back to a simulated mode.
 try:
     import pygame
-    pygame.mixer.init()
+    pygame.mixer.init(frequency=44100)
     HAS_PYGAME = True
 except Exception:
     pygame = None
     HAS_PYGAME = False
     print("[audio] pygame not available – using simulated audio backend.")
 
+# Pydub check (Required for real speed change)
+try:
+    from pydub import AudioSegment
+
+    HAS_PYDUB = True
+except ImportError:
+    HAS_PYDUB = False
+    print("[audio] pydub not found. Speed changes will be simulated.")
 
 class AudioEngine:
     '''
@@ -30,13 +38,52 @@ class AudioEngine:
         self.volume: int = 100
         self.muted: bool = False
 
-    def play(self, path: Path, start_pos: float = 0.0) -> None:
+        # Track the current speed to adjust seek times correctly
+        self.current_speed: float = 1.0
+
+        # Temporary file for speed-modified audio
+        self.temp_file = Path("temp_speed_audio.mp3")
+
+    def play(self, path: Path, start_pos: float = 0.0, speed: float = 1.0) -> None:
         '''
         Loads and starts to play an audio file from a specific position.
         '''
         self.current_path = path
         self.playing = True
         self.paused = False
+        self.current_speed = speed
+
+        # Determine which file to play (Original or Temp)
+        playback_path = path
+        playback_start = start_pos
+
+        # Logic for Real Speed Change
+        if HAS_PYDUB and speed != 1.0:
+            try:
+                print(f"[audio] Processing audio for {speed}x speed... (this may take a moment)")
+
+                # Load original audio
+                seg = AudioSegment.from_file(path)
+
+                # Change Speed
+                new_rate = int(seg.frame_rate * speed)
+                processed = seg._spawn(seg.raw_data, overrides={'frame_rate': new_rate})
+                processed = processed.set_frame_rate(44100)
+
+                # Export to temp file
+                processed.export(self.temp_file, format="mp3")
+
+                # Point playback to the temp file
+                playback_path = self.temp_file
+
+                # 5. Adjust Start Position
+                playback_start = start_pos / speed
+
+            except Exception as e:
+                print(f"[audio] Error processing speed: {e}. Falling back to 1.0x.")
+                playback_path = path
+                playback_start = start_pos
+                self.current_speed = 1.0
 
         # Sent to the appropriate backend - Real or Simulated.
         if HAS_PYGAME:
