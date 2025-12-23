@@ -414,6 +414,9 @@ def clear_queue(state: PlayerState) -> None:
     if 0 <= state.current_index < len(state.tracks):
         current = state.tracks[state.current_index]
 
+    if current:
+        if not hasattr(current, "display_name"):
+
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
 
