@@ -33,6 +33,10 @@ def toggle_like(state: PlayerState) -> None:
         print("[metrics] No track playing.")
         return
 
+    if not hasattr(track, "path") or track.path is None:
+        print("[metrics] Error: Track has no valid path.")
+        return
+
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
 
