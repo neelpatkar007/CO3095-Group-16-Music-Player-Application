@@ -601,8 +601,15 @@ def show_queue(state: PlayerState) -> None:
 
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
-    Internal Helper:
-    If the current play queue IS the main library or a playlist then
-    create a copy of it before modifying so that temporary queue
-    changes from editing the actual Library/Playlist.
+    Helper Function:
+    Create a copy of the current library/playlist so that all changes
+    made to a queue are only to the temp copy queue and not the real playlist.
     """
+    if state.tracks is state.library_tracks:
+        state.tracks = list(state.library_tracks)
+        return
+
+    for pl in state.playlists:
+        if state.tracks is pl.tracks:
+            state.tracks = list(pl.tracks)
+            return
