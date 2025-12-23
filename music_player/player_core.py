@@ -9,6 +9,7 @@ User Stories:
  - S3-12: Set a sleep timer
 """
 import time
+from __future__ import annotations
 from music_player.player_state import PlayerState
 from music_player import player_queue, player_metrics
 
@@ -69,6 +70,28 @@ def stop(state: PlayerState) -> None:
 
 def update_playback(state: PlayerState, delta_seconds: float) -> None:
     # Skip if not playing
+    """
+    Advance the playback position based on elapsed time.
+
+    Called periodically from the CLI loop so that playback continues
+    while the user types commands (S1-12).
+
+    Extended for Sprint 2:
+    - If the current queue is a playlist (state.tracks is not state.library_tracks),
+      automatically advance to the next track when the current one finishes.
+    - If using the main library queue, keep original behaviour (stop at end).
+    """
+    # S3-12: Check Sleep Timer
+    if hasattr(state, "sleep_deadline") and state.sleep_deadline and time.time() > state.sleep_deadline:
+        print("\n[timer] Sleep timer reached. Stopping playback.")
+        stop(state)
+        state.sleep_deadline = None # Reset
+        return
+
+    # Skip if time delta is invalid
+    if delta_seconds <= 0:
+        return
+    # Only update position if currently playing
     if not state.is_playing or state.is_paused:
         return
 
@@ -86,8 +109,73 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
             player_queue.next_track(state)
 
 
+
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
-    """S3-12: Set a sleep timer."""
+    """
+    S3-12: Set a sleep timer. Final high-complexity version.
+    """
+    if state is None:
+        print("[core] Error: State is None.")
+        return
+       if not hasattr(state, "audio_engine") or state.audio_engine is None:
+        print("[core] Error: Engine unavailable.")
+        return
+
+    if not isinstance(minutes, (int, float)):
+        print("[core] Error: Numeric input required.")
+        return
+
+    if not hasattr(state, "sleep_deadline"):
+        state.sleep_deadline = None
+
+    # Handle Cancellation
+    if minutes <= 0:
+        if state.sleep_deadline is not None:
+            state.sleep_deadline = None
+            print("[core] Sleep timer cancelled.")
+        else:
+            print("[core] No active sleep timer to cancel.")
+        return
+
+    # Boundary logic
+    if minutes >= 1440:
+        if minutes > 1440:
+            print("[core] Error: Max 24 hours.")
+            return
+        print("[core] Timer: 24-hour max limit selected.")
+
+    # Overwrite logic with nested duration checks
+    if state.sleep_deadline is not None:
+        remaining = (state.sleep_deadline - time.time()) / 60
+        if remaining > 0:
+            if remaining > 60:
+                print(f"[core] Replacing {remaining / 60:.1f}h timer.")
+            else:
+                print(f"[core] Replacing {remaining:.1f}m timer.")
+
+    try:
+        deadline = time.time() + (minutes * 60)
+        if deadline <= time.time():
+            print("[core] Error: Time calculation error.")
+            return
+
+        state.sleep_deadline = deadline
+
+        # Nested feedback based on engine state
+        if not state.is_playing:
+            print("[core] Warning: Timer set but nothing is currently playing.")
+
+        if minutes >= 60:
+            print(f"[core] Sleep timer set for {minutes / 60:.1f} hours.")
+        elif minutes < 1:
+            print(f"[core] Sleep timer set for {minutes * 60:.0f} seconds.")
+        else:
+            print(f"[core] Sleep timer set for {minutes} minutes.")
+
+    except (ValueError, TypeError) as e:
+        print(f"[core] Input error: {e}")
+    except Exception as e:
+        print(f"[core] Unexpected error: {e}")
 
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
