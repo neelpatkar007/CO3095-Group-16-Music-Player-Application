@@ -53,3 +53,9 @@ def show_top_tracks(state: PlayerState) -> None:
 
      if not hasattr(state, "library_tracks") or not state.library_tracks:
          print("[metrics] Warning: Library empty, cannot resolve song names.")
+
+     try:
+         sorted_items = sorted(state.play_counts.items(), key=lambda x: x[1], reverse=True)
+     except Exception:
+         print("[metrics] Error sorting play history.")
+         return
