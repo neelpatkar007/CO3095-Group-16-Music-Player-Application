@@ -35,6 +35,6 @@ def show_liked_songs(state: PlayerState) -> None:
     """
 
 def show_top_tracks(state: PlayerState) -> None:
-    """
-    S3-11: Show most played songs.
-    """
+     if state is None:
+        print("[metrics] Error: State is None.")
+        return
