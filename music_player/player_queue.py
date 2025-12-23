@@ -432,6 +432,11 @@ def show_queue(state: PlayerState) -> None:
         for t in state.history[-5:]:
             print(f"  [Played] {t.display_name}")
 
+    print("\n[queue] --- Up Next ---")
+    if not state.tracks:
+        print("  (Empty)")
+        return
+
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
     Internal Helper:
