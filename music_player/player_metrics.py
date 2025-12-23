@@ -38,3 +38,7 @@ def show_top_tracks(state: PlayerState) -> None:
      if state is None:
         print("[metrics] Error: State is None.")
         return
+
+     if not hasattr(state, "play_counts") or state.play_counts is None:
+         print("[metrics] No play history data available.")
+         return
