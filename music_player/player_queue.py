@@ -383,13 +383,102 @@ def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper: Find track by Index (1-based) OR Name."""
 
 def add_to_queue(state: PlayerState, query: str) -> None:
-    """S3-04: Add songs to the end of the current queue (Decoupled)."""
+    """
+    S3-04: Add songs to the end of the current queue (Decoupled).
+    """
+    if state is None:
+        print("[queue] Error: State is None.")
+        return
+
+    if not query:
+        print("[queue] Usage: /q.add <index|name>")
+        return
+
+    if not hasattr(state, "library_tracks") or not state.library_tracks:
+        print("[queue] Error: Library is empty or missing.")
+        return
+
+    if not hasattr(state, "tracks") or state.tracks is None:
+        state.tracks = []
+
+    found = _find_track(state, query)
+
+    if not found:
+        print(f"[queue] Song '{query}' not found in Library.")
+        return
+
+    if not hasattr(found, "display_name") or not found.display_name:
+        print("[queue] Error: Track data corrupted.")
+        return
+
+    _ensure_queue_decoupled(state)
+
+    try:
+        state.tracks.append(found)
+    except Exception as e:
+        print(f"[queue] Error appending to queue: {e}")
+        return
+
+    print(f"[queue] Added '{found.display_name}' to queue.")
+
+    if len(state.tracks) > 500:
+        print("[queue] Warning: Queue is getting very long.")
+
 
 def play_next(state: PlayerState, query: str) -> None:
     """S3-05: Queue a specific song to play next (Decoupled)."""
 
 def remove_from_queue(state: PlayerState, query: str) -> None:
-    """S3-04: Remove a song from the queue by Index or Name."""
+    """
+    S3-04: Remove a song from the queue by Index or Name.
+    """
+
+    if state is None: return
+
+    if not state.tracks:
+        print("[queue] Queue is empty.")
+        return
+
+    if not query:
+        print("[queue] Usage: /q.remove <index|name>")
+        return
+
+    _ensure_queue_decoupled(state)
+
+    if query.isdigit():
+        try:
+            idx = int(query) - 1
+            if 0 <= idx < len(state.tracks):
+                removed = state.tracks.pop(idx)
+
+                if idx < state.current_index:
+                    state.current_index -= 1
+
+                name = getattr(removed, "display_name", "Unknown")
+                print(f"[queue] Removed '{name}' from queue.")
+                return
+            else:
+                print("[queue] Index out of range.")
+                return
+        except ValueError:
+            print("[queue] Error parsing index.")
+            return
+
+    query_lower = query.lower()
+
+    for i, t in enumerate(state.tracks):
+        if t is None: continue
+
+        if query_lower in t.display_name.lower():
+            removed = state.tracks.pop(i)
+
+            if i < state.current_index:
+                state.current_index -= 1
+
+            print(f"[queue] Removed '{removed.display_name}' from queue.")
+            return
+
+    print(f"[queue] '{query}' not found in current queue.")
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
