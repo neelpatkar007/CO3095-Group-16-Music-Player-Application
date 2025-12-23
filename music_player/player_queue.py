@@ -421,6 +421,8 @@ def clear_queue(state: PlayerState) -> None:
         state.tracks = [current]
         state.current_index = 0
         print("[queue] Queue cleared (current song retained).")
+    else:
+        state.tracks = []
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
