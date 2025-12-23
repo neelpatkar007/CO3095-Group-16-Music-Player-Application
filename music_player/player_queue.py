@@ -393,6 +393,8 @@ def play_next(state: PlayerState, query: str) -> None:
         print("[queue] Error: State is None.")
         return
 
+    if not query:
+
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
 
