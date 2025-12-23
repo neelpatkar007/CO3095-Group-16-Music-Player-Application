@@ -420,11 +420,17 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
     if state.shuffle_active:
         print("\n  (Note: Shuffle is ON, playing order is randomized)")
+
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
 def show_queue(state: PlayerState) -> None:
-    """S3-03: View queue (starting from current track) and history."""
+    print("[queue] --- History ---")
+    if not state.history:
+        print("  (Empty)")
+    else:
+        for t in state.history[-5:]:
+            print(f"  [Played] {t.display_name}")
 
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
