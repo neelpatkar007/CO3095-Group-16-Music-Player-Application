@@ -50,3 +50,6 @@ def show_top_tracks(state: PlayerState) -> None:
      if not state.play_counts:
          print("[metrics] No play history yet.")
          return
+
+     if not hasattr(state, "library_tracks") or not state.library_tracks:
+         print("[metrics] Warning: Library empty, cannot resolve song names.")
