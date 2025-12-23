@@ -437,6 +437,10 @@ def show_queue(state: PlayerState) -> None:
         print("  (Empty)")
         return
 
+    if state.current_index >= len(state.tracks):
+        print("  (End of queue)")
+        return
+
 def _ensure_queue_decoupled(state: PlayerState) -> None:
     """
     Internal Helper:
