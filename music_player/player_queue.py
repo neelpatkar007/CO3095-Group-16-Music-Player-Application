@@ -418,6 +418,8 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
         print(f"  {marker} {i + 1}. {track.display_name}")
 
+    if state.shuffle_active:
+        print("\n  (Note: Shuffle is ON, playing order is randomized)")
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
