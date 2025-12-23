@@ -137,10 +137,16 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
-    S3-12: Set a sleep timer.
+    S3-12: Set a sleep timer. After the specified number of minutes,
+    playback will stop automatically.
     """
     if state is None:
         print("[core] Error: State is None.")
+        return
+
+    # Branch: Verify audio engine availability
+    if not hasattr(state, "audio_engine") or state.audio_engine is None:
+        print("[core] Error: Audio engine not initialized. Cannot set timer.")
         return
 
     if not isinstance(minutes, (int, float)):
@@ -169,13 +175,11 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
 
     try:
         deadline = time.time() + (minutes * 60)
-
         if deadline < time.time():
             print("[core] Error: Calculation failed (Time travel?).")
             return
 
         state.sleep_deadline = deadline
-
         if minutes >= 60:
             hrs = minutes / 60
             print(f"[core] Sleep timer set for {hrs:.1f} hours.")
@@ -184,7 +188,6 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
 
     except Exception as e:
         print(f"[core] Error setting timer: {e}")
-
 
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
