@@ -478,6 +478,8 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
             print(f"[queue] Removed '{removed.display_name}' from queue.")
             return
 
+    print(f"[queue] '{query}' not found in current queue.")
+
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
