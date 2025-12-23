@@ -8,8 +8,9 @@ User Stories:
  - S3-07: Set playback speed
  - S3-12: Set a sleep timer
 """
-import time
 from __future__ import annotations
+
+import time
 from music_player.player_state import PlayerState
 from music_player import player_queue, player_metrics
 
@@ -117,7 +118,7 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     if state is None:
         print("[core] Error: State is None.")
         return
-       if not hasattr(state, "audio_engine") or state.audio_engine is None:
+    if not hasattr(state, "audio_engine") or state.audio_engine is None:
         print("[core] Error: Engine unavailable.")
         return
 
