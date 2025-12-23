@@ -13,9 +13,27 @@ DATA_FILE = Path("player_data.json")
 
 def load_data(state: PlayerState) -> None:
     """Load likes and play counts from JSON."""
+    if not DATA_FILE.exists():
+        return
+    try:
+        with open(DATA_FILE, "r") as f:
+            data = json.load(f)
+            state.liked_tracks = set(data.get("likes", []))
+            state.play_counts = data.get("counts", {})
+    except Exception as e:
+        print(f"[metrics] Error loading data: {e}")
 
 def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
+    data = {
+        "likes": list(state.liked_tracks),
+        "counts": state.play_counts
+    }
+    try:
+        with open(DATA_FILE, "w") as f:
+            json.dump(data, f)
+    except Exception as e:
+        print(f"[metrics] Error saving data: {e}")
 
 def toggle_like(state: PlayerState) -> None:
     if state is None:
@@ -73,6 +91,40 @@ def show_liked_songs(state: PlayerState) -> None:
     """
     S3-09: View all liked songs.
     """
+    print("[metrics] --- Liked Songs ---")
+
+    if state is None:
+        print("[metrics] Error: State is missing.")
+        return
+    if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
+        print("  (No liked songs data)")
+        return
+    if not state.liked_tracks:
+        print("  (No liked songs yet)")
+        return
+    if not hasattr(state, "library_tracks") or state.library_tracks is None:
+        print("[metrics] Error: Library tracks missing.")
+        return
+    if not isinstance(state.library_tracks, list):
+        print("[metrics] Error: Library data corrupted.")
+        return
+
+    found_count = 0
+
+    for t in state.library_tracks:
+        if t is None:
+            continue
+        if not hasattr(t, "path") or t.path is None:
+            continue
+        path_str = str(t.path)
+        if path_str in state.liked_tracks:
+            name = getattr(t, "display_name", "Unknown Title")
+            if not name:
+                name = "Unknown Title"
+            print(f"  ♥ {name}")
+            found_count += 1
+    if found_count == 0:
+        print("  (Liked songs not found in current library scan)")
 
 def show_top_tracks(state: PlayerState) -> None:
      if state is None:
