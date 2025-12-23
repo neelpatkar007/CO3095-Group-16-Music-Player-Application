@@ -59,3 +59,29 @@ def show_top_tracks(state: PlayerState) -> None:
      except Exception:
          print("[metrics] Error sorting play history.")
          return
+
+     print("[metrics] --- Top Played Songs ---")
+
+     for i, (path_str, count) in enumerate(sorted_items):
+         if i >= 10:
+             break
+
+         if not isinstance(count, int) or count <= 0:
+             continue
+
+         name = "Unknown"
+         found_in_lib = False
+
+         if state.library_tracks:
+             for t in state.library_tracks:
+                 if t is None: continue
+
+                 if str(t.path) == path_str:
+                     name = t.display_name
+                     found_in_lib = True
+                     break
+
+         if not found_in_lib:
+             name = f"Unknown (File: {path_str})"
+
+         print(f"  {count} plays: {name}")
