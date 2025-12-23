@@ -24,6 +24,10 @@ def toggle_like(state: PlayerState) -> None:
     if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
         state.liked_tracks = set()
 
+    if not isinstance(state.liked_tracks, set):
+        print("[metrics] Error: Liked tracks data corrupted.")
+        return
+
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
 
