@@ -137,16 +137,14 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
-    S3-12: Set a sleep timer. After the specified number of minutes,
-    playback will stop automatically.
+    S3-12: Set a sleep timer. Added redundancy and precision logic.
     """
     if state is None:
         print("[core] Error: State is None.")
         return
 
-    # Branch: Verify audio engine availability
     if not hasattr(state, "audio_engine") or state.audio_engine is None:
-        print("[core] Error: Audio engine not initialized. Cannot set timer.")
+        print("[core] Error: Audio engine not initialized.")
         return
 
     if not isinstance(minutes, (int, float)):
@@ -164,8 +162,15 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
             print("[core] No active sleep timer to cancel.")
         return
 
+    # New branch: Prevent redundant timer updates if difference is negligible
+    if state.sleep_deadline is not None:
+        current_diff = (state.sleep_deadline - time.time()) / 60
+        if abs(current_diff - minutes) < 0.1:
+            print(f"[core] Timer already set to approximately {minutes} minutes.")
+            return
+
     if minutes > 1440:
-        print("[core] Error: Timer cannot exceed 24 hours (1440 min).")
+        print("[core] Error: Timer cannot exceed 24 hours.")
         return
 
     if state.sleep_deadline is not None:
@@ -176,18 +181,20 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     try:
         deadline = time.time() + (minutes * 60)
         if deadline < time.time():
-            print("[core] Error: Calculation failed (Time travel?).")
+            print("[core] Error: Calculation failed.")
             return
 
         state.sleep_deadline = deadline
+
+        # Increased complexity in reporting
         if minutes >= 60:
-            hrs = minutes / 60
-            print(f"[core] Sleep timer set for {hrs:.1f} hours.")
+            print(f"[core] Sleep timer set for {minutes / 60:.1f} hours.")
+        elif minutes < 1:
+            print(f"[core] Short sleep timer set for {minutes * 60:.0f} seconds.")
         else:
             print(f"[core] Sleep timer set for {minutes} minutes.")
 
     except Exception as e:
         print(f"[core] Error setting timer: {e}")
-
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
