@@ -18,9 +18,9 @@ def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
 
 def toggle_like(state: PlayerState) -> None:
-    """
-    S3-08: Like or unlike the current song.
-    """
+    if state is None:
+        print("[metrics] Error: State is None.")
+        return
 
 def record_play(state: PlayerState) -> None:
     """S3-11 Helper: Increment play count for current track."""
