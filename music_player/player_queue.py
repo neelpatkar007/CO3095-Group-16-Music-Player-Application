@@ -392,7 +392,10 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     """S3-04: Remove a song from the queue by Index or Name."""
 
 def clear_queue(state: PlayerState) -> None:
-    """S3-06: Clear the queue (keep playing current song)."""
+    """
+    S3-06: Clear the queue (keep playing current song).
+    """
+    if state is None:
 
 def show_queue(state: PlayerState) -> None:
     """S3-03: View queue (starting from current track) and history."""
