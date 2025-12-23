@@ -41,14 +41,16 @@ Date: 23/12/2025
 
 ## 4. Sprint Retrospective
 
-| Sprint   | What Went Well (WWW)                                    | Even Better If (EBI)                                       | Additional Comments                              |
-|----------|---------------------------------------------------------|------------------------------------------------------------|--------------------------------------------------|
-| 1        | All 12 planned user stories were completed within       | Estimations could be improved by breaking larger user      | Overall, the team is gaining confidence and      |
-|          | the sprint with high test coverage.                     | stories into smaller tasks.                                | Sprint 1 met its goals successfully.             |
-|          | The team collaborated effectively throughout.           | More frequent mid-sprint check-ins to adjust scope if      |                                                  |
-|          |                                                         | priorities changed.                                        |                                                  |
-| 2        | All 12 user stories were completed within the sprint,   | Earlier identification of potential risks and obstacles    | The team showed strong improvement in delivery   |
-|          | achieving the planned 40 story points.                  | to allow quicker mitigation.                               | speed and collaboration compared to Sprint 1.    |
-|          | Team communication and collaboration improved.          | More time allocated to refining estimates.                 | Sprint 2 successfully met all objectives.        |
-
+| Sprint | What Went Well (WWW)                                    | Even Better If (EBI)                                       | Additional Comments                              |
+|--------|---------------------------------------------------------|------------------------------------------------------------|--------------------------------------------------|
+| 1      | All 12 planned user stories were completed within       | Estimations could be improved by breaking larger user      | Overall, the team is gaining confidence and      |
+|        | the sprint with high test coverage.                     | stories into smaller tasks.                                | Sprint 1 met its goals successfully.             |
+|        | The team collaborated effectively throughout.           | More frequent mid-sprint check-ins to adjust scope if      |                                                  |
+|        |                                                         | priorities changed.                                        |                                                  |
+| 2      | All 12 user stories were completed within the sprint,   | Earlier identification of potential risks and obstacles    | The team showed strong improvement in delivery   |
+|        | achieving the planned 40 story points.                  | to allow quicker mitigation.                               | speed and collaboration compared to Sprint 1.    |
+|        | Team communication and collaboration improved.          | More time allocated to refining estimates.                 | Sprint 2 successfully met all objectives.        |
+|        |                                                         |                                                            |                                                  |
+| 3      |                                                         |                                                            |                                                  |
+|        |                                                         |                                                            |                                                  |
 
