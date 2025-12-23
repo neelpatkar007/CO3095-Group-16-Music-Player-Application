@@ -42,6 +42,7 @@ class PlayerState:
         self.loop_mode: str = "off"  # Options: "off", "one", "all"
 
         # S3-03: History
+        self.history: List[Track] = []
 
         # S3-07: Playback Speed
 
