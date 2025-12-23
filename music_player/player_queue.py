@@ -454,6 +454,12 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
                 if idx < state.current_index:
                     state.current_index -= 1
 
+                name = getattr(removed, "display_name", "Unknown")
+                print(f"[queue] Removed '{name}' from queue.")
+                return
+
+
+
 
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
