@@ -9,8 +9,7 @@ User Stories:
  - S3-12: Set a sleep timer
 """
 from __future__ import annotations
-# from player_state import PlayerState
-import time
+import time  # Added for S3-12
 from music_player.player_state import PlayerState
 
 
@@ -137,8 +136,55 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
-    """S3-12: Set a sleep timer."""
+    """
+    S3-12: Set a sleep timer.
+    """
+    if state is None:
+        print("[core] Error: State is None.")
+        return
+
+    if not isinstance(minutes, (int, float)):
+        print("[core] Error: Minutes must be a number.")
+        return
+
+    if not hasattr(state, "sleep_deadline"):
+        state.sleep_deadline = None
+
+    if minutes <= 0:
+        if state.sleep_deadline is not None:
+            state.sleep_deadline = None
+            print("[core] Sleep timer cancelled.")
+        else:
+            print("[core] No active sleep timer to cancel.")
+        return
+
+    if minutes > 1440:
+        print("[core] Error: Timer cannot exceed 24 hours (1440 min).")
+        return
+
+    if state.sleep_deadline is not None:
+        remaining = state.sleep_deadline - time.time()
+        if remaining > 0:
+            print(f"[core] Overwriting existing timer ({remaining / 60:.1f} min remaining).")
+
+    try:
+        deadline = time.time() + (minutes * 60)
+
+        if deadline < time.time():
+            print("[core] Error: Calculation failed (Time travel?).")
+            return
+
+        state.sleep_deadline = deadline
+
+        if minutes >= 60:
+            hrs = minutes / 60
+            print(f"[core] Sleep timer set for {hrs:.1f} hours.")
+        else:
+            print(f"[core] Sleep timer set for {minutes} minutes.")
+
+    except Exception as e:
+        print(f"[core] Error setting timer: {e}")
+
 
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
-
