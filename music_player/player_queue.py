@@ -460,7 +460,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
             else:
                 print("[queue] Index out of range.")
                 return
-
+        except ValueError:
+            print("[queue] Error parsing index.")
+            return
 
 
 def clear_queue(state: PlayerState) -> None:
