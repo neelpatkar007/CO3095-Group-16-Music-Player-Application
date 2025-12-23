@@ -23,7 +23,11 @@ def toggle_like(state: PlayerState) -> None:
     """
 
 def record_play(state: PlayerState) -> None:
-    """S3-11 Helper: Increment play count for current track."""
+    track = state.current_track
+    if not track: return
+    path_str = str(track.path)
+    state.play_counts[path_str] = state.play_counts.get(path_str, 0) + 1
+    save_data(state)
 
 def show_liked_songs(state: PlayerState) -> None:
     """
