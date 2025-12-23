@@ -399,6 +399,9 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     print("\n[queue] --- Up Next ---")
     if not state.tracks:
         print("  (Empty)")
+
+    if state.current_index >= len(state.tracks):
+        print("  (End of queue)")
         return
 
 def clear_queue(state: PlayerState) -> None:
