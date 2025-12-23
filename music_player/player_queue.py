@@ -404,6 +404,20 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
         print("  (End of queue)")
         return
 
+    for i in range(state.current_index, len(state.tracks)):
+        track = state.tracks[i]
+        marker = " "
+
+        if i == state.current_index:
+            if state.is_playing:
+                marker = "▶"
+            elif state.is_paused:
+                marker = "‖"
+            else:
+                marker = "•"
+
+        print(f"  {marker} {i + 1}. {track.display_name}")
+
 def clear_queue(state: PlayerState) -> None:
     """S3-06: Clear the queue (keep playing current song)."""
 
