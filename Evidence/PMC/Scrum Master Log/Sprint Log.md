@@ -14,21 +14,22 @@ Date: 23/12/2025
 
 ## 2. Sprint Log Table
 
-| Sprint | Scrum Master  | Description / What you did                                                                                                                                        | Sprint Start Date | Sprint End Date |
-|--------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|-----------------|
-| 1      | Neel Patkar   | Facilitated sprint planning, daily stand-ups, and sprint review.                                                                                                  | 12/11/2025        | 03/12/2025      |
-|        |               | Tracked progress against the sprint goal                                                                                                                          |                   |                 |
-|        |               | Maintained and updated the sprint board                                                                                                                           |                   |                 |
-|        |               | Ensured all user stories met the Definition of Done before closure                                                                                                |                   |                 |
-|        |               |                                                                                                                                                                   |                   |                 |
-| 2      | Sanil Panchal | Facilitated sprint planning, daily stand-ups, and sprint review.                                                                                                  | 04/12/2025        | 15/12/2025      |
-|        |               | Monitored progress against the sprint goal                                                                                                                        |                   |                 |
-|        |               | Maintained and updated the sprint board                                                                                                                           |                   |                 |
-|        |               | Ensured all user stories met the Definition of Done before closure                                                                                                |                   |                 |
-|        |               | Supported team communication and helped remove obstacles                                                                                                          |                   |                 |
-|        |               |                                                                                                                                                                   |                   |                 |
-| 3      | Samuel Ameyaw | Facilitated sprint planning, daily stand-ups, and sprint review.                                                                                                  | 16/12/2025        | 25/12/2025      |
-|        |               | Stayed up-to date with the progress and sprint goals. Maintained and updated the sprint board. Ensured all user stories met the Definition of Done before closure |                   |                 |
+| Sprint | Scrum Master  | Description / What you did                                                                       | Sprint Start Date | Sprint End Date |
+|--------|---------------|--------------------------------------------------------------------------------------------------|-------------------|-----------------|
+| 1      | Neel Patkar   | Facilitated sprint planning, daily stand-ups, and sprint review.                                 | 12/11/2025        | 03/12/2025      |
+|        |               | Tracked progress against the sprint goal                                                         |                   |                 |
+|        |               | Maintained and updated the sprint board                                                          |                   |                 |
+|        |               | Ensured all user stories met the Definition of Done before closure                               |                   |                 |
+|        |               |                                                                                                  |                   |                 |
+| 2      | Sanil Panchal | Facilitated sprint planning, daily stand-ups, and sprint review.                                 | 04/12/2025        | 18/12/2025      |
+|        |               | Monitored progress against the sprint goal                                                       |                   |                 |
+|        |               | Maintained and updated the sprint board                                                          |                   |                 |
+|        |               | Ensured all user stories met the Definition of Done before closure                               |                   |                 |
+|        |               | Supported team communication and helped remove obstacles                                         |                   |                 |
+|        |               |                                                                                                  |                   |                 |
+| 3      | Samuel Ameyaw | Facilitated sprint planning, daily stand-ups, and sprint review.                                 | 19/12/2025        | 25/12/2025      |
+|        |               | Stayed up-to date with the progress and sprint goals. Maintained and updated the sprint board.   |                   |                 |
+|        |               | Ensured all user stories met the Definition of Done before closure                               |                   |                 |
 
 ## 3. Sprint Metrics
 
