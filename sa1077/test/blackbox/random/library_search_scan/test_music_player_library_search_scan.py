@@ -5,12 +5,12 @@ import pytest
 
 import music_player.library_search_scan as sut
 
-
+# This class creates a simple fake 'state' to hold a list of tracks for testing
 class DummyState:
     def __init__(self, tracks):
         self.tracks = tracks
 
-
+# Helper function to quickly create a track object with default values
 def _make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
     return SimpleNamespace(
         title=title,
@@ -19,86 +19,87 @@ def _make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
         path=Path(filename),
     )
 
+# Test how the system handles printing an empty list of tracks
 def test_case_0(capsys):
     sut._print_tracks_table([])
     capsys.readouterr()
 
-
+# Test printing a table that contains a single valid track
 def test_case_1(capsys):
     t0 = _make_track(title="Song", artist="Artist", filename="a.mp3", dur=120.0)
     sut._print_tracks_table([t0])
     capsys.readouterr()
 
-
+# Test how the table handles a track where all information is missing (None)
 def test_case_2(capsys):
     t0 = SimpleNamespace(title=None, artist=None, duration_seconds=None, path=None)
     sut._print_tracks_table([t0])
     capsys.readouterr()
 
-
+# Test searching the library when the state object is missing (None)
 def test_case_3(capsys):
     sut.search_library(None, "abc")
     capsys.readouterr()
 
-
+# Test searching when the state object is empty
 def test_case_4(capsys):
     sut.search_library(SimpleNamespace(), "abc")
     capsys.readouterr()
 
-
+# Test searching when the 'tracks' data is a string instead of a list
 def test_case_5(capsys):
     st = SimpleNamespace(tracks="not-a-list")
     sut.search_library(st, "abc")
     capsys.readouterr()
 
-
+# Test searching an empty track list
 def test_case_6(capsys):
     st = DummyState([])
     sut.search_library(st, "abc")
     capsys.readouterr()
 
-
+# Test searching with an empty string or just spaces to ensure it handles blank input
 def test_case_7(capsys):
     st = DummyState([_make_track()])
     sut.search_library(st, "")
     sut.search_library(st, "   ")
     capsys.readouterr()
 
-
+# Test searching for a song title (case-insensitive check)
 def test_case_8(capsys):
     t0 = _make_track(title="Hello World", artist="X", filename="a.mp3", dur=90.0)
     st = DummyState([t0])
     sut.search_library(st, "hello")
     capsys.readouterr()
 
-
+# Test searching for an artist name
 def test_case_9(capsys):
     t0 = _make_track(title="S", artist="Kanye West", filename="a.mp3", dur=90.0)
     st = DummyState([t0])
     sut.search_library(st, "west")
     capsys.readouterr()
 
-
+# Test searching for a specific filename
 def test_case_10(capsys):
     t0 = _make_track(title="S", artist="A", filename="MySongFile.MP3", dur=90.0)
     st = DummyState([t0])
     sut.search_library(st, "mysongfile")
     capsys.readouterr()
 
-
+# Test searching for a term that does not exist in the library
 def test_case_11(capsys):
     t0 = _make_track(title="abc", artist="def", filename="x.mp3", dur=1.0)
     st = DummyState([t0])
     sut.search_library(st, "zzzzzz")
     capsys.readouterr()
 
-
+# Test viewing the song table with a mix of valid, empty, and broken track data
 def test_case_12(capsys):
     st = DummyState([None, _make_track(), _make_track(title="", artist="", filename="x.mp3", dur=None)])
     sut.view_songs_table(st)
     capsys.readouterr()
 
-
+# Test viewing the artist table with missing or blank artist names
 def test_case_13(capsys):
     st = DummyState([
         _make_track(title="T1", artist="", filename="x.mp3", dur=10.0),
@@ -108,7 +109,7 @@ def test_case_13(capsys):
     sut.view_artists_table(st)
     capsys.readouterr()
 
-
+# Test viewing the album table based on the folder names in the file paths
 def test_case_14(capsys):
     t0 = _make_track(title="T1", artist="A", filename="Album1/a.mp3", dur=10.0)
     t1 = _make_track(title="T2", artist="A", filename="Album1/b.mp3", dur=20.0)
@@ -117,10 +118,11 @@ def test_case_14(capsys):
     sut.view_albums_table(st)
     capsys.readouterr()
 
-
+# Test scanning for new tracks and making sure new files are added to the list
 def test_case_15(monkeypatch, capsys):
     st = DummyState([_make_track(filename="existing.mp3")])
 
+    # Simulate finding one existing file, one new file, and one invalid file
     def fake_discover_tracks():
         return [
             _make_track(filename="existing.mp3", dur=100.0),
@@ -133,7 +135,7 @@ def test_case_15(monkeypatch, capsys):
     assert "Scanning for new tracks" in out
     assert any(getattr(t, "path", None) and t.path.name == "new.mp3" for t in st.tracks)
 
-
+# Test the rescan function when no tracks are found on the computer
 def test_case_16(monkeypatch, capsys):
     st = DummyState([_make_track(filename="existing.mp3")])
 
@@ -143,15 +145,13 @@ def test_case_16(monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "No tracks found on disk" in out
 
-
+# Test rescanning when the state object is empty
 def test_case_17(capsys):
     sut.rescan_for_new_tracks(SimpleNamespace())
     capsys.readouterr()
 
-
+# Test rescanning when the tracks data is corrupted/not a list
 def test_case_18(capsys):
     st = SimpleNamespace(tracks="oops")
     sut.rescan_for_new_tracks(st)
     capsys.readouterr()
-
-
