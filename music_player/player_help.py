@@ -135,7 +135,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("Groups your music by Artist, showing how much music you have for each.")
     elif topic == "albums":
         print("\n[Help] /albums")
-        print("Groups music by folder name—an easy way to see your 'albums'.")
+        print("Groups music by folder name - an easy way to see your 'albums'.")
     elif topic == "scan":
         print("\n[Help] /scan")
         print("Checks your 'songs' folder for new files you've added since the app started.")
