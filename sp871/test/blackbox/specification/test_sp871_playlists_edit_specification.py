@@ -6,8 +6,7 @@ import music_player.playlists_edit as sut
 from music_player.playlist_model import Playlist
 
 
-# Helpers
-
+# Test: Helper to create a track object with standard details for testing
 def make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
     return SimpleNamespace(
         title=title,
@@ -18,6 +17,7 @@ def make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
     )
 
 
+# Test: Helper to set up a player state with playlists and a track library
 def make_state(playlists=None, library_tracks=None):
     if playlists is None:
         playlists = []
@@ -31,16 +31,16 @@ def make_state(playlists=None, library_tracks=None):
     return st
 
 
+# Test: Ensuring the required function exists in the code before running a test
 def require_attr(name: str):
     if not hasattr(sut, name):
         pytest.skip(f"playlists_edit.py does not define {name}() in this project")
 
 
-# Test Case 1: Player State None
-
+# Test: verifying that the system does nothing if the player state is missing
 def test_state_none_does_nothing(capsys):
     require_attr("add_track_from_library")
-    require_attr("remove_track_from_playlist")
+    require_attr("require_attr")
     require_attr("move_track_within_playlist")
 
     sut.add_track_from_library(None, "Mix", "1")
@@ -51,8 +51,7 @@ def test_state_none_does_nothing(capsys):
     assert out == ""
 
 
-# Test Case 2: Invalid/Missing playlist selector
-
+# Test: checking that the system handles empty or invalid playlist names gracefully
 def test_invalid_selector_returns_gracefully(capsys):
     require_attr("add_track_from_library")
     require_attr("remove_track_from_playlist")
@@ -67,8 +66,7 @@ def test_invalid_selector_returns_gracefully(capsys):
     assert capsys.readouterr().out == ""
 
 
-# Test Case 3: Main library empty (for add)
-
+# Test: verifying an error message is shown if trying to add a track when the library is empty
 def test_add_track_library_empty_prints_error(capsys):
     require_attr("add_track_from_library")
 
@@ -79,8 +77,7 @@ def test_add_track_library_empty_prints_error(capsys):
     assert "library is empty" in out or "nothing to add" in out
 
 
-# Test Case 4-7: Index 1 invalid
-
+# Test: ensuring the usage guide is shown if the user enters non-numeric text for an index
 @pytest.mark.parametrize("bad_idx", ["abc", "1.2", "NaN", "garbage"])
 def test_add_track_index1_garbage_prints_usage(bad_idx, capsys):
     require_attr("add_track_from_library")
@@ -92,6 +89,7 @@ def test_add_track_index1_garbage_prints_usage(bad_idx, capsys):
     assert "usage" in out and "pl.add" in out
 
 
+# Test: checking that the system stays silent if the index input is left blank
 def test_add_track_index1_empty_returns_silent(capsys):
     require_attr("add_track_from_library")
 
@@ -101,6 +99,7 @@ def test_add_track_index1_empty_returns_silent(capsys):
     assert capsys.readouterr().out == ""
 
 
+# Test: verifying that negative numbers or zero are reported as out of range for adding
 @pytest.mark.parametrize("idx", ["0", "-1", "-999"])
 def test_add_track_index1_zero_or_negative_out_of_range(idx, capsys):
     require_attr("add_track_from_library")
@@ -112,6 +111,7 @@ def test_add_track_index1_zero_or_negative_out_of_range(idx, capsys):
     assert "out of range" in out
 
 
+# Test: ensuring an error is shown if the requested track number is higher than the library count
 def test_add_track_index1_too_high_out_of_range(capsys):
     require_attr("add_track_from_library")
 
@@ -122,8 +122,7 @@ def test_add_track_index1_too_high_out_of_range(capsys):
     assert "out of range" in out
 
 
-# Remove index parsing/bounds
-
+# Test: ensuring the usage guide is shown if the removal index is not a valid whole number
 @pytest.mark.parametrize("bad_idx", ["abc", "1.2", "garbage"])
 def test_remove_track_index1_garbage_prints_usage(bad_idx, capsys):
     require_attr("remove_track_from_playlist")
@@ -135,6 +134,7 @@ def test_remove_track_index1_garbage_prints_usage(bad_idx, capsys):
     assert "usage" in out and "pl.remove" in out
 
 
+# Test: checking that a blank removal request does nothing and stays silent
 def test_remove_track_index1_empty_returns_silent(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -144,6 +144,7 @@ def test_remove_track_index1_empty_returns_silent(capsys):
     assert capsys.readouterr().out == ""
 
 
+# Test: verifying that an error is shown if the removal index is zero or negative
 @pytest.mark.parametrize("idx", ["0", "-1"])
 def test_remove_track_index1_zero_or_negative_out_of_range(idx, capsys):
     require_attr("remove_track_from_playlist")
@@ -155,6 +156,7 @@ def test_remove_track_index1_zero_or_negative_out_of_range(idx, capsys):
     assert "out of range" in out
 
 
+# Test: ensuring an error is shown if the index to remove is higher than the number of songs in the playlist
 def test_remove_track_index1_too_high_out_of_range(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -165,8 +167,7 @@ def test_remove_track_index1_too_high_out_of_range(capsys):
     assert "out of range" in out
 
 
-# Test Case 8-10: Index 2 (move) same/non-numeric/out of bounds
-
+# Test: verifying that the system does nothing if you try to move a song to the same position it is already in
 def test_move_same_from_to_does_nothing(capsys):
     require_attr("move_track_within_playlist")
 
@@ -176,6 +177,7 @@ def test_move_same_from_to_does_nothing(capsys):
     assert capsys.readouterr().out == ""
 
 
+# Test: checking that the usage guide is shown if the destination position is not a valid number
 @pytest.mark.parametrize("bad_idx2", ["abc", "1.2", "garbage"])
 def test_move_to_non_numeric_prints_usage(bad_idx2, capsys):
     require_attr("move_track_within_playlist")
@@ -187,6 +189,7 @@ def test_move_to_non_numeric_prints_usage(bad_idx2, capsys):
     assert "usage" in out and "pl.move" in out
 
 
+# Test: ensuring an error message is shown if the destination index is out of bounds
 def test_move_to_out_of_bounds_prints_to_out_of_range(capsys):
     require_attr("move_track_within_playlist")
 
@@ -197,6 +200,7 @@ def test_move_to_out_of_bounds_prints_to_out_of_range(capsys):
     assert "'to' index out of range" in out
 
 
+# Test: ensuring an error message is shown if the 'from' index is out of bounds
 def test_move_from_out_of_bounds_prints_from_out_of_range(capsys):
     require_attr("move_track_within_playlist")
 
@@ -207,8 +211,7 @@ def test_move_from_out_of_bounds_prints_from_out_of_range(capsys):
     assert "'from' index out of range" in out
 
 
-# Test Case 11: Playlist tracks list is None
-
+# Test: verifying that the system can fix a broken track list and add a song successfully
 def test_tracks_none_is_auto_fixed_and_add_works(capsys):
     require_attr("add_track_from_library")
 
@@ -224,6 +227,7 @@ def test_tracks_none_is_auto_fixed_and_add_works(capsys):
     assert len(pl.tracks) == 1
 
 
+# Test: verifying that a broken track list is fixed safely during a removal attempt
 def test_tracks_none_is_auto_fixed_and_remove_is_safe(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -237,6 +241,7 @@ def test_tracks_none_is_auto_fixed_and_remove_is_safe(capsys):
     assert "out of range" in out
 
 
+# Test: verifying that a broken track list is fixed safely during a move attempt
 def test_tracks_none_is_auto_fixed_and_move_is_safe(capsys):
     require_attr("move_track_within_playlist")
 
@@ -250,8 +255,7 @@ def test_tracks_none_is_auto_fixed_and_move_is_safe(capsys):
     assert "out of range" in out or "usage" in out or out == ""
 
 
-# Test Case 12: Add Track from library (valid)
-
+# Test: verifying that a valid track can be added from the library and shows a confirmation
 def test_add_track_valid_adds_and_confirms(capsys):
     require_attr("add_track_from_library")
 
@@ -267,8 +271,7 @@ def test_add_track_valid_adds_and_confirms(capsys):
     assert "added" in out and "mix" in out
 
 
-# Test Case 13-14: Remove Track from playlist (valid, with/without caring about library)
-
+# Test: verifying that a track can be removed from a playlist and shows a confirmation
 def test_remove_track_valid_pops_and_confirms(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -284,6 +287,7 @@ def test_remove_track_valid_pops_and_confirms(capsys):
     assert "removed" in out and "mix" in out
 
 
+# Test: checking that a track can be removed from a playlist even if the main library is empty
 def test_remove_track_valid_works_even_if_library_empty(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -298,8 +302,7 @@ def test_remove_track_valid_works_even_if_library_empty(capsys):
     assert "removed" in out
 
 
-# Test Case 15-16: Move Track inside playlist (valid)
-
+# Test: verifying that a track can be moved within a playlist to reorder it
 def test_move_track_valid_reorders_and_confirms(capsys):
     require_attr("move_track_within_playlist")
 
@@ -316,6 +319,7 @@ def test_move_track_valid_reorders_and_confirms(capsys):
     assert "moved" in out and "from position 1 to 3" in out
 
 
+# Test: verifying that tracks can be swapped within a playlist even if the main library is empty
 def test_move_track_valid_works_even_if_library_empty(capsys):
     require_attr("move_track_within_playlist")
 
@@ -331,8 +335,7 @@ def test_move_track_valid_works_even_if_library_empty(capsys):
     assert "moved" in out
 
 
-# Track is None inside list
-
+# Test: ensuring the system ignores it if a blank/None entry exists in the library
 def test_add_track_ignores_none_track_in_library(capsys):
     require_attr("add_track_from_library")
 
@@ -344,6 +347,7 @@ def test_add_track_ignores_none_track_in_library(capsys):
     assert pl.tracks == []
 
 
+# Test: ensuring the system ignores it if a blank/None entry exists in the playlist during removal
 def test_remove_track_ignores_none_entry_in_playlist(capsys):
     require_attr("remove_track_from_playlist")
 
@@ -355,6 +359,7 @@ def test_remove_track_ignores_none_entry_in_playlist(capsys):
     assert pl.tracks == [None]  # unchanged
 
 
+# Test: ensuring the system ignores it if a blank/None entry exists in the playlist during a move
 def test_move_track_ignores_none_entry_in_playlist(capsys):
     require_attr("move_track_within_playlist")
 
