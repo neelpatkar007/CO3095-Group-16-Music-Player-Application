@@ -4,7 +4,7 @@ from typing import Optional
 def print_help(command: Optional[str] = None) -> None:
     '''
     A helpful guide for the user to navigate the player.
-    It covers everything from basic playback to Sprint 2 playlist management.
+    Covers everything from basic playback to Sprint 3 advanced features.
     '''
 
     # If the user just types /help, show them the big picture
@@ -17,19 +17,21 @@ def print_help(command: Optional[str] = None) -> None:
         print("Playback:  /play, /pause, /stop, /next, /prev, /seek, /rw, /ff")
         print("Volume:    /volume, /mute, /unmute")
 
-        # New Sprint 2 Playlist features
-        # This section covers how users can manage their own custom collections
+        # Sprint 2 Playlist features
         print("Playlists: /pl.new, /pl.rename, /pl.del, /pl.list, /pl.open, /pl.show,")
         print("           /pl.play, /pl.close, /pl.add, /pl.remove, /pl.move,")
-        print("           /pl.merge, /pl.copy")
+        print("           /pl.merge, /pl.copy, /pl.sort")
 
-        # New Sprint 2 Library features
-        # These commands help users find specific tunes or see their library from different angles
+        # Sprint 3 Queue and Advanced features
+        print("Queue:     /queue, /q.add, /q.remove, /playnext, /q.clear, /shuffle, /loop")
+        print("Advanced:  /speed, /sleep, /like, /likes, /top")
+
+        # Sprint 2 Library features
         print("Library:   /search, /songs, /artists, /albums, /scan")
 
         print("Info/UI:   /list, /info, /progress, /bar, /quit")
         print("\nKeyboard Shortcuts: 'p' (toggle), 's' (stop), 'm' (mute)")
-        print("\nTip: Need details? Try '/help pl.merge' or '/help search'.")
+        print("\nTip: Need details? Try '/help shuffle' or '/help sleep'.")
         return
 
     # Normalize the topic so /play and play both work
@@ -39,7 +41,6 @@ def print_help(command: Optional[str] = None) -> None:
         topic = topic[1:]
 
     # --- BASIC PLAYBACK ---
-    # These handlers print specific details for the core transport controls
     if topic == "play":
         print("\n[Help] /play")
         print("Starts the music. If you were paused, it picks up right where you left off.")
@@ -66,7 +67,6 @@ def print_help(command: Optional[str] = None) -> None:
         print("Quick forward: jumps ahead 5 seconds.")
 
     # --- VOLUME CONTROLS ---
-    # Managing how loud the music is or silencing it altogether
     elif topic == "volume":
         print("\n[Help] /volume <0-100>")
         print("Adjust the loudness. Example: /volume 25 for quiet background music.")
@@ -77,8 +77,50 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /unmute")
         print("Brings the volume back to where it was before muting.")
 
+    # --- SPRINT 3: QUEUE & ADVANCED ---
+    elif topic == "shuffle":
+        print("\n[Help] /shuffle")
+        print("Toggles random playback. When ON, the next song is picked at random.")
+    elif topic == "loop":
+        print("\n[Help] /loop <off|one|all>")
+        print("Set repeat mode. 'one' repeats the current track, 'all' repeats the whole list.")
+    elif topic == "queue":
+        print("\n[Help] /queue")
+        print("Shows the last 5 played songs (history) and all upcoming songs.")
+    elif topic == "q.add":
+        print("\n[Help] /q.add <index|name>")
+        print("Adds a song from the library to the end of the current playback queue.")
+    elif topic == "q.remove":
+        print("\n[Help] /q.remove <index|name>")
+        print("Removes a specific song from the upcoming queue.")
+    elif topic == "playnext":
+        print("\n[Help] /playnext <index|name>")
+        print("High-priority add: puts a song right after the current one.")
+    elif topic == "q.clear":
+        print("\n[Help] /q.clear")
+        print("Wipes the entire upcoming queue but keeps the current song playing.")
+    elif topic == "speed":
+        print("\n[Help] /speed <0.5-2.0>")
+        print("Changes the playback tempo. 1.0 is normal, 2.0 is double speed.")
+    elif topic == "sleep":
+        print("\n[Help] /sleep <minutes>")
+        print("Sets a timer to stop playback automatically. Use 0 to cancel.")
+
+    # --- SPRINT 3: METRICS & LIKES ---
+    elif topic == "like":
+        print("\n[Help] /like")
+        print("Toggles 'Liked' status for the current track.")
+    elif topic == "likes":
+        print("\n[Help] /likes")
+        print("Displays a list of all your bookmarked/liked tracks.")
+    elif topic == "top":
+        print("\n[Help] /top")
+        print("Shows your most-played tracks based on listening history.")
+    elif topic == "pl.sort":
+        print("\n[Help] /pl.sort <playlist> <artist|title|duration>")
+        print("Reorders a playlist alphabetically by artist/title or by song length.")
+
     # --- PLAYLIST MANAGEMENT (Sprint 2) ---
-    # These are the commands for creating and handling playlist containers
     elif topic == "pl.new":
         print("\n[Help] /pl.new <name>")
         print("Creates a fresh, empty playlist. Give it a name like 'Chill' or 'Gym'.")
@@ -105,7 +147,6 @@ def print_help(command: Optional[str] = None) -> None:
         print("Leaves the playlist view and goes back to your full music library.")
 
     # --- PLAYLIST EDITING (Sprint 2) ---
-    # Specific commands for modifying the tracks inside a playlist
     elif topic == "pl.add":
         print("\n[Help] /pl.add <playlist> <library-index>")
         print("Picks a song from your main library and adds it to the end of a playlist.")
@@ -123,7 +164,6 @@ def print_help(command: Optional[str] = None) -> None:
         print("Duplicates a playlist. Useful if you want to branch off a new version of a mix.")
 
     # --- LIBRARY SEARCH & VIEWS (Sprint 2) ---
-    # Tools for exploring the collection and keeping the library up to date
     elif topic == "search":
         print("\n[Help] /search <text>")
         print("Look for songs by title, artist, or even the filename. It's case-insensitive.")
@@ -141,12 +181,10 @@ def print_help(command: Optional[str] = None) -> None:
         print("Checks your 'songs' folder for new files you've added since the app started.")
 
     # --- SYSTEM ---
-    # Cleanly shutting down the application
     elif topic == "quit":
         print("\n[Help] /quit")
         print("Exits the app safely. See you next time!")
     else:
         # A gentle fallback in case they typo a command
-        # If we get here, the user likely typed something that isn't in our list
         print(f"I couldn't find a command named '/{topic}'.")
         print("Try '/help' for any help.")
