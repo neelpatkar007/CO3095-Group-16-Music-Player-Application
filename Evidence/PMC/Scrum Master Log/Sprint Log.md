@@ -32,11 +32,11 @@ Date: 23/12/2025
 
 ## 3. Sprint Metrics
 
-| Sprint   | Planned Stories | Completed Stories | Velocity | Carryover Items | Burndown   | Coverage   |
-|----------|-----------------|-------------------|----------|-----------------|------------|------------|
-| 1        | 12              | 12                | 35       | 0               |            | 92         |
-| 2        | 12              | 12                | 40       | 0               |            | 94         |
-| 3        | 12              | 12                 | 58        | 0               |            |            |
+| Sprint   | Planned Stories | Completed Stories  | Velocity | Carryover Items  | Burndown   | Coverage   |
+|----------|-----------------|--------------------|----------|------------------|------------|------------|
+| 1        | 12              | 12                 | 35       | 0                |            | 92         |
+| 2        | 12              | 12                 | 40       | 0                |            | 94         |
+| 3        | 12              | 12                 | 58       | 0                |            |            |
 
 
 ## 4. Sprint Retrospective
