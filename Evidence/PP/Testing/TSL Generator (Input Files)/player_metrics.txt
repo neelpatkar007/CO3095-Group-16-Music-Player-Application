@@ -1,0 +1,94 @@
+# TSL Specification for player_metrics.py
+
+Parameters:
+
+Player State:
+    State is None.
+    [error]
+    State object is valid.
+    [property StateValid]
+
+Operation:
+    Toggle Like (S3-08).
+    [if StateValid] [property OpToggle]
+    
+    Show Liked Songs (S3-09).
+    [if StateValid] [property OpShowLikes] [property OpUsesLib]
+    
+    Show Top Tracks (S3-11).
+    [if StateValid] [property OpShowTop] [property OpUsesLib]
+
+Liked Tracks Attribute:
+    Missing or None.
+    [if OpShowLikes] [single]
+    
+    Corrupted (Not a Set).
+    [if StateValid] [error]
+    
+    Empty Set.
+    [if OpShowLikes] [single]
+    
+    Populated Set.
+    [if StateValid] [property LikesPopulated] [property HasData]
+
+Play Counts Attribute:
+    Missing or None.
+    [if OpShowTop] [single]
+    
+    Corrupted (Not a Dict).
+    [if OpShowTop] [error]
+    
+    Empty Dict.
+    [if OpShowTop] [single]
+    
+    Populated Dict.
+    [if OpShowTop] [property CountsPopulated] [property HasData]
+
+Library Tracks Attribute:
+    Missing or None.
+    [if OpUsesLib] [error]
+    
+    Corrupted (Not a List).
+    [if OpUsesLib] [error]
+    
+    Empty List.
+    [if OpShowTop] [property LibEmpty]
+    
+    Populated List.
+    [if OpUsesLib] [property LibPopulated]
+
+Current Playing Track:
+    No track playing (None).
+    [if OpToggle] [error]
+    
+    Track object has no path.
+    [if OpToggle] [error]
+    
+    Track path is empty string.
+    [if OpToggle] [error]
+    
+    Valid track, already in Likes.
+    [if OpToggle]
+    
+    Valid track, not in Likes.
+    [if OpToggle]
+
+Play Count Logic:
+    Count is non-integer or <= 0.
+    [if CountsPopulated]
+    
+    Valid counts, list > 10 items.
+    [if CountsPopulated] [single]
+    
+    Valid counts, list <= 10 items.
+    [if CountsPopulated]
+
+Library Resolution:
+    Song references exist in Library.
+    [if LibPopulated]
+    
+    Song references missing from Library.
+    [if LibPopulated]
+    
+    Song in Library has missing display name.
+    [if LibPopulated]
