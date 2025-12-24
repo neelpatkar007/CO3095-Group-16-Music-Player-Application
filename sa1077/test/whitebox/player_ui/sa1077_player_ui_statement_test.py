@@ -8,40 +8,40 @@ from music_player.player_ui import (
 from music_player.library import Track
 
 
+# Test: A minimal fake engine used to skip the real audio hardware during UI testing
 class DummyEngine:
-    """Minimal test double to bypass the audio backend for UI testing."""
     pass
 
 
+# Test: Helper function to quickly set up a player state for testing
 def make_state_with_tracks(tracks):
-    """Utility to quickly set up a PlayerState for unit tests."""
     return PlayerState(tracks=tracks, audio_engine=DummyEngine())
 
 
+# Test: ensuring the system handles incorrect data types (like a boolean) without crashing
 def test_stmt_progress_invalid_state_type(capsys):
-    """Statement test: Exercises the guard clause for invalid data types."""
     print_progress(True)  # type: ignore[arg-type]
     out = capsys.readouterr().out
     assert "Invalid player state for progress" in out
 
 
+# Test: checking that the UI shows unknown time markers when the track list is empty
 def test_stmt_progress_no_track_total_unknown(capsys):
-    """Statement test: Checks UI behavior when the tracklist is empty."""
     state = make_state_with_tracks([])
     print_progress(state)
     out = capsys.readouterr().out
     assert "00:00/??:??" in out
 
 
+# Test: ensuring the progress bar system correctly catches and reports invalid input types
 def test_stmt_progress_bar_invalid_state_type(capsys):
-    """Statement test: Hits the error path for invalid inputs in the progress bar."""
     print_progress_bar(123)  # type: ignore[arg-type]
     out = capsys.readouterr().out
     assert "Invalid player state for progress_bar" in out
 
 
+# Test: verifying that a standard progress bar is rendered correctly for a song in progress
 def test_stmt_progress_bar_normal(capsys):
-    """Statement test: Standard execution path for rendering the ASCII bar."""
     track = Track(
         path=Path("a.mp3"),
         title="Song",
