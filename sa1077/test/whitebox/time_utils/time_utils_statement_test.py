@@ -2,61 +2,33 @@ import pytest
 from music_player.time_utils import format_mm_ss, parse_timecode
 
 
+# Test: A collection of tests to check that time values are correctly converted to readable text
 class TestFormatMmSsStatement:
-    """
-        Statement Testing suite for time formatting.
-        Ensures 100% line coverage (C0) by executing all logic paths within format_mm_ss.
-        """
+
+    # Test: checking that the system returns '??:??' when no time value is provided (None)
     def test_stmt_none_early_return(self):
-        """
-                Statement Test: Null Input Guard.
-                Executes the early-return path when the input is None, verifying
-                placeholder display logic.
-                """
         assert format_mm_ss(None) == "??:??"
 
+    # Test: verifying that a standard number of seconds is converted correctly into a 'minutes:seconds' format
     def test_stmt_normal_value(self):
-        """
-                Statement Test: Standard Formatting Path.
-                Covers the main execution logic for valid durations, ensuring
-                accurate mm:ss calculation and string conversion.
-                """
         assert format_mm_ss(90.0) == "01:30"
 
+
+# Test: A collection of tests to check that text-based timecodes are correctly read as numbers
 class TestParseTimecodeStatement:
-    """
-        Statement Testing suite for timecode parsing.
-        Validates that every line of the parser—from standard floats to colon
-        splitting—is executed.
-        """
+
+    # Test: checking that a simple number inside a string is correctly read as a numeric value
     def test_stmt_plain_seconds(self):
-        """
-                Statement Test: Direct Numeric Path.
-                Executes the logic path for plain numeric strings, verifying
-                direct float conversion.
-                """
         assert parse_timecode("42") == pytest.approx(42.0)
 
+    # Test: verifying that the system can split and calculate total seconds from a 'minutes:seconds' format
     def test_stmt_mm_ss_path(self):
-        """
-                Statement Test: Colon-Based Parsing.
-                Exercises the specific code path responsible for splitting 'mm:ss'
-                strings and calculating total seconds.
-                """
         assert parse_timecode("01:30") == pytest.approx(90.0)
 
+    # Test: ensuring that a blank input string is handled safely and treated as zero seconds
     def test_stmt_empty_string(self):
-        """
-                Statement Test: Empty String Sanitisation.
-                Covers the guard statements that prevent errors when
-                encountering empty input strings.
-                """
         assert parse_timecode("") == pytest.approx(0.0)
 
+    # Test: checking that the system returns zero and does not crash if the text provided is not a valid time
     def test_stmt_invalid_string(self):
-        """
-                Statement Test: Error Handling Fallback.
-                Forces execution of the try-except (ValueError) logic path to
-                ensure system resilience against malformed text.
-                """
         assert parse_timecode("abc") == pytest.approx(0.0)
