@@ -1,7 +1,7 @@
 # Scrum Master Log – Music Player Application
 
-Version: 1.2
-Date: 23/12/2025
+Version: 1.3
+Date: 24/12/2025
 
 
 ## 1. Expected Duties
