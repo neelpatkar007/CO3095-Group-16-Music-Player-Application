@@ -8,12 +8,13 @@ import pytest
 import music_player.library_search_scan as sut
 
 
-# Helpers
+# Test: Helper class to create a fake player state for testing purposes
 class DummyState:
     def __init__(self, tracks):
         self.tracks = tracks
 
 
+# Test: Helper function to build track objects with specific details like title and duration
 def make_track(
     title="Song",
     artist="Artist",
@@ -25,19 +26,21 @@ def make_track(
     return SimpleNamespace(title=title, artist=artist, duration_seconds=dur, path=p)
 
 
-# _print_tracks_table (S2-04)
+# Test: verifying that the system prints a 'no tracks' message when the list is empty
 def test_print_tracks_table_empty_prints_no_tracks(capsys):
     sut._print_tracks_table([])
     out = capsys.readouterr().out
     assert "(no tracks)" in out
 
 
+# Test: ensuring the system handles a list containing only 'None' values without crashing
 def test_print_tracks_table_all_none_prints_no_tracks(capsys):
     sut._print_tracks_table([None, None])
     out = capsys.readouterr().out
     assert "(no tracks)" in out
 
 
+# Test: verifying that the table prints correct headers and track information
 def test_print_tracks_table_prints_header_and_rows(capsys):
     t1 = make_track(title="T", artist="A", dur=60.0)
     t2 = make_track(title="LongTitle" * 10, artist="LongArtist" * 10, dur=None)
@@ -50,13 +53,14 @@ def test_print_tracks_table_prints_header_and_rows(capsys):
     assert "??:??" in out
 
 
-# search_library (S2-03)
+# Test: checking that the search function shows an error if the library state is missing
 def test_search_library_state_none_prints_error(capsys):
     sut.search_library(None, "x")  # type: ignore[arg-type]
     out = capsys.readouterr().out
     assert "Library state is not available" in out
 
 
+# Test: checking that the system detects if the track data has become corrupted
 def test_search_library_tracks_not_list_prints_corrupted(capsys):
     st = DummyState(tracks="not-a-list")  # type: ignore[assignment]
     sut.search_library(st, "x")
@@ -64,6 +68,7 @@ def test_search_library_tracks_not_list_prints_corrupted(capsys):
     assert "tracks data is corrupted" in out
 
 
+# Test: ensuring the search function reports when the library is empty
 def test_search_library_empty_library_prints_empty(capsys):
     st = DummyState([])
     sut.search_library(st, "x")
@@ -71,6 +76,7 @@ def test_search_library_empty_library_prints_empty(capsys):
     assert "Library is empty" in out
 
 
+# Test: verifying that searching with blank spaces just shows the help/usage message
 def test_search_library_blank_query_prints_usage(capsys):
     st = DummyState([make_track()])
     sut.search_library(st, "   ")
@@ -78,6 +84,7 @@ def test_search_library_blank_query_prints_usage(capsys):
     assert "Usage: /search" in out
 
 
+# Test: verifying that search can find tracks by title, artist name, or file name
 def test_search_library_matches_title_artist_and_filename(capsys):
     t1 = make_track(title="Hello World", artist="Someone", filename="x.mp3")
     t2 = make_track(title="Other", artist="Kanye West", filename="kanye_file.mp3")
@@ -98,6 +105,7 @@ def test_search_library_matches_title_artist_and_filename(capsys):
     assert "nope" in out
 
 
+# Test: ensuring a clear 'no matches' message is shown when a search has no results
 def test_search_library_no_matches_prints_message(capsys):
     st = DummyState([make_track(title="A", artist="B", filename="c.mp3")])
     sut.search_library(st, "zzz")
@@ -107,7 +115,7 @@ def test_search_library_no_matches_prints_message(capsys):
     assert "(no tracks)" in out
 
 
-# view_songs_table (S2-04)
+# Test: verifying that the song list view displays the correct title and header
 def test_view_songs_table_prints_header_and_table(capsys):
     st = DummyState([None, make_track(title="T1"), make_track(title="T2")])
     sut.view_songs_table(st)
@@ -116,13 +124,14 @@ def test_view_songs_table_prints_header_and_table(capsys):
     assert "T1" in out and "T2" in out
 
 
-# view_artists_table (S2-04)
+# Test: ensuring the artist view fails safely if the state is missing
 def test_view_artists_table_invalid_state_prints_error(capsys):
     sut.view_artists_table(None)
     out = capsys.readouterr().out
     assert "Library state is not available" in out
 
 
+# Test: checking for corruption errors in the artist view function
 def test_view_artists_table_tracks_not_list_prints_corrupted(capsys):
     st = DummyState(tracks=123)
     sut.view_artists_table(st)
@@ -130,6 +139,7 @@ def test_view_artists_table_tracks_not_list_prints_corrupted(capsys):
     assert "tracks data is corrupted" in out
 
 
+# Test: ensuring the artist view handles an empty library correctly
 def test_view_artists_table_empty_library_prints_empty(capsys):
     st = DummyState([])
     sut.view_artists_table(st)
@@ -137,6 +147,7 @@ def test_view_artists_table_empty_library_prints_empty(capsys):
     assert "Library is empty" in out
 
 
+# Test: verifying the message shown when no tracks in the library have artist info
 def test_view_artists_table_no_artist_info_prints_message(capsys):
     st = DummyState([make_track(artist=""), make_track(artist=None)])
     sut.view_artists_table(st)
@@ -144,6 +155,7 @@ def test_view_artists_table_no_artist_info_prints_message(capsys):
     assert "No artist information available" in out
 
 
+# Test: verifying that the artist view correctly counts tracks and adds up total play time
 def test_view_artists_table_aggregates_counts_and_time(capsys):
     st = DummyState(
         [
@@ -163,7 +175,7 @@ def test_view_artists_table_aggregates_counts_and_time(capsys):
     assert "00:30" in out
 
 
-# view_albums_table (S2-04)
+# Test: verifying that tracks are correctly grouped by their folder name (album)
 def test_view_albums_table_groups_by_parent_folder(capsys):
     st = DummyState(
         [
@@ -180,13 +192,14 @@ def test_view_albums_table_groups_by_parent_folder(capsys):
     assert "01:30" in out
 
 
-# rescan_for_new_tracks (S2-09)
+# Test: ensuring the rescan function shows an error if the state is missing
 def test_rescan_invalid_state_prints_error(capsys):
     sut.rescan_for_new_tracks(None)
     out = capsys.readouterr().out
     assert "Library state is not available" in out
 
 
+# Test: checking for corruption errors during the rescan process
 def test_rescan_tracks_not_list_prints_corrupted(capsys):
     st = DummyState(tracks="oops")
     sut.rescan_for_new_tracks(st)
@@ -194,6 +207,7 @@ def test_rescan_tracks_not_list_prints_corrupted(capsys):
     assert "tracks data is corrupted" in out
 
 
+# Test: verifying the message shown when a scan is performed but no files are found
 def test_rescan_no_tracks_found_on_disk(monkeypatch, capsys):
     st = DummyState([make_track(filename="existing.mp3")])
 
@@ -205,6 +219,7 @@ def test_rescan_no_tracks_found_on_disk(monkeypatch, capsys):
     assert "No tracks found on disk" in out
 
 
+# Test: ensuring the scan ignores duplicates and skips tracks with zero duration
 def test_rescan_filters_duplicates_and_invalid_duration(monkeypatch, capsys):
     existing = make_track(filename="a.mp3", dur=60.0)
     st = DummyState([existing])
@@ -222,6 +237,7 @@ def test_rescan_filters_duplicates_and_invalid_duration(monkeypatch, capsys):
     assert any(getattr(t, "path", None) == new.path for t in st.tracks)
 
 
+# Test: verifying that a special 'bulk' message is shown when adding more than 50 tracks
 def test_rescan_bulk_message_over_50(monkeypatch, capsys):
     st = DummyState([make_track(filename="existing.mp3")])
 
