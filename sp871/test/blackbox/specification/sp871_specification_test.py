@@ -9,12 +9,8 @@ from music_player.player_audio import change_volume
 from music_player.player_queue import next_track, previous_track
 
 
-# --- Test Doubles (Mocks & Stubs) for Backend Isolation ---
+# Test: A mock engine that records volume and mute changes without needing actual audio hardware
 class DummyEngine:
-    """
-        Mock Object: Records volume and mute state changes without audio hardware.
-        Used to verify that the Backend-to-Audio-Engine interface functions correctly.
-        """
     def __init__(self):
         self.last_volume = None
         self.muted = False
@@ -27,9 +23,8 @@ class DummyEngine:
         self.muted = flag
 
 
-# Helper function to quickly set up a player state with a specific volume/mute setting
+# Test: Helper function to create a player state with specific volume and mute settings
 def make_state_vol(volume: int = 30, muted: bool = False) -> PlayerState:
-    """Factory helper to initialise player state with specific volume parameters."""
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
     state.volume = volume
@@ -37,7 +32,7 @@ def make_state_vol(volume: int = 30, muted: bool = False) -> PlayerState:
     return state
 
 
-# Test to see if the general help command prints the expected list of commands
+# Test: verifying that the general help command prints the list of available commands
 def test_bb_help_general(capsys):
     print_help()
     out = capsys.readouterr().out
@@ -45,30 +40,29 @@ def test_bb_help_general(capsys):
     assert "/play" in out
 
 
-# Test to see if asking for help on a specific command works (without the slash)
+# Test: checking if help works for a specific command name (like 'play')
 def test_bb_help_known_command_name(capsys):
     print_help("play")
     out = capsys.readouterr().out
     assert "[Help] /play" in out
 
 
-# Test to see if asking for help works even if the user includes the slash
+# Test: ensuring help still works if the user includes the forward slash in their query
 def test_bb_help_known_command_with_slash(capsys):
     print_help("/pause")
     out = capsys.readouterr().out
     assert "[Help] /pause" in out
 
 
-# Test to see if the system handles nonsense commands gracefully
+# Test: verifying that the system handles unrecognised commands gracefully
 def test_bb_help_unknown_command(capsys):
     print_help("foobar")
     out = capsys.readouterr().out
     assert "not recognised" in out
 
 
-# Test changing volume normally when the player is NOT muted
+# Test: checking that volume changes correctly when the player is not muted
 def test_bb_change_volume_valid_not_muted(capsys):
-    # Frame F5
     state = make_state_vol(volume=30, muted=False)
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 
@@ -83,9 +77,8 @@ def test_bb_change_volume_valid_not_muted(capsys):
     assert state.is_muted is False
 
 
-# Test changing volume while muted. This should automatically UNMUTE the player.
+# Test: verifying that changing the volume automatically unmutes the player
 def test_bb_change_volume_valid_while_muted_unmutes(capsys):
-    # Frame F6
     state = make_state_vol(volume=20, muted=True)
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
     state.saved_volume = 20
@@ -103,9 +96,8 @@ def test_bb_change_volume_valid_while_muted_unmutes(capsys):
     assert "Volume set to 50%" in out
 
 
-# Creates a fake song object with just enough info for the queue system to work
+# Test: Helper to create a fake track object for queue testing
 def make_track(name: str):
-    """Simple stand-in for a Track object with the attributes queue cares about."""
     return SimpleNamespace(
         path=Path(f"{name}.mp3"),
         display_name=name,
@@ -113,10 +105,8 @@ def make_track(name: str):
     )
 
 
-# A fake engine that simulates normal playback (always succeeds).
-# It can pretend to be "busy" playing something or not.
+# Test: A fake engine that simulates normal, successful playback
 class NormalEngine:
-    """Engine where is_busy can be configured, play always succeeds."""
 
     def __init__(self, busy: bool = False, has_is_busy: bool = True):
         self._busy = busy
@@ -141,13 +131,8 @@ class NormalEngine:
         self.play_calls.append((path, start_pos))
 
 
-# A fake engine that simulates crashes/errors during playback.
-# Useful for testing error handling logic.
+# Test: A fake engine that simulates playback errors to test reliability
 class FlakyEngine:
-    """
-    Engine that can fail on the first or both play() attempts.
-    Used for PlayFirstFailsSecondOK and PlayBothFail frames.
-    """
 
     def __init__(self, fail_first: bool = False, fail_both: bool = False):
         self.fail_first = fail_first
@@ -171,20 +156,15 @@ class FlakyEngine:
         self.play_calls.append((path, start_pos))
 
 
-# A special test state where the "current track" always vanishes.
-# This forces the code into the "Selected track missing" error path.
+# Test: A special state where the track is missing, used to test error handling
 class TrackMissingState(PlayerState):
-    """
-    Abnormal state where current_track always returns None,
-    to exercise the 'Selected track missing' branch as per NF10 / PF9.
-    """
 
     @property
     def current_track(self):
         return None
 
 
-# Helper to build a standard player state for the queue tests
+# Test: Helper to create a standard player state for queue tests
 def make_state(tracks, engine) -> PlayerState:
     state = PlayerState(tracks=tracks, audio_engine=engine)
     # default flags
@@ -195,8 +175,7 @@ def make_state(tracks, engine) -> PlayerState:
     return state
 
 
-# Test 'next_track' when the library is empty.
-# Expected: Print a message, do not crash, do not change anything.
+# Test: ensuring the system reports that no tracks are available when the library is empty
 def test_next_empty_library_prints_message_and_no_change(capsys):
     engine = NormalEngine(busy=False)
     state = make_state([], engine)
@@ -209,8 +188,7 @@ def test_next_empty_library_prints_message_and_no_change(capsys):
     assert engine.play_calls == []
 
 
-# Test 'next_track' with only 1 song.
-# Expected: It selects the same song again and resets the time to 0.
+# Test: verifying that skipping forward with only one song resets the current track to the start
 def test_next_single_stopped_selects_same_track_and_resets_position(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("One")
@@ -227,8 +205,7 @@ def test_next_single_stopped_selects_same_track_and_resets_position(capsys):
     assert engine.play_calls == []
 
 
-# Test 'next_track' with multiple songs (stopped).
-# Expected: Move index to the next song.
+# Test: verifying that the queue moves correctly to the next song in a list
 def test_next_multiple_stopped_moves_to_next_track(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
@@ -250,10 +227,8 @@ def test_next_multiple_stopped_moves_to_next_track(capsys):
     assert engine.play_calls == []
 
 
-# Test 'next_track' when currently on the LAST song.
-# Expected: Wrap around to the FIRST song.
+# Test: ensuring the queue wraps back to the first song after the last one is reached
 def test_next_multiple_stopped_wraps_at_end(capsys):
-    # NF4_MultiStoppedWrap
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -274,10 +249,8 @@ def test_next_multiple_stopped_wraps_at_end(capsys):
     assert engine.play_calls == []
 
 
-# Test 'next_track' while playing (and engine is ready/not busy).
-# Expected: Switch to next track and immediately start playing it.
+# Test: verifying that skipping forward while playing starts the next song immediately
 def test_next_multiple_playing_not_busy_starts_playback(capsys):
-    # NF5_PlayingNormal
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -299,10 +272,8 @@ def test_next_multiple_playing_not_busy_starts_playback(capsys):
     assert "Next: T2" in out or "Wrapped to next: T2" in out
 
 
-# Test 'next_track' while playing (and engine IS busy).
-# Expected: STOP the current track explicitly, then play the next one.
+# Test: ensuring the current track stops before the next one begins if the engine is busy
 def test_next_multiple_playing_busy_stops_then_plays(capsys):
-    # NF6_PlayingBusy
     engine = NormalEngine(busy=True)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -324,10 +295,8 @@ def test_next_multiple_playing_busy_stops_then_plays(capsys):
     assert "Next: T2" in out or "Wrapped to next: T2" in out
 
 
-# Test retry logic: The first play attempt fails, but the second works.
-# Expected: Player shouldn't crash, should end up playing successfully.
+# Test: checking the retry logic if the first attempt to play a song fails
 def test_next_play_first_fails_second_ok(capsys):
-    # NF7_PlayFirstFailsSecondOK
     engine = FlakyEngine(fail_first=True, fail_both=False)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -349,10 +318,8 @@ def test_next_play_first_fails_second_ok(capsys):
     assert "ERROR starting playback" not in out
 
 
-# Test catastrophic failure: Playback fails on every attempt.
-# Expected: Stop trying, mark state as not playing, print error.
+# Test: verifying that an error is shown and playback stops if the song fails to play entirely
 def test_next_play_both_fail_sets_not_playing_and_prints_error(capsys):
-    # NF8_PlayBothFail
     engine = FlakyEngine(fail_first=True, fail_both=True)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -373,10 +340,8 @@ def test_next_play_both_fail_sets_not_playing_and_prints_error(capsys):
     assert "ERROR starting playback" in out
 
 
-# Test 'next_track' while paused.
-# Expected: Move to next track, reset time, but STAY paused (don't auto-play).
+# Test: ensuring skipping forward while on pause changes the track but stays paused
 def test_next_paused_wraps_and_mentions_paused(capsys):
-    # NF9_PausedWrap
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -396,10 +361,8 @@ def test_next_paused_wraps_and_mentions_paused(capsys):
     assert engine.play_calls == []  # still paused, not playing
 
 
-# Test 'next_track' where the track object exists but the file is gone/invalid.
-# Expected: Print a warning about missing track.
+# Test: checking that a warning is shown if the selected track is missing from the system
 def test_next_track_missing_prints_warning(capsys):
-    # NF10_TrackMissing
     engine = NormalEngine(busy=False)
     tracks = [make_track("T1"), make_track("T2")]
     # abnormal state: current_track is forced to None
@@ -415,8 +378,7 @@ def test_next_track_missing_prints_warning(capsys):
     assert engine.play_calls == []
 
 
-# Test 'previous_track' with empty library.
-# Expected: Just print "No tracks".
+# Test: verifying that the system correctly reports no tracks when skipping backwards in an empty library
 def test_previous_empty_library_prints_message(capsys):
     engine = NormalEngine(busy=False)
     state = make_state([], engine)
@@ -428,8 +390,7 @@ def test_previous_empty_library_prints_message(capsys):
     assert engine.play_calls == []
 
 
-# Test 'previous_track' with only 1 song.
-# Expected: Selects itself again (restarts).
+# Test: verifying that skipping backwards with one song just restarts the same track
 def test_previous_single_stopped_selects_same_track(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("One")
@@ -446,7 +407,7 @@ def test_previous_single_stopped_selects_same_track(capsys):
     assert ("Selected: One" in out) or ("Wrapped to prev: One" in out)
 
 
-# Test 'previous_track' moving back normally (e.g., from track 3 to 2).
+# Test: checking that skipping backwards moves the selection back by one track correctly
 def test_previous_multi_stopped_moves_back_one(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
@@ -467,8 +428,7 @@ def test_previous_multi_stopped_moves_back_one(capsys):
     assert engine.play_calls == []
 
 
-# Test 'previous_track' when at the START of the list.
-# Expected: Wrap around to the LAST song.
+# Test: verifying that skipping backwards from the first song wraps around to the last song
 def test_previous_multi_stopped_wraps_from_first_to_last(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
@@ -488,8 +448,7 @@ def test_previous_multi_stopped_wraps_from_first_to_last(capsys):
     assert engine.play_calls == []
 
 
-# Test 'previous_track' while playing (busy engine).
-# Expected: Stop current song, play the previous one.
+# Test: verifying that skipping back while playing starts the previous song immediately
 def test_previous_playing_busy_stops_then_plays_previous(capsys):
     engine = NormalEngine(busy=True)
     t1 = make_track("T1")
@@ -511,8 +470,7 @@ def test_previous_playing_busy_stops_then_plays_previous(capsys):
     assert "Previous: T1" in out or "Wrapped to prev: T1" in out
 
 
-# Test 'previous_track' where playback fails totally.
-# Expected: Print error and stop playing.
+# Test: ensuring playback stops and an error is shown if the previous song fails to load
 def test_previous_play_both_fail_prints_error_and_stops(capsys):
     engine = FlakyEngine(fail_first=True, fail_both=True)
     t1 = make_track("T1")
@@ -533,8 +491,7 @@ def test_previous_play_both_fail_prints_error_and_stops(capsys):
     assert "ERROR starting playback" in out
 
 
-# Test 'previous_track' while paused.
-# Expected: Change track, stay paused.
+# Test: ensuring that skipping back while on pause correctly changes the selection but stays paused
 def test_previous_paused_wraps_and_mentions_paused(capsys):
     engine = NormalEngine(busy=False)
     t1 = make_track("T1")
@@ -554,8 +511,7 @@ def test_previous_paused_wraps_and_mentions_paused(capsys):
     assert engine.play_calls == []
 
 
-# Test 'previous_track' where the file is missing/invalid.
-# Expected: Print warning.
+# Test: verifying that a warning is shown if the previous track is missing from the disk
 def test_previous_track_missing_prints_warning(capsys):
     engine = NormalEngine(busy=False)
     tracks = [make_track("T1"), make_track("T2")]
