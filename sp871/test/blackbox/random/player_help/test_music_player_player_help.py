@@ -3,43 +3,42 @@
 import music_player.player_help as module_0
 
 
+# Test: checking if the help system stays stable when given random capital letters or no input at all
 def test_case_0():
-    # Robustness check: Ensuring the help system handles arbitrary uppercase strings (R\\BYQ) gracefully.
     str_0 = "R\\BYQ"
     module_0.print_help(str_0)
-    # Verifying the default execution path for print_help with no arguments.
     module_0.print_help()
 
 
+# Test: verifying how the system handles a single letter followed by punctuation
 def test_case_1():
-    # Sanitisation check: Testing the response when passed a single character and punctuation.
     str_0 = "W;"
     module_0.print_help(str_0)
 
 
+# Test: checking if the help system correctly handles symbols and non-alphanumeric characters
 def test_case_2():
-    # EP Class: Verifying handling of non-alphanumeric command queries (p|?).
     str_0 = "p|?"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: ensuring the system can switch between a standard help request and an invalid string safely
 def test_case_3():
-    # Verifying the help system's stability when toggling between no arguments and invalid strings.
     module_0.print_help()
     str_0 = "Rw"
     module_0.print_help(str_0)
 
 
+# Test: verifying that the parser can handle long strings containing multiple commands, commas, and slashes
 def test_case_4():
-    # Robustness check: Testing if the parser handles multi-command strings containing commas and slashes.
     module_0.print_help()
     str_0 = "   h     list, /info, /[rogress, /bar"
     module_0.print_help(str_0)
 
 
+# Test: confirming that the help system correctly finds and shows the instructions for the 'play' command
 def test_case_5():
-    # Happy Path Verification: Confirming the help system provides specific documentation for the 'play' command.
     str_0 = "<"
     module_0.print_help(str_0)
     module_0.print_help()
@@ -47,8 +46,8 @@ def test_case_5():
     module_0.print_help(str_1)
 
 
+# Test: comparing how the system handles a single invalid letter versus a completely empty string
 def test_case_6():
-    # EP Class: Testing single-character invalid inputs ('n') vs. empty string inputs.
     str_0 = "n"
     module_0.print_help(str_0)
     module_0.print_help()
@@ -56,22 +55,22 @@ def test_case_6():
     module_0.print_help(str_1)
 
 
+# Test: ensuring that repeated invalid queries result in the same consistent system behaviour
 def test_case_7():
-    # Verifying that repeating the same invalid help query ('n') results in consistent system behaviour.
     str_0 = "n"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: verifying that the help system maintains its state after multiple random capital letter queries
 def test_case_8():
-    # Repeating robustness check for arbitrary uppercase strings to ensure state consistency.
     str_0 = "R\\BYQ"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: checking that the system correctly ignores tab spaces around a valid command name
 def test_case_9():
-    # Whitespace Testing: Verifying the parser's ability to trim tabs around valid command words (BAR).
     str_0 = "\tBAR\t"
     module_0.print_help(str_0)
     module_0.print_help()
@@ -79,56 +78,56 @@ def test_case_9():
     module_0.print_help(str_1)
 
 
+# Test: ensuring that the instructions for the '/volume' command are retrieved correctly
 def test_case_10():
-    # Happy Path Verification: Ensuring the documentation for the '/volume' command is correctly retrieved.
     module_0.print_help()
     str_0 = "/volume"
     module_0.print_help(str_0)
 
 
+# Test: checking how the system handles combinations of letters and numbers that aren't real commands
 def test_case_11():
-    # Testing the help system against alphanumeric combinations that do not match known commands.
     str_0 = "sO"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: verifying the error-handling path when a single invalid character is entered multiple times
 def test_case_12():
-    # Redundant path check for 'n' input to verify consistent error-handling branches.
     str_0 = "n"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: confirming that specific help text is available and correct for the 'stop' command
 def test_case_13():
-    # Happy Path Verification: Confirming specific documentation is available for the 'stop' command.
     module_0.print_help()
     str_0 = "stop"
     module_0.print_help(str_0)
 
 
+# Test: checking if the parser remains stable when a tab character is hidden inside a word
 def test_case_14():
-    # Tab Character Robustness: Testing how the parser handles a tab character embedded within a command string.
     str_0 = "prog\tess"
     module_0.print_help()
     module_0.print_help(str_0)
 
 
+# Test: validating that the 'prev' command triggers the correct documentation
 def test_case_15():
-    # Happy Path Verification: Validating that the 'prev' command query triggers the correct help text.
     module_0.print_help()
     str_0 = "prev"
     module_0.print_help(str_0)
 
 
+# Test: final check to ensure the system handles single-letter invalid inputs without crashing
 def test_case_16():
-    # Final redundancy check for single-character robustness.
     str_0 = "n"
     module_0.print_help(str_0)
     module_0.print_help()
 
 
+# Test: checking if mixed-case commands like 'NExt' are correctly identified or rejected safely
 def test_case_17():
-    # Case Sensitivity Testing: Verifying if the command 'NExt' is correctly interpreted or safely rejected.
     str_0 = "NExt"
     module_0.print_help(str_0)
