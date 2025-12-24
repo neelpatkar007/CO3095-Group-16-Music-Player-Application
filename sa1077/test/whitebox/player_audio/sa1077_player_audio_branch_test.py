@@ -6,6 +6,7 @@ from music_player.player_audio import (
 )
 
 
+# Test: A mock audio engine used to check if volume and mute settings change correctly
 class DummyEngine:
     """Mock audio engine used to verify volume and mute state transitions."""
     def __init__(self):
@@ -19,16 +20,13 @@ class DummyEngine:
         self.muted = flag
 
 
+# Test: A helper function to create a fresh player state for testing
 def make_state():
     """Factory helper to initialise a consistent PlayerState for branch testing."""
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
+# Test: checking that the system correctly catches and reports errors when text is entered instead of a number
 def test_branch_change_volume_non_numeric_input(capsys):
-    """
-        Branch Test: ValueError Exception Path.
-        Forces the execution of the error-handling branch when int() conversion fails
-        due to non-numeric string input.
-        """
     state = make_state()
 
     change_volume(state, "abc")
@@ -37,12 +35,8 @@ def test_branch_change_volume_non_numeric_input(capsys):
     assert "must be a number" in out
 
 
+# Test: ensuring the system triggers a range error when the volume input is below zero
 def test_branch_change_volume_out_of_range_low(capsys):
-    """
-        Branch Test: Lower Boundary Range Check.
-        Exercises the decision path triggered when a numeric input is below the
-        allowable 0-100 threshold.
-        """
     state = make_state()
 
     change_volume(state, "-1")
@@ -51,12 +45,8 @@ def test_branch_change_volume_out_of_range_low(capsys):
     assert "between 0 and 100" in out
 
 
+# Test: ensuring the system triggers a range error when the volume input is above 100
 def test_branch_change_volume_out_of_range_high(capsys):
-    """
-        Branch Test: Upper Boundary Range Check.
-        Exercises the same range-validation branch using an input exceeding
-        the maximum volume limit.
-        """
     state = make_state()
 
     change_volume(state, "101")
@@ -65,12 +55,8 @@ def test_branch_change_volume_out_of_range_high(capsys):
     assert "between 0 and 100" in out
 
 
+# Test: verifying that manually changing the volume automatically unmutes the player
 def test_branch_change_volume_while_muted_unmutes_and_sets_volume(capsys):
-    """
-        Branch Test: Mute State Auto-Correction.
-        Specifically targets the logic fork where the player is currently muted.
-        Verifies the branch that clears saved_volume and updates the engine status.
-        """
     state = make_state()
     engine: DummyEngine = state.audio_engine  # type: ignore[assignment]
 

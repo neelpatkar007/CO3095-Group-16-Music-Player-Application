@@ -6,6 +6,7 @@ from music_player.player_audio import (
 )
 
 
+# Test: A fake audio engine used to check that volume changes happen correctly without real hardware
 class DummyEngine:
     """Mock engine to verify statement execution without hardware dependencies."""
     def __init__(self):
@@ -19,10 +20,12 @@ class DummyEngine:
         self.muted = flag
 
 
+# Test: A helper function to create a clean player state for each test case
 def make_state():
     """Initialises a clean PlayerState for individual statement tests."""
     return PlayerState(tracks=[], audio_engine=DummyEngine())
 
+# Test: ensuring the function does not crash if the player state is missing (None)
 def test_stmt_change_volume_state_none_does_not_crash():
     """
         Statement Test: Null Object Guard.
@@ -32,6 +35,7 @@ def test_stmt_change_volume_state_none_does_not_crash():
     change_volume(None, "50")  # type: ignore[arg-type]
 
 
+# Test: checking that if the volume input is empty, the current volume is displayed
 def test_stmt_change_volume_empty_input_prints_current_volume(capsys):
     """
         Statement Test: Empty String Handling.
@@ -46,6 +50,7 @@ def test_stmt_change_volume_empty_input_prints_current_volume(capsys):
     assert "Current Volume: 42%" in out
 
 
+# Test: verifying the 'happy path' where a valid number is given and the volume updates correctly
 def test_stmt_change_volume_valid_not_muted_updates_engine(capsys):
     """
         Statement Test: Standard Update Path.
@@ -63,6 +68,7 @@ def test_stmt_change_volume_valid_not_muted_updates_engine(capsys):
     assert "[audio] Volume set to 37%" in out
 
 
+# Test: checking that changing the volume automatically clears the mute status
 def test_stmt_change_volume_while_muted_unmutes_and_updates(capsys):
     """
         Statement Test: Mute-Reset Logic.
