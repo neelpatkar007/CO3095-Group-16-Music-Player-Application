@@ -1,9 +1,3 @@
-"""
-White-box: Branch testing for player_queue.next_track / previous_track.
-
-Goal: Execute each branch (True/False outcomes of decisions).
-"""
-
 from pathlib import Path
 from types import SimpleNamespace
 import pytest
@@ -12,11 +6,8 @@ from music_player.player_queue import next_track, previous_track
 from music_player.player_state import PlayerState
 
 
+# Test: A mock audio engine to check if the queue logic triggers play and stop correctly
 class DummyEngine:
-    """
-        Mock Object: Simulates the audio engine backend to verify that
-        the queue system correctly triggers hardware-level calls.
-        """
     def __init__(self):
         self.play_calls = []
         self.stop_calls = 0
@@ -32,20 +23,16 @@ class DummyEngine:
         self.play_calls.append((path, start_pos))
 
 
+# Test: Helper function to create a basic track object for testing
 def make_track(name: str):
-    """Utility helper to initialise a Track object with consistent metadata for testing."""
     return SimpleNamespace(
         path=Path(f"{name}.mp3"),
         display_name=name,
         duration_seconds=180.0,
     )
 
+# Test: verifying that the system reports no tracks available if the library is empty
 def test_branch_next_no_tracks(capsys):
-    """
-        Branch B1: Lower Boundary Guard.
-        Exercises the 'True' branch of 'if len(tracks) == 0' to verify
-        graceful early return when the library is empty.
-        """
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
 
@@ -54,12 +41,8 @@ def test_branch_next_no_tracks(capsys):
     assert "No tracks available" in out
 
 
+# Test: checking that skipping forward when only one song exists keeps the index at zero
 def test_branch_next_single_track_stopped(capsys):
-    """
-        Branch B2: Single-Item Index Stability.
-        Exercises the branch where a single track exists, ensuring the
-        current_index remains clamped at 0 without error.
-        """
     engine = DummyEngine()
     track = make_track("One")
     state = PlayerState(tracks=[track], audio_engine=engine)
@@ -74,12 +57,8 @@ def test_branch_next_single_track_stopped(capsys):
     assert engine.play_calls == []  # no auto play when not playing
 
 
+# Test: verifying that the queue moves to the next song normally when not at the end of the list
 def test_branch_next_multi_track_no_wrap(capsys):
-    """
-        Branch B3: Sequential Increment Path.
-        Exercises the standard 'Next' branch where the index moves forward
-        without reaching the end of the track array.
-        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -94,12 +73,8 @@ def test_branch_next_multi_track_no_wrap(capsys):
     assert state.current_index == 1
 
 
+# Test: ensuring that skipping forward on the last song wraps the queue back to the first song
 def test_branch_next_multi_track_wrap(capsys):
-    """
-        Branch B4: Forward Circular Logic (Wrap-around).
-        Exercises the decision path where the index exceeds the last
-        element and must wrap back to index 0.
-        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -114,12 +89,8 @@ def test_branch_next_multi_track_wrap(capsys):
     assert state.current_index == 0
 
 
+# Test: verifying that skipping forward while a song is playing automatically starts the next song
 def test_branch_next_while_playing_triggers_engine_play(capsys):
-    """
-        Branch B5: Playback State Integration.
-        Exercises the 'True' branch of 'if state.is_playing', ensuring
-        the audio engine is triggered during track transition.
-        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -134,12 +105,8 @@ def test_branch_next_while_playing_triggers_engine_play(capsys):
     assert engine.play_calls[-1][0] == t2.path
     assert "Next" in out or "Wrapped" in out
 
+# Test: ensuring the system reports no tracks when skipping backwards in an empty library
 def test_branch_prev_no_tracks(capsys):
-    """
-        Branch B6: Lower Boundary Guard (Previous).
-        Verifies that the 'previous_track' function correctly triggers the
-        early-return path for empty libraries.
-        """
     engine = DummyEngine()
     state = PlayerState(tracks=[], audio_engine=engine)
 
@@ -149,12 +116,8 @@ def test_branch_prev_no_tracks(capsys):
     assert "No tracks available" in out
 
 
+# Test: verifying that skipping backwards from the first song wraps to the very last song in the list
 def test_branch_prev_wrap_backwards(capsys):
-    """
-        Branch B7: Backward Circular Logic (Wrap-around).
-        Exercises the logic fork that wraps from index 0 back to the
-        tail of the track list.
-        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
@@ -169,12 +132,8 @@ def test_branch_prev_wrap_backwards(capsys):
     assert "Wrapped to prev" in out
 
 
+# Test: verifying that the queue moves back by one song correctly when not at the start
 def test_branch_prev_step_back_without_wrap(capsys):
-    """
-        Branch B8: Standard Backward Decrement.
-        Exercises the path where the index is successfully decremented
-        without needing a wrap-around event.
-        """
     engine = DummyEngine()
     t1 = make_track("T1")
     t2 = make_track("T2")
