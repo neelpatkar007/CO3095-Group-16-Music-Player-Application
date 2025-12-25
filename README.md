@@ -15,7 +15,7 @@ A command-line music player application developed as part of the CO3095 Software
 
 ### Importing the Project into PyCharm:
 
-## Installing Dependencies (requirements.txt):
+### Installing Dependencies (requirements.txt):
 
 
 
