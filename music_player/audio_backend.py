@@ -222,8 +222,13 @@ class AudioEngine:
             self._seek_simulated(seconds)
 
     def _seek_real(self, seconds: float) -> None:
+        '''
+        Pygames set_pos is sometimes unreliable
+        So we then reload the file and start from the new position.
+        '''
         assert pygame is not None
         try:
+            # Adjust the position if we're using a - speed-modified file
             actual_pos = seconds / self.current_speed
 
             target_file = self.current_path
