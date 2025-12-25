@@ -11,5 +11,10 @@ A command-line music player application developed as part of the CO3095 Software
 
 ## Installation and Setup (Charles Wilson Laboratory):
 
+### Uncompressing the Project:
+
+### Importing the Project into PyCharm:
+
+
 ## How to Run the Application:
 
