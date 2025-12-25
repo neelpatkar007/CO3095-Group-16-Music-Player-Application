@@ -23,6 +23,7 @@ We use the following versioning format which is: v<Major>.<Minor>.<Patch>.
 |------|------------|--------|-------------|---------------|----------------------------|-------------|------------------------------------------------------------------------------------------------|
 | v0.1 | 18/12/2025 | 1      | 56e8603     | neelpatkar007 | Completed Sprint 1 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1    |
 | v0.2 | 19/12/2025 | 2      | ca140db     | neelpatkar007 | Completed Sprint 2 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.2    |
+| v0.3 | 25/12/2025 | 3      | 2ff6ca2     | neelpatkar007 | Completed Sprint 3 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.3    |
 
 
 
