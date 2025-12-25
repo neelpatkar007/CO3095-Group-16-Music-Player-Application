@@ -98,10 +98,9 @@ def discover_tracks() -> List[Track]:
     """
     Scan MUSIC_DIR for supported audio files and return a list of Track objects.
 
-    If mutagen is available:
-        - read real metadata
+    If mutagen is available, then read real metadata
 
-    Otherwise, fallback to:
+    Otherwise, we fallback to the:
         - title = filename stem
         - artist = "Unknown"
         - duration = 180.0 (3 minutes)
@@ -134,6 +133,7 @@ def discover_tracks() -> List[Track]:
         if duration is None:
             duration = 180.0 # Default to 3 minutes
 
+        # Create Track object and add to the list
         track = Track(
             path=path,
             title=title,
