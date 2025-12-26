@@ -5,7 +5,11 @@ Stories:
  - S4-05: Custom Tags
  - S4-08: Playback Stats
 """
+import json
+from pathlib import Path
 from music_player.player_state import PlayerState
+
+CONFIG_FILE = Path("player_config.json")
 
 # S4-01: Remember Settings
 
@@ -14,7 +18,14 @@ def save_settings(state: PlayerState) -> None:
     Saves persistent config (Volume, Shuffle, Loop, Speed, Total Time)
     to player_config.json.
     """
-    pass
+    data = {
+        "volume": state.volume,
+        "shuffle": state.shuffle_active,
+        "loop": state.loop_mode,
+        "speed": state.playback_speed,
+        "tags": state.song_tags,
+        "total_time": state.total_play_time
+    }
 
 def load_settings(state: PlayerState) -> None:
     """
