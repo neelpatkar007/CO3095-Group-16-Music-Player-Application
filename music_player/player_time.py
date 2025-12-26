@@ -5,7 +5,13 @@ Stories:
  - S4-02: Schedule Playback
  - S4-06: Recently Added
 """
+import json
+import time
+import datetime
+from pathlib import Path
 from music_player.player_state import PlayerState
+
+RESUME_FILE = Path("resume_state.json")
 
 # S4-03: Resume State
 
