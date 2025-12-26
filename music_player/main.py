@@ -95,7 +95,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # Standard Playback Controls
     if base == "/play":
-        player_core.play(state)
+        # S4-03: Resume Logic (Apply seek if first play)
+        if state.resume_active and state.current_track:
+            print(f"[resume] Seeking to saved position: {int(state.position_seconds)}s...")
+            player_core.play(state)
+            if state.position_seconds > 0:
+                player_seek.seek_to(state, str(state.position_seconds))
+            state.resume_active = False  # Consumed
+        else:
+            player_core.play(state)
     elif base == "/pause":
         player_core.pause(state)
     elif base == "/stop":
