@@ -50,6 +50,15 @@ def load_resume_state(state: PlayerState) -> None:
 
         path_str = data.get("last_track_path")
         pos = data.get("position", 0.0)
+
+        # Find the track index
+        for idx, t in enumerate(state.tracks):
+            if str(t.path) == path_str:
+                state.current_index = idx
+                state.position_seconds = pos
+                state.resume_active = True # Signal for main.py
+                print(f"[state] Resume available: '{t.title}' at {int(pos)}s.")
+                break
     except Exception as e:
         print(f"[state] Error loading state: {e}")
 
