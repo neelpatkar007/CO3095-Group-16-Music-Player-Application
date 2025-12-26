@@ -15,7 +15,7 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
     Copies a valid audio file from an external source to the local 'songs/' directory.
     Triggers a library rescan upon success.
     """
-    pass
+    src = Path(source_path_str)
 
 
 # S4-10: Export Playlist
