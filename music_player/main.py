@@ -34,6 +34,11 @@ from music_player import (
     player_metrics
 )
 
+# Sprint 4 module
+from music_player import (
+    player_time
+)
+
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
@@ -90,7 +95,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # Standard Playback Controls
     if base == "/play":
-        player_core.play(state)
+        # S4-03: Resume Logic (Apply seek if first play)
+        if state.resume_active and state.current_track:
+            print(f"[resume] Seeking to saved position: {int(state.position_seconds)}s...")
+            player_core.play(state)
+            if state.position_seconds > 0:
+                player_seek.seek_to(state, str(state.position_seconds))
+            state.resume_active = False  # Consumed
+        else:
+            player_core.play(state)
     elif base == "/pause":
         player_core.pause(state)
     elif base == "/stop":
@@ -302,6 +315,9 @@ def main() -> None:
     # Load previously held metric data from start up (the JSON file)
     player_metrics.load_data(state)
 
+    # S4-03: Load resume state from previous session
+    player_time.load_resume_state(state)
+
     # Startup display welcome message and available commands summary
     print("Music Player – Sprint 3")
     print(
@@ -337,6 +353,8 @@ def main() -> None:
             if not handle_command(state, command):
                 break
     finally:
+        # S4-03: Save Resume State BEFORE stopping
+        player_time.save_resume_state(state)
         # Stop background playback loop
         stop_event.set()
         playback_thread.join(timeout=1.0)
