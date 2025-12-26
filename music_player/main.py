@@ -307,6 +307,9 @@ def main() -> None:
     # Load previously held metric data from start up (the JSON file)
     player_metrics.load_data(state)
 
+    # S4-03: Load resume state from previous session
+    player_time.load_resume_state(state)
+
     # Startup display welcome message and available commands summary
     print("Music Player – Sprint 3")
     print(
