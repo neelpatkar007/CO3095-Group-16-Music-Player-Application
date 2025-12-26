@@ -20,7 +20,20 @@ def save_resume_state(state: PlayerState) -> None:
     Saves the currently playing track path and exact timestamp to resume_state.json.
     Should be called before the player stops.
     """
-    pass
+    if not state.current_track:
+        return
+
+    data = {
+        "last_track_path": str(state.current_track.path),
+        "position": state.position_seconds,
+        "timestamp": time.time(),
+        "timestamp_human": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    try:
+        with open(RESUME_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"[state] Error saving state: {e}")
 
 def load_resume_state(state: PlayerState) -> None:
     """
