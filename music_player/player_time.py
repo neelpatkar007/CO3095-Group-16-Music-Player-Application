@@ -31,20 +31,26 @@ def save_resume_state(state: PlayerState) -> None:
     if state.current_track.path is None:
         return
 
+    # 4. Normalise position (ensure it's not negative)
+    save_pos = state.position_seconds if state.position_seconds > 0 else 0.0
+
     data = {
         "last_track_path": str(state.current_track.path),
-        "position": state.position_seconds,
+        "position": save_pos,
         "timestamp": time.time(),
         "timestamp_human": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
     try:
+        # 5. Check if parent directory exists before opening file
+        if not RESUME_FILE.parent.exists():
+            RESUME_FILE.parent.mkdir(parents=True, exist_ok=True)
+
         with open(RESUME_FILE, "w") as f:
             json.dump(data, f, indent=2)
         print(f"[state] Playback saved at {int(state.position_seconds)}s.")
     except Exception as e:
         print(f"[state] Error saving state: {e}")
-
 def load_resume_state(state: PlayerState) -> None:
     """
     Loads the last known track and position.
