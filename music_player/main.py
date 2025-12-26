@@ -34,6 +34,11 @@ from music_player import (
     player_metrics
 )
 
+# Sprint 4 module
+from music_player import (
+    player_time
+)
+
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
