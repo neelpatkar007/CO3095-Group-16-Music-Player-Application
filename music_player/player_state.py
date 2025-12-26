@@ -58,6 +58,7 @@ class PlayerState:
         # Config & Tags
 
         # Time & State
+        self.resume_active: bool = False  # Flag to trigger resume logic on boot
 
     @property
     def current_track(self) -> Optional[Track]:
