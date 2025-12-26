@@ -41,7 +41,17 @@ def load_resume_state(state: PlayerState) -> None:
     """
     Loads the last known track and position.
     """
-    pass
+    if not RESUME_FILE.exists():
+        return
+
+    try:
+        with open(RESUME_FILE, "r") as f:
+            data = json.load(f)
+
+        path_str = data.get("last_track_path")
+        pos = data.get("position", 0.0)
+    except Exception as e:
+        print(f"[state] Error loading state: {e}")
 
 # S4-02: Schedule Playback
 
