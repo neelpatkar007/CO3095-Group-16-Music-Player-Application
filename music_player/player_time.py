@@ -72,7 +72,16 @@ def load_resume_state(state: PlayerState) -> None:
     """
     Loads the last known track and position.
     """
+    # 1. Decision: State null check
+    if state is None:
+        return
+
+    # 2. Decision: File existence check
     if not RESUME_FILE.exists():
+        return
+
+    # 3. Decision: Is it actually a file?
+    if not RESUME_FILE.is_file():
         return
 
     try:
@@ -82,16 +91,16 @@ def load_resume_state(state: PlayerState) -> None:
         path_str = data.get("last_track_path")
         pos = data.get("position", 0.0)
 
-        # Find the track index
         for idx, t in enumerate(state.tracks):
             if str(t.path) == path_str:
                 state.current_index = idx
                 state.position_seconds = pos
-                state.resume_active = True # Signal for main.py
+                state.resume_active = True
                 print(f"[state] Resume available: '{t.title}' at {int(pos)}s.")
                 break
     except Exception as e:
         print(f"[state] Error loading state: {e}")
+
 
 # S4-02: Schedule Playback
 
