@@ -17,8 +17,6 @@ RESUME_FILE = Path("resume_state.json")
 def save_resume_state(state: PlayerState) -> None:
     """
     Saves the currently playing track path and exact timestamp to resume_state.json.
-    Should be called before the player stops.
-    Complexity: 10 Decision Points
     """
     # 1. Decision: State null check
     if state is None:
@@ -80,30 +78,48 @@ def load_resume_state(state: PlayerState) -> None:
     if not RESUME_FILE.exists():
         return
 
-    # 3. Decision: Is it actually a file?
-    if not RESUME_FILE.is_file():
-        return
-
     try:
+        # 3. Decision: Is it actually a file?
+        if not RESUME_FILE.is_file():
+            return
+
         with open(RESUME_FILE, "r") as f:
             data = json.load(f)
+
+        # 4. Decision: Validate dictionary structure
+        if not isinstance(data, dict):
+            return
 
         path_str = data.get("last_track_path")
         pos = data.get("position", 0.0)
 
-        for idx, t in enumerate(state.tracks):
+        # 5. Decision: Ensure path exists and track list is not empty
+        if not path_str or not state.tracks:
+            return
+
+        match_found = False
+        for idx, t in enumerate(state.tracks):  # 6. Decision: Loop
+            # 7. Decision: String comparison for path
             if str(t.path) == path_str:
                 state.current_index = idx
-                state.position_seconds = pos
+                state.position_seconds = pos if pos > 0 else 0.0  # 8. Decision: Ternary
                 state.resume_active = True
+                match_found = True
                 print(f"[state] Resume available: '{t.title}' at {int(pos)}s.")
                 break
+
+        # 9. Decision: Check if no match was found in library
+        if not match_found:
+            print("[state] Saved track no longer found in library.")
+
+    # 10. Decision: JSON decode error handling
+    except json.JSONDecodeError:
+        print("[state] Corrupt resume file.")
     except Exception as e:
         print(f"[state] Error loading state: {e}")
 
 
 # S4-02: Schedule Playback
-
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """
     Sets a one-time alarm for playback.
