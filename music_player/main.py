@@ -345,6 +345,8 @@ def main() -> None:
             if not handle_command(state, command):
                 break
     finally:
+        # S4-03: Save Resume State BEFORE stopping
+        player_time.save_resume_state(state)
         # Stop background playback loop
         stop_event.set()
         playback_thread.join(timeout=1.0)
