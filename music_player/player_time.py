@@ -14,14 +14,21 @@ from music_player.player_state import PlayerState
 RESUME_FILE = Path("resume_state.json")
 
 # S4-03: Resume State
-
 def save_resume_state(state: PlayerState) -> None:
     """
     Saves the currently playing track path and exact timestamp to resume_state.json.
     Should be called before the player stops.
     """
-    # Logic: If we have a current track, save the state.
+    # 1. Null check for state
+    if state is None:
+        return
+
+    # 2. Check if a track is actually active
     if not state.current_track:
+        return
+
+    # 3. Validation check for track path
+    if state.current_track.path is None:
         return
 
     data = {
@@ -30,6 +37,7 @@ def save_resume_state(state: PlayerState) -> None:
         "timestamp": time.time(),
         "timestamp_human": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
+
     try:
         with open(RESUME_FILE, "w") as f:
             json.dump(data, f, indent=2)
