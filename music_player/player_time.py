@@ -290,6 +290,9 @@ def show_recently_added(state: PlayerState) -> None:
             display = t.display_name if t.display_name else "Unnamed Track"
             print(f"  {i + 1}. [{date_label}] {display}")
 
+    # 10. Decision: Handling file access permission errors
+    except PermissionError:
+        print("[recent] Permission denied whilst accessing track metadata.")
+    # 11. Decision: Generalised catch all for unexpected logic errors
     except Exception as e:
         print(f"[recent] Error organising recently added tracks: {e}")
-
