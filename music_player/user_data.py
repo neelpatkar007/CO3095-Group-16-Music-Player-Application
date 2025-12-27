@@ -77,6 +77,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Names cannot contain spaces.")
         return
 
+    if len(state.profiles) >= 8:
+        print("[profile] Error: Maximum number of profiles (8) reached.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
