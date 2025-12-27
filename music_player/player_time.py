@@ -144,10 +144,16 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
 
     parts = time_str.split(":")
     # 5. Decision: Character type validation (Digits only)
-    if not all(p.isdigit() for p in parts):
+    if len(parts) != 2 or not all(p.isdigit() for p in parts):
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
+    h, m = int(parts[0]), int(parts[1])
+
+    # 6. Decision: Hour lower bound and 7. Hour upper bound
+    if h < 0 or h > 23:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
     try:
         # Validate HH:MM format
         datetime.datetime.strptime(time_str, "%H:%M")
