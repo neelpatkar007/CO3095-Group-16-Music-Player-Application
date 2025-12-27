@@ -126,7 +126,11 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
     Sets a one-time alarm for playback.
     time_str: Time in 'HH:MM' 24-hour format.
     """
-    state.scheduled_alarms = [time_str]
+    try:
+        datetime.datetime.strptime(time_str, "%H:%M")
+        state.scheduled_alarms = [time_str]
+    except ValueError:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
     pass
 
