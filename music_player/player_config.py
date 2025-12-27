@@ -101,7 +101,12 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     """
     Adds a custom tag to a specific song by index.
     """
-    pass
+    try:
+        idx = int(index_str) - 1
+        if not (0 <= idx < len(state.library_tracks)): raise ValueError
+    except ValueError:
+        print("[tags] Invalid song number.")
+        return
 
 def list_all_tags(state: PlayerState) -> None:
     """
