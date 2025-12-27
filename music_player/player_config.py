@@ -122,6 +122,12 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
         print("[tags] Error: Tag is too long (max 15 chars).")
         return
 
+    valid_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+    for char in clean_tag:
+        if char not in valid_chars:
+            print(f"[tags] Error: Invalid character '{char}'. Use A-Z, 0-9, _ only.")
+            return
+
     if path_str not in state.song_tags:
         state.song_tags[path_str] = []
 
