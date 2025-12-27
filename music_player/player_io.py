@@ -88,3 +88,6 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     try:
         from mutagen.easyid3 import EasyID3
         from mutagen.id3 import ID3NoHeaderError
+
+        try:
+            audio = EasyID3(track.path)
