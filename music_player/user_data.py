@@ -57,6 +57,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Name cannot be empty.")
         return
 
+    if name == "default":
+        print("[profile] 'default' is reserved.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
