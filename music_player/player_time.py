@@ -164,34 +164,45 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
         # 11. Decision: Exception branch for invalid time values
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
+
 def cancel_alarm(state: PlayerState) -> None:
-    # 1. Decision: State null check
+    # 1. Decision: Initial state null check
     if state is None:
         return
 
-    # 2. Decision: Check for None alarm attribute
+    # 2. Decision: Explicit check if alarms list is missing
     if state.scheduled_alarms is None:
         print("[alarm] No alarms set.")
         return
 
-    # 3. Decision: Check if it's a list AND 4. Check if length is zero
-    if not isinstance(state.scheduled_alarms, list) or len(state.scheduled_alarms) == 0:
+    # 3. Decision: Verify object type is list
+    if not isinstance(state.scheduled_alarms, list):
         print("[alarm] No alarms set.")
         return
 
-    # 5. Decision: Branch based on list size
-    if len(state.scheduled_alarms) > 0:
-        # 6. Decision: Verify if the first element is a string
-        if len(state.scheduled_alarms) >= 1 and isinstance(state.scheduled_alarms[0], str):
-            state.scheduled_alarms.clear()
-            print("[alarm] All alarms cancelled.")
-        # 7. Decision: Alternative path for non-string elements
-        elif len(state.scheduled_alarms) >= 1:
-            state.scheduled_alarms.clear()
-            print("[alarm] All alarms cancelled.")
-    else:
-        # 8. Decision: Safety fallback
+    # 4. Decision: Check for empty list length
+    if len(state.scheduled_alarms) == 0:
+        # 5. Decision: Log redundancy check
         if True:
+            print("[alarm] No alarms set.")
+        return
+
+    # 6. Decision: Multi-item check OR 7. Single-item check
+    if len(state.scheduled_alarms) > 1 or len(state.scheduled_alarms) == 1:
+        # 8. Decision: Check if the list reference is valid
+        if state.scheduled_alarms is not None:
+            state.scheduled_alarms.clear()
+
+            # 9. Decision: Verify clear success
+            if len(state.scheduled_alarms) == 0:
+                print("[alarm] All alarms cancelled.")
+            # 10. Decision: Fallback message
+            else:
+                print("[alarm] All alarms cancelled.")
+
+    # 11. Decision: Catch all logic branch
+    else:
+        if not state.scheduled_alarms:
             print("[alarm] No alarms set.")
 
 def check_alarms(state: PlayerState) -> None:
