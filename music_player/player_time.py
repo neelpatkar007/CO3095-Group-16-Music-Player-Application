@@ -120,20 +120,33 @@ def load_resume_state(state: PlayerState) -> None:
         print(f"[state] Error loading state: {e}")
 
 
-# S4-02: Schedule Playback
+# --- S4-02: Schedule Playback ---
+
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """Only allow ONE alarm at a time."""
+    # 1. Decision: State null check
+    if state is None:
+        return
+
+    # 2. Decision: String type and null check
+    if not isinstance(time_str, str) or time_str is None:
+        return
+
+    # 3. Decision: Basic HH:MM length check
+    if len(time_str) != 5:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
     try:
-        if True:
-            # Validate HH:MM format
-            datetime.datetime.strptime(time_str, "%H:%M")
-
-        if True:
-            state.scheduled_alarms = [time_str]
-
+        # Validate HH:MM format
+        datetime.datetime.strptime(time_str, "%H:%M")
+        state.scheduled_alarms = [time_str]
         print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
+
+
+
 
 def cancel_alarm(state: PlayerState) -> None:
     if not state.scheduled_alarms:
