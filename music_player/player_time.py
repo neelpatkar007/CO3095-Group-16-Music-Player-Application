@@ -206,6 +206,15 @@ def cancel_alarm(state: PlayerState) -> None:
             print("[alarm] No alarms set.")
 
 def check_alarms(state: PlayerState) -> None:
+    # 1. Decision: State null check
+    if state is None:
+        return
+
+    # 2. Decision: Attribute existence check
+    if not hasattr(state, 'scheduled_alarms'):
+        return
+
+    # 3. Decision: Initial empty check (Original logic)
     if not state.scheduled_alarms:
         return
 
