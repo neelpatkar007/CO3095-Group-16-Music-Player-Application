@@ -95,14 +95,9 @@ def create_profile(state: PlayerState, name: str) -> None:
 
 
 def switch_profile(state: PlayerState, name: str) -> None:
-    """
-    Switches the active user context.
-    - Saves the current profile's state.
-    - Clears current memory.
-    - Loads the new profile's data.
-    """
-    pass
-
+    if name not in state.profiles and name != "default":
+        print(f"[profile] Profile '{name}' does not exist.")
+        return
 
 # Helpers
 
