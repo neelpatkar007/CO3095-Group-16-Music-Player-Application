@@ -65,6 +65,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Name must be at least 3 characters.")
         return
 
+    if len(name) > 15:
+        print("[profile] Error: Name must be under 15 characters.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
