@@ -141,7 +141,14 @@ def filter_by_tag(state: PlayerState, tag: str) -> None:
     """
     Creates a temporary playlist queue containing only songs with the specified tag.
     """
-    pass
+    tag = tag.strip().lstrip("#")
+    matches = []
+    for path_str, tags in state.song_tags.items():
+        if tag in tags:
+            for t in state.library_tracks:
+                if str(t.path) == path_str:
+                    matches.append(t)
+                    break
 
 # S4-08: Playback Statistics
 
