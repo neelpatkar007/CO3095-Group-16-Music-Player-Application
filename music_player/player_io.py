@@ -5,7 +5,11 @@ Stories:
  - S4-10: Export Playlist
  - S4-11: Update Metadata
 """
+import shutil
+from pathlib import Path
 from music_player.player_state import PlayerState
+from music_player.config import MUSIC_DIR, SUPPORTED_EXTENSIONS
+from music_player import library
 
 
 # S4-04: Import Songs
