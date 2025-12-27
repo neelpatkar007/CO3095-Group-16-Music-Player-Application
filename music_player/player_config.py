@@ -124,7 +124,13 @@ def list_all_tags(state: PlayerState) -> None:
     """
     Prints all tags currently existing in the library.
     """
-    pass
+    unique_tags = set()
+    for tags in state.song_tags.values():
+        unique_tags.update(tags)
+
+    if not unique_tags:
+        print("[tags] No tags created yet.")
+        return
 
 def filter_by_tag(state: PlayerState, tag: str) -> None:
     """
