@@ -99,6 +99,10 @@ def switch_profile(state: PlayerState, name: str) -> None:
         print(f"[profile] Profile '{name}' does not exist.")
         return
 
+    if name == state.active_profile:
+        print(f"[profile] Already on '{name}'.")
+        return
+
 # Helpers
 
 def _serialize_current_state(state: PlayerState) -> dict:
