@@ -56,7 +56,9 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
     name_or_file: Name of the playlist to export.
     filename_arg: Optional specific filename for the output.
     """
-    pass
+    def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
+        target_tracks = []
+        output_filename = ""
 
 
 # S4-11: Update Metadata
