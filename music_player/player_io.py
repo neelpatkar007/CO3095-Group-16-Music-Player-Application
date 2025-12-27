@@ -19,9 +19,20 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
     Copies a valid audio file from an external source to the local 'songs/' directory.
     Triggers a library rescan upon success.
     """
+    if not source_path_str:
+        return
+
     src = Path(source_path_str)
     if not src.exists():
         print("[import] Error: File not found.")
+        return
+
+    if not src.is_file():
+        print("[import] Error: Source is not a file.")
+        return
+
+    if src.stat().st_size == 0:
+        print("[import] Error: File is empty.")
         return
 
     if src.suffix.lower() not in SUPPORTED_EXTENSIONS:
@@ -45,6 +56,9 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
 
         if not state.tracks:
             state.tracks = new_tracks
+    except PermissionError:
+        print("[import] Error: Permission denied.")
+
     except Exception as e:
         print(f"[import] Copy failed: {e}")
 
