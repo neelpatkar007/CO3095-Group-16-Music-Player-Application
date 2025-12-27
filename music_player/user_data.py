@@ -61,8 +61,8 @@ def _save_profiles(state: PlayerState):
 
 
 def _save_current_to_profile(state: PlayerState):
-    """Helper: Snapshots current active state into the profiles dictionary."""
-    pass
+    state.profiles[state.active_profile] = _serialize_current_state(state)
+    _save_profiles(state)
 
 
 # S4-07: User Profiles
