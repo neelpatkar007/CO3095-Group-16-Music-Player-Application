@@ -151,6 +151,8 @@ def check_alarms(state: PlayerState) -> None:
         return
 
     now = datetime.datetime.now().strftime("%H:%M")
+    if now in state.scheduled_alarms:
+        pass
 
 # S4-06: Recently Added
 
