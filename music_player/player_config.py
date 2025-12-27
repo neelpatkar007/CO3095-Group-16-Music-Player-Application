@@ -107,6 +107,18 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     except ValueError:
         print("[tags] Invalid song number.")
         return
+    track = state.library_tracks[idx]
+    path_str = str(track.path)
+
+    if path_str not in state.song_tags:
+        state.song_tags[path_str] = []
+
+    tag = tag.strip().lstrip("#")
+    if tag not in state.song_tags[path_str]:
+        state.song_tags[path_str].append(tag)
+        print(f"[tags] Added #{tag} to '{track.title}'.")
+    else:
+        print(f"[tags] Song already has tag #{tag}.")
 
 def list_all_tags(state: PlayerState) -> None:
     """
