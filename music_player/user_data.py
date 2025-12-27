@@ -30,8 +30,22 @@ def _serialize_current_state(state: PlayerState) -> dict:
         }
 
 def _apply_profile_data(state: PlayerState, data: dict):
-    """Helper: Restores runtime objects from a dictionary."""
-    pass
+    state.liked_tracks = set(data.get("liked", []))
+    state.song_ratings = data.get("ratings", {})
+
+    restored_pl = []
+    for p_dict in data.get("playlists", []):
+        pl_name = p_dict.get("name", "Unknown")
+        new_pl = Playlist(pl_name)
+
+        for path_str in p_dict.get("tracks", []):
+            for t in state.library_tracks:
+                if str(t.path) == path_str:
+                    new_pl.tracks.append(t)
+                    break
+        restored_pl.append(new_pl)
+
+    state.playlists = restored_pl
 
 
 def _save_profiles(state: PlayerState):
