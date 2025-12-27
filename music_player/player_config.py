@@ -128,6 +128,11 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
             print(f"[tags] Error: Invalid character '{char}'. Use A-Z, 0-9, _ only.")
             return
 
+    current_tags = state.song_tags.get(path_str, [])
+    if len(current_tags) >= 5:
+        print(f"[tags] Error: Song '{track.title}' has reached the limit of 5 tags.")
+        return
+
     if path_str not in state.song_tags:
         state.song_tags[path_str] = []
 
