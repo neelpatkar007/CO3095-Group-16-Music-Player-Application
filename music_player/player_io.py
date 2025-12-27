@@ -28,6 +28,9 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         MUSIC_DIR.mkdir()
 
     dest = MUSIC_DIR / src.name
+    if dest.exists():
+        print(f"[import] Error: File '{src.name}' already exists in library.")
+        return
 
 # S4-10: Export Playlist
 
