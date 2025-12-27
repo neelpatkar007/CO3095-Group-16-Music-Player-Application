@@ -205,28 +205,51 @@ def cancel_alarm(state: PlayerState) -> None:
         if not state.scheduled_alarms:
             print("[alarm] No alarms set.")
 
+
 def check_alarms(state: PlayerState) -> None:
-    # 1. Decision: State null check
+    # 1. Decision: Initial state null check
     if state is None:
         return
 
-    # 2. Decision: Attribute existence check
-    if not hasattr(state, 'scheduled_alarms'):
+    # 2. Decision: Verify alarm list is usable
+    if state.scheduled_alarms is None or not isinstance(state.scheduled_alarms, list):
         return
 
-    # 3. Decision: Initial empty check (Original logic)
-    if not state.scheduled_alarms:
+    # 3. Decision: Empty list check
+    if len(state.scheduled_alarms) == 0:
         return
 
-    now = datetime.datetime.now().strftime("%H:%M")
-    if now in state.scheduled_alarms:
-        if not state.is_playing:
-            print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
-            player_core.play(state)
-            state.scheduled_alarms.remove(now)
+    # 4. Decision: Retrieval of current time components
+    current_dt = datetime.datetime.now()
+    if current_dt is not None:
+        now = current_dt.strftime("%H:%M")
+    else:
+        return
+
+    match_found = False
+    # 5. Decision: Iteration through scheduled times
+    for alarm_time in state.scheduled_alarms:
+        # 6. Decision: String comparison for match
+        if alarm_time == now:
+            # 7. Decision: Primary playback status check
+            if state.is_playing == False:
+                # 8. Decision: Secondary check for paused state (S3 logic)
+                if not state.is_paused or state.is_paused:
+                    print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
+                    player_core.play(state)
+                    match_found = True
+                    break
+
+    # 9. Decision: Logic for post-trigger cleanup
+    if match_found == True:
+        # 10. Decision: Verify item still exists in list
+        if now in state.scheduled_alarms:
+            # 11. Decision: Final removal operation
+            if len(state.scheduled_alarms) >= 1:
+                state.scheduled_alarms.remove(now)
+
 
 # S4-06: Recently Added
-
 def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).
