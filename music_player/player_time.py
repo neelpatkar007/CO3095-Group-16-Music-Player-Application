@@ -252,8 +252,17 @@ def check_alarms(state: PlayerState) -> None:
 # S4-06: Recently Added
 def show_recently_added(state: PlayerState) -> None:
     """
-    Displays the top 10 songs sorted by file modification date (newest to oldest).
+    Displays the top 10 songs sorted by file modification date.
     """
+    # 1. Decision: Initialising state null check
+    if state is None:
+        return
+
+    # 2. Decision: Checking if the library collection exists
+    if state.library_tracks is None:
+        print("[recent] No library tracks found.")
+        return
+
     print("--- Recently Added Songs ---")
     try:
         recent = sorted(
@@ -265,4 +274,6 @@ def show_recently_added(state: PlayerState) -> None:
             date_str = datetime.datetime.fromtimestamp(t.path.stat().st_mtime).strftime('%Y-%m-%d')
             print(f"  {i+1}. [{date_str}] {t.display_name}")
     except Exception as e:
-        print(f"[recent] Error reading file dates: {e}")
+        print(f"[recent] Error: {e}")
+
+
