@@ -36,7 +36,9 @@ from music_player import (
 
 # Sprint 4 module
 from music_player import (
-    player_time
+    player_time,
+    player_io
+
 )
 
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
@@ -294,6 +296,11 @@ def handle_command(state: PlayerState, command: str) -> bool:
             player_core.set_sleep_timer(state, float(args[0]))
         except (IndexError, ValueError):
             print("Usage: /sleep <minutes>")
+
+    # Sprint 4 Commands
+    # S4-04: Import Songs
+    elif base == "/import":
+        player_io.import_song(state, " ".join(args))
 
     # Unknown command
     else:
