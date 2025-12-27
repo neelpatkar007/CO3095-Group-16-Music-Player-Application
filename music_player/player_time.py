@@ -122,20 +122,16 @@ def load_resume_state(state: PlayerState) -> None:
 
 # S4-02: Schedule Playback
 def set_alarm(state: PlayerState, time_str: str) -> None:
-    """
-    Sets a one-time alarm for playback.
-    time_str: Time in 'HH:MM' 24-hour format.
-    """
+    """Only allow ONE alarm at a time."""
     try:
+        # Validate HH:MM format
         datetime.datetime.strptime(time_str, "%H:%M")
         state.scheduled_alarms = [time_str]
+        print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
 def cancel_alarm(state: PlayerState) -> None:
-    """
-    Cancels any pending alarms.
-    """
     if not state.scheduled_alarms:
         print("[alarm] No alarms set.")
     else:
@@ -143,10 +139,6 @@ def cancel_alarm(state: PlayerState) -> None:
         print("[alarm] All alarms cancelled.")
 
 def check_alarms(state: PlayerState) -> None:
-    """
-    Checks if current system time matches the alarm.
-    Triggers playback if match found.
-    """
     if not state.scheduled_alarms:
         return
 
@@ -156,6 +148,7 @@ def check_alarms(state: PlayerState) -> None:
             print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
             player_core.play(state)
             state.scheduled_alarms.remove(now)
+
 # S4-06: Recently Added
 
 def show_recently_added(state: PlayerState) -> None:
