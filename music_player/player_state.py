@@ -56,6 +56,8 @@ class PlayerState:
         # User Data
 
         # Config & Tags
+        self.song_tags: Dict[str, List[str]] = {}
+        self.total_play_time: float = 0.0
 
         # Time & State
         self.resume_active: bool = False  # Flag to trigger resume logic on boot
