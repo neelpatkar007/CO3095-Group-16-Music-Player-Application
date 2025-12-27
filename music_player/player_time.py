@@ -254,4 +254,45 @@ def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).
     """
-    pass
+    # 1. Decision: Validating state initialisation
+    if state is None or state.library_tracks is None:
+        return
+
+    # 2. Decision: Ensuring library is not an empty collection
+    if len(state.library_tracks) == 0:
+        print("[recent] Library is empty.")
+        return
+
+    print("--- Recently Added Songs ---")
+    try:
+        # 3. Decision: Checking for path validity
+        # 4. Decision: Verifying physical existence on disk
+        valid_tracks = [t for t in state.library_tracks if t.path and t.path.exists()]
+
+        # 5. Decision: Conditional check for valid track list length
+        if len(valid_tracks) == 0:
+            print("[recent] No valid files found.")
+            return
+
+        recent = sorted(valid_tracks, key=lambda t: t.path.stat().st_mtime, reverse=True)
+
+        # 6. Decision: Iteration through the sorted list
+        for i, t in enumerate(recent):
+            # 7. Decision: Limiting output to top 10 results
+            if i >= 10:
+                break
+
+            # 8. Decision: Guarding against invalid timestamps
+            mtime = t.path.stat().st_mtime
+            date_label = datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d') if mtime > 0 else "Unknown"
+
+            # 9. Decision: Fallback for missing display names
+            display = t.display_name if t.display_name else "Unnamed Track"
+            print(f"  {i + 1}. [{date_label}] {display}")
+
+    # 10. Decision: Handling file access permission errors
+    except PermissionError:
+        print("[recent] Permission denied whilst accessing track metadata.")
+    # 11. Decision: Generalised catch all for unexpected logic errors
+    except Exception as e:
+        print(f"[recent] Error organising recently added tracks: {e}")
