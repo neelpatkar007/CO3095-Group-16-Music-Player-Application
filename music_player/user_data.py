@@ -53,10 +53,9 @@ def show_current_profile(state: PlayerState) -> None:
 
 
 def create_profile(state: PlayerState, name: str) -> None:
-    """
-    Creates a new user profile with empty data and saves it.
-    """
-    pass
+    if not name:
+        print("[profile] Error: Name cannot be empty.")
+        return
 
 
 def switch_profile(state: PlayerState, name: str) -> None:
