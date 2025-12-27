@@ -141,6 +141,13 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
     if ":" not in time_str:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
+
+    parts = time_str.split(":")
+    # 5. Decision: Character type validation (Digits only)
+    if not all(p.isdigit() for p in parts):
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
     try:
         # Validate HH:MM format
         datetime.datetime.strptime(time_str, "%H:%M")
@@ -148,7 +155,6 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
         print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
-
 
 def cancel_alarm(state: PlayerState) -> None:
     if not state.scheduled_alarms:
