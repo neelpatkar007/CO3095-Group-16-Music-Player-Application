@@ -132,13 +132,15 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
-    pass
-
 def cancel_alarm(state: PlayerState) -> None:
     """
     Cancels any pending alarms.
     """
-    pass
+    if not state.scheduled_alarms:
+        print("[alarm] No alarms set.")
+    else:
+        state.scheduled_alarms.clear()
+        print("[alarm] All alarms cancelled.")
 
 def check_alarms(state: PlayerState) -> None:
     """
