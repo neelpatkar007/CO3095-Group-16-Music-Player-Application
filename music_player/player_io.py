@@ -66,4 +66,6 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     Updates the metadata (Title or Artist) of a song.
     Will write changes persistently to the file using mutagen if installed.
     """
-    pass
+    try:
+        idx = int(index_str) - 1
+        if not (0 <= idx < len(state.library_tracks)): raise ValueError
