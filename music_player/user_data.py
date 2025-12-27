@@ -44,6 +44,9 @@ def list_profiles(state: PlayerState) -> None:
     all_profiles = set(state.profiles.keys())
     all_profiles.add("default")
 
+    for name in sorted(all_profiles):
+        marker = " (Active)" if state.active_profile == name else ""
+        print(f"  - {name}{marker}")
 
 def show_current_profile(state: PlayerState) -> None:
     """
