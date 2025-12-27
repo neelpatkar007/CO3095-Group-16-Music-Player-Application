@@ -82,3 +82,5 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     else:
         print("[edit] Can only edit 'title' or 'artist'.")
         return
+
+    print(f"[edit] Updated {field} to '{value}'.")
