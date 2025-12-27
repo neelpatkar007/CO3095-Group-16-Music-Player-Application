@@ -302,6 +302,13 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/import":
         player_io.import_song(state, " ".join(args))
 
+    # S4-11: Update Metadata
+    elif base == "/edit":
+        if len(args) >= 3:
+            player_io.update_metadata(state, args[0], args[1], " ".join(args[2:]))
+        else:
+            print("Usage: /edit <index> <title|artist> <value>")
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
