@@ -149,6 +149,16 @@ def filter_by_tag(state: PlayerState, tag: str) -> None:
                 if str(t.path) == path_str:
                     matches.append(t)
                     break
+    if not matches:
+        print(f"[tags] No songs found with #{tag}.")
+        return
+    print(f"[tags] Queue updated! Ready to play {len(matches)} songs tagged #{tag}:")
+    for t in matches:
+        print(f"  - {t.display_name}")
+
+    # Update Queue Logic
+    state.tracks = matches
+    state.current_index = 0
 
 # S4-08: Playback Statistics
 
