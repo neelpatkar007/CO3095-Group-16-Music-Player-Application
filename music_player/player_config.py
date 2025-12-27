@@ -26,6 +26,12 @@ def save_settings(state: PlayerState) -> None:
         "tags": state.song_tags,
         "total_time": state.total_play_time
     }
+    try:
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+        print("[config] Settings saved.")
+    except Exception as e:
+        print(f"[config] Error saving settings: {e}")
 
 def load_settings(state: PlayerState) -> None:
     """
