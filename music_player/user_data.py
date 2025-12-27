@@ -61,6 +61,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] 'default' is reserved.")
         return
 
+    if len(name) < 3:
+        print("[profile] Error: Name must be at least 3 characters.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
