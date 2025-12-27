@@ -91,3 +91,8 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
 
         try:
             audio = EasyID3(track.path)
+        except ID3NoHeaderError:
+            audio = EasyID3()
+            audio.filename = track.path
+            audio.save()  # Creating a header
+            audio = EasyID3(track.path)
