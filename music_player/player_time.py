@@ -150,6 +150,8 @@ def check_alarms(state: PlayerState) -> None:
     if not state.scheduled_alarms:
         return
 
+    now = datetime.datetime.now().strftime("%H:%M")
+
 # S4-06: Recently Added
 
 def show_recently_added(state: PlayerState) -> None:
