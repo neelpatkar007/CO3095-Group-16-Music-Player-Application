@@ -79,3 +79,6 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         track.title = value
     elif field == "artist":
         track.artist = value
+    else:
+        print("[edit] Can only edit 'title' or 'artist'.")
+        return
