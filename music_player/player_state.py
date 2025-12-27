@@ -60,6 +60,7 @@ class PlayerState:
         self.total_play_time: float = 0.0
 
         # Time & State
+        self.scheduled_alarms: List[str] = []  # List of "HH:MM" strings
         self.resume_active: bool = False  # Flag to trigger resume logic on boot
 
     @property
