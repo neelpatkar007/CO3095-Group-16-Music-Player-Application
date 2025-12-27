@@ -16,7 +16,9 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
     Triggers a library rescan upon success.
     """
     src = Path(source_path_str)
-
+    if not src.exists():
+        print("[import] Error: File not found.")
+        return
 
 # S4-10: Export Playlist
 
