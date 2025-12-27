@@ -49,8 +49,15 @@ def _apply_profile_data(state: PlayerState, data: dict):
 
 
 def _save_profiles(state: PlayerState):
-    """Helper: Persists the entire profiles index to profiles.json."""
-    pass
+    try:
+        data = {
+            "active": state.active_profile,
+            "profiles": state.profiles
+        }
+        with open(PROFILE_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"[profile] Error saving: {e}")
 
 
 def _save_current_to_profile(state: PlayerState):
