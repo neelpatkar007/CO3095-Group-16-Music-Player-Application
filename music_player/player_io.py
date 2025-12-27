@@ -84,3 +84,7 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         return
 
     print(f"[edit] Updated {field} to '{value}'.")
+
+    try:
+        from mutagen.easyid3 import EasyID3
+        from mutagen.id3 import ID3NoHeaderError
