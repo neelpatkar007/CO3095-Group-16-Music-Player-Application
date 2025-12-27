@@ -154,6 +154,12 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
     if h < 0 or h > 23:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
+
+    # 8. Decision: Minute range check
+    if m < 0 or m > 59:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
     try:
         # Validate HH:MM format
         datetime.datetime.strptime(time_str, "%H:%M")
