@@ -8,9 +8,35 @@ Stories:
 import json
 from pathlib import Path
 from music_player.player_state import PlayerState
+from music_player import time_utils
+from music_player.playlist_model import Playlist
 
 
 PROFILE_FILE = Path("profiles.json")
+
+# Helpers
+
+def _serialize_current_state(state: PlayerState) -> dict:
+    pl_data = []
+    for pl in state.playlists:
+        pl_data.append({
+            "name": pl.name,
+            "tracks": [str(t.path) for t in pl.tracks]
+        })
+
+def _apply_profile_data(state: PlayerState, data: dict):
+    """Helper: Restores runtime objects from a dictionary."""
+    pass
+
+
+def _save_profiles(state: PlayerState):
+    """Helper: Persists the entire profiles index to profiles.json."""
+    pass
+
+
+def _save_current_to_profile(state: PlayerState):
+    """Helper: Snapshots current active state into the profiles dictionary."""
+    pass
 
 
 # S4-07: User Profiles
@@ -102,27 +128,6 @@ def switch_profile(state: PlayerState, name: str) -> None:
     if name == state.active_profile:
         print(f"[profile] Already on '{name}'.")
         return
-
-# Helpers
-
-def _serialize_current_state(state: PlayerState) -> dict:
-    """Helper: Converts Playlists to JSON dictionaries."""
-    pass
-
-
-def _apply_profile_data(state: PlayerState, data: dict):
-    """Helper: Restores runtime objects from a dictionary."""
-    pass
-
-
-def _save_profiles(state: PlayerState):
-    """Helper: Persists the entire profiles index to profiles.json."""
-    pass
-
-
-def _save_current_to_profile(state: PlayerState):
-    """Helper: Snapshots current active state into the profiles dictionary."""
-    pass
 
 
 # S4-09: Advanced Search
