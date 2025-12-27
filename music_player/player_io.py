@@ -91,6 +91,8 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
 
         try:
             with open(output_filename, "w", encoding="utf-8") as f:
+                f.write("#EXTM3U\n")
+                for t in target_tracks:
 
 
 # S4-11: Update Metadata
