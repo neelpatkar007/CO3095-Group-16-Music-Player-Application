@@ -262,9 +262,7 @@ def show_recently_added(state: PlayerState) -> None:
             reverse=True
         )
         for i, t in enumerate(recent[:10]):
-            date_str = datetime.datetime.fromtimestamp(
-                t.path.stat().st_mtime
-            ).strftime('%Y-%m-%d')
+            date_str = datetime.datetime.fromtimestamp(t.path.stat().st_mtime).strftime('%Y-%m-%d')
             print(f"  {i+1}. [{date_str}] {t.display_name}")
     except Exception as e:
         print(f"[recent] Error reading file dates: {e}")
