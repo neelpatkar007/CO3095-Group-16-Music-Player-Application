@@ -54,6 +54,9 @@ class PlayerState:
         self.liked_tracks: Set[str] = set()
 
         # User Data
+        self.active_profile: str = "default"
+        self.profiles: Dict[str, Any] = {}  # Stores data for other profiles
+        self.song_ratings: Dict[str, int] = {}  # Path -> Rating (1-5)
 
         # Config & Tags
         self.song_tags: Dict[str, List[str]] = {}
