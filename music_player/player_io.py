@@ -76,7 +76,11 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
             else:
                 output_filename = f"{found_playlist.name}.m3u"
             print(f"[export] Exporting playlist '{found_playlist.name}'...")
-
+        else:
+            # The user is exporting the current queue - and name_or_file is the filename.
+            target_tracks = state.tracks
+            output_filename = name_or_file
+            print(f"[export] Exporting current library/queue...")
 
 
 # S4-11: Update Metadata
