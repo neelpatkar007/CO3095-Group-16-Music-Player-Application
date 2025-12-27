@@ -103,12 +103,24 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     """
     try:
         idx = int(index_str) - 1
-        if not (0 <= idx < len(state.library_tracks)): raise ValueError
     except ValueError:
-        print("[tags] Invalid song number.")
+        print("[tags] Error: Invalid number format.")
+        return
+    if idx < 0 or idx >= len(state.library_tracks):
+        print("[tags] Error: Song index out of range.")
         return
     track = state.library_tracks[idx]
     path_str = str(track.path)
+
+    clean_tag = tag.strip().lstrip("#")
+
+    if not clean_tag:
+        print("[tags] Error: Tag cannot be empty.")
+        return
+
+    if len(clean_tag) > 15:
+        print("[tags] Error: Tag is too long (max 15 chars).")
+        return
 
     if path_str not in state.song_tags:
         state.song_tags[path_str] = []
