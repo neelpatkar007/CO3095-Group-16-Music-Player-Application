@@ -37,8 +37,8 @@ from music_player import (
 # Sprint 4 module
 from music_player import (
     player_time,
-    player_io
-
+    player_io,
+    player_config
 )
 
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
@@ -301,6 +301,19 @@ def handle_command(state: PlayerState, command: str) -> bool:
     # S4-04: Import Songs
     elif base == "/import":
         player_io.import_song(state, " ".join(args))
+    # S4-05: Add, List & Filter Tag
+    elif base == "/tag.add":
+        if len(args) < 2:
+            print("Usage: /tag.add <song-index> <tag>")
+        else:
+            player_config.add_tag(state, args[0], args[1])
+    elif base == "/tags":
+        player_config.list_all_tags(state)
+    elif base == "/tag.filter":
+        if not args:
+            print("[tags] Usage: /tag.play <tag_name>")
+        else:
+            player_config.filter_by_tag(state, args[0])
 
     # Unknown command
     else:
