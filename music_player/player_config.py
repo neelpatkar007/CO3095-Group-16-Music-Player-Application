@@ -132,6 +132,11 @@ def list_all_tags(state: PlayerState) -> None:
         print("[tags] No tags created yet.")
         return
 
+    print("--- Custom Tags ---")
+    for t in sorted(unique_tags):
+        count = sum(1 for tags in state.song_tags.values() if t in tags)
+        print(f"  #{t} ({count} songs)")
+
 def filter_by_tag(state: PlayerState, tag: str) -> None:
     """
     Creates a temporary playlist queue containing only songs with the specified tag.
