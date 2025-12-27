@@ -81,6 +81,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Maximum number of profiles (8) reached.")
         return
 
+    if name in state.profiles:
+        print(f"[profile] Profile '{name}' already exists.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
