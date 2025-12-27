@@ -302,6 +302,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/import":
         player_io.import_song(state, " ".join(args))
 
+    elif base == "/pl.export":
+        player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
+            "Usage: /pl.export <playlist>")
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
