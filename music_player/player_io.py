@@ -74,3 +74,8 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         return
 
     track = state.library_tracks[idx]
+
+    if field == "title":
+        track.title = value
+    elif field == "artist":
+        track.artist = value
