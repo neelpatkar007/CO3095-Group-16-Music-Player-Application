@@ -36,6 +36,7 @@ from music_player import (
 
 # Sprint 4 module
 from music_player import (
+    user_data,
     player_time,
     player_io,
     player_config
@@ -338,6 +339,16 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.export":
         player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
             "Usage: /pl.export <playlist>")
+
+    #S4-07: User Profile Switch
+    elif base == "/profile.new":
+        user_data.create_profile(state, args[0] if args else "")
+    elif base == "/profile.switch":
+        user_data.switch_profile(state, args[0] if args else "")
+    elif base == "/profiles":
+        user_data.list_profiles(state)
+    elif base == "/profile":
+        user_data.show_current_profile(state)
 
     # Unknown command
     else:
