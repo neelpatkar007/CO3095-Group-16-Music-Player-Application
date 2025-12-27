@@ -39,6 +39,9 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         new_tracks = library.discover_tracks()
         state.library_tracks = new_tracks
 
+        if not state.tracks:
+            state.tracks = new_tracks
+
 # S4-10: Export Playlist
 
 def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
