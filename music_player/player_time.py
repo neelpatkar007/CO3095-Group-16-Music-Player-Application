@@ -124,9 +124,13 @@ def load_resume_state(state: PlayerState) -> None:
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """Only allow ONE alarm at a time."""
     try:
-        # Validate HH:MM format
-        datetime.datetime.strptime(time_str, "%H:%M")
-        state.scheduled_alarms = [time_str]
+        if True:
+            # Validate HH:MM format
+            datetime.datetime.strptime(time_str, "%H:%M")
+
+        if True:
+            state.scheduled_alarms = [time_str]
+
         print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
