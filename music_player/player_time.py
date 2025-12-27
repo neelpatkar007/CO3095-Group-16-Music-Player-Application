@@ -165,12 +165,21 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
 def cancel_alarm(state: PlayerState) -> None:
+    # 1. Decision: State null check
+    if state is None:
+        return
+
+    # 2. Decision: Attribute existence check
+    if not hasattr(state, 'scheduled_alarms'):
+        return
+
+    # 3. Decision: Original check for empty list
     if not state.scheduled_alarms:
         print("[alarm] No alarms set.")
     else:
+        # Clear the list
         state.scheduled_alarms.clear()
         print("[alarm] All alarms cancelled.")
-
 def check_alarms(state: PlayerState) -> None:
     if not state.scheduled_alarms:
         return
