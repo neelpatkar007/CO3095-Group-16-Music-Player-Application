@@ -76,9 +76,20 @@ def load_settings(state: PlayerState) -> None:
                     state.playback_speed = 1.0
             else:
                 state.playback_speed = 1.0
-            state.song_tags = data.get("tags", {})
-            state.total_play_time = data.get("total_time", 0.0)
-
+            tags = data.get("tags", {})
+            if isinstance(tags, dict):
+                state.song_tags = tags
+            else:
+                print("[config] Warning: Corrupted tags data. Resetting.")
+                state.song_tags = {}
+            t_time = data.get("total_time", 0.0)
+            if isinstance(t_time, (float, int)):
+                if t_time >= 0:
+                    state.total_play_time = float(t_time)
+                else:
+                    state.total_play_time = 0.0
+            else:
+                state.total_play_time = 0.0
             state.audio_engine.set_volume(state.volume)
             print("[config] Settings loaded.")
     except Exception as e:
