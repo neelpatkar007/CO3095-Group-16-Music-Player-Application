@@ -103,3 +103,5 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
 
     except ImportError:
         print("[edit] WARNING: 'mutagen' not installed. Changes will NOT persist after restart.")
+    except Exception as e:
+        print(f"[edit] Warning: Could not write to file: {e}")
