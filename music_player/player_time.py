@@ -152,8 +152,10 @@ def check_alarms(state: PlayerState) -> None:
 
     now = datetime.datetime.now().strftime("%H:%M")
     if now in state.scheduled_alarms:
-        pass
-
+        if not state.is_playing:
+            print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
+            player_core.play(state)
+            state.scheduled_alarms.remove(now)
 # S4-06: Recently Added
 
 def show_recently_added(state: PlayerState) -> None:
