@@ -86,6 +86,9 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
             print("[export] Nothing to export.")
             return
 
+        if not output_filename.endswith(".m3u") and not output_filename.endswith(".txt"):
+            output_filename += ".m3u"
+
 
 # S4-11: Update Metadata
 
