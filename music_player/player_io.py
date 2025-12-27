@@ -67,6 +67,10 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
                 found_playlist = pl
                 break
 
+        if found_playlist:
+            # The user is exporting a specific playlist
+            target_tracks = found_playlist.tracks
+
 
 
 # S4-11: Update Metadata
