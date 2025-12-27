@@ -37,7 +37,22 @@ def load_settings(state: PlayerState) -> None:
     """
     Loads config from disk and applies it to the PlayerState and AudioEngine.
     """
-    pass
+    if not CONFIG_FILE.exists():
+        return
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            data = json.load(f)
+            state.volume = data.get("volume", 100)
+            state.shuffle_active = data.get("shuffle", False)
+            state.loop_mode = data.get("loop", "off")
+            state.playback_speed = data.get("speed", 1.0)
+            state.song_tags = data.get("tags", {})
+            state.total_play_time = data.get("total_time", 0.0)
+
+            state.audio_engine.set_volume(state.volume)
+            print("[config] Settings loaded.")
+    except Exception as e:
+        print(f"[config] Error loading settings: {e}")
 
 # S4-05: Tags
 
