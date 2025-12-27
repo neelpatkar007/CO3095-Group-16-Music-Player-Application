@@ -93,6 +93,11 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
             with open(output_filename, "w", encoding="utf-8") as f:
                 f.write("#EXTM3U\n")
                 for t in target_tracks:
+                    dur = int(t.duration_seconds) if t.duration_seconds else -1
+                    f.write(f"#EXTINF:{dur},{t.display_name}\n")
+                    f.write(f"{t.path.resolve()}\n")
+
+
 
 
 # S4-11: Update Metadata
