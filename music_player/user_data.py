@@ -73,6 +73,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Name cannot start with a number.")
         return
 
+    if " " in name:
+        print("[profile] Error: Names cannot contain spaces.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
