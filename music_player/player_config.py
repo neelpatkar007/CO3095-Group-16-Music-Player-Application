@@ -52,7 +52,12 @@ def load_settings(state: PlayerState) -> None:
             else:
                 print("[config] Warning: Invalid volume type. Resetting to 100.")
                 state.volume = 100
-            state.shuffle_active = data.get("shuffle", False)
+            shuff = data.get("shuffle", False)
+            if isinstance(shuff, bool):
+                state.shuffle_active = shuff
+            else:
+                print("[config] Warning: Invalid shuffle type. Resetting to False.")
+                state.shuffle_active = False
             state.loop_mode = data.get("loop", "off")
             state.playback_speed = data.get("speed", 1.0)
             state.song_tags = data.get("tags", {})
