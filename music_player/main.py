@@ -64,6 +64,10 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
         # - auto-advance in playlists
         player_core.update_playback(state, delta)
 
+        # S4-02: Check for scheduled alarms every 10 seconds
+        if int(now) % 10 == 0:
+            player_time.check_alarms(state)
+
         # Sleep a little so we don't spin too fast
         time.sleep(0.1)
 
@@ -315,6 +319,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
         else:
             player_config.filter_by_tag(state, args[0])
 
+    # S4-02: Schedule Playback
+    elif base == "/schedule":
+        player_time.set_alarm(state, args[0] if args else "")
+    elif base == "/schedule.cancel":
+        player_time.cancel_alarm(state)
+
     # S4-11: Update Metadata
     elif base == "/edit":
         if len(args) >= 3:
@@ -349,7 +359,7 @@ def main() -> None:
     player_time.load_resume_state(state)
 
     # Startup display welcome message and available commands summary
-    print("Music Player – Sprint 3")
+    print("Music Player – Sprint 4")
     print(
         "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
         "/info /progress /bar /list /help /quit /speed /sleep"
@@ -362,6 +372,7 @@ def main() -> None:
         "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort"
     )
     print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top")
+    print("Scheduling: /schedule HH:MM, /schedule.cancel")
 
     # start background playback thread
     stop_event = threading.Event()

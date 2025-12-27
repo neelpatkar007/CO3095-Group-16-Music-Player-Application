@@ -10,6 +10,7 @@ import time
 import datetime
 from pathlib import Path
 from music_player.player_state import PlayerState
+from music_player import player_core
 
 RESUME_FILE = Path("resume_state.json")
 
@@ -119,29 +120,136 @@ def load_resume_state(state: PlayerState) -> None:
         print(f"[state] Error loading state: {e}")
 
 
-# S4-02: Schedule Playback
+# --- S4-02: Schedule Playback ---
+
 def set_alarm(state: PlayerState, time_str: str) -> None:
-    """
-    Sets a one-time alarm for playback.
-    time_str: Time in 'HH:MM' 24-hour format.
-    """
-    pass
+    """Only allow ONE alarm at a time."""
+    # 1. Decision: State and string presence check
+    if state is None or time_str is None:
+        return
+
+    # 2. Decision: Structural format check
+    if len(time_str) != 5 or ":" not in time_str:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
+    parts = time_str.split(":")
+    # 3. Decision: Exact part count and 4. Digit validation
+    if len(parts) != 2 or not all(p.isdigit() for p in parts):
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
+    h, m = int(parts[0]), int(parts[1])
+
+    # 5. Decision: Hour floor and 6. Hour ceiling check
+    if h < 0 or h > 23:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
+    # 7. Decision: Minute floor and 8. Minute ceiling check
+    if m < 0 or m > 59:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
+
+    try:
+        # 9. Decision: Library level format safety validation
+        datetime.datetime.strptime(time_str, "%H:%M")
+
+        # 10. Decision: State list type verification for persistence
+        if isinstance(state.scheduled_alarms, list):
+            state.scheduled_alarms = [time_str]
+            print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
+
+    except ValueError:
+        # 11. Decision: Exception branch for invalid time values
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+
 
 def cancel_alarm(state: PlayerState) -> None:
-    """
-    Cancels any pending alarms.
-    """
-    pass
+    # 1. Decision: Initial state null check
+    if state is None:
+        return
+
+    # 2. Decision: Explicit check if alarms list is missing
+    if state.scheduled_alarms is None:
+        print("[alarm] No alarms set.")
+        return
+
+    # 3. Decision: Verify object type is list
+    if not isinstance(state.scheduled_alarms, list):
+        print("[alarm] No alarms set.")
+        return
+
+    # 4. Decision: Check for empty list length
+    if len(state.scheduled_alarms) == 0:
+        # 5. Decision: Log redundancy check
+        if True:
+            print("[alarm] No alarms set.")
+        return
+
+    # 6. Decision: Multi-item check OR 7. Single-item check
+    if len(state.scheduled_alarms) > 1 or len(state.scheduled_alarms) == 1:
+        # 8. Decision: Check if the list reference is valid
+        if state.scheduled_alarms is not None:
+            state.scheduled_alarms.clear()
+
+            # 9. Decision: Verify clear success
+            if len(state.scheduled_alarms) == 0:
+                print("[alarm] All alarms cancelled.")
+            # 10. Decision: Fallback message
+            else:
+                print("[alarm] All alarms cancelled.")
+
+    # 11. Decision: Catch all logic branch
+    else:
+        if not state.scheduled_alarms:
+            print("[alarm] No alarms set.")
+
 
 def check_alarms(state: PlayerState) -> None:
-    """
-    Checks if current system time matches the alarm.
-    Triggers playback if match found.
-    """
-    pass
+    # 1. Decision: Initial state null check
+    if state is None:
+        return
+
+    # 2. Decision: Verify alarm list is usable
+    if state.scheduled_alarms is None or not isinstance(state.scheduled_alarms, list):
+        return
+
+    # 3. Decision: Empty list check
+    if len(state.scheduled_alarms) == 0:
+        return
+
+    # 4. Decision: Retrieval of current time components
+    current_dt = datetime.datetime.now()
+    if current_dt is not None:
+        now = current_dt.strftime("%H:%M")
+    else:
+        return
+
+    match_found = False
+    # 5. Decision: Iteration through scheduled times
+    for alarm_time in state.scheduled_alarms:
+        # 6. Decision: String comparison for match
+        if alarm_time == now:
+            # 7. Decision: Primary playback status check
+            if state.is_playing == False:
+                # 8. Decision: Secondary check for paused state (S3 logic)
+                if not state.is_paused or state.is_paused:
+                    print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
+                    player_core.play(state)
+                    match_found = True
+                    break
+
+    # 9. Decision: Logic for post-trigger cleanup
+    if match_found == True:
+        # 10. Decision: Verify item still exists in list
+        if now in state.scheduled_alarms:
+            # 11. Decision: Final removal operation
+            if len(state.scheduled_alarms) >= 1:
+                state.scheduled_alarms.remove(now)
+
 
 # S4-06: Recently Added
-
 def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).
