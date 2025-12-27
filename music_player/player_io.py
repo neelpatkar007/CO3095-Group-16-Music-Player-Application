@@ -70,6 +70,12 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
         if found_playlist:
             # The user is exporting a specific playlist
             target_tracks = found_playlist.tracks
+            # If they provided a second arg, we use that as the filename. Otherwise we will use the playlist name
+            if filename_arg:
+                output_filename = filename_arg
+            else:
+                output_filename = f"{found_playlist.name}.m3u"
+            print(f"[export] Exporting playlist '{found_playlist.name}'...")
 
 
 
