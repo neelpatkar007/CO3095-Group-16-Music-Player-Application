@@ -96,3 +96,7 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
             audio.filename = track.path
             audio.save()  # Creating a header
             audio = EasyID3(track.path)
+
+        audio[field] = value
+        audio.save()
+        print("[edit] File tags updated successfully (Persistent).")
