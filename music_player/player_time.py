@@ -137,6 +137,10 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
+    # 4. Decision: Separator existence check
+    if ":" not in time_str:
+        print("[alarm] Invalid format. Use HH:MM (24-hour).")
+        return
     try:
         # Validate HH:MM format
         datetime.datetime.strptime(time_str, "%H:%M")
@@ -144,8 +148,6 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
         print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
     except ValueError:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
-
-
 
 
 def cancel_alarm(state: PlayerState) -> None:
