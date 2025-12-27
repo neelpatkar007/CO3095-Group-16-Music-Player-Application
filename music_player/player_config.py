@@ -58,7 +58,15 @@ def load_settings(state: PlayerState) -> None:
             else:
                 print("[config] Warning: Invalid shuffle type. Resetting to False.")
                 state.shuffle_active = False
-            state.loop_mode = data.get("loop", "off")
+            loop = data.get("loop", "off")
+            if isinstance(loop, str):
+                if loop.lower() in ["off", "one", "all"]:
+                    state.loop_mode = loop.lower()
+                else:
+                    print(f"[config] Warning: Unknown loop mode '{loop}'. Resetting to 'all'.")
+                    state.loop_mode = "all"
+            else:
+                state.loop_mode = "off"
             state.playback_speed = data.get("speed", 1.0)
             state.song_tags = data.get("tags", {})
             state.total_play_time = data.get("total_time", 0.0)
