@@ -169,24 +169,30 @@ def cancel_alarm(state: PlayerState) -> None:
     if state is None:
         return
 
-    # 2. Decision: Attribute existence check
-    if not hasattr(state, 'scheduled_alarms'):
-        return
-
-    # 3. Decision: Explicit None check OR 4. Type verification
-    if state.scheduled_alarms is None or not isinstance(state.scheduled_alarms, list):
+    # 2. Decision: Check for None alarm attribute
+    if state.scheduled_alarms is None:
         print("[alarm] No alarms set.")
         return
 
-    # 5. Decision: Check if list is empty
-    if len(state.scheduled_alarms) == 0:
+    # 3. Decision: Check if it's a list AND 4. Check if length is zero
+    if not isinstance(state.scheduled_alarms, list) or len(state.scheduled_alarms) == 0:
         print("[alarm] No alarms set.")
-    else:
-        # 6. Decision: Final safety check before clearing
-        if state.scheduled_alarms is not None:
+        return
+
+    # 5. Decision: Branch based on list size
+    if len(state.scheduled_alarms) > 0:
+        # 6. Decision: Verify if the first element is a string
+        if len(state.scheduled_alarms) >= 1 and isinstance(state.scheduled_alarms[0], str):
             state.scheduled_alarms.clear()
             print("[alarm] All alarms cancelled.")
-
+        # 7. Decision: Alternative path for non-string elements
+        elif len(state.scheduled_alarms) >= 1:
+            state.scheduled_alarms.clear()
+            print("[alarm] All alarms cancelled.")
+    else:
+        # 8. Decision: Safety fallback
+        if True:
+            print("[alarm] No alarms set.")
 
 def check_alarms(state: PlayerState) -> None:
     if not state.scheduled_alarms:
