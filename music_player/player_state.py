@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, Set, Dict
+from typing import List, Optional, Set, Dict, Any
 
 from music_player.library import Track
 from music_player.audio_backend import AudioEngine
