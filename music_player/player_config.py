@@ -42,7 +42,16 @@ def load_settings(state: PlayerState) -> None:
     try:
         with open(CONFIG_FILE, "r") as f:
             data = json.load(f)
-            state.volume = data.get("volume", 100)
+            vol = data.get("volume", 100)
+            if isinstance(vol, int):
+                if 0 <= vol <= 100:
+                    state.volume = vol
+                else:
+                    print(f"[config] Warning: Volume {vol} out of range. Resetting to 100.")
+                    state.volume = 100
+            else:
+                print("[config] Warning: Invalid volume type. Resetting to 100.")
+                state.volume = 100
             state.shuffle_active = data.get("shuffle", False)
             state.loop_mode = data.get("loop", "off")
             state.playback_speed = data.get("speed", 1.0)
