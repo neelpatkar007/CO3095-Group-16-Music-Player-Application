@@ -255,3 +255,11 @@ def show_recently_added(state: PlayerState) -> None:
     Displays the top 10 songs sorted by file modification date (newest to oldest).
     """
     print("--- Recently Added Songs ---")
+    try:
+        recent = sorted(
+            state.library_tracks,
+            key=lambda t: t.path.stat().st_mtime,
+            reverse=True
+        )
+    except Exception as e:
+        print(f"[recent] Error reading file dates: {e}")
