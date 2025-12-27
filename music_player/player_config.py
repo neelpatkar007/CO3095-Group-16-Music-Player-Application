@@ -67,7 +67,15 @@ def load_settings(state: PlayerState) -> None:
                     state.loop_mode = "all"
             else:
                 state.loop_mode = "off"
-            state.playback_speed = data.get("speed", 1.0)
+            speed = data.get("speed", 1.0)
+            if isinstance(speed, (float, int)):
+                if 0.5 <= speed <= 2.0:
+                    state.playback_speed = float(speed)
+                else:
+                    print(f"[config] Warning: Speed {speed} out of bounds. Resetting to 1.0.")
+                    state.playback_speed = 1.0
+            else:
+                state.playback_speed = 1.0
             state.song_tags = data.get("tags", {})
             state.total_play_time = data.get("total_time", 0.0)
 
