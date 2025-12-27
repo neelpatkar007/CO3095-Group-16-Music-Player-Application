@@ -60,6 +60,10 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
         target_tracks = []
         output_filename = ""
 
+        # Logic: Check if - 'name_or_file' matches a playlist name
+        found_playlist = None
+
+
 
 # S4-11: Update Metadata
 
