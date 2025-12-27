@@ -124,48 +124,44 @@ def load_resume_state(state: PlayerState) -> None:
 
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """Only allow ONE alarm at a time."""
-    # 1. Decision: State null check
-    if state is None:
+    # 1. Decision: State and string presence check
+    if state is None or time_str is None:
         return
 
-    # 2. Decision: String type and null check
-    if not isinstance(time_str, str) or time_str is None:
-        return
-
-    # 3. Decision: Basic HH:MM length check
-    if len(time_str) != 5:
-        print("[alarm] Invalid format. Use HH:MM (24-hour).")
-        return
-
-    # 4. Decision: Separator existence check
-    if ":" not in time_str:
+    # 2. Decision: Structural format check
+    if len(time_str) != 5 or ":" not in time_str:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     parts = time_str.split(":")
-    # 5. Decision: Character type validation (Digits only)
+    # 3. Decision: Exact part count and 4. Digit validation
     if len(parts) != 2 or not all(p.isdigit() for p in parts):
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     h, m = int(parts[0]), int(parts[1])
 
-    # 6. Decision: Hour lower bound and 7. Hour upper bound
+    # 5. Decision: Hour floor and 6. Hour ceiling check
     if h < 0 or h > 23:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
-    # 8. Decision: Minute range check
+    # 7. Decision: Minute floor and 8. Minute ceiling check
     if m < 0 or m > 59:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     try:
-        # Validate HH:MM format
+        # 9. Decision: Library level format safety validation
         datetime.datetime.strptime(time_str, "%H:%M")
-        state.scheduled_alarms = [time_str]
-        print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
+
+        # 10. Decision: State list type verification for persistence
+        if isinstance(state.scheduled_alarms, list):
+            state.scheduled_alarms = [time_str]
+            print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
+
     except ValueError:
+        # 11. Decision: Exception branch for invalid time values
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
 def cancel_alarm(state: PlayerState) -> None:
