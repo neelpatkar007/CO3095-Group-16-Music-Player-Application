@@ -251,29 +251,31 @@ def check_alarms(state: PlayerState) -> None:
 
 # S4-06: Recently Added
 def show_recently_added(state: PlayerState) -> None:
-    """
-    Displays the top 10 songs sorted by file modification date.
-    """
-    # 1. Decision: Initialising state null check
+    # 1. Decision: State null check
     if state is None:
         return
 
-    # 2. Decision: Checking if the library collection exists
+    # 2. Decision: Library existence check
     if state.library_tracks is None:
         print("[recent] No library tracks found.")
         return
 
     print("--- Recently Added Songs ---")
     try:
-        recent = sorted(
-            state.library_tracks,
-            key=lambda t: t.path.stat().st_mtime,
-            reverse=True
-        )
+        # 3. Decision: Filtering tracks that have actual paths on disk
+        # 4. Decision: Verifying path object is not None
+        valid_tracks = [t for t in state.library_tracks if t.path and t.path.exists()]
+
+        # 5. Decision: Ensure we have items left to sort
+        if not valid_tracks:
+            print("[recent] No valid files found in library.")
+            return
+
+        recent = sorted(valid_tracks, key=lambda t: t.path.stat().st_mtime, reverse=True)
+
         for i, t in enumerate(recent[:10]):
             date_str = datetime.datetime.fromtimestamp(t.path.stat().st_mtime).strftime('%Y-%m-%d')
-            print(f"  {i+1}. [{date_str}] {t.display_name}")
+            print(f"  {i + 1}. [{date_str}] {t.display_name}")
     except Exception as e:
         print(f"[recent] Error: {e}")
-
 
