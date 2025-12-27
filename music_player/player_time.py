@@ -10,6 +10,7 @@ import time
 import datetime
 from pathlib import Path
 from music_player.player_state import PlayerState
+from music_player import player_core
 
 RESUME_FILE = Path("resume_state.json")
 
