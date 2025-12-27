@@ -40,10 +40,9 @@ def load_profiles_index(state: PlayerState) -> None:
 
 
 def list_profiles(state: PlayerState) -> None:
-    """
-    Prints a list of all available user profiles.
-    """
-    pass
+    print("--- User Profiles ---")
+    all_profiles = set(state.profiles.keys())
+    all_profiles.add("default")
 
 
 def show_current_profile(state: PlayerState) -> None:
