@@ -49,10 +49,7 @@ def list_profiles(state: PlayerState) -> None:
         print(f"  - {name}{marker}")
 
 def show_current_profile(state: PlayerState) -> None:
-    """
-    Displays the name of the currently active profile.
-    """
-    pass
+    print(f"[profile] Current Profile: {state.active_profile}")
 
 
 def create_profile(state: PlayerState, name: str) -> None:
