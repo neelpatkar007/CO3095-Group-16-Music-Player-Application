@@ -147,7 +147,8 @@ def check_alarms(state: PlayerState) -> None:
     Checks if current system time matches the alarm.
     Triggers playback if match found.
     """
-    pass
+    if not state.scheduled_alarms:
+        return
 
 # S4-06: Recently Added
 
