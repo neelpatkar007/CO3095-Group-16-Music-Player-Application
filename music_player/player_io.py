@@ -82,6 +82,10 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
             output_filename = name_or_file
             print(f"[export] Exporting current library/queue...")
 
+        if not target_tracks:
+            print("[export] Nothing to export.")
+            return
+
 
 # S4-11: Update Metadata
 
