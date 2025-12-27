@@ -126,6 +126,8 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
     Sets a one-time alarm for playback.
     time_str: Time in 'HH:MM' 24-hour format.
     """
+    state.scheduled_alarms = [time_str]
+
     pass
 
 def cancel_alarm(state: PlayerState) -> None:
