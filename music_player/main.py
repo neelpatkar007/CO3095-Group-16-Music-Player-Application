@@ -184,7 +184,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.show":
         playlists_basic.show_current_playlist(state)
     elif base == "/pl.play":
-        # /pl.play          -> play active playlist
+        # /pl.play           -> play active playlist
         # /pl.play MyMix    -> play named/indexed playlist
         if args:
             playlists_basic.play_playlist(state, args[0])
@@ -325,6 +325,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/schedule.cancel":
         player_time.cancel_alarm(state)
 
+    # S4-06: Recently Added
+    elif base == "/recent":
+        player_time.show_recently_added(state)
+
     # S4-11: Update Metadata
     elif base == "/edit":
         if len(args) >= 3:
@@ -372,7 +376,7 @@ def main() -> None:
         "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort"
     )
     print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top")
-    print("Scheduling: /schedule HH:MM, /schedule.cancel")
+    print("Scheduling: /schedule HH:MM, /schedule.cancel, /recent")
 
     # start background playback thread
     stop_event = threading.Event()
