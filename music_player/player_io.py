@@ -5,6 +5,7 @@ Stories:
  - S4-10: Export Playlist
  - S4-11: Update Metadata
 """
+import os
 import shutil
 from pathlib import Path
 from music_player.player_state import PlayerState
@@ -123,6 +124,9 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     Updates the metadata (Title or Artist) of a song.
     Will write changes persistently to the file using mutagen if installed.
     """
+    if not index_str:
+        return
+
     try:
         idx = int(index_str) - 1
         if not (0 <= idx < len(state.library_tracks)): raise ValueError
@@ -131,6 +135,10 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         return
 
     track = state.library_tracks[idx]
+
+    if not value or value.strip() == "":
+        print("[edit] Error: Value cannot be empty.")
+        return
 
     if field == "title":
         track.title = value
@@ -141,6 +149,10 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         return
 
     print(f"[edit] Updated {field} to '{value}'.")
+
+    if not os.access(track.path, os.W_OK):
+        print("[edit] Error: No write permission for file.")
+        return
 
     try:
         from mutagen.easyid3 import EasyID3
