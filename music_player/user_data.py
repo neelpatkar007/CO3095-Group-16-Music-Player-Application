@@ -85,6 +85,14 @@ def create_profile(state: PlayerState, name: str) -> None:
         print(f"[profile] Profile '{name}' already exists.")
         return
 
+    state.profiles[name] = {
+        "liked": [],
+        "ratings": {},
+        "playlists": []
+    }
+    print(f"[profile] Created profile '{name}'.")
+    _save_profiles(state)
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
