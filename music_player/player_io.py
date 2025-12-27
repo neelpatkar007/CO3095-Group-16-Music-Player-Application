@@ -62,6 +62,7 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
 
         # Logic: Check if - 'name_or_file' matches a playlist name
         found_playlist = None
+        for pl in state.playlists:
 
 
 
