@@ -97,7 +97,9 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
                     f.write(f"#EXTINF:{dur},{t.display_name}\n")
                     f.write(f"{t.path.resolve()}\n")
 
-
+            print(f"[export] Saved {len(target_tracks)} songs to {output_filename}.")
+        except Exception as e:
+            print(f"[export] Error writing file: {e}")
 
 
 # S4-11: Update Metadata
