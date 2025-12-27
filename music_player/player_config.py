@@ -101,19 +101,87 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     """
     Adds a custom tag to a specific song by index.
     """
-    pass
+    try:
+        idx = int(index_str) - 1
+    except ValueError:
+        print("[tags] Error: Invalid number format.")
+        return
+    if idx < 0 or idx >= len(state.library_tracks):
+        print("[tags] Error: Song index out of range.")
+        return
+    track = state.library_tracks[idx]
+    path_str = str(track.path)
+
+    clean_tag = tag.strip().lstrip("#")
+
+    if not clean_tag:
+        print("[tags] Error: Tag cannot be empty.")
+        return
+
+    if len(clean_tag) > 15:
+        print("[tags] Error: Tag is too long (max 15 chars).")
+        return
+
+    valid_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+    for char in clean_tag:
+        if char not in valid_chars:
+            print(f"[tags] Error: Invalid character '{char}'. Use A-Z, 0-9, _ only.")
+            return
+
+    current_tags = state.song_tags.get(path_str, [])
+    if len(current_tags) >= 5:
+        print(f"[tags] Error: Song '{track.title}' has reached the limit of 5 tags.")
+        return
+
+    if path_str not in state.song_tags:
+        state.song_tags[path_str] = []
+
+    tag = tag.strip().lstrip("#")
+    if tag not in state.song_tags[path_str]:
+        state.song_tags[path_str].append(tag)
+        print(f"[tags] Added #{tag} to '{track.title}'.")
+    else:
+        print(f"[tags] Song already has tag #{tag}.")
 
 def list_all_tags(state: PlayerState) -> None:
     """
     Prints all tags currently existing in the library.
     """
-    pass
+    unique_tags = set()
+    for tags in state.song_tags.values():
+        unique_tags.update(tags)
+
+    if not unique_tags:
+        print("[tags] No tags created yet.")
+        return
+
+    print("--- Custom Tags ---")
+    for t in sorted(unique_tags):
+        count = sum(1 for tags in state.song_tags.values() if t in tags)
+        print(f"  #{t} ({count} songs)")
 
 def filter_by_tag(state: PlayerState, tag: str) -> None:
     """
     Creates a temporary playlist queue containing only songs with the specified tag.
     """
-    pass
+    tag = tag.strip().lstrip("#")
+    matches = []
+    for path_str, tags in state.song_tags.items():
+        if tag in tags:
+            for t in state.library_tracks:
+                if str(t.path) == path_str:
+                    matches.append(t)
+                    break
+    if not matches:
+        print(f"[tags] No songs found with #{tag}.")
+        return
+    print(f"[tags] Queue updated! Ready to play {len(matches)} songs tagged #{tag}:")
+    for t in matches:
+        print(f"  - {t.display_name}")
+
+    # Update Queue Logic
+    state.tracks = matches
+    state.current_index = 0
 
 # S4-08: Playback Statistics
 
