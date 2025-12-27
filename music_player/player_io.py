@@ -32,6 +32,10 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         print(f"[import] Error: File '{src.name}' already exists in library.")
         return
 
+    try:
+        shutil.copy2(src, dest)
+        print(f"[import] Successfully imported '{src.name}'.")
+
 # S4-10: Export Playlist
 
 def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
