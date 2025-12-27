@@ -100,3 +100,6 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         audio[field] = value
         audio.save()
         print("[edit] File tags updated successfully (Persistent).")
+
+    except ImportError:
+        print("[edit] WARNING: 'mutagen' not installed. Changes will NOT persist after restart.")
