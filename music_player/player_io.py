@@ -20,6 +20,10 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         print("[import] Error: File not found.")
         return
 
+    if src.suffix.lower() not in SUPPORTED_EXTENSIONS:
+        print("[import] Error: Unsupported file type.")
+        return
+
 # S4-10: Export Playlist
 
 def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
