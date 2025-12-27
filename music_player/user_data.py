@@ -69,6 +69,10 @@ def create_profile(state: PlayerState, name: str) -> None:
         print("[profile] Error: Name must be under 15 characters.")
         return
 
+    if name[0].isdigit():
+        print("[profile] Error: Name cannot start with a number.")
+        return
+
 
 def switch_profile(state: PlayerState, name: str) -> None:
     """
