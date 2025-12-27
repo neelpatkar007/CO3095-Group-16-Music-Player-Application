@@ -69,3 +69,6 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     try:
         idx = int(index_str) - 1
         if not (0 <= idx < len(state.library_tracks)): raise ValueError
+    except ValueError:
+        print("[edit] Invalid song number.")
+        return
