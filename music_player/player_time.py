@@ -254,4 +254,4 @@ def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).
     """
-    pass
+    print("--- Recently Added Songs ---")
