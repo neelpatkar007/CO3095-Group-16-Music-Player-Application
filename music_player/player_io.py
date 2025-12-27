@@ -45,6 +45,8 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
 
         if not state.tracks:
             state.tracks = new_tracks
+    except Exception as e:
+        print(f"[import] Copy failed: {e}")
 
 # S4-10: Export Playlist
 
