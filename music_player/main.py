@@ -308,6 +308,9 @@ def handle_command(state: PlayerState, command: str) -> bool:
             player_io.update_metadata(state, args[0], args[1], " ".join(args[2:]))
         else:
             print("Usage: /edit <index> <title|artist> <value>")
+    elif base == "/pl.export":
+        player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
+            "Usage: /pl.export <playlist>")
 
     # Unknown command
     else:
