@@ -109,4 +109,42 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     Updates the metadata (Title or Artist) of a song.
     Will write changes persistently to the file using mutagen if installed.
     """
-    pass
+    try:
+        idx = int(index_str) - 1
+        if not (0 <= idx < len(state.library_tracks)): raise ValueError
+    except ValueError:
+        print("[edit] Invalid song number.")
+        return
+
+    track = state.library_tracks[idx]
+
+    if field == "title":
+        track.title = value
+    elif field == "artist":
+        track.artist = value
+    else:
+        print("[edit] Can only edit 'title' or 'artist'.")
+        return
+
+    print(f"[edit] Updated {field} to '{value}'.")
+
+    try:
+        from mutagen.easyid3 import EasyID3
+        from mutagen.id3 import ID3NoHeaderError
+
+        try:
+            audio = EasyID3(track.path)
+        except ID3NoHeaderError:
+            audio = EasyID3()
+            audio.filename = track.path
+            audio.save()  # Creating a header
+            audio = EasyID3(track.path)
+
+        audio[field] = value
+        audio.save()
+        print("[edit] File tags updated successfully (Persistent).")
+
+    except ImportError:
+        print("[edit] WARNING: 'mutagen' not installed. Changes will NOT persist after restart.")
+    except Exception as e:
+        print(f"[edit] Warning: Could not write to file: {e}")
