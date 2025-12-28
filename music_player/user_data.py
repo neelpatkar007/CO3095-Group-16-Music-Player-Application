@@ -84,6 +84,10 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
         print("[search] Usage: /search <query>")
         return
 
+    tokens = query_str.split()
+    results = state.library_tracks
+
+
 
 # S4-12: Song Ratings
 
