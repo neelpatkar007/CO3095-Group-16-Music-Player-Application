@@ -192,4 +192,37 @@ def view_stats(state: PlayerState) -> None:
     Total number of songs played.
     Top 3 most played artists.
     """
-    pass
+    if state is None:
+        print("[stats] Error: State is None.")
+        return
+    if not state.play_counts:
+        print("[stats] No play history yet.")
+        return
+    if not isinstance(getattr(state, "play_counts", None), dict):
+        print("[stats] Error: Play count data is corrupted.")
+        return
+    if not isinstance(getattr(state, "library_tracks", None), list) or not state.library_tracks:
+        print("[stats] Error: Library tracks are missing.")
+        return
+    total_sec = int(state.total_play_time)
+    hours = total_sec // 3600
+    mins = (total_sec % 3600) // 60
+
+    print("--- Playback Statistics ---")
+    print(f"Total Listening Time: {hours}h {mins}m")
+    print(f"Total Songs Played: {sum(state.play_counts.values())}")
+
+    artist_counts = {}
+    for path_str, count in state.play_counts.items():
+        for t in state.library_tracks:
+            if str(t.path) == path_str:
+                art = t.artist or "Unknown"
+                artist_counts[art] = artist_counts.get(art, 0) + count
+                break
+
+    print("\nTop Artists:")
+    if not artist_counts:
+        print("  (No data yet)")
+    top_3 = sorted(artist_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+    for art, count in top_3:
+        print(f"  {art}: {count} plays")
