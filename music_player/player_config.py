@@ -195,6 +195,9 @@ def view_stats(state: PlayerState) -> None:
     if state is None:
         print("[stats] Error: State is None.")
         return
+    if not state.play_counts:
+        print("[stats] No play history yet.")
+        return
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
