@@ -334,6 +334,9 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
             "Usage: /pl.export <playlist>")
 
+    # S4-09: Advanced Search
+    elif base == "/search":
+        user_data.advanced_search(state, " ".join(args))  # Overrides S2 search
     #S4-07: User Profile Switch
     elif base == "/profile.new":
         user_data.create_profile(state, args[0] if args else "")
