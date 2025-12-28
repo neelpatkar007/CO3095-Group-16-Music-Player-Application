@@ -5,7 +5,13 @@ Stories:
  - S4-09: Advanced Search
  - S4-12: Rate Songs
 """
+import json
+from pathlib import Path
 from music_player.player_state import PlayerState
+from music_player import time_utils
+from music_player.playlist_model import Playlist
+
+PROFILE_FILE = Path("profiles.json")
 
 
 # S4-07: User Profiles
@@ -74,10 +80,9 @@ def _save_current_to_profile(state: PlayerState):
 # S4-09: Advanced Search
 
 def advanced_search(state: PlayerState, query_str: str) -> None:
-    """
-    Performs specific field searches on the library for artist and duration (artist:<name> and duration<=<>><seconds>.
-    """
-    pass
+    if not query_str:
+        print("[search] Usage: /search <query>")
+        return
 
 
 # S4-12: Song Ratings
