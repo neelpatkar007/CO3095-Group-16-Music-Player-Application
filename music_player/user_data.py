@@ -127,7 +127,9 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
 
 
 def view_rated(state: PlayerState) -> None:
-    """
-    Displays all rated songs sorted by rating (highest first).
-    """
-    pass
+    if not state.song_ratings:
+        print("[rate] No songs rated yet.")
+        return
+
+    print("--- Rated Songs ---")
+    sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
