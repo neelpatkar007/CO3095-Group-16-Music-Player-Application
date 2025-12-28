@@ -211,3 +211,6 @@ def view_stats(state: PlayerState) -> None:
     print("\nTop Artists:")
     if not artist_counts:
         print("  (No data yet)")
+    top_3 = sorted(artist_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+    for art, count in top_3:
+        print(f"  {art}: {count} plays")
