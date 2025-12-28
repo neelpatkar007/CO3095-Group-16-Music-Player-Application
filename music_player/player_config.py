@@ -192,6 +192,9 @@ def view_stats(state: PlayerState) -> None:
     Total number of songs played.
     Top 3 most played artists.
     """
+    if state is None:
+        print("[stats] Error: State is None.")
+        return
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
