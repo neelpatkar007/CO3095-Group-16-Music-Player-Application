@@ -207,3 +207,7 @@ def view_stats(state: PlayerState) -> None:
                 art = t.artist or "Unknown"
                 artist_counts[art] = artist_counts.get(art, 0) + count
                 break
+
+    print("\nTop Artists:")
+    if not artist_counts:
+        print("  (No data yet)")
