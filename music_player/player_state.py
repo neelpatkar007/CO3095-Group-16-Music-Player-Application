@@ -13,7 +13,7 @@ class PlayerState:
     All modules (core, queue, seek, audio) read from and write to this single object.
     '''
     def __init__(self, tracks: List[Track], audio_engine: AudioEngine) -> None:
-        # Main library – never lost, used when not in playlist mode
+        # Main library – never lost. Used when not in playlist mode
         self.library_tracks: List[Track] = tracks
 
         # Playlist / queue of tracks to play
@@ -46,6 +46,7 @@ class PlayerState:
 
         # S3-07: Playback Speed
         self.playback_speed: float = 1.0
+
         # S3-12: Sleep Timer
         self.sleep_deadline: float | None = None  # Timestamp to stop
 
@@ -69,7 +70,7 @@ class PlayerState:
     @property
     def current_track(self) -> Optional[Track]:
         '''
-        Retrieves the currently selected track, or none if it is out of bounds.
+        Retrieves the currently selected track, or it's none if it is out of bounds.
         '''
         # Check if the playlist is empty
         if not self.tracks:
