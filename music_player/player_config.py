@@ -195,3 +195,7 @@ def view_stats(state: PlayerState) -> None:
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
+
+    print("--- Playback Statistics ---")
+    print(f"Total Listening Time: {hours}h {mins}m")
+    print(f"Total Songs Played: {sum(state.play_counts.values())}")
