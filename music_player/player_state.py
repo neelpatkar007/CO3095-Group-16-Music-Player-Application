@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, Set, Dict
+from typing import List, Optional, Set, Dict, Any
 
 from music_player.library import Track
 from music_player.audio_backend import AudioEngine
@@ -54,6 +54,8 @@ class PlayerState:
         self.liked_tracks: Set[str] = set()
 
         # User Data
+        self.active_profile: str = "default"
+        self.profiles: Dict[str, Any] = {}  # Stores data for other profiles
         self.song_ratings: Dict[str, int] = {}  # Path -> Rating (1-5)
 
         # Config & Tags

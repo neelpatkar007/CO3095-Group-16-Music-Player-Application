@@ -45,25 +45,16 @@ from music_player import (
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
-
-    This is what makes autoplay work even when the user is not
-    typing any commands.
-
-    - It calls player_core.update_playback(state, delta_seconds)
-      around 10 times per second.
     """
     last = time.time()
-
     while not stop_event.is_set():
         now = time.time()
         delta = now - last
         last = now
 
-        # This will:
-        # - advance state.position_seconds while playing
-        # - detect end-of-track
-        # - auto-advance in playlists
-        player_core.update_playback(state, delta)
+        if state.is_playing and not state.is_paused:
+            player_core.update_playback(state, delta)
+            state.total_play_time += delta
 
         # S4-02: Check for scheduled alarms every 10 seconds
         if int(now) % 10 == 0:
@@ -74,7 +65,6 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
 
 def handle_command(state: PlayerState, command: str) -> bool:
     """
-    Simple command dispatcher backbone.
     Parses user input and calls appropriate handlers.
     Returns False if the application should quit.
     """
@@ -330,6 +320,10 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/recent":
         player_time.show_recently_added(state)
 
+   # S4-08: Playback Statistics
+    elif base == "/stats":
+        player_config.view_stats(state)
+
     # S4-11: Update Metadata
     elif base == "/edit":
         if len(args) >= 3:
@@ -346,6 +340,18 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/rated":
         user_data.view_rated(state)
 
+    # S4-09: Advanced Search
+    elif base == "/search":
+        user_data.advanced_search(state, " ".join(args))  # Overrides S2 search
+    #S4-07: User Profile Switch
+    elif base == "/profile.new":
+        user_data.create_profile(state, args[0] if args else "")
+    elif base == "/profile.switch":
+        user_data.switch_profile(state, args[0] if args else "")
+    elif base == "/profiles":
+        user_data.list_profiles(state)
+    elif base == "/profile":
+        user_data.show_current_profile(state)
 
     # Unknown command
     else:
@@ -363,6 +369,9 @@ def main() -> None:
     tracks = discover_tracks()
     # Initialise player state with discovered tracks and audio engine
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
+
+    # S4-01: Load previous state from JSON file
+    player_config.load_settings(state)
 
     # Load previously held metric data from start up (the JSON file)
     player_metrics.load_data(state)
@@ -411,6 +420,8 @@ def main() -> None:
         # Stop background playback loop
         stop_event.set()
         playback_thread.join(timeout=1.0)
+        # S4-01: Save settings to JSON file
+        player_config.save_settings(state)
 
         # Ensure audio is stopped
         state.audio_engine.stop()
