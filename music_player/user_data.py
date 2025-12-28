@@ -116,6 +116,15 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
             return
         print(f"[rate] Updated rating from {old_rating} to {val}/5.")
 
+    else:
+        if val == 5:
+            print(f"[rate] Rated '{track.title}' 5/5 stars! (A favourite!!)")
+        else:
+            print(f"[rate] Rated '{track.title}' {val}/5 stars.")
+
+    state.song_ratings[path_str] = val
+    _save_current_to_profile(state)
+
 
 def view_rated(state: PlayerState) -> None:
     """
