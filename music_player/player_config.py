@@ -198,6 +198,9 @@ def view_stats(state: PlayerState) -> None:
     if not state.play_counts:
         print("[stats] No play history yet.")
         return
+    if not isinstance(getattr(state, "play_counts", None), dict):
+        print("[stats] Error: Play count data is corrupted.")
+        return
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
