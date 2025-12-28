@@ -92,6 +92,11 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] Error: Please provide a rating (e.g., /rate 5).")
         return
 
+    clean_str = rating_str.strip()
+    if "." in clean_str:
+        print("[rate] Error: Decimals are not supported. Use whole numbers.")
+        return
+
 def view_rated(state: PlayerState) -> None:
     """
     Displays all rated songs sorted by rating (highest first).
