@@ -196,14 +196,61 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
 # S4-12: Song Ratings
 
 def rate_song(state: PlayerState, rating_str: str) -> None:
-    """
-    Assigns a rating (1-5) to the currently playing song.
-    """
-    pass
+    track = state.current_track
+    if not track:
+        print("[rate] No song playing.")
+        return
+
+    if not rating_str or not rating_str.strip():
+        print("[rate] Error: Please provide a rating (e.g., /rate 5).")
+        return
+
+    clean_str = rating_str.strip()
+    if "." in clean_str:
+        print("[rate] Error: Decimals are not supported. Use whole numbers.")
+        return
+
+    if not clean_str.lstrip("-").isdigit():
+        print("[rate] Error: Input must be a number.")
+        return
+
+    try:
+        val = int(clean_str)
+        if not (1 <= val <= 5): raise ValueError
+    except ValueError:
+        print("[rate] Rating must be a whole number 1-5.")
+        return
+
+    path_str = str(track.path)
+    if path_str in state.song_ratings:
+        old_rating = state.song_ratings[path_str]
+        if old_rating == val:
+            print(f"[rate] Song is already rated {val}/5. No change made.")
+            return
+        print(f"[rate] Updated rating from {old_rating} to {val}/5.")
+
+    else:
+        if val == 5:
+            print(f"[rate] Rated '{track.title}' 5/5 stars! (A favourite!!)")
+        else:
+            print(f"[rate] Rated '{track.title}' {val}/5 stars.")
+
+    state.song_ratings[path_str] = val
+    _save_current_to_profile(state)
 
 
 def view_rated(state: PlayerState) -> None:
-    """
-    Displays all rated songs sorted by rating (highest first).
-    """
-    pass
+    if not state.song_ratings:
+        print("[rate] No songs rated yet.")
+        return
+
+    print("--- Rated Songs ---")
+    sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
+
+    for path_str, rating in sorted_paths:
+        name = "Unknown File"
+        for t in state.library_tracks:
+            if str(t.path) == path_str:
+                name = t.display_name
+                break
+        print(f"  {'★' * rating} ({rating}) - {name}")

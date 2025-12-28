@@ -334,6 +334,12 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
             "Usage: /pl.export <playlist>")
 
+    # S4-12: Rate Songs
+    elif base == "/rate":
+        user_data.rate_song(state, args[0] if args else "")
+    elif base == "/rated":
+        user_data.view_rated(state)
+
     # S4-09: Advanced Search
     elif base == "/search":
         user_data.advanced_search(state, " ".join(args))  # Overrides S2 search
