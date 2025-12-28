@@ -101,6 +101,13 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] Error: Input must be a number.")
         return
 
+    try:
+        val = int(clean_str)
+        if not (1 <= val <= 5): raise ValueError
+    except ValueError:
+        print("[rate] Rating must be a whole number 1-5.")
+        return
+
 def view_rated(state: PlayerState) -> None:
     """
     Displays all rated songs sorted by rating (highest first).
