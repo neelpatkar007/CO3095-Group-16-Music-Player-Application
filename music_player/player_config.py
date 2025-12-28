@@ -201,6 +201,9 @@ def view_stats(state: PlayerState) -> None:
     if not isinstance(getattr(state, "play_counts", None), dict):
         print("[stats] Error: Play count data is corrupted.")
         return
+    if not isinstance(getattr(state, "library_tracks", None), list) or not state.library_tracks:
+        print("[stats] Error: Library tracks are missing.")
+        return
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
