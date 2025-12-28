@@ -88,6 +88,9 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] No song playing.")
         return
 
+    if not rating_str or not rating_str.strip():
+        print("[rate] Error: Please provide a rating (e.g., /rate 5).")
+        return
 
 def view_rated(state: PlayerState) -> None:
     """
