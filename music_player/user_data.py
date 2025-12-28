@@ -133,3 +133,11 @@ def view_rated(state: PlayerState) -> None:
 
     print("--- Rated Songs ---")
     sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
+
+    for path_str, rating in sorted_paths:
+        name = "Unknown File"
+        for t in state.library_tracks:
+            if str(t.path) == path_str:
+                name = t.display_name
+                break
+        print(f"  {'★' * rating} ({rating}) - {name}")
