@@ -83,10 +83,10 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
 # S4-12: Song Ratings
 
 def rate_song(state: PlayerState, rating_str: str) -> None:
-    """
-    Assigns a rating (1-5) to the currently playing song.
-    """
-    pass
+    track = state.current_track
+    if not track:
+        print("[rate] No song playing.")
+        return
 
 
 def view_rated(state: PlayerState) -> None:
