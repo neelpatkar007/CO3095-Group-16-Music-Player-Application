@@ -92,7 +92,10 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
             val = token.split(":", 1)[1].lower().replace("_", " ")
             results = [t for t in results if val in (t.artist or "").lower()]
 
-
+        elif token.lower().startswith("duration>"):
+            val_str = token.split(">", 1)[1]
+            limit = time_utils.parse_timecode(val_str)
+            results = [t for t in results if (t.duration_seconds or 0) > limit]
 
 
 # S4-12: Song Ratings
