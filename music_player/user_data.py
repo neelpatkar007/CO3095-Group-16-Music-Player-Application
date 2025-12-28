@@ -87,6 +87,12 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
     tokens = query_str.split()
     results = state.library_tracks
 
+    for token in tokens:
+        if token.lower().startswith("artist:"):
+            val = token.split(":", 1)[1].lower().replace("_", " ")
+            results = [t for t in results if val in (t.artist or "").lower()]
+
+
 
 
 # S4-12: Song Ratings
