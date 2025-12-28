@@ -106,6 +106,12 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
             val = token.lower()
             results = [t for t in results if val in t.title.lower() or val in (t.artist or "").lower()]
 
+        if not results:
+            print("[search] No matches found.")
+        else:
+            print(f"[search] Found {len(results)} matches:")
+            for i, t in enumerate(results[:10]):
+                print(f"  {i + 1}. {t.display_name} ({time_utils.format_mm_ss(t.duration_seconds)})")
 
 
 # S4-12: Song Ratings
