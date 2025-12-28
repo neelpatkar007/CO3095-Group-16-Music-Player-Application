@@ -97,6 +97,10 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] Error: Decimals are not supported. Use whole numbers.")
         return
 
+    if not clean_str.lstrip("-").isdigit():
+        print("[rate] Error: Input must be a number.")
+        return
+
 def view_rated(state: PlayerState) -> None:
     """
     Displays all rated songs sorted by rating (highest first).
