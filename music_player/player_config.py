@@ -199,3 +199,11 @@ def view_stats(state: PlayerState) -> None:
     print("--- Playback Statistics ---")
     print(f"Total Listening Time: {hours}h {mins}m")
     print(f"Total Songs Played: {sum(state.play_counts.values())}")
+
+    artist_counts = {}
+    for path_str, count in state.play_counts.items():
+        for t in state.library_tracks:
+            if str(t.path) == path_str:
+                art = t.artist or "Unknown"
+                artist_counts[art] = artist_counts.get(art, 0) + count
+                break
