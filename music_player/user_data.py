@@ -108,6 +108,15 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] Rating must be a whole number 1-5.")
         return
 
+    path_str = str(track.path)
+    if path_str in state.song_ratings:
+        old_rating = state.song_ratings[path_str]
+        if old_rating == val:
+            print(f"[rate] Song is already rated {val}/5. No change made.")
+            return
+        print(f"[rate] Updated rating from {old_rating} to {val}/5.")
+
+
 def view_rated(state: PlayerState) -> None:
     """
     Displays all rated songs sorted by rating (highest first).
