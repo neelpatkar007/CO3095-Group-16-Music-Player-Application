@@ -102,6 +102,11 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
             limit = time_utils.parse_timecode(val_str)
             results = [t for t in results if (t.duration_seconds or 0) < limit]
 
+        else:
+            val = token.lower()
+            results = [t for t in results if val in t.title.lower() or val in (t.artist or "").lower()]
+
+
 
 # S4-12: Song Ratings
 
