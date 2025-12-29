@@ -25,6 +25,12 @@ class TestPlayerConfigBranch(unittest.TestCase):
         Branches:
          - File exists
          - Audio Engine exists
+         Expected Result:
+         - Returns immediately if file missing.
+         - Loads settings. If engine exists, sets volume and if not, skips engine setup.
+         Actual Result:
+            [config] Settings loaded.
+            [config] Error loading settings: 'NoneType' object has no attribute 'set_volume'
         """
         # File exists check
         with patch("pathlib.Path.exists", return_value=False):
@@ -49,6 +55,12 @@ class TestPlayerConfigBranch(unittest.TestCase):
         Branches:
          - New and Duplicate tag
          - Tag List initialisation
+        Expected Result:
+         - Initialises list and adds tag.
+         - Detects duplicate and prints message.
+        Actual Result:
+            [tags] Added #fresh to 'Song A'.
+            [tags] Song already has tag #fresh.
         """
         path = str(self.track1.path)
 
@@ -67,6 +79,30 @@ class TestPlayerConfigBranch(unittest.TestCase):
         Branches:
          - Count is integer
          - Track found in library
+        Expected Result:
+         - Calculates artist stats.
+         - Skips missing tracks.
+         - Skips invalid data types (String error).
+        Actual Result:
+            --- Playback Statistics ---
+            Total Listening Time: 0h 1m
+            Total Songs Played: 5
+
+            Top Artists:
+                Artist A: 5 plays
+
+            --- Playback Statistics ---
+            Total Listening Time: 0h 1m
+            Total Songs Played: 5
+
+            Top Artists:
+                (No data yet)
+            --- Playback Statistics ---
+            Total Listening Time: 0h 1m
+            Total Songs Played: 0
+
+            Top Artists:
+                (No data yet)
         """
         self.state.total_play_time = 100
         path = str(self.track1.path)
