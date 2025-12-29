@@ -1,0 +1,108 @@
+# TSL Specification for player_config
+# Functions: save_settings, load_settings, add_tag, list_all_tags, filter_by_tag, view_stats
+
+Test Case Name: Save Settings
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Settings Data:
+        Valid Attributes.        [if ValidState]
+        Missing Attributes.      [if ValidState] [property PartialData]
+
+    Config File Access:
+        Writable.                [if ValidState] [property SuccessfulSave]
+        Read-only/Error.         [if ValidState] [property FileError]
+
+
+Test Case Name: Load Settings
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Config File Existence:
+        Exists.                  [if ValidState] [property FileFound]
+        Missing.                 [if ValidState] [property NoOp]
+
+    Config File Content:
+        Valid JSON.              [if FileFound] [property SuccessfulLoad]
+        Corrupt JSON.            [if FileFound] [property JSONError]
+        Empty File.              [if FileFound] [property EmptyConfig]
+
+
+Test Case Name: Add Tag
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Library Status:
+        Tracks Available.        [if ValidState] [property LibraryReady]
+        Empty Library.           [if ValidState] [error]
+
+    Index Input:
+        Valid Number.            [if LibraryReady] [property ValidIndex]
+        Out of Bounds.           [if LibraryReady] [error]
+        Non-numeric string.      [if LibraryReady] [error]
+        None.                    [if LibraryReady] [error]
+
+    Tag Input:
+        Valid Tag String.        [if ValidIndex] [property ValidTag]
+        Empty String.            [if ValidIndex] [error]
+        Invalid Chars (#, !).    [if ValidIndex] [error]
+        None.                    [if ValidIndex] [error]
+
+    Tag Existence:
+        New Tag.                 [if ValidTag] [property TagAdded]
+        Duplicate Tag.           [if ValidTag] [property TagExists]
+
+
+Test Case Name: List Tags
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Tag Data:
+        Tags Exist.              [if ValidState] [property ShowTags]
+        No Tags / Empty.         [if ValidState] [property NoTags]
+        Corrupt Data (Not dict). [if ValidState] [property DataError]
+
+
+Test Case Name: Filter By Tag
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Tag Input:
+        Valid Tag.               [if ValidState] [property ValidTag]
+        None.                    [if ValidState] [error]
+
+    Matching Songs:
+        Found Matches.           [if ValidTag] [property FilterApplied]
+        No Matches.              [if ValidTag] [property NoMatches]
+
+
+Test Case Name: View Stats
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Play Counts Data:
+        Populated (Dict).        [if ValidState] [property StatsAvailable]
+        Empty.                   [if ValidState] [property NoHistory]
+        Corrupted/None.          [if ValidState] [property DataError]
+
+    Library Linkage:
+        Tracks Available.        [if StatsAvailable] [property ShowStats]
+        Missing/None.            [if StatsAvailable] [property DataError]
