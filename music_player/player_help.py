@@ -25,7 +25,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("Advanced:   /speed, /sleep, /like, /likes, /top, /rate, /rated, /stats")
 
         # Library, Tags, and Profile management from Sprint 4
-        print("Library:    /search, /songs, /artists, /albums, /scan, /recent, /import, /edit")
+        print("Library:    /search, /songs, /artists, /albums, /scan, /recent, /import, /edit, /advanced.search")
         print("Tags:       /tag.add, /tags, /tag.filter")
         print("Profiles:   /profile, /profiles, /profile.new, /profile.switch")
         print("System:     /schedule, /schedule.cancel, /info, /progress, /bar, /quit")
@@ -39,7 +39,7 @@ def print_help(command: Optional[str] = None) -> None:
     if topic.startswith("/"):
         topic = topic[1:]
 
-    # --- BASIC PLAYBACK ---
+    # BASIC PLAYBACK
     if topic == "play":
         print("\n[Help] /play")
         print("Starts the music. If a session was saved, it picks up from where you left off.")
@@ -65,7 +65,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /ff")
         print("Fast-forward: jumps ahead 5 seconds.")
 
-    # --- VOLUME CONTROLS ---
+    # VOLUME CONTROLS
     elif topic in ["volume", "vol"]:
         print("\n[Help] /volume <0-100>")
         print("Adjust the loudness. e.g. /volume 25 for a bit of background music.")
@@ -76,7 +76,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /unmute")
         print("Turns the sound back on to the previous level.")
 
-    # --- QUEUE & ADVANCED (Sprint 3) ---
+    # QUEUE & ADVANCED (Sprint 3)
     elif topic == "shuffle":
         print("\n[Help] /shuffle")
         print("Toggles random playback mode.")
@@ -105,7 +105,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /sleep <minutes>")
         print("Sets a timer to stop the music automatically.")
 
-    # --- METRICS & RATINGS (Sprint 3 & 4) ---
+    # METRICS & RATINGS (Sprint 3 & 4)
     elif topic == "like":
         print("\n[Help] /like")
         print("Toggles the 'Liked' status for the current song.")
@@ -125,7 +125,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /stats")
         print("Shows your listening stats and playback data.")
 
-    # --- PLAYLIST MANAGEMENT ---
+    # PLAYLIST MANAGEMENT
     elif topic == "pl.new":
         print("\n[Help] /pl.new <name>")
         print("Creates a brand new, empty playlist.")
@@ -157,7 +157,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /pl.sort <playlist> <artist|title|duration>")
         print("Sorts a playlist out based on your choice.")
 
-    # --- PLAYLIST EDITING ---
+    # PLAYLIST EDITING
     elif topic == "pl.add":
         print("\n[Help] /pl.add <playlist> <library-index>")
         print("Adds a song from the main library to a playlist.")
@@ -174,9 +174,9 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /pl.copy <source> <new_name>")
         print("Makes a copy of an existing playlist.")
 
-    # --- LIBRARY & TAGS ---
+    # LIBRARY & TAGS
     elif topic == "search":
-        print("\n[Help] /search <text>")
+        print("\n[Help] /search <text> or /advanced.search <query>")
         print("Search for songs by title, artist, or tags.")
     elif topic == "songs":
         print("\n[Help] /songs")
@@ -209,7 +209,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /tag.filter <tag>")
         print("Filter the library to show only tracks with that tag.")
 
-    # --- PROFILES & SCHEDULING ---
+    # PROFILES & SCHEDULING
     elif topic == "profile":
         print("\n[Help] /profile")
         print("Check which profile is currently active.")
@@ -229,7 +229,7 @@ def print_help(command: Optional[str] = None) -> None:
         print("\n[Help] /schedule.cancel")
         print("Turns off any active playback alarms.")
 
-    # --- UI & SYSTEM ---
+    # UI & SYSTEM
     elif topic == "info":
         print("\n[Help] /info")
         print("Shows info about the song currently playing.")
