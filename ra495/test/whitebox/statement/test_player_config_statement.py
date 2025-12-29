@@ -88,14 +88,14 @@ class TestPlayerConfigStatement(unittest.TestCase):
 
     def test_add_tag_none_state(self):
         """
-        Expected Result: Returns early.
+        Expected Result: Prints Error.
         Actual Result: [tags] Error: State is None.
         """
         player_config.add_tag(None, "1", "tag")
 
     def test_add_tag_state_invalid_attrs(self):
         """
-        Expected Result: Returns early.
+        Expected Result: Prints Corrupted Error.
         Actual Result: [tags] Error: Tag data is unavailable/corrupted.
         """
         bad_state = MagicMock()
@@ -160,7 +160,7 @@ class TestPlayerConfigStatement(unittest.TestCase):
 
     def test_list_tags_none_state(self):
         """
-        Expected Result: Returns early.
+        Expected Result: Prints Error.
         Actual Result: [tags] Error: State is None.
         """
         player_config.list_all_tags(None)
@@ -187,7 +187,7 @@ class TestPlayerConfigStatement(unittest.TestCase):
 
     def test_filter_none_state(self):
         """
-        Expected Result: Returns early.
+        Expected Result: Prints Error.
         Actual Result: [tags] Error: State is None.
         """
         player_config.filter_by_tag(None, "tag")
@@ -217,3 +217,43 @@ class TestPlayerConfigStatement(unittest.TestCase):
         self.state.song_tags = {path: ["gym"]}
         player_config.filter_by_tag(self.state, "gym")
         self.assertEqual(len(self.state.tracks), 1)
+
+    # View Stats Tests
+
+    def test_stats_none_state(self):
+        """
+        Expected Result: Prints error.
+        Actual Result: [stats] Error: State is None.
+        """
+        player_config.view_stats(None)
+
+    def test_stats_missing_attr(self):
+        """
+        Expected Result: Prints corrupted data error.
+        Actual Result: [stats] Error: Play count data is corrupted.
+        """
+        del self.state.play_counts
+        player_config.view_stats(self.state)
+
+    def test_stats_empty_counts(self):
+        """
+        Expected Result: Prints no history.
+        Actual Result: [stats] No play history yet.
+        """
+        self.state.play_counts = {}
+        player_config.view_stats(self.state)
+
+    def test_stats_populated(self):
+        """
+        Expected Result: Prints stats table.
+        Actual Result:
+            --- Playback Statistics ---
+            Total Listening Time: 1h 0m
+            Total Songs Played: 5
+
+            Top Artists:
+                Artist A: 5 plays
+        """
+        self.state.play_counts = {str(self.track1.path): 5}
+        self.state.total_play_time = 3600
+        player_config.view_stats(self.state)
