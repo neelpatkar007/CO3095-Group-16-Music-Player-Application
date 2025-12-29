@@ -20,6 +20,8 @@ class TestPlayerCore(unittest.TestCase):
         self.state = PlayerState([], self.mock_engine)
         self.sample_track = Track(Path("song.mp3"), "Test Song", "Artist", 180)
 
+    # Play Command Tests
+
     def test_play_error_invalid_state(self):
         """
         Expected Result: The function handles None input without crashing.
@@ -68,3 +70,23 @@ class TestPlayerCore(unittest.TestCase):
 
         self.assertFalse(self.state.is_paused)
         self.mock_engine.resume.assert_called_once()
+
+    def test_play_start_fresh(self):
+        """
+        Expected Result: Audio engine starts playing file from 0.0s.
+        Actual Result: [core] Playing: Test Song – Artist (1.5x)
+        """
+        self.state.tracks = [self.sample_track]
+        self.state.current_index = 0
+
+        self.state.is_playing = False
+        self.state.is_paused = False
+        self.state.playback_speed = 1.5
+
+        player_core.play(self.state)
+
+        self.assertTrue(self.state.is_playing)
+        self.mock_engine.play.assert_called_with(self.sample_track.path, start_pos=0.0, speed=1.5)
+
+    # Pause Command Tests
+
