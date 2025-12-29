@@ -11,6 +11,7 @@ from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
 from music_player.player_state import PlayerState
 
+# Sprint 1 modules
 from music_player import (
     player_core,
     player_queue,

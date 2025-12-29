@@ -45,7 +45,7 @@ def next_track(state: PlayerState) -> None:
             state.history = []
         state.history.append(state.current_track)
 
-    # --- S3-02: Loop One Logic ---
+    # S3-02: Loop One Logic
     if hasattr(state, "loop_mode") and state.loop_mode == "one":
         new = old
         wrapped = False
@@ -136,16 +136,26 @@ def next_track(state: PlayerState) -> None:
             state.is_playing = False
             state.is_paused = False
 
-    # Handle Playback Paused or Stopped
+    # Handle Playback Paused
     elif state.is_paused:
+        try:
+            state.audio_engine.stop()
+        except:
+            pass
+
+        state.is_paused = False
+        state.is_playing = False
+        state.position_seconds = 0.0
+
         if state.shuffle_active:
-             print(f"[queue] Shuffled to (paused): {track.display_name}")
+             print(f"[queue] Shuffled to (ready): {track.display_name}")
         elif wrapped:
-            print(f"[queue] Wrapped to next (paused): {track.display_name}")
+            print(f"[queue] Wrapped to next (ready): {track.display_name}")
         elif changed:
-            print(f"[queue] Selected next (paused): {track.display_name}")
+            print(f"[queue] Selected next (ready): {track.display_name}")
         else:
-            print(f"[queue] Selected (paused): {track.display_name}")
+            print(f"[queue] Selected (ready): {track.display_name}")
+
     else:
         # Update messages for stopped state
         if state.shuffle_active:
@@ -174,7 +184,7 @@ def previous_track(state: PlayerState) -> None:
     if old is None:
         old = 0
 
-    # --- S3-02: Loop-Aware Previous Logic ---
+    # S3-02: Loop-Aware Previous Logic
     if hasattr(state, "loop_mode") and state.loop_mode == "one":
         new = old  # Stay on current track
         wrapped = False
@@ -268,15 +278,25 @@ def previous_track(state: PlayerState) -> None:
             state.is_playing = False
             state.is_paused = False
 
-    # Handle Playback Paused or Stopped
+    # Handle Playback Paused
     elif state.is_paused:
+        try:
+            state.audio_engine.stop()
+        except:
+            pass
+
+        state.is_paused = False
+        state.is_playing = False
+        state.position_seconds = 0.0
+
         # Update messages for paused state
         if wrapped:
-            print(f"[queue] Wrapped to prev (paused): {track.display_name}")
+            print(f"[queue] Wrapped to prev (ready): {track.display_name}")
         elif changed:
-            print(f"[queue] Selected prev (paused): {track.display_name}")
+            print(f"[queue] Selected prev (ready): {track.display_name}")
         else:
-            print(f"[queue] Selected (paused): {track.display_name}")
+            print(f"[queue] Selected (ready): {track.display_name}")
+
     else:
         # Update messages for stopped state
         if wrapped:
