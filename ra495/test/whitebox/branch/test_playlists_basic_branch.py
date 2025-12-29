@@ -73,3 +73,30 @@ class TestPlaylistsBasicBranch(unittest.TestCase):
         # Sort Duration
         playlists_basic.sort_playlist(self.state, "Mix", "duration")
         self.assertEqual(self.pl.tracks[0], t_bad)
+
+    def test_delete_and_index_branches(self):
+        """
+        Branches:
+         - if idx < active_playlist_index
+         - elif idx == active_playlist_index
+           - if not state.playlists (empty list)
+        Expected Result:
+         - Active index goes down by one when preceding playlist is deleted.
+         - Active index becomes None when the only active playlist is deleted.
+        Actual Result:
+            [pl] Deleted playlist 'A'.
+            [pl] Deleted playlist 'B'.
+        """
+        p1 = Playlist("A")
+        p2 = Playlist("B")
+        self.state.playlists = [p1, p2]
+        # Delete p1
+        self.state.active_playlist_index = 1
+        playlists_basic.delete_playlist(self.state, "A")
+        # Active index goes down to 0
+        self.assertEqual(self.state.active_playlist_index, 0)
+        self.assertEqual(self.state.playlists[0], p2)
+        # Delete p2
+        playlists_basic.delete_playlist(self.state, "B")
+        # List is empty so active index becomes None
+        self.assertIsNone(self.state.active_playlist_index)
