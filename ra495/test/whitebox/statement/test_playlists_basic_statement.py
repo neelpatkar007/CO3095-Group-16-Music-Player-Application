@@ -95,3 +95,33 @@ class TestPlaylistsBasicStatement(unittest.TestCase):
         playlists_basic.rename_playlist(self.state, "Mix", "Other")
         # Delete
         playlists_basic.delete_playlist(self.state, "Ghost")
+
+    def test_list_playlists_coverage(self):
+        """
+        Expected Result: Function handles all data corruption states.
+        Actual Result:
+            [pl] Error: State is None.
+            [pl] Internal Error: State is missing.
+            [pl] No playlists defined.
+            [pl] Error: Playlist data is corrupted.
+            [pl] No playlists defined.
+            [pl] Playlists:
+               1. Mix* (0 songs, Total time: 00:00)
+               2. <Error: Invalid Playlist>
+        """
+        # State/Data errors
+        playlists_basic.list_playlists(None)
+        self.state.playlists = None
+
+        playlists_basic.list_playlists(self.state)
+
+        self.state.playlists = "NotList"
+        playlists_basic.list_playlists(self.state)
+
+        self.state.playlists = []
+        playlists_basic.list_playlists(self.state)
+
+        # Valid list with None item
+        self.state.playlists = [self.pl, None]
+        self.state.active_playlist_index = 0
+        playlists_basic.list_playlists(self.state)
