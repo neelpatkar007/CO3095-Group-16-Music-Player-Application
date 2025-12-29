@@ -9,9 +9,9 @@ from pathlib import Path
 class TestPlayerCore(unittest.TestCase):
     """
     Black-Box Specification-based Testing for player_core.py.
-
-    Testing Tool: Python unittest + unittest.mock
+    Testing Tool: Python unittest
     Test Technique: Category Partition Method using TSLGenerator
+    Source: playerCore.txt
     """
 
     def setUp(self):
@@ -22,8 +22,34 @@ class TestPlayerCore(unittest.TestCase):
 
     def test_play_error_invalid_state(self):
         """
-        Technique: Category Partition
         Expected Result: The function handles None input without crashing.
-        Actual Result: PASSED [100%][core] Error: State is None.
+        Actual Result: [core] Error: State is None.
         """
         player_core.play(None)
+
+    def test_play_error_no_track(self):
+        """
+        Expected Result: Playback should not start if current_track is missing.
+        Actual Result: [core] No tracks loaded.
+        """
+        self.state.tracks = []
+        self.state.current_index = 0
+
+        player_core.play(self.state)
+        self.assertFalse(self.state.is_playing)
+
+    def test_play_already_playing(self):
+        """
+        Expected Result: Audio engine should not receive any new commands and won't do anything more.
+        Actual Result: [core] Already playing.
+        """
+        self.state.tracks = [self.sample_track]
+        self.state.current_index = 0
+
+        self.state.is_playing = True
+        self.state.is_paused = False
+
+        player_core.play(self.state)
+
+        self.mock_engine.play.assert_not_called()
+
