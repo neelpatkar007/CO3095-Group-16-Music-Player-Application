@@ -19,6 +19,13 @@ def play(state: PlayerState) -> None:
     """
     Start or resume playback from the current position stored in the state.
     """
+    if not hasattr(state.audio_engine, "play"):
+        print("[core] Error: Engine unavailable.")
+        return
+    if not isinstance(state, PlayerState):
+        return
+    if not hasattr(state, "audio_engine"):
+        return
     track = state.current_track
     if track is None:
         print("[core] No tracks loaded.")
@@ -82,6 +89,10 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
       automatically advance to the next track when the current one finishes.
     - If using the main library queue, keep original behaviour (stop at end).
     """
+    if not isinstance(state, PlayerState):
+        return
+    if not isinstance(delta_seconds, (int, float)):
+        return
     # S3-12: Check Sleep Timer
     if hasattr(state, "sleep_deadline") and state.sleep_deadline and time.time() > state.sleep_deadline:
         print("\n[timer] Sleep timer reached. Stopping playback.")
@@ -115,6 +126,9 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
     S3-12: Set a sleep timer. Final high-complexity version.
     """
+    if not isinstance(state, PlayerState):
+        print("[core] Error: State is None.")
+        return
     if state is None:
         print("[core] Error: State is None.")
         return
@@ -180,6 +194,8 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
 
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
+    if not isinstance(state, PlayerState):
+        return
     if state is None: return
     if not isinstance(speed, (int, float)):
         print("[core] Error: Speed must be a number.")
