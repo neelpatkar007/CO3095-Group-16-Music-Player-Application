@@ -20,3 +20,21 @@ class TestLibrary(unittest.TestCase):
 
     def tearDown(self):
         self.patcher.stop()
+
+    # Track Dataclass Tests
+
+    def test_track_display_name_formatted(self):
+        """
+        Expected Result: Returns "Title – Artist" when both are present.
+        Actual Result: Song A – Artist A
+        """
+        t = Track(Path("a.mp3"), "Song A", "Artist A", 180)
+        self.assertEqual(t.display_name, "Song A – Artist A")
+
+    def test_track_display_name_simple(self):
+        """
+        Expected Result: Returns only Title when Artist is empty.
+        Actual Result: Song B
+        """
+        t = Track(Path("b.mp3"), "Song B", "", 180)
+        self.assertEqual(t.display_name, "Song B")
