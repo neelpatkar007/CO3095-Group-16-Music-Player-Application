@@ -199,3 +199,28 @@ class TestMain(unittest.TestCase):
         """
         result = main.handle_command(self.state, "/notacommand")
         self.assertTrue(result)
+
+    # Playback Worker Logic
+
+    def test_playback_worker_updates(self):
+        """
+        Expected Result: Worker updates playback time when playing, and checks alarms.
+        Actual Result: update_playback called, check_alarms called.
+        """
+        # Setup thread event to stop loop immediately after one pass
+        stop_event = threading.Event()
+
+        self.state.is_playing = True
+        self.state.is_paused = False
+
+        with patch("time.time", side_effect=[999.0, 1000.0]), \
+                patch("time.sleep", side_effect=lambda *a: stop_event.set()), \
+                patch("music_player.player_core.update_playback") as mock_update, \
+                patch("music_player.player_time.check_alarms") as mock_alarm:
+            # Run worker
+            main._playback_worker(self.state, stop_event)
+
+            # Check if playback updated
+            mock_update.assert_called()
+            # Check if alarms checked
+            mock_alarm.assert_called()
