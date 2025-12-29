@@ -104,3 +104,37 @@ class TestMain(unittest.TestCase):
         with patch("music_player.player_seek.seek_to") as mock_seek:
             main.handle_command(self.state, "/seek")
             mock_seek.assert_not_called()
+
+    # Sprint 2 Tests (Playlists)
+
+    def test_command_playlist_new(self):
+        """
+        Expected Result: /pl.new dispatches to playlists_basic with name.
+        Actual Result: Playlist 'Gym' created.
+        """
+        with patch("music_player.playlists_basic.create_playlist") as mock_create:
+            main.handle_command(self.state, "/pl.new Gym Mix")
+            mock_create.assert_called_with(self.state, "Gym Mix")
+
+    def test_command_playlist_list(self):
+        """
+        Expected Result: /pl.list calls list_playlists.
+        Actual Result: Playlists listed.
+        """
+        with patch("music_player.playlists_basic.list_playlists") as mock_list:
+            main.handle_command(self.state, "/pl.list")
+            mock_list.assert_called_once()
+
+    def test_command_playlist_merge_args(self):
+        """
+        Expected Result: /pl.merge parses target, source, and dedupe flag correctly.
+        Actual Result: Merge called with dedupe=True.
+        """
+        with patch("music_player.playlists_advanced.merge_playlists") as mock_merge:
+            # Default dedupe (True)
+            main.handle_command(self.state, "/pl.merge Target Source")
+            mock_merge.assert_called_with(self.state, "Target", "Source", dedupe=True)
+
+            # Selected "all" dedupe=False
+            main.handle_command(self.state, "/pl.merge Target Source all")
+            mock_merge.assert_called_with(self.state, "Target", "Source", dedupe=False)
