@@ -113,3 +113,28 @@ class TestPlayerConfig(unittest.TestCase):
         """
         player_config.filter_by_tag(self.state, "nonexistent")
         self.assertEqual(len(self.state.tracks), 0)
+
+    # Playback Stats Tests
+
+    def test_view_stats_populated(self):
+        """
+        Expected Result: Function runs successfully and prints stats.
+        Actual Result:
+            --- Playback Statistics ---
+            Total Listening Time: 1h 0m
+            Total Songs Played: 5
+            Top Artists:
+                Artist A: 5 plays
+        """
+        self.state.play_counts = {str(self.track1.path): 5}
+        self.state.total_play_time = 3605
+
+        player_config.view_stats(self.state)
+
+    def test_view_stats_empty(self):
+        """
+        Expected Result: Function handles empty dict without crashing.
+        Actual Result: [stats] No play history yet.
+        """
+        self.state.play_counts = {}
+        player_config.view_stats(self.state)
