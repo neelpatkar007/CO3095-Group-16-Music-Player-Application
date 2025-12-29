@@ -54,3 +54,15 @@ class TestPlaylistModel(unittest.TestCase):
         t3 = Track(Path("3.mp3"), "T3", duration_seconds=None)
         pl = Playlist("Mix", [self.t1, t3])
         self.assertEqual(pl.total_duration_seconds, 60.0)
+
+    # Summary Display Tests
+
+    def test_summary_line_active(self):
+        """
+        Expected Result: Output string contains the active marker '*'.
+        Actual Result: * 1. Mix (1 tracks) [01:00]
+        """
+        pl = Playlist("Mix", [self.t1])
+        summary = pl.summary_line(index=1, active=True)
+        self.assertIn("*", summary)
+        self.assertIn("Mix", summary)
