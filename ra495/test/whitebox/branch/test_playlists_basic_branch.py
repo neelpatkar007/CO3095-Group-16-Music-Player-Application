@@ -18,3 +18,28 @@ class TestPlaylistsBasicBranch(unittest.TestCase):
         self.state = PlayerState([], MagicMock())
         self.pl = Playlist("Mix")
         self.state.playlists = [self.pl]
+
+    def test_resolve_branches(self):
+        """
+        Branches:
+         - Selector is digit - Valid + Invalid Index
+         - Selector is string - Name Match + Mismatch
+        Expected Result:
+         - Returns Playlist object for valid inputs.
+         - Returns None for invalid inputs.
+        Actual Result:
+            [pl] Playlist index out of range.
+            [pl] Playlist 'other' not found.
+        """
+        # Valid Index
+        res = playlists_basic._resolve_playlist(self.state, "1")
+        self.assertEqual(res, self.pl)
+        # Invalid Index
+        res = playlists_basic._resolve_playlist(self.state, "5")
+        self.assertIsNone(res)
+        # Name Match
+        res = playlists_basic._resolve_playlist(self.state, "mix")
+        self.assertEqual(res, self.pl)
+        # Name Mismatch
+        res = playlists_basic._resolve_playlist(self.state, "other")
+        self.assertIsNone(res)
