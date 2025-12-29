@@ -101,6 +101,15 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     """
     Adds a custom tag to a specific song by index.
     """
+    if state is None:
+        print("[tags] Error: State is None.")
+        return
+    if not hasattr(state, "song_tags") or not isinstance(state.song_tags, dict):
+        print("[tags] Error: Tag data is unavailable/corrupted.")
+        return
+    if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
+        print("[tags] Error: Library tracks missing/corrupted.")
+        return
     try:
         idx = int(index_str) - 1
     except ValueError:
@@ -147,6 +156,15 @@ def list_all_tags(state: PlayerState) -> None:
     """
     Prints all tags currently existing in the library.
     """
+    if state is None:
+        print("[tags] Error: State is None.")
+        return
+    if not hasattr(state, "song_tags") or not isinstance(state.song_tags, dict):
+        print("[tags] Error: Tag data is unavailable/corrupted.")
+        return
+    if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
+        print("[tags] Error: Library tracks missing/corrupted.")
+        return
     unique_tags = set()
     for tags in state.song_tags.values():
         unique_tags.update(tags)
@@ -164,6 +182,15 @@ def filter_by_tag(state: PlayerState, tag: str) -> None:
     """
     Creates a temporary playlist queue containing only songs with the specified tag.
     """
+    if state is None:
+        print("[tags] Error: State is None.")
+        return
+    if not hasattr(state, "song_tags") or not isinstance(state.song_tags, dict):
+        print("[tags] Error: Tag data is unavailable/corrupted.")
+        return
+    if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
+        print("[tags] Error: Library tracks missing/corrupted.")
+        return
     tag = tag.strip().lstrip("#")
     matches = []
     for path_str, tags in state.song_tags.items():
@@ -195,14 +222,17 @@ def view_stats(state: PlayerState) -> None:
     if state is None:
         print("[stats] Error: State is None.")
         return
-    if not state.play_counts:
-        print("[stats] No play history yet.")
-        return
     if not isinstance(getattr(state, "play_counts", None), dict):
         print("[stats] Error: Play count data is corrupted.")
         return
+    if not state.play_counts:
+        print("[stats] No play history yet.")
+        return
     if not isinstance(getattr(state, "library_tracks", None), list) or not state.library_tracks:
         print("[stats] Error: Library tracks are missing.")
+        return
+    if not isinstance(getattr(state, "total_play_time", None), (int, float)):
+        print("[stats] Error: Total play time is corrupted.")
         return
     total_sec = int(state.total_play_time)
     hours = total_sec // 3600
