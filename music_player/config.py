@@ -1,17 +1,13 @@
 """
 Module: config
 Central configuration for the Music Player app.
-
-Sprint 1:
- - Defines the songs folder used as the music library source.
 """
 
 from pathlib import Path
 
-# Folder (root directory) that contains all songs for the player to read from.
-# Expects a 'songs' folder in the current working directory.
+# Folder (called songs) that contains all songs that the player to read from.
 
 MUSIC_DIR: Path = Path("songs")
 
-# Whitelists all audio file formats.
+# only allow audio file formats in the song directory.
 SUPPORTED_EXTENSIONS = {".mp3", ".wav", ".ogg", ".flac", ".m4a"}
