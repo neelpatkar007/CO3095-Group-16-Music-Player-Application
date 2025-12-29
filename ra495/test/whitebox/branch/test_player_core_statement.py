@@ -34,3 +34,23 @@ class TestPlayerCoreStatement(unittest.TestCase):
         self.state.tracks = []
         player_core.play(self.state)
 
+    def test_play_execution_paths(self):
+        """
+        Expected Result: Covers Resume and Fresh Start logic.
+        Actual Result:
+            [core] Resumed: Test Song – Artist
+            [core] Playing: Test Song – Artist (1.0x)
+        """
+        self.state.tracks = [self.sample_track]
+        self.state.current_index = 0
+
+        # Resume
+        self.state.is_paused = True
+        player_core.play(self.state)
+        self.mock_engine.resume.assert_called()
+
+        # Fresh Play
+        self.state.is_paused = False
+        self.state.is_playing = False
+        player_core.play(self.state)
+        self.mock_engine.play.assert_called()
