@@ -71,3 +71,27 @@ class TestPlaylistsBasicStatement(unittest.TestCase):
         self.pl.tracks = [MagicMock()]
         with patch.object(playlists_basic, 'player_core', spec=[]) as empty_core:
             playlists_basic._activate_playlist_queue(self.state, self.pl)
+
+    def test_crud_errors(self):
+        """
+        Expected Result: CRUD operations reject invalid inputs without crashing.
+        Actual Result:
+            [pl] Usage: /pl.new <name>
+            [pl] A playlist named 'Mix' already exists.
+            [pl] Usage: /pl.rename <old> <new>
+            [pl] Playlist 'Ghost' not found.
+            [pl] Another playlist already has the name 'Other'.
+            [pl] Playlist 'Ghost' not found.
+        """
+        # Create
+        playlists_basic.create_playlist(self.state, "")
+        self.state.playlists.append(self.pl)
+        playlists_basic.create_playlist(self.state, "Mix")  # Duplicate
+        # Rename
+        playlists_basic.rename_playlist(self.state, "Mix", "")
+        playlists_basic.rename_playlist(self.state, "Ghost", "New")
+        pl2 = Playlist("Other")
+        self.state.playlists.append(pl2)
+        playlists_basic.rename_playlist(self.state, "Mix", "Other")
+        # Delete
+        playlists_basic.delete_playlist(self.state, "Ghost")
