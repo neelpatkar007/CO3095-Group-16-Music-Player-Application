@@ -34,3 +34,23 @@ class TestPlaylistModel(unittest.TestCase):
         """
         pl = Playlist("")
         self.assertEqual(pl.name, "(unnamed)")
+
+    # Duration Tests
+
+    def test_total_duration_valid(self):
+        """
+        Expected Result: Sum of durations matches (60+90=150s).
+        Actual Result: 150.0 seconds / 02:30
+        """
+        pl = Playlist("Mix", [self.t1, self.t2])
+        self.assertEqual(pl.total_duration_seconds, 150.0)
+        self.assertEqual(pl.total_duration_mm_ss, "02:30")
+
+    def test_total_duration_mixed_invalid(self):
+        """
+        Expected Result: 'None' durations are treated as 0 and ignored.
+        Actual Result: 60.0 seconds
+        """
+        t3 = Track(Path("3.mp3"), "T3", duration_seconds=None)
+        pl = Playlist("Mix", [self.t1, t3])
+        self.assertEqual(pl.total_duration_seconds, 60.0)
