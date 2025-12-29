@@ -17,3 +17,20 @@ class TestPlayerCoreStatement(unittest.TestCase):
         self.mock_engine = MagicMock()
         self.state = PlayerState([], self.mock_engine)
         self.sample_track = Track(Path("song.mp3"), "Test Song", "Artist", 180)
+
+    # Play Tests
+
+    def test_play_errors(self):
+        """
+        Expected Result: Handles None state and missing tracks without crashing.
+        Actual Result:
+            [core] Error: State is None.
+            [core] No tracks loaded.
+        """
+        # Test None state
+        player_core.play(None)
+
+        # Test No Tracks
+        self.state.tracks = []
+        player_core.play(self.state)
+
