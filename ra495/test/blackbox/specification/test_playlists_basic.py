@@ -1,26 +1,23 @@
 import unittest
-import json
-from unittest.mock import MagicMock, patch, mock_open
-from music_player import player_config, playlists_basic
+from unittest.mock import MagicMock
+from music_player import playlists_basic
 from music_player.player_state import PlayerState
+from music_player.playlist_model import Playlist
 from music_player.library import Track
 from pathlib import Path
 
 
 class TestPlayerConfig(unittest.TestCase):
     """
-    Black-Box Specification-based Testing for player_config.py.
+    Black-Box Specification-based Testing for playlists_basic.py..
     Testing Tool: Python unittest + unittest.mock
     Test Technique: Category Partition Method using TSLGenerator
-    Source: playerConfig.txt
+    Source: playlistBasic.txt
     """
 
     def setUp(self):
         self.state = PlayerState([], MagicMock())
-        # Setup dummy library for testing tags/stats
-        self.track1 = Track(Path("a.mp3"), "Song A", "Artist A", 100)
-        self.track2 = Track(Path("b.mp3"), "Song B", "Artist B", 200)
-        self.state.library_tracks = [self.track1, self.track2]
+        self.state.playlists = []
 
     # Create Playlist Tests
 
@@ -41,3 +38,23 @@ class TestPlayerConfig(unittest.TestCase):
         playlists_basic.create_playlist(self.state, "Gym")
         playlists_basic.create_playlist(self.state, "Gym")
         self.assertEqual(len(self.state.playlists), 1)
+
+    # Rename Playlist Tests
+
+    def test_rename_playlist_success(self):
+        """
+        Expected Result: Playlist name is updated.
+        Actual Result: [pl] Renamed playlist 'Old' -> 'New'.
+        """
+        playlists_basic.create_playlist(self.state, "Old")
+        playlists_basic.rename_playlist(self.state, "Old", "New")
+        self.assertEqual(self.state.playlists[0].name, "New")
+
+    def test_rename_playlist_not_found(self):
+        """
+        Expected Result: Operation fails.
+        Actual Result: [pl] Playlist 'Missing' not found.
+        """
+        playlists_basic.create_playlist(self.state, "Old")
+        playlists_basic.rename_playlist(self.state, "Missing", "New")
+        self.assertEqual(self.state.playlists[0].name, "Old")
