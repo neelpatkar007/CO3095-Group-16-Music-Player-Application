@@ -41,3 +41,21 @@ class TestPlayerConfigBranch(unittest.TestCase):
             # Engine missing (False)
             self.state.audio_engine = None
             player_config.load_settings(self.state)
+
+    # Add Tag Tests
+
+    def test_add_tag_branches(self):
+        """
+        Branches:
+         - New and Duplicate tag
+         - Tag List initialisation
+        """
+        path = str(self.track1.path)
+
+        # Init List (True)
+        self.state.song_tags = {}
+        player_config.add_tag(self.state, "1", "fresh")
+        self.assertIn("fresh", self.state.song_tags[path])
+
+        # Duplicate Check (True)
+        player_config.add_tag(self.state, "1", "fresh")
