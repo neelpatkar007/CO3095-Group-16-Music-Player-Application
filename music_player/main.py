@@ -342,8 +342,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
         user_data.view_rated(state)
 
     # S4-09: Advanced Search
-    elif base == "/search":
-        user_data.advanced_search(state, " ".join(args))  # Overrides S2 search
+    elif base == "/advanced.search":
+        user_data.advanced_search(state, " ".join(args))
     #S4-07: User Profile Switch
     elif base == "/profile.new":
         user_data.create_profile(state, args[0] if args else "")

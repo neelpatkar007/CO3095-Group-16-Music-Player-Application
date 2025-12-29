@@ -162,7 +162,7 @@ def show_current_profile(state: PlayerState) -> None:
 
 def advanced_search(state: PlayerState, query_str: str) -> None:
     if not query_str:
-        print("[search] Usage: /search <query>")
+        print("[search] Usage: /advanced.search <query>")
         return
 
     tokens = query_str.split()
