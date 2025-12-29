@@ -1,0 +1,70 @@
+# TSL Specification for player_core module
+# Functions: play, pause, stop, set_sleep_timer
+
+Test Case Name: Play Command
+
+Parameters:
+    State Object:
+        Valid PlayerState object.       [property ValidState]
+        None.                           [error]
+        Invalid type (not PlayerState). [error]
+
+    Track Loaded (current_track):
+        Yes (Track exists).             [if ValidState] [property TrackLoaded]
+        No (None).                      [if ValidState] [error]
+
+    Playback Status (is_playing, is_paused):
+        Playing (True, False).          [if TrackLoaded] [property AlreadyPlaying]
+        Paused (True, True).            [if TrackLoaded] [property Resumed]
+        Stopped (False, False).         [if TrackLoaded] [property FreshPlay]
+
+Environments:
+    Audio Engine:
+        Available.
+        Missing/None.                   [error]
+
+
+
+Test Case Name: Pause Command
+
+Parameters:
+    State Object:
+        Valid PlayerState object.       [property ValidState]
+        None.                           [error]
+
+    Playback Status:
+        Playing (is_playing=True).      [if ValidState] [property SuccessfulPause]
+        Already Paused.                 [if ValidState] [property NoOp]
+        Stopped (is_playing=False).     [if ValidState] [property NoOp]
+
+
+
+Test Case Name: Stop Command
+
+Parameters:
+    State Object:
+        Valid PlayerState object.       [property ValidState]
+        None.                           [error]
+
+    Playback Status:
+        Playing or Paused.              [if ValidState] [property SuccessfulStop]
+        Already Stopped.                [if ValidState] [property NoOp]
+
+
+
+Test Case Name: Sleep Timer
+
+Parameters:
+    State Object:
+        Valid PlayerState object.
+        None.                           [error]
+
+    Input Minutes:
+        Positive number (Standard).     [property ValidTimer]
+        Zero or Negative (Cancel).      [property CancelTimer]
+        Non-numeric input (String).     [error]
+        Huge number (> 24 hours).       [property MaxLimit]
+
+    Current Timer State:
+        No active timer.                [if ValidTimer]
+        Existing timer active.          [if ValidTimer] [property Overwrite]
