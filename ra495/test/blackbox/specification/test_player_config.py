@@ -62,3 +62,54 @@ class TestPlayerConfig(unittest.TestCase):
                 player_config.load_settings(self.state)
 
         self.assertEqual(self.state.volume, 100)
+
+    # Custom Tag Tests
+
+    def test_add_tag_valid(self):
+        """
+        Expected Result: Tag is appended to the song_tags dictionary for the correct track.
+        Actual Result: [tags] Added #chill to 'Song A'.
+        """
+        player_config.add_tag(self.state, "1", "chill")
+
+        tags = self.state.song_tags.get(str(self.track1.path))
+        self.assertIn("chill", tags)
+
+    def test_add_tag_duplicate(self):
+        """
+        Expected Result: Duplicate tag is ignored.
+        Actual Result: [tags] Song already has tag #chill.
+        """
+        player_config.add_tag(self.state, "1", "chill")
+        player_config.add_tag(self.state, "1", "chill")
+
+        tags = self.state.song_tags.get(str(self.track1.path))
+        self.assertEqual(tags.count("chill"), 1)
+
+    def test_add_tag_invalid_index(self):
+        """
+        Expected Result: Error printed and no tags added.
+        Actual Result: [tags] Error: Song index out of range.
+        """
+        player_config.add_tag(self.state, "99", "chill")
+        self.assertEqual(len(self.state.song_tags), 0)
+
+    def test_filter_by_tag_matches(self):
+        """
+        Expected Result: Playlist queue is replaced with matching tracks.
+        Actual Result: [tags] Queue updated! Ready to play 1 songs tagged #gym.
+        """
+        self.state.song_tags[str(self.track2.path)] = ["gym"]
+
+        player_config.filter_by_tag(self.state, "gym")
+
+        self.assertEqual(len(self.state.tracks), 1)
+        self.assertEqual(self.state.tracks[0], self.track2)
+
+    def test_filter_by_tag_no_matches(self):
+        """
+        Expected Result: Queue remains unchanged (or empty handled gracefully).
+        Actual Result: [tags] No songs found with #nonexistent.
+        """
+        player_config.filter_by_tag(self.state, "nonexistent")
+        self.assertEqual(len(self.state.tracks), 0)
