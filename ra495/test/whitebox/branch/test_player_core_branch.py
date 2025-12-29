@@ -24,23 +24,34 @@ class TestPlayerCoreBranch(unittest.TestCase):
          - Track None
          - Already Playing
          - Is Paused
+        Expected Result:
+         - No tracks loaded message.
+         - Already playing message.
+         - Resumes or starts fresh playback.
+        Actual Result:
+            [core] No tracks loaded.
+
+            [core] Already playing.
+
+            [core] Resumed: Test Song – Artist
+            [core] Playing: Test Song – Artist (1.0x)
         """
         # Track is None (True)
         self.state.tracks = []
         self.state.current_index = 0
-        player_core.play(self.state)  # Prints "No tracks loaded"
+        player_core.play(self.state)
 
         # Already Playing (True)
         self.state.tracks = [self.sample_track]
         self.state.is_playing = True
-        player_core.play(self.state)  # Prints "Already playing"
+        player_core.play(self.state)
 
         # Resume vs Fresh (True/False)
-        self.state.is_paused = True  # Resume
+        self.state.is_paused = True
         player_core.play(self.state)
 
         self.state.is_paused = False
-        self.state.is_playing = False  # Fresh
+        self.state.is_playing = False
         player_core.play(self.state)
 
     def test_update_branches(self):
@@ -48,6 +59,11 @@ class TestPlayerCoreBranch(unittest.TestCase):
         Branches:
          - Sleep Timer Triggered
          - Track Finished
+        Expected Result:
+         - Stops playback when timer expires.
+        Actual Result:
+            [timer] Sleep timer reached. Stopping playback.
+            [core] Stopped.
         """
         self.state.is_playing = True
         self.state.tracks = [self.sample_track]
@@ -73,11 +89,21 @@ class TestPlayerCoreBranch(unittest.TestCase):
         Branches:
          - Cancel Input
          - Timer Exists
+        Expected Result:
+         - Cancels timer (sleep_deadline = None).
+         - Sets new timer.
+        Actual Result:
+            [core] Warning: Timer set but nothing is currently playing.
+
+            [core] Sleep timer set for 10 minutes.
+            [core] Replacing 10.0m timer.
+            [core] Warning: Timer set but nothing is currently playing.
+            [core] Sleep timer set for 20 minutes.
         """
         # Cancel (True)
         player_core.set_sleep_timer(self.state, 0)
 
-        # 2. Overwrite Logic (True/False)
+        # Overwrite Logic (True/False)
         # False path (New timer)
         self.state.sleep_deadline = None
         player_core.set_sleep_timer(self.state, 10)
