@@ -1,0 +1,63 @@
+# TSL Specification for playlist_model
+# Class: Playlist
+
+Test Case Name: Playlist Initialization
+
+Parameters:
+    Name Input:
+        Valid String.            [property ValidName]
+        Empty String.            [property UnnamedFallback]
+        None.                    [property TypeConversion]
+        Non-String.              [property TypeConversion]
+
+    Tracks Input:
+        List of Tracks.          [property HasTracks]
+        Empty List.              [property EmptyTracks]
+        None.                    [property EmptyFallback]
+        Non-List.                [property EmptyFallback]
+
+
+Test Case Name: Number of Tracks
+
+Parameters:
+    Tracks List:
+        Populated (>0).          [property PositiveCount]
+        Empty (0).               [property ZeroCount]
+
+
+Test Case Name: Total Duration (Seconds)
+
+Parameters:
+    Tracks List:
+        Populated (>0).          [property HasTracks]
+        Empty (0).               [property IsEmpty]
+
+    Track Durations:
+        All Valid Floats.        [if HasTracks] [property SumDuration]
+        Mixed (Some None).       [if HasTracks] [property SumDuration]
+        All None/Invalid.        [if HasTracks] [property ZeroDuration]
+        N/A (List Empty).        [if IsEmpty]   [property ZeroDuration]
+
+
+Test Case Name: Total Duration (String)
+
+Parameters:
+    Total Seconds:
+        Positive (>0).           [property FormattedString]
+        Zero (0.0).              [property ZeroString]
+
+
+Test Case Name: Summary Line
+
+Parameters:
+    Index Argument:
+        Provided (Int).          [property Indexed]
+        None.                    [property NoIndex]
+
+    Active Flag:
+        True.                    [property ActiveMarker]
+        False.                   [property InactiveMarker]
+
+    Playlist State:
+        Empty.                   [property EmptySummary]
+        Has Tracks.              [property NormalSummary]
