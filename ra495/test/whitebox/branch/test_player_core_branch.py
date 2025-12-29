@@ -17,3 +17,28 @@ class TestPlayerCoreBranch(unittest.TestCase):
         self.mock_engine = MagicMock()
         self.state = PlayerState([], self.mock_engine)
         self.sample_track = Track(Path("song.mp3"), "Test Song", "Artist", 180)
+
+    def test_play_branches(self):
+        """
+        Branches:
+         - Track None
+         - Already Playing
+         - Is Paused
+        """
+        # Track is None (True)
+        self.state.tracks = []
+        self.state.current_index = 0
+        player_core.play(self.state)  # Prints "No tracks loaded"
+
+        # Already Playing (True)
+        self.state.tracks = [self.sample_track]
+        self.state.is_playing = True
+        player_core.play(self.state)  # Prints "Already playing"
+
+        # Resume vs Fresh (True/False)
+        self.state.is_paused = True  # Resume
+        player_core.play(self.state)
+
+        self.state.is_paused = False
+        self.state.is_playing = False  # Fresh
+        player_core.play(self.state)
