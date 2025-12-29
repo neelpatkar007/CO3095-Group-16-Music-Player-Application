@@ -90,3 +90,24 @@ class TestPlayerCore(unittest.TestCase):
 
     # Pause Command Tests
 
+    def test_pause_successful(self):
+        """
+        Expected Result: State updates to paused and engine pauses.
+        Actual Result: [core] Paused.
+        """
+        self.state.is_playing = True
+        self.state.is_paused = False
+
+        player_core.pause(self.state)
+
+        self.assertTrue(self.state.is_paused)
+        self.mock_engine.pause.assert_called_once()
+
+    def test_pause_noop(self):
+        """
+        Expected Result: No action taken if not currently playing.
+        Actual Result: [core] Nothing to pause.
+        """
+        self.state.is_playing = False
+        player_core.pause(self.state)
+        self.mock_engine.pause.assert_not_called()
