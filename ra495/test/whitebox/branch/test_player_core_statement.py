@@ -111,3 +111,13 @@ class TestPlayerCoreStatement(unittest.TestCase):
         # Cancel
         player_core.set_sleep_timer(self.state, 0)
         self.assertIsNone(self.state.sleep_deadline)
+
+    # Playback Speed Tests
+
+    def test_set_speed(self):
+        """
+        Expected Result: Updates speed for valid input.
+        Actual Result: [core] Playback speed set to 1.5x.
+        """
+        player_core.set_playback_speed(self.state, 1.5)
+        self.assertEqual(self.state.playback_speed, 1.5)
