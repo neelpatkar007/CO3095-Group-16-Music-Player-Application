@@ -19,23 +19,24 @@ We use the following versioning format which is: v<Major>.<Minor>.<Patch>.
 
 ## 2. Tag History Log
 
-| Tag  | Date       | Sprint | Commit Hash | Author        | Description / Contents     | QA Status   | Evidence Links                                                                                 |
-|------|------------|--------|-------------|---------------|----------------------------|-------------|------------------------------------------------------------------------------------------------|
-| v0.1 | 18/12/2025 | 1      | 56e8603     | neelpatkar007 | Completed Sprint 1 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1    |
-| v0.2 | 19/12/2025 | 2      | ca140db     | neelpatkar007 | Completed Sprint 2 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.2    |
-| v0.3 | 25/12/2025 | 3      | 2ff6ca2     | neelpatkar007 | Completed Sprint 3 Release | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.3    |
+| Tag  | Date       | Sprint | Commit Hash | Author        | Description / Contents             | QA Status   | Evidence Links                                                                                 |
+|------|------------|--------|-------------|---------------|------------------------------------|-------------|------------------------------------------------------------------------------------------------|
+| v0.1 | 18/12/2025 | 1      | 56e8603     | neelpatkar007 | Completed Sprint 1 Release         | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.1    |
+| v0.2 | 19/12/2025 | 2      | ca140db     | neelpatkar007 | Completed Sprint 2 Release         | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.2    |
+| v0.3 | 25/12/2025 | 3      | 2ff6ca2     | neelpatkar007 | Completed Sprint 3 Release         | Verified    | https://github.com/neelpatkar007/CO3095-Group-16-Music-Player-Application/releases/tag/v0.3    |
+| v1.0 |            | 4      |             |               | Final Release (Completed Sprint 4) |             |                                                                                                |
 
 
 
 
 ## 3. Process of How to do Tag Creation & Maintenance
 Before you create a tag, make sure that you have followed and met these rules so we don't break the project's versioning and stability:
-1. Completion: All acceptance criteria for the sprint must be 100% complete.
-2. Location: Never tag a feature branch - only tag `main` after the merge.
-3. Quality Gate: We need at least an 85% test coverage across the board.
-4. Steps:
+1. All acceptance criteria for the sprint must be 100% complete.
+2. Never tag a feature branch - only tag `main` after the merge.
+3. We need at least an 85% test coverage across the board.
+4. Now you can create the tag:
     - Merge all approved Pull Requests into `main`.
     - Run the tests one last time to ensure everything works.
     - Run the git tag command (git tag v0.x.0) and push it.
     - Update the table in Section 2 immediately after tagging is done.
-5. Any Corrections: If any releases are messed up, do not delete the tag and instead fix the bug, merge it, and create a Patch tag (for example v0.1.1).
+5. If any releases are messed up, do not delete the tag and instead fix the bug, merge it, and create a Patch tag (for example v0.1.1).
