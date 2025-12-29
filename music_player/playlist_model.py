@@ -12,16 +12,16 @@ Stories:
 
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Any
 
-from music_player.library import Track  # Sprint 1 Track model
+from music_player.library import Track
 from music_player.time_utils import format_mm_ss
 
 
 @dataclass
 class Playlist:
     """
-    Core model for a playlist (Sprint 2).
+    Core model for playlist.
 
     Fields used by:
       - S2-01: name, tracks
@@ -32,9 +32,22 @@ class Playlist:
     name: str
     tracks: List[Track] = field(default_factory=list)
 
+    def __post_init__(self) -> None:
+        """
+        Default initialization and type normalisation.
+        """
+        if not isinstance(self.name, str):
+            self.name = str(self.name)
+        self.name = self.name.strip() or "(unnamed)"
+
+        if self.tracks is None:
+            self.tracks = []
+        elif not isinstance(self.tracks, list):
+            self.tracks = []
+
     @property
     def num_tracks(self) -> int:
-        """Number of tracks (S2-05, S2-10)."""
+        """Total duration as in seconds (S2-05, S2-10)."""
         return len(self.tracks)
 
     @property
@@ -42,8 +55,9 @@ class Playlist:
         """Total duration as in seconds (S2-05, S2-10)."""
         total = 0.0
         for t in self.tracks:
-            if t.duration_seconds is not None:
-                total += t.duration_seconds
+            dur = getattr(t, "duration_seconds", None)
+            if isinstance(dur, (int, float)) and dur > 0:
+                total += float(dur)
         return total
 
     @property
@@ -58,8 +72,8 @@ class Playlist:
         Helper for listing playlists (S2-05, S2-10).
         Shows index, name, number of tracks and total time.
         """
-        idx_part = f"{index:02d}" if index is not None else "--"
-        active_marker = "*" if active else " "
+        idx_part = f"{index:02d}" if isinstance(index, int) else "--"
+        active_marker = "*" if bool(active) else " "
         return (
             f"{active_marker} {idx_part}  {self.name:<20}  "
             f"{self.num_tracks:3d} tracks  {self.total_duration_mm_ss}"
