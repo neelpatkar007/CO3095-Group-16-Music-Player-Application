@@ -33,14 +33,41 @@ class TestPlaylistsBasicStatement(unittest.TestCase):
         """
         # _ensure_playlists errors
         playlists_basic._ensure_playlists(None)
-
         # _resolve_playlist errors
         playlists_basic._resolve_playlist(None, "1")
         playlists_basic._resolve_playlist(self.state, 123)
-
         self.state.playlists = "NotList"  # Corrupt playlists
         playlists_basic._resolve_playlist(self.state, "1")
-
         self.state.playlists = []
         playlists_basic._resolve_playlist(self.state, "99")
         playlists_basic._resolve_playlist(self.state, "Missing")
+
+    def test_activate_queue_errors(self):
+        """
+        Expected Result: Activation fails safely with error messages.
+        Actual Result:
+        [pl] Error: State is None.
+        [pl] Error: Playlist is None.
+        [pl] Error: Playlist invalid.
+        [pl] Warning: Playlist is empty.
+        [pl] Error: Playlist tracks corrupted.
+        [pl] Error: Player core not available.
+        """
+        # State None
+        playlists_basic._activate_playlist_queue(None, self.pl)
+        # Playlist None
+        playlists_basic._activate_playlist_queue(self.state, None)
+        # Playlist Invalid
+        del self.pl.tracks
+        playlists_basic._activate_playlist_queue(self.state, self.pl)
+        # Restore tracks
+        self.pl.tracks = []
+        # Playlist Empty
+        playlists_basic._activate_playlist_queue(self.state, self.pl)
+        # Tracks Corrupted
+        self.pl.tracks = "NotList"
+        playlists_basic._activate_playlist_queue(self.state, self.pl)
+        # Player Core missing
+        self.pl.tracks = [MagicMock()]
+        with patch.object(playlists_basic, 'player_core', spec=[]) as empty_core:
+            playlists_basic._activate_playlist_queue(self.state, self.pl)
