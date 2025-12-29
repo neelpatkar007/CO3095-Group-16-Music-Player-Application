@@ -125,3 +125,30 @@ class TestPlaylistsBasicStatement(unittest.TestCase):
         self.state.playlists = [self.pl, None]
         self.state.active_playlist_index = 0
         playlists_basic.list_playlists(self.state)
+
+    def test_play_open_show_close_errors(self):
+        """
+        Expected Result: Navigation functions handle invalid states safely.
+        Actual Result:
+            [pl] Error: State is None.
+            [pl] Error: State is None.
+            [pl] No active playlist. Use /pl.open <name|index>.
+            [pl] No active playlist. Use /pl.open or /pl.play <name>.
+            [pl] Playlist 'Ghost' not found.
+            [pl] No main library to return to.
+            [pl] Already in main library.
+        """
+        # Show Current
+        playlists_basic.show_current_playlist(None)
+        self.state.active_playlist_index = None
+        playlists_basic.show_current_playlist(self.state)
+        # Play Active
+        playlists_basic.play_active_playlist(self.state)
+        # Play Selector
+        playlists_basic.play_playlist(self.state, "Ghost")
+        # Close
+        del self.state.library_tracks
+        playlists_basic.close_playlist(self.state)  # No library found
+        self.state.library_tracks = []
+        self.state.tracks = self.state.library_tracks
+        playlists_basic.close_playlist(self.state)  # Already in main library
