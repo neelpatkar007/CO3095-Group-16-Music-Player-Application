@@ -125,3 +125,32 @@ class TestPlayerCore(unittest.TestCase):
         self.assertFalse(self.state.is_playing)
         self.assertEqual(self.state.position_seconds, 0.0)
         self.mock_engine.stop.assert_called_once()
+
+    # Sleep Timer Tests
+
+    def test_sleep_timer_valid(self):
+        """
+        Expected Result: sleep_deadline is set to current_time + minutes*60.
+        Actual Result: [core] Sleep timer set for 10 minutes.
+        """
+        with patch('time.time', return_value=1000):
+            player_core.set_sleep_timer(self.state, 10)
+
+        self.assertEqual(self.state.sleep_deadline, 1600)
+
+    def test_sleep_timer_cancel(self):
+        """
+        Expected Result: Existing sleep_deadline is cleared (None).
+        Actual Result: [core] Sleep timer cancelled.
+        """
+        self.state.sleep_deadline = 5000
+        player_core.set_sleep_timer(self.state, 0)
+        self.assertIsNone(self.state.sleep_deadline)
+
+    def test_sleep_timer_max_limit(self):
+        """
+        Expected Result: Request rejected.
+        Actual Result: Error: Max 24 hours.
+        """
+        player_core.set_sleep_timer(self.state, 2000)
+        self.assertIsNone(self.state.sleep_deadline)
