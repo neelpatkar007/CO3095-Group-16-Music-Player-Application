@@ -380,6 +380,9 @@ def main() -> None:
     # S4-03: Load resume state from previous session
     player_time.load_resume_state(state)
 
+    # S4-07: Load user profiles
+    user_data.load_profiles_index(state)
+
     # Startup display welcome message and available commands summary
     print("Music Player – Sprint 4")
     print(
@@ -423,6 +426,8 @@ def main() -> None:
         playback_thread.join(timeout=1.0)
         # S4-01: Save settings to JSON file
         player_config.save_settings(state)
+        # S4-07: Save current profile state
+        user_data._save_current_to_profile(state)
 
         # Ensure audio is stopped
         state.audio_engine.stop()
