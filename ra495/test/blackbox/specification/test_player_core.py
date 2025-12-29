@@ -9,7 +9,7 @@ from pathlib import Path
 class TestPlayerCore(unittest.TestCase):
     """
     Black-Box Specification-based Testing for player_core.py.
-    Testing Tool: Python unittest
+    Testing Tool: Python unittest + unittest.mock
     Test Technique: Category Partition Method using TSLGenerator
     Source: playerCore.txt
     """
@@ -53,3 +53,18 @@ class TestPlayerCore(unittest.TestCase):
 
         self.mock_engine.play.assert_not_called()
 
+    def test_play_resume(self):
+        """
+        Expected Result: Audio engine resumes.
+        Actual Result: [core] Resumed: Test Song – Artist
+        """
+        self.state.tracks = [self.sample_track]
+        self.state.current_index = 0
+
+        self.state.is_playing = True
+        self.state.is_paused = True
+
+        player_core.play(self.state)
+
+        self.assertFalse(self.state.is_paused)
+        self.mock_engine.resume.assert_called_once()
