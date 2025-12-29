@@ -69,3 +69,22 @@ class TestPlayerConfig(unittest.TestCase):
         playlists_basic.create_playlist(self.state, "Bye")
         playlists_basic.delete_playlist(self.state, "Bye")
         self.assertEqual(len(self.state.playlists), 0)
+
+    # Open Playlist Tests
+
+    def test_open_playlist_valid(self):
+        """
+        Expected Result: Queue (state.tracks) replaced by playlist tracks.
+        Actual Result:
+            [pl] Opened playlist 'P1':
+            01. A – Art [01:40]
+            [core] Playing: A – Art (1.0x)
+        """
+        pl = Playlist("P1")
+        t1 = Track(Path("a.mp3"), "A", "Art", 100)
+        pl.tracks.append(t1)
+        self.state.playlists.append(pl)
+
+        playlists_basic.open_playlist(self.state, "P1")
+
+        self.assertEqual(self.state.tracks, [t1])
