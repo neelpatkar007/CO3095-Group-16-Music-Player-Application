@@ -21,7 +21,10 @@ from music_player.time_utils import format_mm_ss
 
 def _ensure_playlists(state: PlayerState) -> None:
     """Internal helper to ensure state.playlists exists."""
-    if state is not None and state.playlists is None:
+    if state is None or not hasattr(state, "playlists"):
+        print("[pl] Error: State is None.")
+        return
+    if state.playlists is None:
         state.playlists = []
 
 
@@ -31,10 +34,13 @@ def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     Used by multiple S2 stories.
     """
     _ensure_playlists(state)
-    selector = (selector or "").strip()
-    if not selector:
+    if state is None or not hasattr(state, "playlists") or not isinstance(state.playlists, list):
+        print("[pl] Error: State is None.")
+        return None
+    if not isinstance(selector, str):
         print("[pl] Missing playlist name or number.")
         return None
+    selector = (selector or "").strip()
 
     # Try numeric index first
     try:
@@ -319,6 +325,9 @@ def show_current_playlist(state: PlayerState) -> None:
       - Otherwise print guidance.
     """
     _ensure_playlists(state)
+    if state is None or not hasattr(state, "playlists"):
+        print("[pl] Error: State is None.")
+        return
     if state.active_playlist_index is None or not state.playlists:
         print("[pl] No active playlist. Use /pl.open <name|index>.")
         return
