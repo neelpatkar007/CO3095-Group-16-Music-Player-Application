@@ -21,6 +21,7 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
     Triggers a library rescan upon success.
     """
     if not source_path_str:
+        print("[import] Usage: /import <path_to_file>")
         return
 
     src = Path(source_path_str)
