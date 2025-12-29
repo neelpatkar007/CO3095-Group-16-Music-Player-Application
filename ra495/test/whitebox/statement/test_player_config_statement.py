@@ -182,3 +182,38 @@ class TestPlayerConfigStatement(unittest.TestCase):
         """
         self.state.song_tags = {"song1": ["gym"]}
         player_config.list_all_tags(self.state)
+
+    # Filter By Tag Tests
+
+    def test_filter_none_state(self):
+        """
+        Expected Result: Returns early.
+        Actual Result: [tags] Error: State is None.
+        """
+        player_config.filter_by_tag(None, "tag")
+
+    def test_filter_tag_none(self):
+        """
+        Expected Result: Prints error.
+        Actual Result: [tags] Error: Tag cannot be empty.
+        """
+        player_config.filter_by_tag(self.state, None)
+
+    def test_filter_no_matches(self):
+        """
+        Expected Result: Prints no matches found.
+        Actual Result: [tags] No songs found with #gym.
+        """
+        player_config.filter_by_tag(self.state, "gym")
+
+    def test_filter_matches_found(self):
+        """
+        Expected Result: Updates state.tracks.
+        Actual Result:
+            [tags] Queue updated! Ready to play 1 songs tagged #gym:
+            - Song A – Artist A
+        """
+        path = str(self.track1.path)
+        self.state.song_tags = {path: ["gym"]}
+        player_config.filter_by_tag(self.state, "gym")
+        self.assertEqual(len(self.state.tracks), 1)
