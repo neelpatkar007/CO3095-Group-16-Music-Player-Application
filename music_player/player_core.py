@@ -19,6 +19,9 @@ def play(state: PlayerState) -> None:
     """
     Start or resume playback from the current position stored in the state.
     """
+    if state is None:
+        print("[core] Error: State is None.")
+        return
     if not hasattr(state.audio_engine, "play"):
         print("[core] Error: Engine unavailable.")
         return
