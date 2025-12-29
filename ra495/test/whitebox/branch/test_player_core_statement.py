@@ -92,3 +92,22 @@ class TestPlayerCoreStatement(unittest.TestCase):
         with patch('music_player.player_queue.next_track') as mock_next:
             player_core.update_playback(self.state, 1.0)
             mock_next.assert_called()
+
+    # Sleep Timer Tests
+
+    def test_sleep_timer_logic(self):
+        """
+        Expected Result: Sets valid timer and handles cancellation.
+        Actual Result:
+            [core] Warning: Timer set but nothing is currently playing.
+            [core] Sleep timer set for 10 minutes.
+            [core] Sleep timer cancelled.
+        """
+        # Valid Set
+        with patch('time.time', return_value=1000):
+            player_core.set_sleep_timer(self.state, 10)
+        self.assertEqual(self.state.sleep_deadline, 1600)
+
+        # Cancel
+        player_core.set_sleep_timer(self.state, 0)
+        self.assertIsNone(self.state.sleep_deadline)
