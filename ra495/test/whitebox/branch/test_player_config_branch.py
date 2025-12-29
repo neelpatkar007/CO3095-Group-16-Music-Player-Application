@@ -17,3 +17,27 @@ class TestPlayerConfigBranch(unittest.TestCase):
         self.state = PlayerState([], MagicMock())
         self.track1 = Track(Path("a.mp3"), "Song A", "Artist A", 100)
         self.state.library_tracks = [self.track1]
+
+    # Load Settings Tests
+
+    def test_load_settings_branches(self):
+        """
+        Branches:
+         - File exists
+         - Audio Engine exists
+        """
+        # File exists check
+        with patch("pathlib.Path.exists", return_value=False):
+            player_config.load_settings(self.state)  # False path Return
+
+        # Audio Engine check
+        with patch("pathlib.Path.exists", return_value=True), \
+                patch("builtins.open", unittest.mock.mock_open(read_data="{}")):
+            # Engine exists (True)
+            self.state.audio_engine = MagicMock()
+            player_config.load_settings(self.state)
+            self.state.audio_engine.set_volume.assert_called()
+
+            # Engine missing (False)
+            self.state.audio_engine = None
+            player_config.load_settings(self.state)
