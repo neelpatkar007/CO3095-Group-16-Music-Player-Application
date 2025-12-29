@@ -42,3 +42,28 @@ class TestPlayerCoreBranch(unittest.TestCase):
         self.state.is_paused = False
         self.state.is_playing = False  # Fresh
         player_core.play(self.state)
+
+    def test_update_branches(self):
+        """
+        Branches:
+         - Sleep Timer Triggered
+         - Track Finished
+        """
+        self.state.is_playing = True
+        self.state.tracks = [self.sample_track]
+
+        # Sleep Timer (True)
+        self.state.sleep_deadline = 100
+        with patch('time.time', return_value=200):
+            player_core.update_playback(self.state, 1.0)
+        self.assertFalse(self.state.is_playing)
+
+        # Track Finished (True/False)
+        self.state.is_playing = True
+        self.state.position_seconds = 10.0  # False
+        player_core.update_playback(self.state, 1.0)
+
+        self.state.position_seconds = 180.0  # True
+        with patch('music_player.player_queue.next_track') as mock_next:
+            player_core.update_playback(self.state, 1.0)
+            mock_next.assert_called()
