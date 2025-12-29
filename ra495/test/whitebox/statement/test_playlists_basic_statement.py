@@ -152,3 +152,47 @@ class TestPlaylistsBasicStatement(unittest.TestCase):
         self.state.library_tracks = []
         self.state.tracks = self.state.library_tracks
         playlists_basic.close_playlist(self.state)  # Already in main library
+
+    def test_sort_errors_and_exceptions(self):
+        """
+        Expected Result: Sort validates inputs and catches internal sorting errors.
+        Actual Result:
+            [pl] Error: State is None.
+            [pl] Error: Selector cannot be empty.
+            [pl] Error: Sort criteria must be a valid string.
+            [pl] Playlist 'Ghost' not found.
+            [pl] Error: Playlist tracks corrupted.
+            [pl] Playlist 'Mix' is empty, nothing to sort.
+            [pl] Invalid sort criteria. Use: title, artist, duration
+            [pl] Error sorting by title: Sort Failed
+            [pl] Error sorting by artist: Sort Failed
+            [pl] Error sorting by duration: Sort Failed
+        """
+        # Basic validation
+        playlists_basic.sort_playlist(None, "Mix", "title")
+        playlists_basic.sort_playlist(self.state, "", "title")
+        playlists_basic.sort_playlist(self.state, "Mix", None)
+
+        # Playlist resolution failures
+        playlists_basic.sort_playlist(self.state, "Ghost", "title")
+
+        self.state.playlists = [self.pl]
+        del self.pl.tracks
+        playlists_basic.sort_playlist(self.state, "Mix", "title")  # Tracks corrupted
+
+        self.pl.tracks = []
+        playlists_basic.sort_playlist(self.state, "Mix", "title")  # Empty
+
+        self.pl.tracks = [MagicMock()]
+        playlists_basic.sort_playlist(self.state, "Mix", "invalid_criteria")
+
+        exploding_list = MagicMock()
+        exploding_list.__len__.return_value = 1
+        exploding_list.__bool__.return_value = True
+        exploding_list.sort.side_effect = Exception("Sort Failed")
+
+        self.pl.tracks = exploding_list
+
+        playlists_basic.sort_playlist(self.state, "Mix", "title")
+        playlists_basic.sort_playlist(self.state, "Mix", "artist")
+        playlists_basic.sort_playlist(self.state, "Mix", "duration")
