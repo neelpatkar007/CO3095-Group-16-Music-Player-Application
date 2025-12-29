@@ -58,3 +58,14 @@ class TestPlayerConfig(unittest.TestCase):
         playlists_basic.create_playlist(self.state, "Old")
         playlists_basic.rename_playlist(self.state, "Missing", "New")
         self.assertEqual(self.state.playlists[0].name, "Old")
+
+    # Delete Playlist Tests
+
+    def test_delete_playlist_by_name(self):
+        """
+        Expected Result: Playlist removed from state.
+        Actual Result: [pl] Deleted playlist 'Bye'.
+        """
+        playlists_basic.create_playlist(self.state, "Bye")
+        playlists_basic.delete_playlist(self.state, "Bye")
+        self.assertEqual(len(self.state.playlists), 0)
