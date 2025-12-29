@@ -1,0 +1,53 @@
+# Test Specification for Music Player System
+# Targeted Module: main.py (handle_command)
+
+# User Command Input
+
+Command:
+    Empty String.               [error]
+    Shortcut (p/s/m).           [single]
+    
+    /play.                      [property CmdPlay]
+    /seek.                      [property CmdSeek]
+    /speed.                     [property CmdSpeed]
+    
+    /tag.add.                   [property CmdTag]
+    /import.                    [property CmdImport]
+    
+    Unknown Command.            [error]
+
+# Arguments Provided
+
+Arguments:
+    None.                       [if CmdPlay] [property NoArgs]
+    
+    One Valid Arg.              [if CmdSpeed] [if CmdSeek] [if CmdImport] [property OneArg]
+    
+    Two Valid Args.             [if CmdTag] [property TwoArgs]
+    
+    Missing/Empty.              [if CmdSpeed] [if CmdTag] [if CmdImport] [error]
+
+# System State
+
+Resume State:
+    Active (Saved Position).    [if CmdPlay] [property ResumeActive]
+    Inactive.
+
+Loop Mode:
+    Off.
+    One/All.
+
+# Environment & Library
+
+Audio Backend:
+    Pygame Installed.           [property RealAudio]
+    Pygame Missing.             [property SimAudio]
+
+Pydub Library:
+    # Tests audio_backend.py speed processing logic
+    Installed.                  [if CmdSpeed]
+    Missing.                    [if CmdSpeed]
+
+Library Content:
+    Tracks Available.
+    Empty Library.              [if CmdPlay] [error]

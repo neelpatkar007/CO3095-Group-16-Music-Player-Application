@@ -1,0 +1,340 @@
+
+Test Case 1  		<error>
+   Command :  Empty String
+
+
+Test Case 2  		<single>
+   Command :  Shortcut (p/s/m)
+
+
+Test Case 3  		<error>
+   Command :  Unknown Command
+
+
+Test Case 4  		<error>  (follows [if])
+   Arguments :  Missing/Empty
+
+
+Test Case 5  		<error>  (follows [if])
+   Library Content :  Empty Library
+
+
+Test Case 6  		(Key = 3.1.1.1.1.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Active (Saved Position)
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 7  		(Key = 3.1.1.1.2.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Active (Saved Position)
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 8  		(Key = 3.1.1.2.1.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Active (Saved Position)
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 9  		(Key = 3.1.1.2.2.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Active (Saved Position)
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 10 		(Key = 3.1.2.1.1.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 11 		(Key = 3.1.2.1.2.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 12 		(Key = 3.1.2.2.1.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 13 		(Key = 3.1.2.2.2.0.1.)
+   Command         :  /play
+   Arguments       :  None
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 14 		(Key = 4.0.2.1.1.0.1.)
+   Command         :  /seek
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 15 		(Key = 4.0.2.1.2.0.1.)
+   Command         :  /seek
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 16 		(Key = 4.0.2.2.1.0.1.)
+   Command         :  /seek
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 17 		(Key = 4.0.2.2.2.0.1.)
+   Command         :  /seek
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 18 		(Key = 5.0.2.1.1.1.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  Installed
+   Library Content :  Tracks Available
+
+
+Test Case 19 		(Key = 5.0.2.1.1.2.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  Missing
+   Library Content :  Tracks Available
+
+
+Test Case 20 		(Key = 5.0.2.1.2.1.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  Installed
+   Library Content :  Tracks Available
+
+
+Test Case 21 		(Key = 5.0.2.1.2.2.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  Missing
+   Library Content :  Tracks Available
+
+
+Test Case 22 		(Key = 5.0.2.2.1.1.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  Installed
+   Library Content :  Tracks Available
+
+
+Test Case 23 		(Key = 5.0.2.2.1.2.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  Missing
+   Library Content :  Tracks Available
+
+
+Test Case 24 		(Key = 5.0.2.2.2.1.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  Installed
+   Library Content :  Tracks Available
+
+
+Test Case 25 		(Key = 5.0.2.2.2.2.1.)
+   Command         :  /speed
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  Missing
+   Library Content :  Tracks Available
+
+
+Test Case 26 		(Key = 6.0.2.1.1.0.1.)
+   Command         :  /tag
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 27 		(Key = 6.0.2.1.2.0.1.)
+   Command         :  /tag
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 28 		(Key = 6.0.2.2.1.0.1.)
+   Command         :  /tag
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 29 		(Key = 6.0.2.2.2.0.1.)
+   Command         :  /tag
+   Arguments       :  <n/a>
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 30 		(Key = 7.3.2.1.1.0.1.)
+   Command         :  add
+   Arguments       :  Two Valid Args
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 31 		(Key = 7.3.2.1.2.0.1.)
+   Command         :  add
+   Arguments       :  Two Valid Args
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 32 		(Key = 7.3.2.2.1.0.1.)
+   Command         :  add
+   Arguments       :  Two Valid Args
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 33 		(Key = 7.3.2.2.2.0.1.)
+   Command         :  add
+   Arguments       :  Two Valid Args
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 34 		(Key = 8.2.2.1.1.0.1.)
+   Command         :  /import
+   Arguments       :  One Valid Arg
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 35 		(Key = 8.2.2.1.2.0.1.)
+   Command         :  /import
+   Arguments       :  One Valid Arg
+   Resume State    :  Inactive
+   Loop Mode       :  Off
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 36 		(Key = 8.2.2.2.1.0.1.)
+   Command         :  /import
+   Arguments       :  One Valid Arg
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Installed
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
+
+Test Case 37 		(Key = 8.2.2.2.2.0.1.)
+   Command         :  /import
+   Arguments       :  One Valid Arg
+   Resume State    :  Inactive
+   Loop Mode       :  One/All
+   Audio Backend   :  Pygame Missing
+   Pydub Library   :  <n/a>
+   Library Content :  Tracks Available
+
