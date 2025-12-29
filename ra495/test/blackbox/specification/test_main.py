@@ -138,3 +138,32 @@ class TestMain(unittest.TestCase):
             # Selected "all" dedupe=False
             main.handle_command(self.state, "/pl.merge Target Source all")
             mock_merge.assert_called_with(self.state, "Target", "Source", dedupe=False)
+
+    # Sprint 3 Tests (Metrics/Queue)
+
+    def test_command_shuffle_toggle(self):
+        """
+        Expected Result: /shuffle toggles shuffle mode.
+        Actual Result: Shuffle toggled.
+        """
+        with patch("music_player.player_queue.toggle_shuffle") as mock_shuff:
+            main.handle_command(self.state, "/shuffle")
+            mock_shuff.assert_called_with(self.state)
+
+    def test_command_playback_speed(self):
+        """
+        Expected Result: /speed converts arg to float and calls set_speed.
+        Actual Result: Speed set to 1.5.
+        """
+        with patch("music_player.player_core.set_playback_speed") as mock_speed:
+            main.handle_command(self.state, "/speed 1.5")
+            mock_speed.assert_called_with(self.state, 1.5)
+
+    def test_command_speed_invalid(self):
+        """
+        Expected Result: Handles non-numeric input without crashing.
+        Actual Result: Usage: /speed <0.5 - 2.0>
+        """
+        with patch("music_player.player_core.set_playback_speed") as mock_speed:
+            main.handle_command(self.state, "/speed fast")
+            mock_speed.assert_not_called()
