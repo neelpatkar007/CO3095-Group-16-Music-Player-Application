@@ -155,3 +155,30 @@ class TestPlayerConfigStatement(unittest.TestCase):
         path = str(self.track1.path)
         self.state.song_tags = {path: ["exists"]}
         player_config.add_tag(self.state, "1", "exists")
+
+    # List Tags Tests
+
+    def test_list_tags_none_state(self):
+        """
+        Expected Result: Returns early.
+        Actual Result: [tags] Error: State is None.
+        """
+        player_config.list_all_tags(None)
+
+    def test_list_tags_empty(self):
+        """
+        Expected Result: Prints no tags message.
+        Actual Result: [tags] No tags created yet.
+        """
+        self.state.song_tags = {}
+        player_config.list_all_tags(self.state)
+
+    def test_list_tags_populated(self):
+        """
+        Expected Result: Prints tags.
+        Actual Result:
+            --- Custom Tags ---
+            #gym (1 songs)
+        """
+        self.state.song_tags = {"song1": ["gym"]}
+        player_config.list_all_tags(self.state)
