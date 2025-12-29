@@ -111,3 +111,17 @@ class TestPlayerCore(unittest.TestCase):
         self.state.is_playing = False
         player_core.pause(self.state)
         self.mock_engine.pause.assert_not_called()
+
+    # Stop Command Tests
+
+    def test_stop_successful(self):
+        """
+        Expected Result: Playback flags cleared and the Position is reset to 0.0.
+        Actual Result: [core] Stopped.
+        """
+        self.state.is_playing = True
+        player_core.stop(self.state)
+
+        self.assertFalse(self.state.is_playing)
+        self.assertEqual(self.state.position_seconds, 0.0)
+        self.mock_engine.stop.assert_called_once()
