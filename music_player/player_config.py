@@ -18,6 +18,8 @@ def save_settings(state: PlayerState) -> None:
     Saves persistent config (Volume, Shuffle, Loop, Speed, Total Time)
     to player_config.json.
     """
+    if state is None:
+        return
     data = {
         "volume": state.volume,
         "shuffle": state.shuffle_active,
@@ -104,28 +106,33 @@ def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     if state is None:
         print("[tags] Error: State is None.")
         return
+    try:
+        if index_str is None:
+            raise ValueError
+        idx = int(index_str) - 1
+        # ...
+    except (ValueError, TypeError):
+        print("[tags] Error: Invalid number format.")
+        return
     if not hasattr(state, "song_tags") or not isinstance(state.song_tags, dict):
         print("[tags] Error: Tag data is unavailable/corrupted.")
         return
     if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
         print("[tags] Error: Library tracks missing/corrupted.")
         return
-    try:
-        idx = int(index_str) - 1
-    except ValueError:
-        print("[tags] Error: Invalid number format.")
-        return
     if idx < 0 or idx >= len(state.library_tracks):
         print("[tags] Error: Song index out of range.")
         return
     track = state.library_tracks[idx]
+    if track is None:
+        return
     path_str = str(track.path)
 
-    clean_tag = tag.strip().lstrip("#")
-
-    if not clean_tag:
+    if tag is None:
         print("[tags] Error: Tag cannot be empty.")
         return
+
+    clean_tag = tag.strip().lstrip("#")
 
     if len(clean_tag) > 15:
         print("[tags] Error: Tag is too long (max 15 chars).")
@@ -190,6 +197,9 @@ def filter_by_tag(state: PlayerState, tag: str) -> None:
         return
     if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
         print("[tags] Error: Library tracks missing/corrupted.")
+        return
+    if tag is None:
+        print("[tags] Error: Tag cannot be empty.")
         return
     tag = tag.strip().lstrip("#")
     matches = []
