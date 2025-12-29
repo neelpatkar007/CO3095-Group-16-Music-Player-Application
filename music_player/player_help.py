@@ -3,8 +3,7 @@ from typing import Optional
 
 def print_help(command: Optional[str] = None) -> None:
     '''
-    A handy guide to help users get around the player.
-    Covers all the basics plus the fancy Sprint 4 features.
+    Displays help information for the music player commands.
     '''
 
     # If they just type /help, give them the full run-down
