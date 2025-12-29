@@ -18,18 +18,45 @@ PROFILE_FILE = Path("profiles.json")
 
 def _serialize_current_state(state: PlayerState) -> dict:
     pl_data = []
+    # Collect all playlists
     for pl in state.playlists:
         pl_data.append({
             "name": pl.name,
             "tracks": [str(t.path) for t in pl.tracks]
         })
+
     return {
         "liked": list(state.liked_tracks),
         "ratings": state.song_ratings,
         "playlists": pl_data
     }
 
+def _save_profiles(state: PlayerState):
+    """Persist all profiles to JSON."""
+    try:
+        data = {
+            "active": state.active_profile,
+            "profiles": state.profiles
+        }
+        with open(PROFILE_FILE, "w") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"[profile] Error saving: {e}")
+
+def _save_current_to_profile(state: PlayerState):
+    """Snapshot current state variables into the profiles dict storage."""
+    serialized = _serialize_current_state(state)
+    if serialized:
+        state.profiles[state.active_profile] = serialized
+        _save_profiles(state)
+
 def _apply_profile_data(state: PlayerState, data: dict):
+    if not data:
+        state.liked_tracks = set()
+        state.song_ratings = {}
+        state.playlists = []
+        return
+
     state.liked_tracks = set(data.get("liked", []))
     state.song_ratings = data.get("ratings", {})
 
@@ -48,26 +75,10 @@ def _apply_profile_data(state: PlayerState, data: dict):
     state.playlists = restored_pl
 
 
-def _save_profiles(state: PlayerState):
-    try:
-        data = {
-            "active": state.active_profile,
-            "profiles": state.profiles
-        }
-        with open(PROFILE_FILE, "w") as f:
-            json.dump(data, f, indent=2)
-    except Exception as e:
-        print(f"[profile] Error saving: {e}")
-
-
-def _save_current_to_profile(state: PlayerState):
-    state.profiles[state.active_profile] = _serialize_current_state(state)
-    _save_profiles(state)
-
-
 # S4-07: User Profiles
 
 def load_profiles_index(state: PlayerState) -> None:
+    """Loads profile metadata on startup."""
     if not PROFILE_FILE.exists():
         _save_profiles(state)
         return
@@ -77,7 +88,7 @@ def load_profiles_index(state: PlayerState) -> None:
             data = json.load(f)
             state.active_profile = data.get("active", "default")
             state.profiles = data.get("profiles", {})
-            print(f"[profile] Loaded profiles. Active: '{state.active_profile}'")
+            print(f"[profile] Profiles loaded. Active: '{state.active_profile}'")
 
             # Apply the active profile data
             if state.active_profile in state.profiles:
@@ -90,49 +101,13 @@ def load_profiles_index(state: PlayerState) -> None:
     except Exception as e:
         print(f"[profile] Error loading profiles: {e}")
 
-
-def list_profiles(state: PlayerState) -> None:
-    print("--- User Profiles ---")
-    all_profiles = set(state.profiles.keys())
-    all_profiles.add("default")
-
-    for name in sorted(all_profiles):
-        marker = " (Active)" if state.active_profile == name else ""
-        print(f"  - {name}{marker}")
-
-def show_current_profile(state: PlayerState) -> None:
-    print(f"[profile] Current Profile: {state.active_profile}")
-
-
 def create_profile(state: PlayerState, name: str) -> None:
     if not name:
         print("[profile] Error: Name cannot be empty.")
         return
-
     if name == "default":
         print("[profile] 'default' is reserved.")
         return
-
-    if len(name) < 3:
-        print("[profile] Error: Name must be at least 3 characters.")
-        return
-
-    if len(name) > 15:
-        print("[profile] Error: Name must be under 15 characters.")
-        return
-
-    if name[0].isdigit():
-        print("[profile] Error: Name cannot start with a number.")
-        return
-
-    if " " in name:
-        print("[profile] Error: Names cannot contain spaces.")
-        return
-
-    if len(state.profiles) >= 8:
-        print("[profile] Error: Maximum number of profiles (8) reached.")
-        return
-
     if name in state.profiles:
         print(f"[profile] Profile '{name}' already exists.")
         return
@@ -145,7 +120,6 @@ def create_profile(state: PlayerState, name: str) -> None:
     print(f"[profile] Created profile '{name}'.")
     _save_profiles(state)
 
-
 def switch_profile(state: PlayerState, name: str) -> None:
     if name not in state.profiles and name != "default":
         print(f"[profile] Profile '{name}' does not exist.")
@@ -154,6 +128,34 @@ def switch_profile(state: PlayerState, name: str) -> None:
     if name == state.active_profile:
         print(f"[profile] Already on '{name}'.")
         return
+
+    # Save old profile state
+    _save_current_to_profile(state)
+
+    # Clear State
+    state.liked_tracks = set()
+    state.song_ratings = {}
+    state.playlists = []
+
+    # Load new profile state
+    state.active_profile = name
+    if name in state.profiles:
+        _apply_profile_data(state, state.profiles[name])
+
+    print(f"[profile] Switched to profile '{name}'.")
+    _save_profiles(state)
+
+def list_profiles(state: PlayerState) -> None:
+    print("--- User Profiles ---")
+    all_profiles = set(state.profiles.keys())
+    all_profiles.add("default")
+
+    for name in sorted(all_profiles):
+        marker = " (Active)" if state.active_profile == name else ""
+        print(f"  - {name}{marker}")
+
+def show_current_profile(state: PlayerState) -> None:
+    print(f"[profile] Current Profile: {state.active_profile}")
 
 
 # S4-09: Advanced Search
@@ -185,15 +187,14 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
             val = token.lower()
             results = [t for t in results if val in t.title.lower() or val in (t.artist or "").lower()]
 
-        if not results:
-            print("[search] No matches found.")
-        else:
-            print(f"[search] Found {len(results)} matches:")
-            for i, t in enumerate(results[:10]):
-                print(f"  {i + 1}. {t.display_name} ({time_utils.format_mm_ss(t.duration_seconds)})")
+    if not results:
+        print("[search] No matches found.")
+    else:
+        print(f"[search] Found {len(results)} matches:")
+        for i, t in enumerate(results[:10]):
+            print(f"  {i+1}. {t.display_name} ({time_utils.format_mm_ss(t.duration_seconds)})")
 
-
-# S4-12: Song Ratings
+# S4-12: Rate Songs
 
 def rate_song(state: PlayerState, rating_str: str) -> None:
     track = state.current_track
@@ -201,43 +202,18 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
         print("[rate] No song playing.")
         return
 
-    if not rating_str or not rating_str.strip():
-        print("[rate] Error: Please provide a rating (e.g., /rate 5).")
-        return
-
-    clean_str = rating_str.strip()
-    if "." in clean_str:
-        print("[rate] Error: Decimals are not supported. Use whole numbers.")
-        return
-
-    if not clean_str.lstrip("-").isdigit():
-        print("[rate] Error: Input must be a number.")
-        return
-
     try:
-        val = int(clean_str)
+        val = int(rating_str)
         if not (1 <= val <= 5): raise ValueError
     except ValueError:
         print("[rate] Rating must be a whole number 1-5.")
         return
 
     path_str = str(track.path)
-    if path_str in state.song_ratings:
-        old_rating = state.song_ratings[path_str]
-        if old_rating == val:
-            print(f"[rate] Song is already rated {val}/5. No change made.")
-            return
-        print(f"[rate] Updated rating from {old_rating} to {val}/5.")
-
-    else:
-        if val == 5:
-            print(f"[rate] Rated '{track.title}' 5/5 stars! (A favourite!!)")
-        else:
-            print(f"[rate] Rated '{track.title}' {val}/5 stars.")
-
     state.song_ratings[path_str] = val
+    print(f"[rate] Rated '{track.title}' {val}/5 stars.")
+    # Auto-save
     _save_current_to_profile(state)
-
 
 def view_rated(state: PlayerState) -> None:
     if not state.song_ratings:
