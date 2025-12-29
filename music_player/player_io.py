@@ -71,50 +71,49 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
     name_or_file: Name of the playlist to export.
     filename_arg: Optional specific filename for the output.
     """
-    def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
-        target_tracks = []
-        output_filename = ""
+    target_tracks = []
+    output_filename = ""
 
-        # Logic: Check if - 'name_or_file' matches a playlist name
-        found_playlist = None
-        for pl in state.playlists:
-            if pl.name == name_or_file:
-                found_playlist = pl
-                break
+    # Logic: Check if 'name_or_file' matches a playlist name
+    found_playlist = None
+    for pl in state.playlists:
+        if pl.name == name_or_file:
+            found_playlist = pl
+            break
 
-        if found_playlist:
-            # The user is exporting a specific playlist
-            target_tracks = found_playlist.tracks
-            # If they provided a second arg, we use that as the filename. Otherwise we will use the playlist name
-            if filename_arg:
-                output_filename = filename_arg
-            else:
-                output_filename = f"{found_playlist.name}.m3u"
-            print(f"[export] Exporting playlist '{found_playlist.name}'...")
+    if found_playlist:
+        # The user is exporting a specific playlist
+        target_tracks = found_playlist.tracks
+        # If they provided a second arg, we use that as the filename. Otherwise we will use the playlist name
+        if filename_arg:
+            output_filename = filename_arg
         else:
-            # The user is exporting the current queue - and name_or_file is the filename.
-            target_tracks = state.tracks
-            output_filename = name_or_file
-            print(f"[export] Exporting current library/queue...")
+            output_filename = f"{found_playlist.name}.m3u"
+        print(f"[export] Exporting playlist '{found_playlist.name}'...")
+    else:
+        # The user is exporting the current queue - and name_or_file is the filename.
+        target_tracks = state.tracks
+        output_filename = name_or_file
+        print(f"[export] Exporting current library/queue...")
 
-        if not target_tracks:
-            print("[export] Nothing to export.")
-            return
+    if not target_tracks:
+        print("[export] Nothing to export.")
+        return
 
-        if not output_filename.endswith(".m3u") and not output_filename.endswith(".txt"):
-            output_filename += ".m3u"
+    if not output_filename.endswith(".m3u") and not output_filename.endswith(".txt"):
+        output_filename += ".m3u"
 
-        try:
-            with open(output_filename, "w", encoding="utf-8") as f:
-                f.write("#EXTM3U\n")
-                for t in target_tracks:
-                    dur = int(t.duration_seconds) if t.duration_seconds else -1
-                    f.write(f"#EXTINF:{dur},{t.display_name}\n")
-                    f.write(f"{t.path.resolve()}\n")
+    try:
+        with open(output_filename, "w", encoding="utf-8") as f:
+            f.write("#EXTM3U\n")
+            for t in target_tracks:
+                dur = int(t.duration_seconds) if t.duration_seconds else -1
+                f.write(f"#EXTINF:{dur},{t.display_name}\n")
+                f.write(f"{t.path.resolve()}\n")
 
-            print(f"[export] Saved {len(target_tracks)} songs to {output_filename}.")
-        except Exception as e:
-            print(f"[export] Error writing file: {e}")
+        print(f"[export] Saved {len(target_tracks)} songs to {output_filename}. Visible after close.")
+    except Exception as e:
+        print(f"[export] Error writing file: {e}")
 
 
 # S4-11: Update Metadata
