@@ -54,3 +54,21 @@ class TestPlayerCoreStatement(unittest.TestCase):
         self.state.is_playing = False
         player_core.play(self.state)
         self.mock_engine.play.assert_called()
+
+    # Pause and Stop Tests
+
+    def test_pause_stop_logic(self):
+        """
+        Expected Result: Pause and Stop update flags correctly.
+        Actual Result:
+            [core] Paused.
+            [core] Stopped.
+        """
+        # Pause
+        self.state.is_playing = True
+        player_core.pause(self.state)
+        self.assertTrue(self.state.is_paused)
+
+        # Stop
+        player_core.stop(self.state)
+        self.assertEqual(self.state.position_seconds, 0.0)
