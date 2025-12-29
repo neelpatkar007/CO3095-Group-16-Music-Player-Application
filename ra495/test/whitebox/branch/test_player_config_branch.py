@@ -59,3 +59,26 @@ class TestPlayerConfigBranch(unittest.TestCase):
 
         # Duplicate Check (True)
         player_config.add_tag(self.state, "1", "fresh")
+
+    # View Stats Tests
+
+    def test_view_stats_branches(self):
+        """
+        Branches:
+         - Count is integer
+         - Track found in library
+        """
+        self.state.total_play_time = 100
+        path = str(self.track1.path)
+
+        # Track Found (True)
+        self.state.play_counts = {path: 5}
+        player_config.view_stats(self.state)
+
+        # Track Missing (False)
+        self.state.play_counts = {"ghost_path": 5}
+        player_config.view_stats(self.state)
+
+        # Invalid Count Type (False)
+        self.state.play_counts = {path: "string_error"}
+        player_config.view_stats(self.state)
