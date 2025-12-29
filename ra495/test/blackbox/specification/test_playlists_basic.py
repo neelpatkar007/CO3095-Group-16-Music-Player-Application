@@ -9,7 +9,7 @@ from pathlib import Path
 
 class TestPlayerConfig(unittest.TestCase):
     """
-    Black-Box Specification-based Testing for playlists_basic.py..
+    Black-Box Specification-based Testing for playlists_basic.py.
     Testing Tool: Python unittest + unittest.mock
     Test Technique: Category Partition Method using TSLGenerator
     Source: playlistBasic.txt
@@ -88,3 +88,20 @@ class TestPlayerConfig(unittest.TestCase):
         playlists_basic.open_playlist(self.state, "P1")
 
         self.assertEqual(self.state.tracks, [t1])
+
+    # Sort Playlist Tests
+
+    def test_sort_playlist_by_title(self):
+        """
+        Expected Result: Tracks reordered and sorted by title.
+        Actual Result: [pl] Sorted playlist 'SortMe' by title.
+        """
+        t1 = Track(Path("b.mp3"), "Bravo")
+        t2 = Track(Path("a.mp3"), "Alpha")
+        pl = Playlist("SortMe", [t1, t2])
+        self.state.playlists.append(pl)
+
+        playlists_basic.sort_playlist(self.state, "SortMe", "title")
+
+        self.assertEqual(pl.tracks[0].title, "Alpha")
+        self.assertEqual(pl.tracks[1].title, "Bravo")
