@@ -43,3 +43,33 @@ class TestPlaylistsBasicBranch(unittest.TestCase):
         # Name Mismatch
         res = playlists_basic._resolve_playlist(self.state, "other")
         self.assertIsNone(res)
+
+    def test_sort_lambda_branches(self):
+        """
+        Branches:
+         - Lambda logic for title, artist, duration sorting
+        Expected Result:
+         - Missing title sorts as "".
+         - Missing artist sorts as "unknown".
+         - Missing duration sorts as 0.0.
+        Actual Result:
+            [pl] Sorted playlist 'Mix' by title.
+            [pl] Sorted playlist 'Mix' by artist.
+            [pl] Sorted playlist 'Mix' by duration.
+        """
+        t_good = Track(Path("a"), "B_Good", "B_Art", 100)
+        # Broken track with None attributes
+        t_bad = Track(Path("b"), "", "", 0)
+        t_bad.title = None
+        t_bad.artist = None
+        t_bad.duration_seconds = None
+        self.pl.tracks = [t_good, t_bad]
+        # Sort Title
+        playlists_basic.sort_playlist(self.state, "Mix", "title")
+        self.assertEqual(self.pl.tracks[0], t_bad)
+        # Sort Artist
+        playlists_basic.sort_playlist(self.state, "Mix", "artist")
+        self.assertEqual(self.pl.tracks[0], t_good)
+        # Sort Duration
+        playlists_basic.sort_playlist(self.state, "Mix", "duration")
+        self.assertEqual(self.pl.tracks[0], t_bad)
