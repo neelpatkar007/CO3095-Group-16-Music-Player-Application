@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, Set, Dict
+from typing import List, Optional, Set, Dict, Any
 
 from music_player.library import Track
 from music_player.audio_backend import AudioEngine
@@ -13,7 +13,7 @@ class PlayerState:
     All modules (core, queue, seek, audio) read from and write to this single object.
     '''
     def __init__(self, tracks: List[Track], audio_engine: AudioEngine) -> None:
-        # Main library – never lost, used when not in playlist mode
+        # Main library – never lost. Used when not in playlist mode
         self.library_tracks: List[Track] = tracks
 
         # Playlist / queue of tracks to play
@@ -39,25 +39,38 @@ class PlayerState:
 
         # S3-01 & S3-02: Shuffle and Loop
         self.shuffle_active: bool = False
-        self.loop_mode: str = "off"  # Options: "off", "one", "all"
+        self.loop_mode: str = "all"  # Options: "off", "one", "all"
 
         # S3-03: History
         self.history: List[Track] = []
 
         # S3-07: Playback Speed
         self.playback_speed: float = 1.0
+
         # S3-12: Sleep Timer
         self.sleep_deadline: float | None = None  # Timestamp to stop
 
         # S3-08, S3-09 S3-11: Liked and Top songs
         self.play_counts: Dict[str, int] = {}
-
         self.liked_tracks: Set[str] = set()
+
+        # User Data
+        self.active_profile: str = "default"
+        self.profiles: Dict[str, Any] = {}  # Stores data for other profiles
+        self.song_ratings: Dict[str, int] = {}  # Path -> Rating (1-5)
+
+        # Config & Tags
+        self.song_tags: Dict[str, List[str]] = {}
+        self.total_play_time: float = 0.0
+
+        # Time & State
+        self.scheduled_alarms: List[str] = []  # List of "HH:MM" strings
+        self.resume_active: bool = False  # Flag to trigger resume logic on boot
 
     @property
     def current_track(self) -> Optional[Track]:
         '''
-        Retrieves the currently selected track, or none if it is out of bounds.
+        Retrieves the currently selected track, or it's none if it is out of bounds.
         '''
         # Check if the playlist is empty
         if not self.tracks:

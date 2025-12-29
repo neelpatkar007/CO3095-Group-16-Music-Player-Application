@@ -11,6 +11,7 @@ from music_player.audio_backend import AudioEngine
 from music_player.library import discover_tracks
 from music_player.player_state import PlayerState
 
+# Sprint 1 modules
 from music_player import (
     player_core,
     player_queue,
@@ -34,35 +35,37 @@ from music_player import (
     player_metrics
 )
 
+# Sprint 4 module
+from music_player import (
+    user_data,
+    player_time,
+    player_io,
+    player_config
+)
+
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
-
-    This is what makes autoplay work even when the user is not
-    typing any commands.
-
-    - It calls player_core.update_playback(state, delta_seconds)
-      around 10 times per second.
     """
     last = time.time()
-
     while not stop_event.is_set():
         now = time.time()
         delta = now - last
         last = now
 
-        # This will:
-        # - advance state.position_seconds while playing
-        # - detect end-of-track
-        # - auto-advance in playlists
-        player_core.update_playback(state, delta)
+        if state.is_playing and not state.is_paused:
+            player_core.update_playback(state, delta)
+            state.total_play_time += delta
+
+        # S4-02: Check for scheduled alarms every 10 seconds
+        if int(now) % 10 == 0:
+            player_time.check_alarms(state)
 
         # Sleep a little so we don't spin too fast
         time.sleep(0.1)
 
 def handle_command(state: PlayerState, command: str) -> bool:
     """
-    Simple command dispatcher backbone.
     Parses user input and calls appropriate handlers.
     Returns False if the application should quit.
     """
@@ -90,7 +93,15 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # Standard Playback Controls
     if base == "/play":
-        player_core.play(state)
+        # S4-03: Resume Logic (Apply seek if first play)
+        if state.resume_active and state.current_track:
+            print(f"[resume] Seeking to saved position: {int(state.position_seconds)}s...")
+            player_core.play(state)
+            if state.position_seconds > 0:
+                player_seek.seek_to(state, str(state.position_seconds))
+            state.resume_active = False  # Consumed
+        else:
+            player_core.play(state)
     elif base == "/pause":
         player_core.pause(state)
     elif base == "/stop":
@@ -165,7 +176,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.show":
         playlists_basic.show_current_playlist(state)
     elif base == "/pl.play":
-        # /pl.play          -> play active playlist
+        # /pl.play           -> play active playlist
         # /pl.play MyMix    -> play named/indexed playlist
         if args:
             playlists_basic.play_playlist(state, args[0])
@@ -282,6 +293,67 @@ def handle_command(state: PlayerState, command: str) -> bool:
         except (IndexError, ValueError):
             print("Usage: /sleep <minutes>")
 
+    # Sprint 4 Commands
+    # S4-04: Import Songs
+    elif base == "/import":
+        player_io.import_song(state, " ".join(args))
+    # S4-05: Add, List & Filter Tag
+    elif base == "/tag.add":
+        if len(args) < 2:
+            print("Usage: /tag.add <song-index> <tag>")
+        else:
+            player_config.add_tag(state, args[0], args[1])
+    elif base == "/tags":
+        player_config.list_all_tags(state)
+    elif base == "/tag.filter":
+        if not args:
+            print("[tags] Usage: /tag.play <tag_name>")
+        else:
+            player_config.filter_by_tag(state, args[0])
+
+    # S4-02: Schedule Playback
+    elif base == "/schedule":
+        player_time.set_alarm(state, args[0] if args else "")
+    elif base == "/schedule.cancel":
+        player_time.cancel_alarm(state)
+
+    # S4-06: Recently Added
+    elif base == "/recent":
+        player_time.show_recently_added(state)
+
+   # S4-08: Playback Statistics
+    elif base == "/stats":
+        player_config.view_stats(state)
+
+    # S4-11: Update Metadata
+    elif base == "/edit":
+        if len(args) >= 3:
+            player_io.update_metadata(state, args[0], args[1], " ".join(args[2:]))
+        else:
+            print("Usage: /edit <index> <title|artist> <value>")
+    elif base == "/pl.export":
+        player_io.export_playlist(state, args[0], args[1] if len(args) > 1 else "") if args else print(
+            "Usage: /pl.export <playlist>")
+
+    # S4-12: Rate Songs
+    elif base == "/rate":
+        user_data.rate_song(state, args[0] if args else "")
+    elif base == "/rated":
+        user_data.view_rated(state)
+
+    # S4-09: Advanced Search
+    elif base == "/advanced.search":
+        user_data.advanced_search(state, " ".join(args))
+    #S4-07: User Profile Switch
+    elif base == "/profile.new":
+        user_data.create_profile(state, args[0] if args else "")
+    elif base == "/profile.switch":
+        user_data.switch_profile(state, args[0] if args else "")
+    elif base == "/profiles":
+        user_data.list_profiles(state)
+    elif base == "/profile":
+        user_data.show_current_profile(state)
+
     # Unknown command
     else:
         print("Unknown command. Try /help")
@@ -299,11 +371,20 @@ def main() -> None:
     # Initialise player state with discovered tracks and audio engine
     state = PlayerState(tracks=tracks, audio_engine=audio_engine)
 
+    # S4-01: Load previous state from JSON file
+    player_config.load_settings(state)
+
     # Load previously held metric data from start up (the JSON file)
     player_metrics.load_data(state)
 
+    # S4-03: Load resume state from previous session
+    player_time.load_resume_state(state)
+
+    # S4-07: Load user profiles
+    user_data.load_profiles_index(state)
+
     # Startup display welcome message and available commands summary
-    print("Music Player – Sprint 3")
+    print("Music Player – Sprint 4")
     print(
         "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
         "/info /progress /bar /list /help /quit /speed /sleep"
@@ -316,6 +397,7 @@ def main() -> None:
         "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort"
     )
     print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top")
+    print("Scheduling: /schedule HH:MM, /schedule.cancel, /recent")
 
     # start background playback thread
     stop_event = threading.Event()
@@ -337,9 +419,15 @@ def main() -> None:
             if not handle_command(state, command):
                 break
     finally:
+        # S4-03: Save Resume State BEFORE stopping
+        player_time.save_resume_state(state)
         # Stop background playback loop
         stop_event.set()
         playback_thread.join(timeout=1.0)
+        # S4-01: Save settings to JSON file
+        player_config.save_settings(state)
+        # S4-07: Save current profile state
+        user_data._save_current_to_profile(state)
 
         # Ensure audio is stopped
         state.audio_engine.stop()
