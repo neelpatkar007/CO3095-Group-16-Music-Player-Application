@@ -83,3 +83,75 @@ class TestPlayerConfigStatement(unittest.TestCase):
         with patch("pathlib.Path.exists", return_value=True):
             with patch("builtins.open", mock_open(read_data="{bad_json")):
                 player_config.load_settings(self.state)
+
+    # Add Tag Tests
+
+    def test_add_tag_none_state(self):
+        """
+        Expected Result: Returns early.
+        Actual Result: [tags] Error: State is None.
+        """
+        player_config.add_tag(None, "1", "tag")
+
+    def test_add_tag_state_invalid_attrs(self):
+        """
+        Expected Result: Returns early.
+        Actual Result: [tags] Error: Tag data is unavailable/corrupted.
+        """
+        bad_state = MagicMock()
+        del bad_state.library_tracks
+        player_config.add_tag(bad_state, "1", "tag")
+
+    def test_add_tag_index_none(self):
+        """
+        Expected Result: Prints invalid format error.
+        Actual Result: [tags] Error: Invalid number format.
+        """
+        player_config.add_tag(self.state, None, "tag")
+
+    def test_add_tag_out_of_bounds(self):
+        """
+        Expected Result: Prints out of range error.
+        Actual Result: [tags] Error: Song index out of range.
+        """
+        player_config.add_tag(self.state, "99", "tag")
+
+    def test_add_tag_tag_none(self):
+        """
+        Expected Result: Prints error.
+        Actual Result: [tags] Error: Tag cannot be empty.
+        """
+        player_config.add_tag(self.state, "1", None)
+
+    def test_add_tag_track_missing(self):
+        """
+        Expected Result: Returns early.
+        Actual Result: Function returns.
+        """
+        self.state.library_tracks = [None]
+        player_config.add_tag(self.state, "1", "tag")
+
+    def test_add_tag_init_dict(self):
+        """
+        Expected Result: Creates list for new song.
+        Actual Result: [tags] Added #new to 'Song A'.
+        """
+        self.state.song_tags = {}
+        player_config.add_tag(self.state, "1", "new")
+        self.assertIn("new", self.state.song_tags[str(self.track1.path)])
+
+    def test_add_tag_invalid_chars(self):
+        """
+        Expected Result: Prints invalid char error.
+        Actual Result: [tags] Error: Invalid character '!'. Use A-Z, 0-9, _ only.
+        """
+        player_config.add_tag(self.state, "1", "bad!")
+
+    def test_add_tag_existing(self):
+        """
+        Expected Result: Prints duplicate message.
+        Actual Result: [tags] Song already has tag #exists.
+        """
+        path = str(self.track1.path)
+        self.state.song_tags = {path: ["exists"]}
+        player_config.add_tag(self.state, "1", "exists")
