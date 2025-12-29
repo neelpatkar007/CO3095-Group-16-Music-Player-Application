@@ -1,0 +1,4160 @@
+
+Test Case 1  		<error>
+   State Object :  None
+
+
+Test Case 2  		<error>  (follows [if])
+   Name Input :  Duplicate Name
+
+
+Test Case 3  		<error>
+   State Object :  None
+
+
+Test Case 4  		<error>  (follows [if])
+   Old Name :  Not Found
+
+
+Test Case 5  		<error>  (follows [if])
+   New Name :  Empty
+
+
+Test Case 6  		<error>  (follows [if])
+   New Name :  Existing Name (Conflict)
+
+
+Test Case 7  		<error>
+   State Object :  None
+
+
+Test Case 8  		<error>  (follows [if])
+   Query :  Invalid Name/Index
+
+
+Test Case 9  		<error>
+   State Object :  None
+
+
+Test Case 10 		<error>
+   State Object :  None
+
+
+Test Case 11 		<error>  (follows [if])
+   Query :  Invalid
+
+
+Test Case 12 		<error>
+   State Object :  None
+
+
+Test Case 13 		<error>  (follows [if])
+   Selector :  Invalid
+
+
+Test Case 14 		<error>  (follows [if])
+   Criteria :  Invalid
+
+
+Test Case 15 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 16 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 17 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 18 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 19 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 20 		(Key = 1.1.1.1.1.1.1.1.1.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 21 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 22 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 23 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 24 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 25 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 26 		(Key = 1.1.1.1.1.1.1.1.1.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 27 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 28 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 29 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 30 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 31 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 32 		(Key = 1.1.1.1.1.1.1.1.1.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 33 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 34 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 35 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 36 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 37 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 38 		(Key = 1.1.1.1.1.1.1.1.2.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 39 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 40 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 41 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 42 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 43 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 44 		(Key = 1.1.1.1.1.1.1.1.2.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 45 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 46 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 47 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 48 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 49 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 50 		(Key = 1.1.1.1.1.1.1.1.2.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 51 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 52 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 53 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 54 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 55 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 56 		(Key = 1.1.1.1.1.1.1.1.3.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 57 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 58 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 59 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 60 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 61 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 62 		(Key = 1.1.1.1.1.1.1.1.3.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 63 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 64 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 65 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 66 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 67 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 68 		(Key = 1.1.1.1.1.1.1.1.3.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 69 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 70 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 71 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 72 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 73 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 74 		(Key = 1.1.1.1.1.1.2.1.1.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 75 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 76 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 77 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 78 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 79 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 80 		(Key = 1.1.1.1.1.1.2.1.1.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 81 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 82 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 83 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 84 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 85 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 86 		(Key = 1.1.1.1.1.1.2.1.1.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 87 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 88 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 89 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 90 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 91 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 92 		(Key = 1.1.1.1.1.1.2.1.2.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 93 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 94 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 95 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 96 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 97 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 98 		(Key = 1.1.1.1.1.1.2.1.2.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 99 		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 100		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 101		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 102		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 103		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 104		(Key = 1.1.1.1.1.1.2.1.2.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 105		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 106		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 107		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 108		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 109		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 110		(Key = 1.1.1.1.1.1.2.1.3.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 111		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 112		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 113		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 114		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 115		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 116		(Key = 1.1.1.1.1.1.2.1.3.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 117		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 118		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 119		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 120		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 121		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 122		(Key = 1.1.1.1.1.1.2.1.3.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Valid Name
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 123		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 124		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 125		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 126		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 127		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 128		(Key = 1.3.1.1.1.1.1.1.1.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 129		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 130		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 131		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 132		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 133		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 134		(Key = 1.3.1.1.1.1.1.1.1.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 135		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 136		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 137		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 138		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 139		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 140		(Key = 1.3.1.1.1.1.1.1.1.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 141		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 142		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 143		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 144		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 145		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 146		(Key = 1.3.1.1.1.1.1.1.2.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 147		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 148		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 149		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 150		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 151		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 152		(Key = 1.3.1.1.1.1.1.1.2.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 153		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 154		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 155		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 156		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 157		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 158		(Key = 1.3.1.1.1.1.1.1.2.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 159		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 160		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 161		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 162		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 163		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 164		(Key = 1.3.1.1.1.1.1.1.3.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 165		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 166		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 167		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 168		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 169		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 170		(Key = 1.3.1.1.1.1.1.1.3.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 171		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 172		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 173		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 174		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 175		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 176		(Key = 1.3.1.1.1.1.1.1.3.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 177		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 178		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 179		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 180		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 181		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 182		(Key = 1.3.1.1.1.1.2.1.1.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 183		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 184		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 185		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 186		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 187		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 188		(Key = 1.3.1.1.1.1.2.1.1.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 189		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 190		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 191		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 192		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 193		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 194		(Key = 1.3.1.1.1.1.2.1.1.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Populated
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 195		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 196		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 197		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 198		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 199		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 200		(Key = 1.3.1.1.1.1.2.1.2.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 201		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 202		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 203		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 204		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 205		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 206		(Key = 1.3.1.1.1.1.2.1.2.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 207		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 208		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 209		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 210		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 211		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 212		(Key = 1.3.1.1.1.1.2.1.2.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  Empty
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 213		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 214		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 215		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 216		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 217		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 218		(Key = 1.3.1.1.1.1.2.1.3.1.1.1.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Has Tracks
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 219		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 220		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 221		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 222		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 223		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 224		(Key = 1.3.1.1.1.1.2.1.3.1.1.2.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Name
+   Target Playlist  :  Empty
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+
+
+Test Case 225		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.1.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Has Tracks
+
+
+Test Case 226		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.1.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Title
+   Playlist Content :  Empty
+
+
+Test Case 227		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.2.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Has Tracks
+
+
+Test Case 228		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.2.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Artist
+   Playlist Content :  Empty
+
+
+Test Case 229		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.3.1.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Has Tracks
+
+
+Test Case 230		(Key = 1.3.1.1.1.1.2.1.3.1.2.0.1.1.3.2.)
+   State Object     :  Valid PlayerState
+   Name Input       :  Empty/None
+   State Object     :  Valid PlayerState
+   Old Name         :  Exists
+   New Name         :  Valid Name
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index (String)
+   State Object     :  Valid PlayerState
+   Playlists List   :  None/Corrupt
+   State Object     :  Valid PlayerState
+   Query            :  Valid Index
+   Target Playlist  :  <n/a>
+   State Object     :  Valid PlayerState
+   Selector         :  Valid Playlist
+   Criteria         :  Duration
+   Playlist Content :  Empty
+

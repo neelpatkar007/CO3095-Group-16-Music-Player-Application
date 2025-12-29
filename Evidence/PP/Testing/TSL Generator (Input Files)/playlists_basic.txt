@@ -1,0 +1,95 @@
+# TSL Specification for playlists_basic
+
+Test Case Name: Create Playlist
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Name Input:
+        Valid Name.              [if ValidState] [property NewPlaylist]
+        Duplicate Name.          [if ValidState] [error]
+        Empty/None.              [if ValidState] [property DefaultName]
+
+
+Test Case Name: Rename Playlist
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Old Name:
+        Exists.                  [if ValidState] [property TargetFound]
+        Not Found.               [if ValidState] [error]
+
+    New Name:
+        Valid Name.              [if TargetFound] [property Renamed]
+        Empty.                   [if TargetFound] [error]
+        Existing Name (Conflict).[if TargetFound] [error]
+
+
+Test Case Name: Delete Playlist
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Query:
+        Valid Name.              [if ValidState] [property DeletedByName]
+        Valid Index (String).    [if ValidState] [property DeletedByIndex]
+        Invalid Name/Index.      [if ValidState] [error]
+
+
+Test Case Name: List Playlists
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Playlists List:
+        Populated.               [if ValidState] [property ListShown]
+        Empty.                   [if ValidState] [property EmptyMsg]
+        None/Corrupt.            [if ValidState] [property ErrorMsg]
+
+
+Test Case Name: Open Playlist
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Query:
+        Valid Name.              [if ValidState] [property OpenedByName]
+        Valid Index.             [if ValidState] [property OpenedByIndex]
+        Invalid.                 [if ValidState] [error]
+
+    Target Playlist:
+        Has Tracks.              [if OpenedByName] [property QueueLoaded]
+        Empty.                   [if OpenedByName] [property QueueEmpty]
+
+
+Test Case Name: Sort Playlist
+
+Parameters:
+    State Object:
+        Valid PlayerState.       [property ValidState]
+        None.                    [error]
+
+    Selector:
+        Valid Playlist.          [if ValidState] [property TargetResolved]
+        Invalid.                 [if ValidState] [error]
+
+    Criteria:
+        Title.                   [if TargetResolved] [property SortByTitle]
+        Artist.                  [if TargetResolved] [property SortByArtist]
+        Duration.                [if TargetResolved] [property SortByDuration]
+        Invalid.                 [if TargetResolved] [error]
+
+    Playlist Content:
+        Has Tracks.              [if TargetResolved] [property Sorted]
+        Empty.                   [if TargetResolved] [property NoOp]
