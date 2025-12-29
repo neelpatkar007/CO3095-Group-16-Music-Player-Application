@@ -67,3 +67,22 @@ class TestPlayerCoreBranch(unittest.TestCase):
         with patch('music_player.player_queue.next_track') as mock_next:
             player_core.update_playback(self.state, 1.0)
             mock_next.assert_called()
+
+    def test_timer_branches(self):
+        """
+        Branches:
+         - Cancel Input
+         - Timer Exists
+        """
+        # Cancel (True)
+        player_core.set_sleep_timer(self.state, 0)
+
+        # 2. Overwrite Logic (True/False)
+        # False path (New timer)
+        self.state.sleep_deadline = None
+        player_core.set_sleep_timer(self.state, 10)
+
+        # True path (Overwrite existing)
+        with patch('time.time', return_value=1000):
+            self.state.sleep_deadline = 1600
+            player_core.set_sleep_timer(self.state, 20)
