@@ -248,12 +248,18 @@ def view_stats(state: PlayerState) -> None:
     hours = total_sec // 3600
     mins = (total_sec % 3600) // 60
 
+    valid_counts = [c for c in state.play_counts.values() if isinstance(c, (int, float))]
+    total_played = sum(valid_counts)
+
     print("--- Playback Statistics ---")
     print(f"Total Listening Time: {hours}h {mins}m")
-    print(f"Total Songs Played: {sum(state.play_counts.values())}")
+    print(f"Total Songs Played: {total_played}")
 
     artist_counts = {}
     for path_str, count in state.play_counts.items():
+        if not isinstance(count, (int, float)):
+            continue
+
         for t in state.library_tracks:
             if str(t.path) == path_str:
                 art = t.artist or "Unknown"
