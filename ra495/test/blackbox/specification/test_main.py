@@ -167,3 +167,35 @@ class TestMain(unittest.TestCase):
         with patch("music_player.player_core.set_playback_speed") as mock_speed:
             main.handle_command(self.state, "/speed fast")
             mock_speed.assert_not_called()
+
+    # Sprint 4 Tests (Schedule/User Data)
+
+    def test_command_schedule(self):
+        """
+        Expected Result: /schedule passes time string to player_time.
+        Actual Result: Alarm set for 08:00.
+        """
+        with patch("music_player.player_time.set_alarm") as mock_alarm:
+            main.handle_command(self.state, "/schedule 08:00")
+            mock_alarm.assert_called_with(self.state, "08:00")
+
+    def test_command_profiles(self):
+        """
+        Expected Result: /profile.new creates a new profile and /profile.switch switches to it.
+        Actual Result: Profile 'Work' created.
+        """
+        with patch("music_player.user_data.create_profile") as mock_create, \
+                patch("music_player.user_data.switch_profile") as mock_switch:
+            main.handle_command(self.state, "/profile.new Work")
+            mock_create.assert_called_with(self.state, "Work")
+
+            main.handle_command(self.state, "/profile.switch Home")
+            mock_switch.assert_called_with(self.state, "Home")
+
+    def test_command_unknown(self):
+        """
+        Expected Result: Prints error for unknown commands but keeps loop running.
+        Actual Result: Unknown command. Try /help. Returns True.
+        """
+        result = main.handle_command(self.state, "/notacommand")
+        self.assertTrue(result)
