@@ -72,3 +72,23 @@ class TestPlayerCoreStatement(unittest.TestCase):
         # Stop
         player_core.stop(self.state)
         self.assertEqual(self.state.position_seconds, 0.0)
+
+    # Update Playback Tests
+
+    def test_update_playback_flow(self):
+        """
+        Expected Result: Update position and handle track finish.
+        Actual Result: Position increments and next_track is called on finish.
+        """
+        self.state.is_playing = True
+        self.state.tracks = [self.sample_track]
+
+        # Normal Update
+        player_core.update_playback(self.state, 5.0)
+        self.assertEqual(self.state.position_seconds, 5.0)
+
+        # Track Finished
+        self.state.position_seconds = 180.0
+        with patch('music_player.player_queue.next_track') as mock_next:
+            player_core.update_playback(self.state, 1.0)
+            mock_next.assert_called()
