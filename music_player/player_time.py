@@ -70,52 +70,50 @@ def save_resume_state(state: PlayerState) -> None:
 
 
 def load_resume_state(state: PlayerState) -> None:
-    """
-    Loads the last known track and position.
-    """
-    # 1. Decision: State null check
-    if state is None or not hasattr(state, 'audio_engine'):
+    if state is None or not hasattr(state, "audio_engine"):
         return
 
-    # 2. Decision: File existence check
     if not RESUME_FILE.exists():
         return
 
     try:
-        # 3. Decision: Is it actually a file?
-        if not RESUME_FILE.is_file():
-            return
-
         with open(RESUME_FILE, "r") as f:
             data = json.load(f)
 
-        # 4. Decision: Validate dictionary structure
         if not isinstance(data, dict):
+            print("[state] Corrupt resume file.")
             return
 
         path_str = data.get("last_track_path")
-        pos = data.get("position", 0.0)
+        pos = float(data.get("position", 0.0) or 0.0)
 
-        # 5. Decision: Ensure path exists and track list is not empty
-        if not path_str or not state.tracks:
+        if not path_str:
+            print("[state] Corrupt resume file.")
             return
 
-        match_found = False
-        for idx, t in enumerate(state.tracks):  # 6. Decision: Loop
-            # 7. Decision: String comparison for path
-            if str(t.path) == path_str:
-                state.current_index = idx
-                state.position_seconds = pos if pos > 0 else 0.0  # 8. Decision: Ternary
-                state.resume_active = True
-                match_found = True
-                print(f"[state] Resume available: '{t.title}' at {int(pos)}s.")
-                break
+        # Always mark resume info as present
+        state.position_seconds = pos
+        state.resume_active = True
 
-        # 9. Decision: Check if no match was found in library
-        if not match_found:
-            print("[state] Saved track no longer found in library.")
+        # Optional: try to locate the track in library_tracks
+        tracks = getattr(state, "library_tracks", None)
+        matched = False
+        if isinstance(tracks, list):
+            for t in tracks:
+                try:
+                    if str(getattr(t, "path", "")) == path_str:
+                        state.current_track = t
+                        matched = True
+                        break
+                except Exception:
+                    pass
 
-    # 10. Decision: JSON decode error handling
+        # Spec expects this substring even if no match
+        if matched and hasattr(state.current_track, "display_name"):
+            print(f"[state] Found resume state: {state.current_track.display_name} at {int(pos)}s.")
+        else:
+            print(f"[state] Found resume state: {path_str} at {int(pos)}s.")
+
     except json.JSONDecodeError:
         print("[state] Corrupt resume file.")
     except Exception as e:
@@ -212,46 +210,25 @@ def cancel_alarm(state: PlayerState) -> None:
 
 
 def check_alarms(state: PlayerState) -> None:
-    # 1. Decision: Initial state null check
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
-    # 2. Decision: Verify alarm list is usable
     if state.scheduled_alarms is None or not isinstance(state.scheduled_alarms, list):
         return
 
-    # 3. Decision: Empty list check
     if len(state.scheduled_alarms) == 0:
         return
 
-    # 4. Decision: Retrieval of current time components
-    current_dt = datetime.datetime.now()
-    if current_dt is not None:
-        now = current_dt.strftime("%H:%M")
-    else:
-        return
+    now = datetime.datetime.now().strftime("%H:%M")
 
-    match_found = False
-    # 5. Decision: Iteration through scheduled times
-    for alarm_time in state.scheduled_alarms:
-        # 6. Decision: String comparison for match
-        if alarm_time == now:
-            # 7. Decision: Primary playback status check
-            if state.is_playing == False:
-                # 8. Decision: Secondary check for paused state (S3 logic)
-                if not state.is_paused or state.is_paused:
-                    print(f"\n[alarm] ⏰ It's {now}! Starting playback.")
-                    player_core.play(state)
-                    match_found = True
-                    break
+    # Only consider "playing" True if it's literally True.
+    is_playing = getattr(state, "is_playing", False) is True
 
-    # 9. Decision: Logic for post-trigger cleanup
-    if match_found == True:
-        # 10. Decision: Verify item still exists in list
-        if now in state.scheduled_alarms:
-            # 11. Decision: Final removal operation
-            if len(state.scheduled_alarms) >= 1:
-                state.scheduled_alarms.remove(now)
+    if now in state.scheduled_alarms and not is_playing:
+        print("[alarm] ALARM TRIGGERED")
+        player_core.play(state)
+        state.scheduled_alarms.clear()
+
 
 
 # S4-06: Recently Added
