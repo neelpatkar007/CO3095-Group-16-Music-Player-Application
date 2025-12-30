@@ -19,12 +19,14 @@ def save_resume_state(state: PlayerState) -> None:
     """
     Saves the currently playing track path and exact timestamp to resume_state.json.
     """
-    # 1. Decision: State null check
-    if state is None:
+    if state is None or not hasattr(state, 'current_track'):
         return
 
     # 2. Decision: Track presence check
     if not state.current_track:
+        return
+
+    if not hasattr(state.current_track, 'path'):
         return
 
     # 3. Decision: Path validity check
@@ -72,7 +74,7 @@ def load_resume_state(state: PlayerState) -> None:
     Loads the last known track and position.
     """
     # 1. Decision: State null check
-    if state is None:
+    if state is None or not hasattr(state, 'audio_engine'):
         return
 
     # 2. Decision: File existence check
@@ -125,7 +127,10 @@ def load_resume_state(state: PlayerState) -> None:
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """Only allow ONE alarm at a time."""
     # 1. Decision: State and string presence check
-    if state is None or time_str is None:
+    if not isinstance(time_str, str):
+        return
+
+    if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
     # 2. Decision: Structural format check
@@ -167,7 +172,7 @@ def set_alarm(state: PlayerState, time_str: str) -> None:
 
 def cancel_alarm(state: PlayerState) -> None:
     # 1. Decision: Initial state null check
-    if state is None:
+    if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
     # 2. Decision: Explicit check if alarms list is missing
@@ -208,7 +213,7 @@ def cancel_alarm(state: PlayerState) -> None:
 
 def check_alarms(state: PlayerState) -> None:
     # 1. Decision: Initial state null check
-    if state is None:
+    if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
     # 2. Decision: Verify alarm list is usable
@@ -255,11 +260,10 @@ def show_recently_added(state: PlayerState) -> None:
     Displays the top 10 songs sorted by file modification date (newest to oldest).
     """
     # 1. Decision: Validating state initialisation
-    if state is None or state.library_tracks is None:
+    if state is None or not hasattr(state, 'library_tracks'):
         return
 
-    # 2. Decision: Ensuring library is not an empty collection
-    if len(state.library_tracks) == 0:
+    if state.library_tracks is None or not isinstance(state.library_tracks, list):
         print("[recent] Library is empty.")
         return
 
