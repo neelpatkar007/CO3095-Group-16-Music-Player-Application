@@ -384,7 +384,7 @@ def main() -> None:
     user_data.load_profiles_index(state)
 
     # Startup display welcome message and available commands summary
-    print("Music Player – Sprint 4")
+    print("Music Player Application")
     print(
         "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
         "/info /progress /bar /list /help /quit /speed /sleep"
