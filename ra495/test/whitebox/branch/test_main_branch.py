@@ -97,3 +97,48 @@ class TestMainBranchExtended(unittest.TestCase):
             m_a.assert_called()
             main.handle_command(self.state, "/albums")
             m_b.assert_called()
+
+    def test_sprint_4_branches(self):
+        """
+        Expected Result:
+         - Commands verify and allow only a strict number of accepted arguments where required.
+         - Optional arguments are handled properly without crashing/errors.
+        Actual Result:
+            Usage: /tag.add <song-index> <tag>
+            [tags] Usage: /tag.play <tag_name>
+            Usage: /edit <index> <title|artist> <value>
+        """
+        # /tag.add
+        main.handle_command(self.state, "/tag.add 1")  # Fail
+        with patch('music_player.player_config.add_tag') as mock_tag:
+            main.handle_command(self.state, "/tag.add 1 Cool")  # Success
+
+        # /tag.filter
+        main.handle_command(self.state, "/tag.filter")  # Fail
+        with patch('music_player.player_config.filter_by_tag') as mock_filt:
+            main.handle_command(self.state, "/tag.filter Cool")  # Success
+
+        # /edit
+        main.handle_command(self.state, "/edit 1 title")  # Fail
+        with patch('music_player.player_io.update_metadata') as mock_edit:
+            main.handle_command(self.state, "/edit 1 title NewTitle")  # Success
+
+        # /pl.export
+        with patch('music_player.player_io.export_playlist') as mock_exp:
+            main.handle_command(self.state, "/pl.export Mix csv")  # With format
+            main.handle_command(self.state, "/pl.export Mix")  # Without format
+
+        # /rate
+        with patch('music_player.user_data.rate_song') as mock_rate:
+            main.handle_command(self.state, "/rate 5")  # With arg
+            main.handle_command(self.state, "/rate")  # Without arg
+
+        # /profile commands
+        with patch('music_player.user_data.create_profile') as m_cp, \
+                patch('music_player.user_data.switch_profile') as m_sp, \
+                patch('music_player.user_data.list_profiles') as m_lp, \
+                patch('music_player.user_data.show_current_profile') as m_scp:
+            main.handle_command(self.state, "/profile.new User")
+            main.handle_command(self.state, "/profile.switch User")
+            main.handle_command(self.state, "/profiles")
+            main.handle_command(self.state, "/profile")
