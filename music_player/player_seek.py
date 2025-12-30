@@ -15,9 +15,15 @@ def get_progress(state: PlayerState) -> tuple[float, float | None]:
     '''
     Retrieve current position and total duration of the track.
     '''
-    track = state.current_track
+    try:
+        track = state.current_track
+    except (AttributeError, TypeError):
+        return 0.0, None
+
     if not isinstance(track, Track):
-        return state.position_seconds, None
+        pos = getattr(state, 'position_seconds', 0.0)
+        return (pos if isinstance(pos, (int, float)) else 0.0), None
+
     return state.position_seconds, track.duration_seconds
 
 def render_progress_bar(state: PlayerState, width: int = 15) -> str:
@@ -27,9 +33,10 @@ def render_progress_bar(state: PlayerState, width: int = 15) -> str:
     pos, total = get_progress(state)
 
     # Cannot render progress bar if total duration is unknown or invalid
-    if total is None or total <= 0 :
+    if total is None or not isinstance(total, (int, float)) or total <= 0:
         return "[Time null]"
-
+    if not isinstance(pos, (int, float)):
+        pos = 0.0
     # Calculate fill ratio
     ratio = max(0.0,min(1.0,pos/total))
 
@@ -49,8 +56,15 @@ def nudge(state: PlayerState, offset_seconds: float) -> None:
     Move forward/backward by offset seconds.
     Use for /ff and /rw commands.
     '''
+    if state is None:
+        return
+
+    current_pos = getattr(state, 'position_seconds', 0.0)
+    if not isinstance(current_pos, (int, float)):
+        current_pos = 0.0
+
     # Calculate new position
-    new_pos = state.position_seconds + offset_seconds
+    new_pos = current_pos + offset_seconds
 
     # Seek to the new position
     seek_to(state, new_pos)
@@ -61,7 +75,13 @@ def seek_to(state: PlayerState, text_or_seconds) -> None:
     Seek to a specific time in the track.
     Can accept a number or a timecode string (mm:ss).
     '''
-    track = state.current_track
+    if state is None:
+        return
+    try:
+        track = state.current_track
+    except (AttributeError, TypeError):
+        print("[seek] Error accessing track state.")
+        return
 
     # Validate that a track is loaded
     if not isinstance(track, Track):
@@ -76,7 +96,7 @@ def seek_to(state: PlayerState, text_or_seconds) -> None:
         new_pos = parse_timecode(str(text_or_seconds))
 
     # Bound check
-    if track.duration_seconds is not None:
+    if track.duration_seconds is not None and isinstance(track.duration_seconds, (int, float)):
         # Ensure new position is within track duration
         new_pos = max(0.0, min(new_pos, track.duration_seconds))
 
@@ -84,5 +104,5 @@ def seek_to(state: PlayerState, text_or_seconds) -> None:
     state.position_seconds = new_pos
 
     # Tell audio engine backend to jump to new position
-    state.audio_engine.seek(new_pos)
-    print(f"[seek] Jumped to {format_mm_ss(new_pos)}")
+    if hasattr(state, 'audio_engine') and hasattr(state.audio_engine, 'seek'):
+        state.audio_engine.seek(new_pos)
