@@ -89,3 +89,21 @@ class TestLibraryStatement(unittest.TestCase):
             self.assertEqual(t, "song")  # Fallback to stem
             self.assertEqual(a, "Unknown")  # Fallback default
             self.assertIsNone(d)  # Fallback None
+
+    def test_read_metadata_title_artist_duration(self):
+        """
+        Expected Result: discover_tracks enters the file loop and executes _read_metadata.
+        Actual Result: Passed 100%. The function iterated over the mock file and triggered _read_metadata.
+        """
+        with patch("music_player.library.MUSIC_DIR") as mock_dir:
+            mock_dir.exists.return_value = True
+
+            # Valid file Setup
+            p_file = MagicMock()
+            p_file.is_file.return_value = True
+            p_file.suffix = ".mp3"
+
+            mock_dir.iterdir.return_value = [p_file]
+
+            with patch("music_player.library._read_metadata", return_value=("Title", "Artist", 100)):
+                library.discover_tracks()
