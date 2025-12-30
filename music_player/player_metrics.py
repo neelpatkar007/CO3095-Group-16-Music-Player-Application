@@ -13,7 +13,7 @@ DATA_FILE = Path("player_data.json")
 
 def load_data(state: PlayerState) -> None:
     """Load likes and play counts from JSON."""
-    if not DATA_FILE.exists():
+    if not DATA_FILE.exists() or state is None:
         return
     try:
         with open(DATA_FILE, "r") as f:
@@ -25,9 +25,11 @@ def load_data(state: PlayerState) -> None:
 
 def save_data(state: PlayerState) -> None:
     """Save likes and play counts to JSON."""
+    if state is None:
+        return
     data = {
-        "likes": list(state.liked_tracks),
-        "counts": state.play_counts
+        "likes": list(getattr(state, "liked_tracks", [])),
+        "counts": getattr(state, "play_counts", {})
     }
     try:
         with open(DATA_FILE, "w") as f:
@@ -38,12 +40,17 @@ def save_data(state: PlayerState) -> None:
 def toggle_like(state: PlayerState) -> None:
     if state is None:
         print("[metrics] Error: State is None.")
+        return
 
     if not hasattr(state, "liked_tracks") or state.liked_tracks is None:
         state.liked_tracks = set()
 
     if not isinstance(state.liked_tracks, set):
         print("[metrics] Error: Liked tracks data corrupted.")
+        return
+
+    if not hasattr(state, "current_track"):
+        print("[metrics] Error: State invalid (no current_track).")
         return
 
     track = state.current_track
@@ -62,35 +69,37 @@ def toggle_like(state: PlayerState) -> None:
 
     if path_str in state.liked_tracks:
         state.liked_tracks.remove(path_str)
-
         if path_str in state.liked_tracks:
             print("[metrics] Error: Failed to remove like.")
             return
-
-        print(f"[metrics] Unliked '{track.display_name}'.")
-
+        print(f"[metrics] Unliked '{getattr(track, 'display_name', 'Unknown')}'.")
     else:
         state.liked_tracks.add(path_str)
-
         if path_str not in state.liked_tracks:
             print("[metrics] Error: Failed to add like.")
             return
-
-        print(f"[metrics] Liked '{track.display_name}'.")
+        print(f"[metrics] Liked '{getattr(track, 'display_name', 'Unknown')}'.")
 
     save_data(state)
 
 def record_play(state: PlayerState) -> None:
+    if state is None: return
+    if not hasattr(state, "current_track"): return
+
     track = state.current_track
     if not track: return
+
+    if not hasattr(track, "path"): return
+
     path_str = str(track.path)
+    if not hasattr(state, "play_counts") or state.play_counts is None:
+        state.play_counts = {}
+
     state.play_counts[path_str] = state.play_counts.get(path_str, 0) + 1
     save_data(state)
 
 def show_liked_songs(state: PlayerState) -> None:
-    """
-    S3-09: View all liked songs.
-    """
+    """S3-09: View all liked songs."""
     print("[metrics] --- Liked Songs ---")
 
     if state is None:
@@ -110,17 +119,12 @@ def show_liked_songs(state: PlayerState) -> None:
         return
 
     found_count = 0
-
     for t in state.library_tracks:
-        if t is None:
-            continue
-        if not hasattr(t, "path") or t.path is None:
+        if t is None or not hasattr(t, "path") or t.path is None:
             continue
         path_str = str(t.path)
         if path_str in state.liked_tracks:
-            name = getattr(t, "display_name", "Unknown Title")
-            if not name:
-                name = "Unknown Title"
+            name = getattr(t, "display_name", "Unknown Title") or "Unknown Title"
             print(f"  ♥ {name}")
             found_count += 1
     if found_count == 0:
@@ -166,10 +170,10 @@ def show_top_tracks(state: PlayerState) -> None:
 
          if state.library_tracks:
              for t in state.library_tracks:
-                 if t is None: continue
+                 if t is None or not hasattr(t, "path"): continue
 
                  if str(t.path) == path_str:
-                     name = t.display_name
+                     name = getattr(t, "display_name", "Unknown")
                      found_in_lib = True
                      break
 
