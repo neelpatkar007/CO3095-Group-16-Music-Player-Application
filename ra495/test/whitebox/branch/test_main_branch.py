@@ -76,3 +76,24 @@ class TestMainBranchExtended(unittest.TestCase):
         with patch('music_player.playlists_basic.sort_playlist') as mock_sort:
             main.handle_command(self.state, "/pl.sort Mix title")  # Success
 
+    def test_search_and_library_branches(self):
+        """
+        Expected Result: All view/search commands dispatch to library_search_scan.
+        Actual Result: All mocks asserted successfully (100% Passed Test).
+        """
+        # /search
+        with patch('music_player.library_search_scan.search_library') as mock_search:
+            main.handle_command(self.state, "/search query")
+            mock_search.assert_called()
+            main.handle_command(self.state, "/search")  # Empty query
+
+        # View Tables
+        with patch('music_player.library_search_scan.view_songs_table') as m_s, \
+                patch('music_player.library_search_scan.view_artists_table') as m_a, \
+                patch('music_player.library_search_scan.view_albums_table') as m_b:
+            main.handle_command(self.state, "/songs")
+            m_s.assert_called()
+            main.handle_command(self.state, "/artists")
+            m_a.assert_called()
+            main.handle_command(self.state, "/albums")
+            m_b.assert_called()
