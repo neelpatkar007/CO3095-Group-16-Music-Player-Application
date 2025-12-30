@@ -54,3 +54,25 @@ class TestMainBranchExtended(unittest.TestCase):
         with patch('music_player.playlists_edit.remove_track_from_playlist') as mock_rm:
             main.handle_command(self.state, "/pl.remove Mix 1")  # Success
 
+    def test_advanced_playlist_branches(self):
+        """
+        Expected Result: Missing args triggers usage error and valid args triggers backend call.
+        Actual Result:
+            [main] Usage: /pl.copy <source> <new-name>
+            Usage: /pl.sort <playlist> <artist|title|duration>
+        """
+        # /pl.copy
+        main.handle_command(self.state, "/pl.copy Source")  # Fail
+        with patch('music_player.playlists_advanced.copy_playlist') as mock_cp:
+            main.handle_command(self.state, "/pl.copy Source New")  # Success
+
+        # /scan
+        with patch('music_player.library_search_scan.rescan_for_new_tracks') as mock_scan:
+            main.handle_command(self.state, "/scan")
+            mock_scan.assert_called()
+
+        # /pl.sort
+        main.handle_command(self.state, "/pl.sort Mix")  # Fail
+        with patch('music_player.playlists_basic.sort_playlist') as mock_sort:
+            main.handle_command(self.state, "/pl.sort Mix title")  # Success
+
