@@ -35,3 +35,17 @@ class TestLibraryBranch(unittest.TestCase):
             # audio is None
             with patch("music_player.library.mutagen.File", return_value=None):
                 library._read_metadata(path)
+
+        # audio exists
+        mock_audio = MagicMock()
+
+        # Info is None
+        mock_audio.info = None
+        mock_audio.tags = None
+        with patch("music_player.library.mutagen.File", return_value=mock_audio):
+            library._read_metadata(path)
+
+        # Info exists but No length
+        mock_audio.info = object()
+        with patch("music_player.library.mutagen.File", return_value=mock_audio):
+            library._read_metadata(path)
