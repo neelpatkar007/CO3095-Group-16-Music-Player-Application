@@ -48,3 +48,44 @@ class TestLibraryStatement(unittest.TestCase):
             # Reload again
             importlib.reload(library)
 
+    def test_read_metadata_complex_paths(self):
+        """
+        Expected Result: All internal exceptions are caught, returning safe default values in their place.
+        Actual Result: Passed 100%. The logic survived the exceptions and returned the correct default data.
+        """
+        path = Path("song.mp3")
+
+        # HAS_MUTAGEN is False
+        with patch("music_player.library.HAS_MUTAGEN", False):
+            t, a, d = library._read_metadata(path)
+            self.assertEqual(t, "song")
+            self.assertEqual(d, None)
+
+        # mutagen.File returns None
+        with patch("music_player.library.HAS_MUTAGEN", True), \
+                patch("music_player.library.mutagen.File", return_value=None):
+            t, a, d = library._read_metadata(path)
+            self.assertIsNone(d)
+
+        # Tag & Duration Exceptions
+        mock_audio = MagicMock()
+
+        # Duration has length, but float conversion fails
+        mock_audio.info.length = "invalid_float"
+
+        # Tags exist, but accessing keys fails
+        bad_tag = MagicMock()
+        bad_tag.__str__.side_effect = Exception("Tag Decode Error")
+
+        mock_audio.tags = {
+            "TIT2": bad_tag,  # Title error
+            "TPE1": bad_tag  # Artist error
+        }
+
+        with patch("music_player.library.HAS_MUTAGEN", True), \
+                patch("music_player.library.mutagen.File", return_value=mock_audio):
+            t, a, d = library._read_metadata(path)
+
+            self.assertEqual(t, "song")  # Fallback to stem
+            self.assertEqual(a, "Unknown")  # Fallback default
+            self.assertIsNone(d)  # Fallback None
