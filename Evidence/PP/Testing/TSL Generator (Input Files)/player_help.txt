@@ -1,0 +1,25 @@
+# TSL input for player_help.print_help
+
+Command:
+    none.        [property NoCmd]
+    empty.       [property NoCmd]
+    whitespace.  [property NoCmd]
+
+    play.        [property HasCmd]
+    pause.       [property HasCmd]
+    volume.      [property HasCmd]
+    vol.         [property HasCmd]
+    info.        [property HasCmd]
+    progress.    [property HasCmd]
+    bar.         [property HasCmd]
+    list.        [property HasCmd]
+    quit.        [property HasCmd]
+    exit.        [property HasCmd]
+    q.           [property HasCmd]
+    unknown.     [property HasCmd]
+
+Slash:
+    with.
+    without.
+
+[if Command = NoCmd] Slash = without.
