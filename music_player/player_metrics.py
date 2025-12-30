@@ -72,13 +72,15 @@ def toggle_like(state: PlayerState) -> None:
         if path_str in state.liked_tracks:
             print("[metrics] Error: Failed to remove like.")
             return
-        print(f"[metrics] Unliked '{getattr(track, 'display_name', 'Unknown')}'.")
+        name = getattr(track, 'display_name', 'Unknown') or 'Unknown'
+        print(f"[metrics] Unliked '{name}'.")
     else:
         state.liked_tracks.add(path_str)
         if path_str not in state.liked_tracks:
             print("[metrics] Error: Failed to add like.")
             return
-        print(f"[metrics] Liked '{getattr(track, 'display_name', 'Unknown')}'.")
+        name = getattr(track, 'display_name', 'Unknown') or 'Unknown'
+        print(f"[metrics] Liked '{name}'.")
 
     save_data(state)
 
@@ -95,7 +97,11 @@ def record_play(state: PlayerState) -> None:
     if not hasattr(state, "play_counts") or state.play_counts is None:
         state.play_counts = {}
 
-    state.play_counts[path_str] = state.play_counts.get(path_str, 0) + 1
+    current_count = state.play_counts.get(path_str, 0)
+    if not isinstance(current_count, int):
+        current_count = 0
+
+    state.play_counts[path_str] = current_count + 1
     save_data(state)
 
 def show_liked_songs(state: PlayerState) -> None:
@@ -150,8 +156,10 @@ def show_top_tracks(state: PlayerState) -> None:
      if not hasattr(state, "library_tracks") or not state.library_tracks:
          print("[metrics] Warning: Library empty, cannot resolve song names.")
 
+     valid_counts = {k: v for k, v in state.play_counts.items() if isinstance(v, int)}
+
      try:
-         sorted_items = sorted(state.play_counts.items(), key=lambda x: x[1], reverse=True)
+         sorted_items = sorted(valid_counts.items(), key=lambda x: x[1], reverse=True)
      except Exception:
          print("[metrics] Error sorting play history.")
          return
@@ -162,7 +170,7 @@ def show_top_tracks(state: PlayerState) -> None:
          if i >= 10:
              break
 
-         if not isinstance(count, int) or count <= 0:
+         if count <= 0:
              continue
 
          name = "Unknown"
@@ -173,7 +181,7 @@ def show_top_tracks(state: PlayerState) -> None:
                  if t is None or not hasattr(t, "path"): continue
 
                  if str(t.path) == path_str:
-                     name = getattr(t, "display_name", "Unknown")
+                     name = getattr(t, "display_name", "Unknown") or "Unknown"
                      found_in_lib = True
                      break
 
