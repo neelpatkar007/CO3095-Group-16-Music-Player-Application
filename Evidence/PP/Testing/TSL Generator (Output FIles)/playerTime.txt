@@ -1,0 +1,168 @@
+
+Test Case 1  		<error>
+   State Object :  None
+
+
+Test Case 2  		<single>  (follows [if])
+   Current Track (Save) :  None / No Track
+
+
+Test Case 3  		<single>  (follows [if])
+   Current Track (Save) :  Track with No Path
+
+
+Test Case 4  		<single>  (follows [if])
+   Resume File (Load) :  File Missing
+
+
+Test Case 5  		<single>  (follows [if])
+   Resume File (Load) :  File Corrupt/Empty
+
+
+Test Case 6  		<single>  (follows [if])
+   Library Match (Load) :  Path Found in Library
+
+
+Test Case 7  		<single>  (follows [if])
+   Library Match (Load) :  Path Not Found
+
+
+Test Case 8  		<single>  (follows [if])
+   Valid HH :  MM
+
+
+Test Case 9  		<error>  (follows [if])
+   Valid HH :  No Colon / Bad Length
+
+
+Test Case 10 		<error>  (follows [if])
+   Valid HH :  Non-Numeric
+
+
+Test Case 11 		<error>  (follows [if])
+   Out of Range (25 :  99)
+
+
+Test Case 12 		<error>  (follows [if])
+   Alarm List State :  None / Not List
+
+
+Test Case 13 		<error>  (follows [if])
+   Alarm List State :  None / Not List
+
+
+Test Case 14 		<single>  (follows [if])
+   Alarm List State :  Empty List
+
+
+Test Case 15 		<single>  (follows [if])
+   Alarm List State :  Empty List
+
+
+Test Case 16 		<single>  (follows [if])
+   Alarm List State :  Populated List
+
+
+Test Case 17 		<single>  (follows [if])
+   Alarm List State :  Populated (No Match)
+
+
+Test Case 18 		<single>  (follows [if])
+   Playback Status :  Already Playing
+
+
+Test Case 19 		<single>  (follows [if])
+   Playback Status :  Stopped / Paused
+
+
+Test Case 20 		<error>  (follows [if])
+   Library Content :  Empty / None
+
+
+Test Case 21 		<single>  (follows [if])
+   Library Content :  Valid Files Exists
+
+
+Test Case 22 		(Key = 1.2.4.1.1.1.0.0.1.1.1.)
+   Function             :  save_resume_state
+   State Object         :  Valid Instance
+   Current Track (Save) :  Valid Track & Path
+   Resume File (Load)   :  n/a
+   Library Match (Load) :  n/a
+   Alarm Input String   :  n/a
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  n/a
+   Playback Status      :  n/a
+   Library Content      :  n/a
+
+
+Test Case 23 		(Key = 2.2.1.4.0.1.0.0.2.1.1.)
+   Function             :  load_resume_state
+   State Object         :  Valid Instance
+   Current Track (Save) :  n/a
+   Resume File (Load)   :  Valid JSON File
+   Library Match (Load) :  <n/a>
+   Alarm Input String   :  n/a
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  n/a
+   Playback Status      :  n/a
+   Library Content      :  n/a
+
+
+Test Case 24 		(Key = 3.2.1.1.1.0.0.0.3.1.1.)
+   Function             :  set_alarm
+   State Object         :  Valid Instance
+   Current Track (Save) :  n/a
+   Resume File (Load)   :  n/a
+   Library Match (Load) :  n/a
+   Alarm Input String   :  <n/a>
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  n/a
+   Playback Status      :  n/a
+   Library Content      :  n/a
+
+
+Test Case 25 		(Key = 4.2.1.1.1.1.0.0.0.1.1.)
+   Function             :  cancel_alarm
+   State Object         :  Valid Instance
+   Current Track (Save) :  n/a
+   Resume File (Load)   :  n/a
+   Library Match (Load) :  n/a
+   Alarm Input String   :  n/a
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  <n/a>
+   Playback Status      :  n/a
+   Library Content      :  n/a
+
+
+Test Case 26 		(Key = 5.2.1.1.1.1.0.0.10.0.1.)
+   Function             :  check_alarms
+   State Object         :  Valid Instance
+   Current Track (Save) :  n/a
+   Resume File (Load)   :  n/a
+   Library Match (Load) :  n/a
+   Alarm Input String   :  n/a
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  Populated (Match Now)
+   Playback Status      :  <n/a>
+   Library Content      :  n/a
+
+
+Test Case 27 		(Key = 6.2.1.1.1.1.0.0.4.1.0.)
+   Function             :  show_recently_added
+   State Object         :  Valid Instance
+   Current Track (Save) :  n/a
+   Resume File (Load)   :  n/a
+   Library Match (Load) :  n/a
+   Alarm Input String   :  n/a
+   Valid HH             :  <n/a>
+   Out of Range (25     :  <n/a>
+   Alarm List State     :  n/a
+   Playback Status      :  n/a
+   Library Content      :  <n/a>
+

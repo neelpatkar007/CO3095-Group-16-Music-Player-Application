@@ -1,0 +1,75 @@
+# Test Specification for Sprint 4 Time Module
+# Module: player_time.py
+# Covers: Resume, Scheduling, Recent Tracks
+
+# Target Function
+Function:
+    save_resume_state.          [property OpSave]
+    load_resume_state.          [property OpLoad]
+
+    set_alarm.                  [property OpSet]
+    cancel_alarm.               [property OpCancel]
+    check_alarms.               [property OpCheck]
+
+    show_recently_added.        [property OpRecent]
+
+# Player State
+State Object:
+    None.                       [error]
+    Valid Instance.
+
+# Resume Logic
+Current Track (Save):
+    n/a.                        [if !OpSave]
+
+    None / No Track.            [if OpSave] [single]
+    Track with No Path.         [if OpSave] [single]
+    Valid Track & Path.         [if OpSave]
+
+Resume File (Load):
+    n/a.                        [if !OpLoad]
+
+    File Missing.               [if OpLoad] [single]
+    File Corrupt/Empty.         [if OpLoad] [single]
+    Valid JSON File.            [if OpLoad] [property FileReady]
+
+Library Match (Load):
+    n/a.                        [if !FileReady]
+    Path Found in Library.      [if FileReady] [single]
+    Path Not Found.             [if FileReady] [single]
+
+# Scheduling Logic
+Alarm Input String:
+    n/a.                        [if !OpSet]
+
+    Valid HH:MM.                [if OpSet] [single]
+    No Colon / Bad Length.      [if OpSet] [error]
+    Non-Numeric.                [if OpSet] [error]
+    Out of Range (25:99).       [if OpSet] [error]
+
+Alarm List State:
+    n/a.                        [if OpSave]
+    n/a.                        [if OpLoad]
+    n/a.                        [if OpSet]
+    n/a.                        [if OpRecent]
+
+    None / Not List.            [if OpCancel] [error]
+    None / Not List.            [if OpCheck]  [error]
+
+    Empty List.                 [if OpCancel] [single]
+    Empty List.                 [if OpCheck]  [single]
+
+    Populated List.             [if OpCancel] [single]
+    Populated (Match Now).      [if OpCheck] [property Trigger]
+    Populated (No Match).       [if OpCheck] [single]
+
+Playback Status:
+    n/a.                        [if !Trigger]
+    Already Playing.            [if Trigger] [single]
+    Stopped / Paused.           [if Trigger] [single]
+
+# Insights Logic
+Library Content:
+    n/a.                        [if !OpRecent]
+    Empty / None.               [if OpRecent] [error]
+    Valid Files Exists.         [if OpRecent] [single]
