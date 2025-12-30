@@ -9,15 +9,22 @@ def change_volume(state: PlayerState, raw_input: str) -> None:
     if state is None:
         return
 
-    # If no argument, show current volume
+    if not hasattr(state, 'volume') or not hasattr(state, 'audio_engine'):
+        return
+
+    # If no argument show current volume
     if not raw_input:
         print(f"[audio] Current Volume: {state.volume}%")
         return
 
-    # Input validation - must be integer 0-100
+    # Ensure input is a string or number before conversion
+    if not isinstance(raw_input, (str, int, float)):
+        return
+
+    # Input validation must be integer 0-100
     try:
         val = int(raw_input)
-    except ValueError:
+    except (ValueError, TypeError):
         print("[audio] Error: Volume must be a number.")
         return
 
@@ -30,14 +37,20 @@ def change_volume(state: PlayerState, raw_input: str) -> None:
     state.volume = val
 
     # Setting volume unmutes if currently muted
-    if state.is_muted:
+    if getattr(state, 'is_muted', False):
         state.is_muted = False
-        state.saved_volume = None # clear saved volume
-        state.audio_engine.set_muted(False) # unmute
+        state.saved_volume = None  # clear saved volume
+
+        # Check audio engine method existence
+        if state.audio_engine and hasattr(state.audio_engine, 'set_muted'):
+            state.audio_engine.set_muted(False)  # unmute
 
     # Apply volume to audio engine
-    state.audio_engine.set_volume(val)
+    if state.audio_engine and hasattr(state.audio_engine, 'set_volume'):
+        state.audio_engine.set_volume(val)
+
     print(f"[audio] Volume set to {val}%")
+
 
 def toggle_mute(state: PlayerState) -> None:
     '''
@@ -46,17 +59,28 @@ def toggle_mute(state: PlayerState) -> None:
     if state is None:
         return
 
+    # Check for required state attributes
+    if not hasattr(state, 'is_muted') or not hasattr(state, 'audio_engine'):
+        return
+
     if state.is_muted:
         # Unmute logic
         state.is_muted = False
 
         # Restore saved volume if available
-        restored = state.saved_volume if state.saved_volume is not None else state.volume
+        saved = getattr(state, 'saved_volume', None)
+        restored = saved if saved is not None else getattr(state, 'volume', 50)
 
         # Update state and backend
         state.volume = restored
-        state.audio_engine.set_muted(False) # Clear temp mute
-        state.audio_engine.set_volume(restored)
+
+        # Check audio engine methods
+        if state.audio_engine:
+            if hasattr(state.audio_engine, 'set_muted'):
+                state.audio_engine.set_muted(False)  # Clear temp mute
+            if hasattr(state.audio_engine, 'set_volume'):
+                state.audio_engine.set_volume(restored)
+
         print(f"[audio] Unmuted (volume back to {restored}%)")
         return
 
@@ -64,12 +88,18 @@ def toggle_mute(state: PlayerState) -> None:
     state.is_muted = True
 
     # Save current volume
-    state.saved_volume = state.volume
+    state.saved_volume = getattr(state, 'volume', 0)
 
     # Set volume to 0 in backend
-    state.audio_engine.set_muted(True)
-    state.audio_engine.set_volume(0)
+    # Check audio engine methods
+    if state.audio_engine:
+        if hasattr(state.audio_engine, 'set_muted'):
+            state.audio_engine.set_muted(True)
+        if hasattr(state.audio_engine, 'set_volume'):
+            state.audio_engine.set_volume(0)
+
     print("[audio] Muted")
+
 
 def handle_mute_command(state: PlayerState, raw: str) -> None:
     '''
@@ -77,19 +107,25 @@ def handle_mute_command(state: PlayerState, raw: str) -> None:
     '''
     if state is None:
         return
-    cmd = raw.strip().lower()
-    if cmd == "/mute":
-        if state.is_muted:
-            print("[audio] Already muted.")
-            return
-        toggle_mute(state)
-        return
-    if cmd == "/unmute":
-        if not state.is_muted:
-            print("[audio] Already unmuted.")
-            return
-        toggle_mute(state)
+
+    # Validate input type
+    if not isinstance(raw, str):
         return
 
-    # Unknown command
-    print("[audio] Unknown mute command.")
+    cmd = raw.strip().lower()
+
+    # Ensure state has is_muted attribute
+    is_muted = getattr(state, 'is_muted', False)
+
+    if cmd == "/mute":
+        if is_muted:
+            print("[audio] Already muted.")
+        else:
+            toggle_mute(state)
+    elif cmd == "/unmute":
+        if not is_muted:
+            print("[audio] Already unmuted.")
+        else:
+            toggle_mute(state)
+    else:
+        print("[audio] Unknown mute command.")
