@@ -15,3 +15,8 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
     Tools -  Python unittest + unittest.mock + tempfile + contextlib.redirect_stdout
     Technique -  Black-Box Specification Testing
     """
+
+    def setUp(self):
+        self.state = MagicMock(spec=PlayerState)
+        self.state.library_tracks = []
+        self.state.tracks = []
