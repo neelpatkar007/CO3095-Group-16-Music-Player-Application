@@ -22,6 +22,16 @@ class TestLibraryBranch(unittest.TestCase):
          - if "TIT2" in tags
          - if "TPE1" in tags
         Expected Result: Returns defaults for missing data and correct values for valid tags.
-
+        Actual Result:
         """
         path = Path("test.mp3")
+
+        # HAS_MUTAGEN = False
+        with patch("music_player.library.HAS_MUTAGEN", False):
+            library._read_metadata(path)
+
+        # HAS_MUTAGEN = True
+        with patch("music_player.library.HAS_MUTAGEN", True):
+            # audio is None
+            with patch("music_player.library.mutagen.File", return_value=None):
+                library._read_metadata(path)
