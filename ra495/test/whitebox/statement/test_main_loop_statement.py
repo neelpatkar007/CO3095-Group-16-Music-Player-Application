@@ -26,3 +26,18 @@ class TestMainLoops(unittest.TestCase):
         with patch('music_player.player_queue.set_loop_mode') as mock_loop:
             main.handle_command(self.state, "/loop all")  # Success
 
+        # Queue: /queue, /q.add
+        with patch('music_player.player_queue.show_queue') as m_show, \
+                patch('music_player.player_queue.add_to_queue') as m_add:
+            main.handle_command(self.state, "/queue")
+            main.handle_command(self.state, "/q.add 1")
+            m_show.assert_called()
+            m_add.assert_called()
+
+        # /q.remove, /playnext, /q.clear
+        with patch('music_player.player_queue.remove_from_queue') as m_rem, \
+                patch('music_player.player_queue.play_next') as m_next, \
+                patch('music_player.player_queue.clear_queue') as m_clear:
+            main.handle_command(self.state, "/q.remove 1")
+            main.handle_command(self.state, "/playnext 1")
+            main.handle_command(self.state, "/q.clear")
