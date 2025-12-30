@@ -41,3 +41,11 @@ class TestMainLoops(unittest.TestCase):
             main.handle_command(self.state, "/q.remove 1")
             main.handle_command(self.state, "/playnext 1")
             main.handle_command(self.state, "/q.clear")
+
+        # Metrics: /like, /likes, /top
+        with patch('music_player.player_metrics.toggle_like') as m_like, \
+                patch('music_player.player_metrics.show_liked_songs') as m_likes, \
+                patch('music_player.player_metrics.show_top_tracks') as m_top:
+            main.handle_command(self.state, "/like")
+            main.handle_command(self.state, "/likes")
+            main.handle_command(self.state, "/top")
