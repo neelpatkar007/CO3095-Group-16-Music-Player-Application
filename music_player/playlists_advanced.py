@@ -143,7 +143,9 @@ def copy_playlist(
     if new_name.strip().lower() in reserved:
         print("[pl] Error: name is reserved.")
         return
-
+    if state is None or not hasattr(state, "playlists"):
+        print("[pl] Error: Playlist state is not available.")
+        return
     # Ensure that playlist structures exist
     _ensure_playlists(state)
 
