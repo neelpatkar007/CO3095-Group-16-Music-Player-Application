@@ -21,3 +21,9 @@ class TestPlayerUISpec(unittest.TestCase):
         self.mock_state.current_track = MagicMock(spec=Track)
         self.mock_state.current_track.display_name = "Song"
         self.mock_state.current_track.duration_seconds = 60
+
+    def tearDown(self):
+        sys.stdout = self.sys_stdout
+
+    def get_output(self):
+        return self.captured_output.getvalue().strip()
