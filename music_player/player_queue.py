@@ -439,26 +439,34 @@ def set_loop_mode(state: PlayerState, mode: str) -> None:
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
     """Helper Function: Find track by Index or Name."""
-    query = query.strip()
-    if query.isdigit():
-        idx = int(query) - 1
-        if 0 <= idx < len(state.library_tracks):
-            return state.library_tracks[idx]
-    query_lower = query.lower()
-    for t in state.library_tracks:
-        if query_lower in t.display_name.lower():
-            return t
+    try:
+        query = query.strip()
+        if query.isdigit():
+            idx = int(query) - 1
+            if hasattr(state, "library_tracks") and isinstance(state.library_tracks, list):
+                if 0 <= idx < len(state.library_tracks):
+                    return state.library_tracks[idx]
+        query_lower = query.lower()
+
+        if hasattr(state, "library_tracks") and isinstance(state.library_tracks, list):
+            for t in state.library_tracks:
+                if not hasattr(t, "display_name"):
+                    continue
+                if query_lower in t.display_name.lower():
+                    return t
+    except Exception:
+        return None
     return None
 
 def add_to_queue(state: PlayerState, query: str) -> None:
     """
     S3-04: Add songs to the end of the current queue (Decoupled).
     """
-    if state is None:
+    if state is None or isinstance(state, (str, int, float, bool)):
         print("[queue] Error: State is None.")
         return
 
-    if not query:
+    if not query or not isinstance(query, str):
         print("[queue] Usage: /q.add <index|name>")
         return
 
@@ -466,8 +474,18 @@ def add_to_queue(state: PlayerState, query: str) -> None:
         print("[queue] Error: Library is empty or missing.")
         return
 
+    # Use safe retrieval logic for initial check
     if not hasattr(state, "tracks") or state.tracks is None:
-        state.tracks = []
+        try:
+            state.tracks = []
+        except AttributeError:
+            return
+    elif not isinstance(state.tracks, list):
+        # Forced conversion if possible, or reset
+        try:
+            state.tracks = list(state.tracks)
+        except:
+            state.tracks = []
 
     found = _find_track(state, query)
 
@@ -482,7 +500,8 @@ def add_to_queue(state: PlayerState, query: str) -> None:
     _ensure_queue_decoupled(state)
 
     try:
-        state.tracks.append(found)
+        if isinstance(state.tracks, list):
+            state.tracks.append(found)
     except Exception as e:
         print(f"[queue] Error appending to queue: {e}")
         return
@@ -497,17 +516,21 @@ def play_next(state: PlayerState, query: str) -> None:
     """
     S3-05: Queue a specific song to play next (Decoupled).
     """
-    if state is None:
+    if state is None or isinstance(state, (str, int, float, bool)):
         print("[queue] Error: State is None.")
         return
 
-    if not query:
+    if not query or not isinstance(query, str):
         print("[queue] Usage: /playnext <index|name>")
         return
 
-    if not isinstance(state.tracks, list):
+    # Strict list requirement for insertion
+    if not hasattr(state, "tracks") or not isinstance(state.tracks, list):
         print("[queue] Error: Queue corrupted.")
-        state.tracks = []
+        try:
+            state.tracks = []
+        except AttributeError:
+            return
 
     found = _find_track(state, query)
 
@@ -517,8 +540,13 @@ def play_next(state: PlayerState, query: str) -> None:
 
     _ensure_queue_decoupled(state)
 
-    current_len = len(state.tracks)
-    insert_idx = state.current_index + 1
+    tracks = state.tracks
+    current_len = len(tracks)
+    current_index = getattr(state, "current_index", 0)
+    if current_index is None: current_index = 0
+    if not isinstance(current_index, int): current_index = 0
+
+    insert_idx = current_index + 1
 
     if insert_idx < 0:
         insert_idx = 0
@@ -526,31 +554,35 @@ def play_next(state: PlayerState, query: str) -> None:
         insert_idx = current_len
 
     try:
-        state.tracks.insert(insert_idx, found)
+        tracks.insert(insert_idx, found)
     except Exception as e:
         print(f"[queue] Insertion failed: {e}")
         return
 
-    if state.tracks[insert_idx] != found:
+    if tracks[insert_idx] != found:
         print("[queue] Error: Track did not insert correctly.")
         return
 
     print(f"[queue] Queued next: '{found.display_name}'.")
 
 
-
 def remove_from_queue(state: PlayerState, query: str) -> None:
     """
     S3-04: Remove a song from the queue by Index or Name.
     """
+    if state is None or isinstance(state, (str, int, float, bool)): return
 
-    if state is None: return
-
-    if not state.tracks:
+    # Use safe retrieval, but we need the actual reference to remove from it
+    if not hasattr(state, "tracks") or not isinstance(state.tracks, list):
         print("[queue] Queue is empty.")
         return
 
-    if not query:
+    tracks = state.tracks
+    if not tracks:
+        print("[queue] Queue is empty.")
+        return
+
+    if not query or not isinstance(query, str):
         print("[queue] Usage: /q.remove <index|name>")
         return
 
@@ -559,11 +591,14 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
     if query.isdigit():
         try:
             idx = int(query) - 1
-            if 0 <= idx < len(state.tracks):
-                removed = state.tracks.pop(idx)
+            if 0 <= idx < len(tracks):
+                removed = tracks.pop(idx)
 
-                if idx < state.current_index:
-                    state.current_index -= 1
+                current_index = getattr(state, "current_index", 0)
+                if current_index is None: current_index = 0
+
+                if idx < current_index:
+                    state.current_index = current_index - 1
 
                 name = getattr(removed, "display_name", "Unknown")
                 print(f"[queue] Removed '{name}' from queue.")
@@ -577,14 +612,18 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
     query_lower = query.lower()
 
-    for i, t in enumerate(state.tracks):
+    for i, t in enumerate(tracks):
         if t is None: continue
+        if not hasattr(t, "display_name"): continue
 
         if query_lower in t.display_name.lower():
-            removed = state.tracks.pop(i)
+            removed = tracks.pop(i)
 
-            if i < state.current_index:
-                state.current_index -= 1
+            current_index = getattr(state, "current_index", 0)
+            if current_index is None: current_index = 0
+
+            if i < current_index:
+                state.current_index = current_index - 1
 
             print(f"[queue] Removed '{removed.display_name}' from queue.")
             return
@@ -595,24 +634,43 @@ def clear_queue(state: PlayerState) -> None:
     """
     S3-06: Clear the queue (keep playing current song).
     """
-    if state is None:
+    if state is None or isinstance(state, (str, int, float, bool)):
         print("[queue] Error: State is None.")
         return
 
-    if not hasattr(state, "tracks") or state.tracks is None:
+    # Use safe retrieval for reading, but check type for modification
+    tracks_ref = getattr(state, "tracks", None)
+
+    if tracks_ref is None:
         print("[queue] Queue is already missing.")
-        state.tracks = []
+        try:
+            state.tracks = []
+        except AttributeError:
+            pass
         return
 
-    if not state.tracks:
+    if not isinstance(tracks_ref, list):
+        try:
+            state.tracks = list(tracks_ref)
+            tracks_ref = state.tracks
+        except:
+            print("[queue] Queue corrupted (invalid type).")
+            state.tracks = []
+            return
+
+    if not tracks_ref:
         print("[queue] Queue is already empty.")
         return
 
     _ensure_queue_decoupled(state)
 
     current = None
-    if 0 <= state.current_index < len(state.tracks):
-        current = state.tracks[state.current_index]
+    current_index = getattr(state, "current_index", 0)
+    if current_index is None: current_index = 0
+    if not isinstance(current_index, int): current_index = 0
+
+    if 0 <= current_index < len(tracks_ref):
+        current = tracks_ref[current_index]
 
     if current:
         if not hasattr(current, "display_name"):
@@ -626,10 +684,11 @@ def clear_queue(state: PlayerState) -> None:
         state.current_index = 0
         print("[queue] Queue completely cleared.")
 
+    # Re-check len
     if len(state.tracks) > 1:
         print("[queue] Error: Queue failed to clear.")
 
-    if not state.is_playing and not state.is_paused:
+    if not getattr(state, "is_playing", False) and not getattr(state, "is_paused", False):
         print("[queue] (Player is stopped)")
 
 def show_queue(state: PlayerState) -> None:
