@@ -61,3 +61,8 @@ Input:
 [if Function = F_CHANGE] Input = s50
 
 [if Function = F_TOGGLE] Input = empty
+
+[if Function = F_HANDLE] Input = mute
+[if Function = F_HANDLE] Input = unmute
+[if Function = F_HANDLE] Input = unknowncmd
+[if Function = F_HANDLE] Input = obj
