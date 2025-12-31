@@ -97,3 +97,42 @@ class TestPlayerAudioSpec(unittest.TestCase):
         self.assertEqual(self.state.volume, 60)  # Restore Volume
         self.state.audio_engine.set_muted.assert_called_with(False)
         self.state.audio_engine.set_volume.assert_called_with(60)
+
+    # Handle Mute Command
+
+    def test_handle_mute_command_spec(self):
+        """
+        Expected Result: Calls toggle_mute if the state changes, otherwise prints "Already muted/unmuted".
+        Actual Result: Passed.
+        """
+        # State None
+        player_audio.handle_mute_command(None, "/mute")
+
+        # /mute when already muted
+        self.state.is_muted = True
+        with patch("builtins.print") as m_print:
+            player_audio.handle_mute_command(self.state, "/mute")
+            m_print.assert_called_with("[audio] Already muted.")
+
+        # /mute
+        self.state.is_muted = False
+        with patch("music_player.player_audio.toggle_mute") as m_toggle:
+            player_audio.handle_mute_command(self.state, "/mute")
+            m_toggle.assert_called_once()
+
+        # /unmute when already unmuted
+        self.state.is_muted = False
+        with patch("builtins.print") as m_print:
+            player_audio.handle_mute_command(self.state, "/unmute")
+            m_print.assert_called_with("[audio] Already unmuted.")
+
+        # /unmute
+        self.state.is_muted = True
+        with patch("music_player.player_audio.toggle_mute") as m_toggle:
+            player_audio.handle_mute_command(self.state, "/unmute")
+            m_toggle.assert_called_once()
+
+        # Unknown Command
+        with patch("builtins.print") as m_print:
+            player_audio.handle_mute_command(self.state, "/garbage")
+            m_print.assert_called_with("[audio] Unknown mute command.")
