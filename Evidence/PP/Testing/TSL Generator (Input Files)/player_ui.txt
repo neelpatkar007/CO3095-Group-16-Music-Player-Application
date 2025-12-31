@@ -13,3 +13,8 @@ State:
 Track:
     invalid_track.      [property TR_BAD]
     valid_track.        [property TR_OK]
+
+Status:
+    playing.            [property S_PLAY]
+    paused.             [property S_PAUSE]
+    stopped.            [property S_STOP]
