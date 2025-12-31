@@ -74,3 +74,5 @@ Input:
 
 [if MutedFlag = M_MISS] SavedVol = SV_MISS
 [if MutedFlag = M_MISS] Engine = ENG_NONE
+
+[if SavedVol = SV_MISS] Engine = ENG_NONE
