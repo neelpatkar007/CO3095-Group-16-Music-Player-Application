@@ -43,3 +43,9 @@ Input:
     mute.                   [property IN_MUTE]
     unmute.                 [property IN_UNMUTE]
     unknowncmd.             [property IN_UNKNOWN]
+
+[if State = ST_NONE] Engine = ENG_NONE
+[if State = ST_NONE] MutedFlag = M_FALSE
+[if State = ST_NONE] SavedVol = SV_NONE
+[if State = ST_NONE] Volume = V_50
+[if State = ST_NONE] Input = empty
