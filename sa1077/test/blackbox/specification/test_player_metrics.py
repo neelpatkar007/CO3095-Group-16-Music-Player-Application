@@ -135,3 +135,16 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
 
         player_metrics.toggle_like(self.mock_state)
         self.assertIn("[metrics] Error: Track path is empty.", self.get_output())
+
+    def test_case_13_play_count_logic_limit(self):
+        """Test Case 13: Play count top 10 items are displayed."""
+        # Generate 15 entries
+        self.mock_state.play_counts = {f"/song{i}.mp3": i for i in range(1, 16)}
+        self.mock_state.library_tracks = []
+
+        player_metrics.show_top_tracks(self.mock_state)
+        output = self.get_output()
+
+        # Count lines generated for top tracks
+        lines = [l for l in output.split('\n') if "plays:" in l]
+        self.assertEqual(len(lines), 10, "Should strictly display top 10 tracks")
