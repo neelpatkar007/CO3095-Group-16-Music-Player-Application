@@ -1,0 +1,7 @@
+# TSL input for music_player.player_ui
+
+Function:
+    now_playing.        [property F_NOW]
+    progress.           [property F_PROG]
+    progress_bar.       [property F_BAR]
+    playlist.           [property F_LIST]
