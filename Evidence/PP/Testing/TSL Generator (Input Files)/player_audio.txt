@@ -76,3 +76,6 @@ Input:
 [if MutedFlag = M_MISS] Engine = ENG_NONE
 
 [if SavedVol = SV_MISS] Engine = ENG_NONE
+
+[if Function = F_TOGGLE] Volume = v50
+[if Function = F_HANDLE] Volume = v50
