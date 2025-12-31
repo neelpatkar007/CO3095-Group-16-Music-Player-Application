@@ -204,3 +204,79 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
 
         player_metrics.show_liked_songs(self.mock_state)
         self.assertIn("♥ Unknown Title", self.get_output())
+
+    def test_case_19_top_tracks_invalid_counts(self):
+        """Test Case 19: Show top tracks count is non-integer or negative/zero."""
+        self.mock_state.play_counts = {"/song1.mp3": 0, "/song2.mp3": -5, "/song3.mp3": "bad"}
+        self.mock_state.library_tracks = []
+
+        player_metrics.show_top_tracks(self.mock_state)
+        output = self.get_output()
+        self.assertIn("--- Top Played Songs ---", output)
+        self.assertNotIn("plays:", output, "Should not display invalid counts")
+
+    def test_case_20_top_tracks_valid_limit(self):
+        """Test Case 20: Show top tracks valid counts and less than 10 songs."""
+        self.mock_state.play_counts = {"/song1.mp3": 5}
+        self.mock_state.library_tracks = []
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("5 plays:", self.get_output())
+
+    def test_case_21_top_tracks_invalid_with_lib(self):
+        """Test Case 21: Show top tracks invalid counts with library present."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: 0}
+        self.mock_state.library_tracks = [MockTrack(path, "Song One")]
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertNotIn("Song One", self.get_output())
+
+    def test_case_22_top_tracks_invalid_no_lib(self):
+        """Test Case 22: Show top tracks invalid counts, library missing."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: -1}
+        self.mock_state.library_tracks = []
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertNotIn("plays:", self.get_output())
+
+    def test_case_23_top_tracks_invalid_no_name(self):
+        """Test Case 23: Show top tracks with invalid counts and with no name track."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: 0}
+        self.mock_state.library_tracks = [MockTrack(path, None)]
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertNotIn("plays:", self.get_output())
+
+    def test_case_24_top_tracks_valid_with_lib(self):
+        """Test Case 24: Show top tracks with a valid track in library."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: 10}
+        self.mock_state.library_tracks = [MockTrack(path, "Hit Song")]
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("10 plays: Hit Song", self.get_output())
+
+    def test_case_25_top_tracks_valid_no_lib(self):
+        """Test Case 25: Show top tracks with a valid track but not in library."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: 10}
+        self.mock_state.library_tracks = []
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn(f"10 plays: Unknown (File: {path})", self.get_output())
+
+    def test_case_26_top_tracks_valid_no_name(self):
+        """Test Case 26: Show top tracks with a valid track that has no name."""
+        path = "/song1.mp3"
+        self.mock_state.play_counts = {path: 10}
+        self.mock_state.library_tracks = [MockTrack(path, None)]
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("10 plays: Unknown", self.get_output())
+
+
+if __name__ == '__main__':
+    unittest.main()
