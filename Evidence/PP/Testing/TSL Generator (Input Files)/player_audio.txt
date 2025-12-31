@@ -13,3 +13,8 @@ Engine:
     none.                   [property ENG_NONE]
     ok.                     [property ENG_OK]
     partial.                [property ENG_PARTIAL]
+
+MutedFlag:
+    muted_true.             [property M_TRUE]
+    muted_false.            [property M_FALSE]
+    missing.                [property M_MISS]
