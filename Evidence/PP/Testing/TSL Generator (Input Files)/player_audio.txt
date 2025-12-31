@@ -49,3 +49,13 @@ Input:
 [if State = ST_NONE] SavedVol = SV_NONE
 [if State = ST_NONE] Volume = V_50
 [if State = ST_NONE] Input = empty
+
+[if Function = F_CHANGE] Input = empty
+[if Function = F_CHANGE] Input = num
+[if Function = F_CHANGE] Input = obj
+[if Function = F_CHANGE] Input = badnum
+[if Function = F_CHANGE] Input = neg
+[if Function = F_CHANGE] Input = over
+[if Function = F_CHANGE] Input = s0
+[if Function = F_CHANGE] Input = s1
+[if Function = F_CHANGE] Input = s50
