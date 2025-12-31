@@ -29,3 +29,17 @@ Volume:
     v50.                    [property V_50]
     v100.                   [property V_100]
     missing.                [property V_MISS]
+
+Input:
+    empty.                  [property IN_EMPTY]
+    num.                    [property IN_NUM]
+    obj.                    [property IN_OBJ]
+    badnum.                 [property IN_BADNUM]
+    neg.                    [property IN_NEG]
+    over.                   [property IN_OVER]
+    s0.                     [property IN_S0]
+    s1.                     [property IN_S1]
+    s50.                    [property IN_S50]
+    mute.                   [property IN_MUTE]
+    unmute.                 [property IN_UNMUTE]
+    unknowncmd.             [property IN_UNKNOWN]
