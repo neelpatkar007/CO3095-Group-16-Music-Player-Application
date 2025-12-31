@@ -77,3 +77,24 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
 
         player_metrics.show_liked_songs(self.mock_state)
         self.assertIn("(No liked songs yet)", self.get_output())
+
+    def test_case_05_play_counts_missing(self):
+        """Test Case 5: Play counts attribute missing or None."""
+        del self.mock_state.play_counts
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("[metrics] No play history data available.", self.get_output())
+
+    def test_case_06_play_counts_corrupted(self):
+        """Test Case 6: Play counts attribute corrupted."""
+        self.mock_state.play_counts = ["Not", "A", "Dict"]
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("[metrics] Error: Play counts corrupted.", self.get_output())
+
+    def test_case_07_play_counts_empty(self):
+        """Test Case 7: Play counts dict empty."""
+        self.mock_state.play_counts = {}
+
+        player_metrics.show_top_tracks(self.mock_state)
+        self.assertIn("[metrics] No play history yet.", self.get_output())
