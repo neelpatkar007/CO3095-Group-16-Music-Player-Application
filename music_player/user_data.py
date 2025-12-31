@@ -17,22 +17,30 @@ PROFILE_FILE = Path("profiles.json")
 # Helpers
 
 def _serialize_current_state(state: PlayerState) -> dict:
+    if state is None or not hasattr(state, "playlists"):
+        return {}
+
     pl_data = []
     # Collect all playlists
-    for pl in state.playlists:
-        pl_data.append({
-            "name": pl.name,
-            "tracks": [str(t.path) for t in pl.tracks]
-        })
+    if state.playlists:
+        for pl in state.playlists:
+            if pl:
+                pl_data.append({
+                    "name": getattr(pl, "name", "Unknown"),
+                    "tracks": [str(t.path) for t in pl.tracks if hasattr(t, "path")]
+                })
 
     return {
-        "liked": list(state.liked_tracks),
-        "ratings": state.song_ratings,
+        "liked": list(getattr(state, "liked_tracks", [])),
+        "ratings": getattr(state, "song_ratings", {}),
         "playlists": pl_data
     }
 
 def _save_profiles(state: PlayerState):
     """Persist all profiles to JSON."""
+    if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
+        return
+
     try:
         data = {
             "active": state.active_profile,
@@ -45,12 +53,18 @@ def _save_profiles(state: PlayerState):
 
 def _save_current_to_profile(state: PlayerState):
     """Snapshot current state variables into the profiles dict storage."""
+    if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
+        return
+
     serialized = _serialize_current_state(state)
     if serialized:
         state.profiles[state.active_profile] = serialized
         _save_profiles(state)
 
 def _apply_profile_data(state: PlayerState, data: dict):
+    if state is None:
+        return
+
     if not data:
         state.liked_tracks = set()
         state.song_ratings = {}
@@ -65,9 +79,12 @@ def _apply_profile_data(state: PlayerState, data: dict):
         pl_name = p_dict.get("name", "Unknown")
         new_pl = Playlist(pl_name)
 
+        # Ensure library_tracks exists before iterating
+        lib_tracks = getattr(state, "library_tracks", []) or []
+
         for path_str in p_dict.get("tracks", []):
-            for t in state.library_tracks:
-                if str(t.path) == path_str:
+            for t in lib_tracks:
+                if t and hasattr(t, "path") and str(t.path) == path_str:
                     new_pl.tracks.append(t)
                     break
         restored_pl.append(new_pl)
@@ -79,6 +96,9 @@ def _apply_profile_data(state: PlayerState, data: dict):
 
 def load_profiles_index(state: PlayerState) -> None:
     """Loads profile metadata on startup."""
+    if state is None:
+        return
+
     if not PROFILE_FILE.exists():
         _save_profiles(state)
         return
@@ -102,7 +122,11 @@ def load_profiles_index(state: PlayerState) -> None:
         print(f"[profile] Error loading profiles: {e}")
 
 def create_profile(state: PlayerState, name: str) -> None:
-    if not name:
+    if state is None or not hasattr(state, "profiles"):
+        print("[profile] Error: Invalid state.")
+        return
+
+    if not name or not isinstance(name, str):
         print("[profile] Error: Name cannot be empty.")
         return
     if name == "default":
@@ -121,6 +145,10 @@ def create_profile(state: PlayerState, name: str) -> None:
     _save_profiles(state)
 
 def switch_profile(state: PlayerState, name: str) -> None:
+    if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
+        print("[profile] Error: Invalid state.")
+        return
+
     if name not in state.profiles and name != "default":
         print(f"[profile] Profile '{name}' does not exist.")
         return
@@ -146,6 +174,9 @@ def switch_profile(state: PlayerState, name: str) -> None:
     _save_profiles(state)
 
 def list_profiles(state: PlayerState) -> None:
+    if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
+        return
+
     print("--- User Profiles ---")
     all_profiles = set(state.profiles.keys())
     all_profiles.add("default")
@@ -155,48 +186,67 @@ def list_profiles(state: PlayerState) -> None:
         print(f"  - {name}{marker}")
 
 def show_current_profile(state: PlayerState) -> None:
+    if state is None or not hasattr(state, "active_profile"):
+        print("[profile] Error: Invalid state.")
+        return
     print(f"[profile] Current Profile: {state.active_profile}")
 
 
 # S4-09: Advanced Search
 
 def advanced_search(state: PlayerState, query_str: str) -> None:
-    if not query_str:
+    if state is None or not hasattr(state, "library_tracks"):
+        print("[search] Error: Invalid state.")
+        return
+
+    if not query_str or not isinstance(query_str, str):
         print("[search] Usage: /advanced.search <query>")
         return
 
     tokens = query_str.split()
     results = state.library_tracks
 
+    if results is None:
+        results = []
+
     for token in tokens:
         if token.lower().startswith("artist:"):
             val = token.split(":", 1)[1].lower().replace("_", " ")
-            results = [t for t in results if val in (t.artist or "").lower()]
+            results = [t for t in results if t and val in (getattr(t, 'artist', '') or "").lower()]
 
         elif token.lower().startswith("duration>"):
             val_str = token.split(">", 1)[1]
             limit = time_utils.parse_timecode(val_str)
-            results = [t for t in results if (t.duration_seconds or 0) > limit]
+            results = [t for t in results if t and (getattr(t, 'duration_seconds', 0) or 0) > limit]
 
         elif token.lower().startswith("duration<"):
             val_str = token.split("<", 1)[1]
             limit = time_utils.parse_timecode(val_str)
-            results = [t for t in results if (t.duration_seconds or 0) < limit]
+            results = [t for t in results if t and (getattr(t, 'duration_seconds', 0) or 0) < limit]
 
         else:
             val = token.lower()
-            results = [t for t in results if val in t.title.lower() or val in (t.artist or "").lower()]
+            results = [
+                t for t in results
+                if t and (val in (getattr(t, 'title', '') or "").lower() or val in (getattr(t, 'artist', '') or "").lower())
+            ]
 
     if not results:
         print("[search] No matches found.")
     else:
         print(f"[search] Found {len(results)} matches:")
         for i, t in enumerate(results[:10]):
-            print(f"  {i+1}. {t.display_name} ({time_utils.format_mm_ss(t.duration_seconds)})")
+            name = getattr(t, 'display_name', 'Unknown') or 'Unknown'
+            dur = time_utils.format_mm_ss(getattr(t, 'duration_seconds', 0) or 0)
+            print(f"  {i+1}. {name} ({dur})")
 
 # S4-12: Rate Songs
 
 def rate_song(state: PlayerState, rating_str: str) -> None:
+    if state is None or not hasattr(state, "current_track"):
+        print("[rate] No song playing.")
+        return
+
     track = state.current_track
     if not track:
         print("[rate] No song playing.")
@@ -205,28 +255,52 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
     try:
         val = int(rating_str)
         if not (1 <= val <= 5): raise ValueError
-    except ValueError:
+    except (ValueError, TypeError):
         print("[rate] Rating must be a whole number 1-5.")
         return
 
+    if not hasattr(track, "path") or not hasattr(state, "song_ratings"):
+        return
+
     path_str = str(track.path)
+    if state.song_ratings is None:
+        state.song_ratings = {}
+
     state.song_ratings[path_str] = val
-    print(f"[rate] Rated '{track.title}' {val}/5 stars.")
+
+    title = getattr(track, 'title', 'Unknown') or 'Unknown'
+    print(f"[rate] Rated '{title}' {val}/5 stars.")
     # Auto-save
     _save_current_to_profile(state)
 
 def view_rated(state: PlayerState) -> None:
+    if state is None or not hasattr(state, "song_ratings") or state.song_ratings is None:
+        print("[rate] No songs rated yet.")
+        return
+
     if not state.song_ratings:
         print("[rate] No songs rated yet.")
         return
 
     print("--- Rated Songs ---")
-    sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
+    try:
+        sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
+    except Exception:
+        print("[rate] Error sorting ratings.")
+        return
+
+    # Check for library existence
+    lib_tracks = getattr(state, "library_tracks", []) or []
 
     for path_str, rating in sorted_paths:
+        try:
+            val = int(rating)
+        except (ValueError, TypeError):
+            continue
+
         name = "Unknown File"
-        for t in state.library_tracks:
-            if str(t.path) == path_str:
-                name = t.display_name
+        for t in lib_tracks:
+            if t and hasattr(t, "path") and str(t.path) == path_str:
+                name = getattr(t, "display_name", "Unknown")
                 break
-        print(f"  {'★' * rating} ({rating}) - {name}")
+        print(f"  {'★' * val} ({val}) - {name}")
