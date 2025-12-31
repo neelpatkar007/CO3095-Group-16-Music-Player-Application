@@ -18,3 +18,8 @@ MutedFlag:
     muted_true.             [property M_TRUE]
     muted_false.            [property M_FALSE]
     missing.                [property M_MISS]
+
+SavedVol:
+    saved_set.              [property SV_SET]
+    saved_none.             [property SV_NONE]
+    missing.                [property SV_MISS]
