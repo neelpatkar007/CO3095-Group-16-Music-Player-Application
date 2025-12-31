@@ -8,3 +8,8 @@ State:
     none.                   [property ST_NONE]
     ok.                     [property ST_OK]
     bad.                    [property ST_BAD]
+
+Engine:
+    none.                   [property ENG_NONE]
+    ok.                     [property ENG_OK]
+    partial.                [property ENG_PARTIAL]
