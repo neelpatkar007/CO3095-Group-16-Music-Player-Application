@@ -9,3 +9,7 @@ Function:
 State:
     invalid.            [property ST_BAD]
     valid.              [property ST_OK]
+
+Track:
+    invalid_track.      [property TR_BAD]
+    valid_track.        [property TR_OK]
