@@ -3,3 +3,8 @@ Function:
     change_volume.          [property F_CHANGE]
     toggle_mute.            [property F_TOGGLE]
     handle_mute_command.    [property F_HANDLE]
+
+State:
+    none.                   [property ST_NONE]
+    ok.                     [property ST_OK]
+    bad.                    [property ST_BAD]
