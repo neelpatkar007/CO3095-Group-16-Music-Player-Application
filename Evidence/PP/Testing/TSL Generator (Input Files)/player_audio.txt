@@ -71,3 +71,6 @@ Input:
 [if State = ST_BAD] MutedFlag = M_FALSE
 [if State = ST_BAD] SavedVol = SV_NONE
 [if State = ST_BAD] Volume = V_50
+
+[if MutedFlag = M_MISS] SavedVol = SV_MISS
+[if MutedFlag = M_MISS] Engine = ENG_NONE
