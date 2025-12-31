@@ -34,3 +34,10 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
         self.captured_output = io.StringIO()
         self.sys_stdout = sys.stdout
         sys.stdout = self.captured_output
+
+    def tearDown(self):
+        sys.stdout = self.sys_stdout
+
+    def get_output(self):
+        """Helper to get printed output."""
+        return self.captured_output.getvalue().strip()
