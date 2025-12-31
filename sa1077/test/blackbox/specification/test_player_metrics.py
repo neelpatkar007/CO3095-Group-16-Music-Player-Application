@@ -148,3 +148,59 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
         # Count lines generated for top tracks
         lines = [l for l in output.split('\n') if "plays:" in l]
         self.assertEqual(len(lines), 10, "Should strictly display top 10 tracks")
+
+    @patch("builtins.open", new_callable=mock_open)
+    @patch("json.dump")
+    def test_case_14_toggle_like_remove(self, mock_dump, mock_file):
+        """Test Case 14: Toggle Like when a valid track is already in Likes."""
+        path = "/music/song1.mp3"
+        self.mock_state.current_track = MockTrack(path, "My Song")
+        self.mock_state.liked_tracks = {path}
+
+        player_metrics.toggle_like(self.mock_state)
+
+        self.assertNotIn(path, self.mock_state.liked_tracks)
+        self.assertIn("Unliked 'My Song'", self.get_output())
+        # Verify save_data was called
+        self.assertTrue(mock_dump.called)
+
+    @patch("builtins.open", new_callable=mock_open)
+    @patch("json.dump")
+    def test_case_15_toggle_like_add(self, mock_dump, mock_file):
+        """Test Case 15: Toggle Like adding a valid track to Likes."""
+        path = "/music/song2.mp3"
+        self.mock_state.current_track = MockTrack(path, "New Song")
+        self.mock_state.liked_tracks = set()
+
+        player_metrics.toggle_like(self.mock_state)
+
+        self.assertIn(path, self.mock_state.liked_tracks)
+        self.assertIn("Liked 'New Song'", self.get_output())
+        self.assertTrue(mock_dump.called)
+
+    def test_case_16_show_liked_found_in_lib(self):
+        """Test Case 16: Show liked songs exist in Library."""
+        path = "/music/fav.mp3"
+        self.mock_state.liked_tracks = {path}
+        self.mock_state.library_tracks = [MockTrack(path, "Favorite Song")]
+
+        player_metrics.show_liked_songs(self.mock_state)
+        self.assertIn("♥ Favorite Song", self.get_output())
+
+    def test_case_17_show_liked_missing_from_lib(self):
+        """Test Case 17: Show liked song missing from Library."""
+        path = "/music/deleted.mp3"
+        self.mock_state.liked_tracks = {path}
+        self.mock_state.library_tracks = [MockTrack("/music/other.mp3")]
+
+        player_metrics.show_liked_songs(self.mock_state)
+        self.assertIn("(Liked songs not found in current library scan)", self.get_output())
+
+    def test_case_18_show_liked_no_display_name(self):
+        """Test Case 18: Show liked songs song in Library with a missing display name."""
+        path = "/music/unnamed.mp3"
+        self.mock_state.liked_tracks = {path}
+        self.mock_state.library_tracks = [MockTrack(path, None)]
+
+        player_metrics.show_liked_songs(self.mock_state)
+        self.assertIn("♥ Unknown Title", self.get_output())
