@@ -18,3 +18,9 @@ Status:
     playing.            [property S_PLAY]
     paused.             [property S_PAUSE]
     stopped.            [property S_STOP]
+
+Library:
+    invalid_library.    [property L_BAD]
+    empty_library.      [if F_LIST] [property L_EMPTY]
+    one_track.          [if F_LIST] [property L_ONE]
+    many_tracks.        [if F_LIST] [property L_MANY]
