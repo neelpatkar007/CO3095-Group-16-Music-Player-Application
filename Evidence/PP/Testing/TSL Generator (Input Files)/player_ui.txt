@@ -5,3 +5,7 @@ Function:
     progress.           [property F_PROG]
     progress_bar.       [property F_BAR]
     playlist.           [property F_LIST]
+
+State:
+    invalid.            [property ST_BAD]
+    valid.              [property ST_OK]
