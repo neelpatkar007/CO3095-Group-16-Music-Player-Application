@@ -1,0 +1,5 @@
+# TSL input for music_player.player_audio
+Function:
+    change_volume.          [property F_CHANGE]
+    toggle_mute.            [property F_TOGGLE]
+    handle_mute_command.    [property F_HANDLE]
