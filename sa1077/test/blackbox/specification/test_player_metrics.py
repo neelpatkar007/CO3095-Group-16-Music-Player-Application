@@ -114,3 +114,24 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
 
         player_metrics.show_liked_songs(self.mock_state)
         self.assertIn("[metrics] Error: Library data corrupted.", self.get_output())
+
+    def test_case_10_current_track_none(self):
+        """Test Case 10: Current playing track is None."""
+        self.mock_state.current_track = None
+
+        player_metrics.toggle_like(self.mock_state)
+        self.assertIn("[metrics] No track playing.", self.get_output())
+
+    def test_case_11_track_no_path(self):
+        """Test Case 11: Current playing rrack object has no path."""
+        self.mock_state.current_track = MagicMock(spec=[])
+
+        player_metrics.toggle_like(self.mock_state)
+        self.assertIn("[metrics] Error: Track has no valid path.", self.get_output())
+
+    def test_case_12_track_empty_path(self):
+        """Test Case 12: Current playing Track path is empty string."""
+        self.mock_state.current_track = MockTrack("")
+
+        player_metrics.toggle_like(self.mock_state)
+        self.assertIn("[metrics] Error: Track path is empty.", self.get_output())
