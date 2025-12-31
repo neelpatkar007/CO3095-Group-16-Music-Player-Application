@@ -28,3 +28,9 @@ Library:
 Titles:
     all_present.        [property T_OK]
     some_missing.       [if L_MANY] [property T_MISS]
+
+CurrentInList:
+    none.               [property C_NONE]
+    in_list.            [if L_ONE] [property C_IN]
+    in_list.            [if L_MANY] [property C_IN]
+    not_in_list.        [if L_MANY] [property C_OUT]
