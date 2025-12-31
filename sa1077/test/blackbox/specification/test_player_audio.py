@@ -61,3 +61,39 @@ class TestPlayerAudioSpec(unittest.TestCase):
         self.assertIsNone(self.state.saved_volume)
         self.state.audio_engine.set_muted.assert_called_with(False)
         self.state.audio_engine.set_volume.assert_called_with(20)
+
+    # Toggle Mute
+
+    def test_toggle_mute_spec(self):
+        """
+        Expected Result: Returns on None and otherwise toggles backend saves or restores volume.
+        Actual Result:
+            PASSED [100%][audio] Muted
+            [audio] Unmuted (volume back to 60%)
+        """
+        # State None
+        player_audio.toggle_mute(None)
+
+        # Mute
+        self.state.is_muted = False
+        self.state.volume = 60
+
+        player_audio.toggle_mute(self.state)
+
+        self.assertTrue(self.state.is_muted)
+        self.assertEqual(self.state.saved_volume, 60)
+        self.state.audio_engine.set_muted.assert_called_with(True)
+        self.state.audio_engine.set_volume.assert_called_with(0)
+
+        # Unmute
+        # Setup muted state
+        self.state.is_muted = True
+        self.state.saved_volume = 60
+        self.state.volume = 0
+
+        player_audio.toggle_mute(self.state)
+
+        self.assertFalse(self.state.is_muted)
+        self.assertEqual(self.state.volume, 60)  # Restore Volume
+        self.state.audio_engine.set_muted.assert_called_with(False)
+        self.state.audio_engine.set_volume.assert_called_with(60)
