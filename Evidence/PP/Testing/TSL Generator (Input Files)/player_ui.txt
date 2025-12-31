@@ -38,3 +38,8 @@ CurrentInList:
 Track:
     invalid_track.      [if ST_BAD] [property TR_BAD]
     valid_track.        [if ST_OK]  [property TR_OK]
+
+State:
+    invalid.            [if F_PROG] [single]
+    invalid.            [if F_BAR]  [single]
+    valid.              [property ST_OK]
