@@ -98,3 +98,19 @@ class TestPlayerMetricsSpecs(unittest.TestCase):
 
         player_metrics.show_top_tracks(self.mock_state)
         self.assertIn("[metrics] No play history yet.", self.get_output())
+
+    def test_case_08_library_tracks_missing(self):
+        """Test Case 8: Library tracks attribute missing or None."""
+        del self.mock_state.library_tracks
+        self.mock_state.liked_tracks = {'/some/path'}
+
+        player_metrics.show_liked_songs(self.mock_state)
+        self.assertIn("[metrics] Error: Library tracks missing.", self.get_output())
+
+    def test_case_09_library_tracks_corrupted(self):
+        """Test Case 9: Library tracks attribute corrupted."""
+        self.mock_state.library_tracks = "Not A List"
+        self.mock_state.liked_tracks = {'/some/path'}
+
+        player_metrics.show_liked_songs(self.mock_state)
+        self.assertIn("[metrics] Error: Library data corrupted.", self.get_output())
