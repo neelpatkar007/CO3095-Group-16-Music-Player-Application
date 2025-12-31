@@ -59,3 +59,5 @@ Input:
 [if Function = F_CHANGE] Input = s0
 [if Function = F_CHANGE] Input = s1
 [if Function = F_CHANGE] Input = s50
+
+[if Function = F_TOGGLE] Input = empty
