@@ -51,3 +51,17 @@ class TestPlayerUISpec(unittest.TestCase):
         self.mock_state.current_track = None
         player_ui.print_now_playing(self.mock_state)
         self.assertIn("[ui] No track selected.", self.get_output())
+
+    @patch("music_player.player_ui.render_progress_bar", return_value="|||...")
+    @patch("music_player.player_ui.get_progress", return_value=(30, 60))
+    @patch("music_player.player_ui.format_mm_ss", side_effect=["00:30", "01:00"])
+    def test_print_progress_features(self, mock_fmt, mock_prog, mock_render):
+        """
+        Expected Result: Prints progress timestamps and progress bar.
+        Actual Result: Passed.
+        """
+        player_ui.print_progress(self.mock_state)
+        self.assertIn("[ui] Progress: 00:30/01:00", self.get_output())
+
+        player_ui.print_progress_bar(self.mock_state)
+        self.assertIn("[ui] |||...", self.get_output())
