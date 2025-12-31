@@ -43,3 +43,9 @@ State:
     invalid.            [if F_PROG] [single]
     invalid.            [if F_BAR]  [single]
     valid.              [property ST_OK]
+
+Status:
+    stopped.            [if TR_BAD] [property S_STOP]
+    playing.            [if TR_OK]  [property S_PLAY]
+    paused.             [if TR_OK]  [property S_PAUSE]
+    stopped.            [if TR_OK]  [property S_STOP]
