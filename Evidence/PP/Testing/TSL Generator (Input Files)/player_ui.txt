@@ -24,3 +24,7 @@ Library:
     empty_library.      [if F_LIST] [property L_EMPTY]
     one_track.          [if F_LIST] [property L_ONE]
     many_tracks.        [if F_LIST] [property L_MANY]
+
+Titles:
+    all_present.        [property T_OK]
+    some_missing.       [if L_MANY] [property T_MISS]
