@@ -81,5 +81,35 @@ class TestPlayerUISpec(unittest.TestCase):
             self.mock_state.library_tracks = lib
             player_ui.print_playlist_with_indicator(self.mock_state)
             self.assertIn(error_msg, self.get_output())
+            self.captured_output.truncate(0); self.captured_output.seek(0)
+
+    def test_playlist_indicators_and_single_note(self):
+            """
+            Expected Result: Prints note for single track libraries and correct indicators for track states.
+            Actual Result: Passed
+            """
+            t1, t2 = MagicMock(spec=Track, display_name="S1"), MagicMock(spec=Track, display_name="S2")
+            self.mock_state.library_tracks = [t1]
+
+            # Single track note
+            player_ui.print_playlist_with_indicator(self.mock_state)
+            self.assertIn("Note: Only one track", self.get_output())
             self.captured_output.truncate(0);
             self.captured_output.seek(0)
+
+            # Indicator tests
+            self.mock_state.library_tracks = [t1, t2]
+            self.mock_state.current_track = t1
+
+            indicator_map = [(True, False, "▶"), (False, True, "‖"), (False, False, "•")]
+            for playing, paused, symbol in indicator_map:
+                self.mock_state.is_playing = playing
+                self.mock_state.is_paused = paused
+
+                player_ui.print_playlist_with_indicator(self.mock_state)
+                self.assertIn(f"{symbol} 01: S1", self.get_output())
+                self.captured_output.truncate(0);
+                self.captured_output.seek(0)
+
+    if __name__ == '__main__':
+        unittest.main()
