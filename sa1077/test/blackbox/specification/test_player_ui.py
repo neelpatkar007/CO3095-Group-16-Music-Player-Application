@@ -65,3 +65,21 @@ class TestPlayerUISpec(unittest.TestCase):
 
         player_ui.print_progress_bar(self.mock_state)
         self.assertIn("[ui] |||...", self.get_output())
+
+    def test_playlist_warnings(self):
+        """
+        Expected Result: Prints appropriate warnings for all invalid playlist states.
+        Actual Result: Passed.
+        """
+        scenarios = [
+            ("Not a list", "invalid state"),
+            (["Not a Track"], "invalid state"),
+            ([], "empty"),
+            ([MagicMock(spec=Track, display_name="")], "missing titles")
+        ]
+        for lib, error_msg in scenarios:
+            self.mock_state.library_tracks = lib
+            player_ui.print_playlist_with_indicator(self.mock_state)
+            self.assertIn(error_msg, self.get_output())
+            self.captured_output.truncate(0);
+            self.captured_output.seek(0)
