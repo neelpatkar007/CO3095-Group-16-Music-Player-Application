@@ -46,3 +46,18 @@ class TestPlayerAudioSpec(unittest.TestCase):
         with patch("builtins.print") as m_print:
             player_audio.change_volume(self.state, "150")
             m_print.assert_called_with("[audio] Error: Volume must be between 0 and 100.")
+
+        # Valid Set
+        player_audio.change_volume(self.state, "75")
+        self.assertEqual(self.state.volume, 75)
+        self.state.audio_engine.set_volume.assert_called_with(75)
+
+        # Valid Set while Muted
+        self.state.is_muted = True
+        self.state.saved_volume = 30
+        player_audio.change_volume(self.state, "20")
+
+        self.assertFalse(self.state.is_muted)
+        self.assertIsNone(self.state.saved_volume)
+        self.state.audio_engine.set_muted.assert_called_with(False)
+        self.state.audio_engine.set_volume.assert_called_with(20)
