@@ -51,3 +51,27 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         self.state.shuffle_active = False
         self.state.position_seconds = 0.0
         self.state.playlists = []
+
+    # Helper Function Tests
+
+    def test_get_tracks_safe(self):
+        """
+        Test _get_tracks_safe helper.
+        Branches: List, None, Set, Invalid
+        """
+        # Normal List
+        self.assertEqual(player_queue._get_tracks_safe(self.state), self.state.tracks)
+
+        # None
+        self.state.tracks = None
+        self.assertEqual(player_queue._get_tracks_safe(self.state), [])
+
+        # Set
+        self.state.tracks = {"track1", "track2"}
+        result = player_queue._get_tracks_safe(self.state)
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 2)
+
+        # Invalid Type
+        self.state.tracks = 123
+        self.assertEqual(player_queue._get_tracks_safe(self.state), [])
