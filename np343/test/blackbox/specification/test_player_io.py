@@ -26,3 +26,5 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
         with redirect_stdout(buf):
             func(*args, **kwargs)
         return buf.getvalue()
+
+    # Import Song Tests
