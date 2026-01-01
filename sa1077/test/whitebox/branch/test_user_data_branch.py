@@ -77,3 +77,25 @@ class TestUserDataBranch(unittest.TestCase):
         with patch("builtins.print") as mock_print:
             user_data.advanced_search(self.mock_state, "NonExistentThing")
             mock_print.assert_any_call("[search] No matches found.")
+
+    # rate_song
+
+    def test_rate_song_branches(self):
+        # No track
+        self.mock_state.current_track = None
+        user_data.rate_song(self.mock_state, "5")
+
+        # Set valid track
+        self.mock_state.current_track = MockTrack("/path")
+
+        # Rating out of bounds
+        user_data.rate_song(self.mock_state, "0")
+        user_data.rate_song(self.mock_state, "6")
+
+        # Invalid type
+        user_data.rate_song(self.mock_state, "five")
+
+        # Success Branch
+        with patch("music_player.user_data._save_current_to_profile"):
+            user_data.rate_song(self.mock_state, "5")
+            self.assertEqual(self.mock_state.song_ratings["/path"], 5)
