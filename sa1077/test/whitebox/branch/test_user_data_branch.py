@@ -51,3 +51,29 @@ class TestUserDataBranch(unittest.TestCase):
         with patch("music_player.user_data._save_profiles"):
             user_data.create_profile(self.mock_state, "new_one")
             self.assertIn("new_one", self.mock_state.profiles)
+
+    # advanced_search
+
+    @patch("music_player.time_utils.parse_timecode", return_value=60)
+    @patch("music_player.time_utils.format_mm_ss", return_value="01:00")
+    def test_advanced_search_branches(self, mock_fmt, mock_parse):
+        t1 = MockTrack("/p1", artist="ArtistA", title="TitleA", duration=120)
+        t2 = MockTrack("/p2", artist="ArtistB", title="TitleB", duration=30)
+        self.mock_state.library_tracks = [t1, t2]
+
+        # Artist
+        user_data.advanced_search(self.mock_state, "artist:ArtistA")
+
+        # Duration >
+        user_data.advanced_search(self.mock_state, "duration>0:59")
+
+        # Duration <
+        user_data.advanced_search(self.mock_state, "duration<0:59")
+
+        # Normal
+        user_data.advanced_search(self.mock_state, "TitleB")
+
+        # No matches
+        with patch("builtins.print") as mock_print:
+            user_data.advanced_search(self.mock_state, "NonExistentThing")
+            mock_print.assert_any_call("[search] No matches found.")
