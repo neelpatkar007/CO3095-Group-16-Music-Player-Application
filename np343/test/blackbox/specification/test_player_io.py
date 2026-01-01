@@ -139,3 +139,20 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
                 self.assertIn("already exists", out)
             finally:
                 player_io.MUSIC_DIR = old_music_dir
+
+    # Update Metadata Tests
+
+    def test_update_metadata_invalid_index_prints_error(self):
+        """
+        Expected Result: Prints error for non integer or malformed index strings.
+        Actual Result: Passed.
+        """
+        # Put one track in library
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        track.title = "Old"
+        track.artist = "OldArtist"
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "abc", "title", "New")
+        self.assertIn("[edit] Invalid song number.", out)
