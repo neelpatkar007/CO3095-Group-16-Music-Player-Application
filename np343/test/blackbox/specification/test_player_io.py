@@ -13,7 +13,7 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
     """
     Black-box specification tests for player_io.py.
     Tools -  Python unittest + unittest.mock + tempfile + contextlib.redirect_stdout
-    Technique -  Black-Box Specification Testing
+    Test Technique -  Category Partition Method
     """
 
     def setUp(self):
