@@ -46,3 +46,51 @@ class TestUserDataStatement(unittest.TestCase):
         """
         res = user_data._serialize_current_state(None)
         self.assertEqual(res, {})
+
+    def test_helpers_save_profiles_error(self):
+        """
+        Expected Result: Catches the OSError/Exception and prints an error message.
+        Actual Result: PASSED [100%][profile] Error saving: Disk full
+        """
+        with patch("builtins.open", mock_open()) as m:
+            m.side_effect = OSError("Disk full")
+            user_data._save_profiles(self.mock_state)
+
+    def test_helpers_save_current_none(self):
+        """
+        Expected Result: Returns immediately without error when state is None.
+        Actual Result: Passed.
+        """
+        user_data._save_current_to_profile(None)
+
+    def test_helpers_apply_data_none_or_empty(self):
+        """
+        Expected Result: If state is None then returns and when data is empty liked_tracks set and playlists list empty.
+        Actual Result: Passed.
+        """
+        # State None
+        user_data._apply_profile_data(None, {})
+
+        # Data Empty
+        user_data._apply_profile_data(self.mock_state, {})
+        self.assertEqual(self.mock_state.liked_tracks, set())
+        self.assertEqual(self.mock_state.playlists, [])
+
+    def test_load_profiles_not_exists(self):
+        """
+        Expected Result: Detected that file does not exist and calls _save_profiles to create a default.
+        Actual Result: Passed.
+        """
+        with patch("pathlib.Path.exists", return_value=False):
+            with patch("music_player.user_data._save_profiles") as mock_save:
+                user_data.load_profiles_index(self.mock_state)
+                mock_save.assert_called_once()
+
+    def test_load_profiles_exception(self):
+        """
+        Expected Result: Catches JSONDecodeError and prints error message.
+        Actual Result: PASSED [100%][profile] Error loading profiles: Expecting value: line 1 column 1 (char 0)
+        """
+        with patch("pathlib.Path.exists", return_value=True):
+            with patch("builtins.open", mock_open(read_data="INVALID JSON")):
+                user_data.load_profiles_index(self.mock_state)
