@@ -13,3 +13,13 @@ class MockTrack:
         self.title = title
         self.artist = artist
         self.duration_seconds = duration
+
+class TestLibrarySearchScanBranch(unittest.TestCase):
+    """
+    White-Box Branch Tests for library_search_scan.py.
+    Testing Tool: Python unittest + unittest.mock
+    Test Technique: White-Box Branch Testing
+    """
+    def setUp(self):
+        self.mock_state = MagicMock(spec=PlayerState)
+        self.mock_state.library_tracks = []
