@@ -24,3 +24,14 @@ class TestLibrarySearchScanStatement(unittest.TestCase):
         self.mock_state = MagicMock(spec=PlayerState)
         self.mock_state.library_tracks = []
         self.mock_state.tracks = []
+
+    def test_print_tracks_table_basic(self):
+        """
+        Expected Result: Prints table header and one row.
+        Actual Result:
+        No  Title                           Artist                  Time
+        -----------------------------------------------------------------
+          1  Song A                          Artist A               02:00
+        """
+        tracks = [MockTrack("/a/b.mp3", "Song A", "Artist A", 120)]
+        library_search_scan._print_tracks_table(tracks)
