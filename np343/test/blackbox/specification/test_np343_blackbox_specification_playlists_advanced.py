@@ -5,6 +5,12 @@ from types import SimpleNamespace
 import music_player.playlists_advanced as sut
 from music_player.playlist_model import Playlist
 
+"""
+   Black-box specification tests for playlists_advanced.py.
+   Tools - pytest
+   Test Technique - Category Partition Method
+   Source: playlistAdvanced.txt
+"""
 
 def make_track(title="T", artist="A", filename="x.mp3", dur=180.0):
     return SimpleNamespace(
