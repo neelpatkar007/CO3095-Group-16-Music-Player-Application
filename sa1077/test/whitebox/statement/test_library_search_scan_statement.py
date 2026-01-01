@@ -35,3 +35,16 @@ class TestLibrarySearchScanStatement(unittest.TestCase):
         """
         tracks = [MockTrack("/a/b.mp3", "Song A", "Artist A", 120)]
         library_search_scan._print_tracks_table(tracks)
+
+    def test_search_library_match(self):
+        """
+        Expected Result: Finds match and prints results table.
+        Actual Result:
+        [lib] Search results for 'love':
+         No  Title                           Artist                  Time
+        -----------------------------------------------------------------
+          1  Love Song                       The Band               03:20
+        """
+        t1 = MockTrack("/music/song1.mp3", "Love Song", "The Band", 200)
+        self.mock_state.library_tracks = [t1]
+        library_search_scan.search_library(self.mock_state, "love")
