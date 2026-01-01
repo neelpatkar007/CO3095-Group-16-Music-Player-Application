@@ -20,3 +20,9 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
         self.state = MagicMock(spec=PlayerState)
         self.state.library_tracks = []
         self.state.tracks = []
+
+    def _capture_prints(self, func, *args, **kwargs) -> str:
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            func(*args, **kwargs)
+        return buf.getvalue()
