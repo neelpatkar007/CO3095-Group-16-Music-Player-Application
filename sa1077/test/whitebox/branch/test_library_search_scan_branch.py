@@ -43,3 +43,43 @@ class TestLibrarySearchScanBranch(unittest.TestCase):
         """
         tracks = [MockTrack("/a.mp3"), None]
         library_search_scan._print_tracks_table(tracks)
+
+    # search_library Branches
+
+    def test_search_library_invalid_inputs(self):
+        """
+        Expected Result: Returns early if state is None or query is empty.
+        Actual Result:
+            [lib] Usage: /search <text>
+            [lib] Usage: /search <text>
+        """
+        library_search_scan.search_library(None, "query")
+        library_search_scan.search_library(self.mock_state, "")
+        library_search_scan.search_library(self.mock_state, "   ")
+
+    def test_search_library_matching_branches(self):
+        """
+        Expected Result: Matches query against title, artist, or filename, skipping invalid tracks.
+        Actual Result:
+            [lib] Search results for 'super':
+             No  Title                           Artist                  Time
+            -----------------------------------------------------------------
+              1  Super Match                     Nobody                 01:00
+              2  Boring                          Super Star             01:00
+        """
+        t_none = None
+        t_title = MockTrack("/1.mp3", title="Super Match", artist="Nobody")
+        t_artist = MockTrack("/2.mp3", title="Boring", artist="Super Star")
+        t_file = MockTrack("/super_song.mp3", title="Boring", artist="Nobody")
+        t_no_match = MockTrack("/other.mp3", title="Boring", artist="Nobody")
+
+        self.mock_state.library_tracks = [t_none, t_title, t_artist, t_file, t_no_match]
+        library_search_scan.search_library(self.mock_state, "super")
+
+    def test_search_library_no_results(self):
+        """
+        Expected Result: Prints "No matches found" when no tracks match the query.
+        Actual Result: PASSED [100%][lib] No matches found.
+        """
+        self.mock_state.library_tracks = [MockTrack("/a.mp3", title="A")]
+        library_search_scan.search_library(self.mock_state, "Z")
