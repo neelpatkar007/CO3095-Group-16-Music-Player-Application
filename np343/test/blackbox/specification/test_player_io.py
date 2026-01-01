@@ -70,3 +70,15 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
             out = self._capture_prints(player_io.import_song, self.state, str(src))
             self.assertIn("[import] Error: File is empty.", out)
+
+    def test_import_song_unsupported_extension_rejected(self):
+        """
+        Expected Result : Prints error if file extension is not in the supported list.
+        Actual Result  : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "notes.txt"
+            src.write_bytes(b"hello")
+
+            out = self._capture_prints(player_io.import_song, self.state, str(src))
+            self.assertIn("[import] Error: Unsupported file type.", out)
