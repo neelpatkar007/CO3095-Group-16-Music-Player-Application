@@ -107,3 +107,12 @@ class TestPlayerShortcutsSpec(unittest.TestCase):
         self.state.volume = 0
         player_shortcuts.handle_keypress(self.state, "-")
         self.assertEqual(self.state.volume, 0)
+
+    def test_handle_mute(self):
+        """
+        Expected Result : Calls player_audio.toggle_mute() to handle mute state logic.
+        Actual Result : Passed. Function call verified.
+        """
+        with patch("music_player.player_audio.toggle_mute") as mock_mute:
+            player_shortcuts.handle_keypress(self.state, "m")
+            mock_mute.assert_called_once()
