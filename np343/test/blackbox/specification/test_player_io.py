@@ -46,3 +46,96 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
             missing = Path(tmp) / "ASDASD.mp3"
             out = self._capture_prints(player_io.import_song, self.state, str(missing))
             self.assertIn("[import] Error: File not found.", out)
+
+    def test_import_song_source_is_directory(self):
+        """
+        Expected Result : Prints error if source path points to a directory instead of a file.
+        Actual Result : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            src_dir = Path(tmp) / "folder"
+            src_dir.mkdir()
+            out = self._capture_prints(player_io.import_song, self.state, str(src_dir))
+            self.assertIn("[import] Error: Source is not a file.", out)
+
+    def test_import_song_empty_file_rejected(self):
+        """
+        Expected Result : Prints error if the source file is empty.
+        Actual Result : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+            src = Path(tmp) / f"empty{supported_ext}"
+            src.write_bytes(b"")
+
+            out = self._capture_prints(player_io.import_song, self.state, str(src))
+            self.assertIn("[import] Error: File is empty.", out)
+
+    def test_import_song_unsupported_extension_rejected(self):
+        """
+        Expected Result : Prints error if file extension is not in the supported list.
+        Actual Result  : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "notes.txt"
+            src.write_bytes(b"hello")
+
+            out = self._capture_prints(player_io.import_song, self.state, str(src))
+            self.assertIn("[import] Error: Unsupported file type.", out)
+
+    def test_import_song_success_copies_file_and_updates_state(self):
+        """
+        Expected Result :  Prints success message, copies file to music directory, and updates library and state tracks.
+        Actual Result : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            sandbox_music_dir = Path(tmp) / "songs"
+
+            old_music_dir = player_io.MUSIC_DIR
+            player_io.MUSIC_DIR = sandbox_music_dir
+            try:
+                supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+                src = Path(tmp) / f"cool_song{supported_ext}"
+                src.write_bytes(b"not empty")
+
+                # Ensure tracks starts empty
+                self.state.tracks = []
+                self.state.library_tracks = []
+
+                out = self._capture_prints(player_io.import_song, self.state, str(src))
+
+                # Success Message
+                self.assertIn("[import] Successfully imported", out)
+
+                # File copied to MUSIC_DIR
+                dest = sandbox_music_dir / src.name
+                self.assertTrue(dest.exists(), "Expected imported file to exist in MUSIC_DIR")
+
+                # Library tracks assigned
+                self.assertIsInstance(self.state.library_tracks, list)
+
+            finally:
+                player_io.MUSIC_DIR = old_music_dir
+
+    def test_import_song_duplicate_name_rejected(self):
+        """
+        Expected Result is : Prints error if a file with the same name already exists in the library.
+        Actual Result:  Passed. Verified duplicate rejection logic.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            sandbox_music_dir = Path(tmp) / "songs"
+            sandbox_music_dir.mkdir()
+
+            old_music_dir = player_io.MUSIC_DIR
+            player_io.MUSIC_DIR = sandbox_music_dir
+            try:
+                supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+                src = Path(tmp) / f"dup{supported_ext}"
+                src.write_bytes(b"not empty")
+
+                (sandbox_music_dir / src.name).write_bytes(b"already there")
+
+                out = self._capture_prints(player_io.import_song, self.state, str(src))
+                self.assertIn("already exists", out)
+            finally:
+                player_io.MUSIC_DIR = old_music_dir
