@@ -167,3 +167,32 @@ class TestUserDataStatement(unittest.TestCase):
         user_data.advanced_search(self.mock_state, "artist:Band")
         user_data.advanced_search(self.mock_state, "duration>1:00")
         user_data.advanced_search(self.mock_state, "duration<1:00")
+
+    def test_rate_song_errors(self):
+        """
+        Expected Result: Return on State None, print "No song playing" when no track is playing, print error when rating not number .
+        Actual Result:
+            PASSED [100%][rate] No song playing.
+            [rate] No song playing.
+            [rate] Rating must be a whole number 1-5.
+            [rate] Rating must be a whole number 1-5.
+        """
+        # Invalid state
+        user_data.rate_song(None, "5")
+
+        # No track playing
+        self.mock_state.current_track = None
+        user_data.rate_song(self.mock_state, "5")
+
+        # Invalid input
+        self.mock_state.current_track = MockTrack("/p.mp3")
+        user_data.rate_song(self.mock_state, "not_a_number")
+
+        # Number out of range
+        user_data.rate_song(self.mock_state, "6")
+
+        # Track has no path
+        bad_track = MagicMock()
+        del bad_track.path
+        self.mock_state.current_track = bad_track
+        user_data.rate_song(self.mock_state, "3")
