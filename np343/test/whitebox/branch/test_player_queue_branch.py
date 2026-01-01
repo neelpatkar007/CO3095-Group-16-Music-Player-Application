@@ -142,3 +142,35 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         mock_rand.return_value = 2
         player_queue.next_track(self.state)
         self.assertEqual(self.state.current_index, 2)
+
+    def test_prev_track_logic(self):
+        """
+        Test previous_track navigation.
+        Branches: Sequential, Start of a List, Loop All
+        """
+        # Standard Prev
+        self.state.current_index = 1
+        player_queue.previous_track(self.state)
+        self.assertEqual(self.state.current_index, 0)
+
+        # Start of Playlist
+        self.state.current_index = 0
+        player_queue.previous_track(self.state)
+        self.assertEqual(self.state.current_index, 0)
+
+        # Loop All
+        self.state.loop_mode = "all"
+        self.state.current_index = 0
+        player_queue.previous_track(self.state)
+        self.assertEqual(self.state.current_index, 2)
+
+    def test_prev_track_shuffle_history(self):
+        """
+        Test previous_track with Shuffle active.
+        Branch: Use History Stack
+        """
+        self.state.shuffle_active = True
+        self.state.history = [self.track2]  # Last played was track 2
+
+        player_queue.previous_track(self.state)
+        self.assertEqual(self.state.current_index, 1)
