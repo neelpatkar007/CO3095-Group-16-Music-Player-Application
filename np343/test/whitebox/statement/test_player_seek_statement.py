@@ -64,3 +64,38 @@ class TestPlayerSeekStatement(unittest.TestCase):
 
         # Verify seek called with 5.0
         self.state.audio_engine.seek.assert_called_with(5.0)
+
+    def test_seek_to_state_none(self):
+        """
+        Expected Result: Returns None immediately.
+        Actual Result: Passed.
+        """
+        player_seek.seek_to(None, 10.0)
+
+    def test_seek_to_track_access_error(self):
+        """
+        Expected Result: Prints error message and returns.
+        Actual Result: Passed.
+        """
+
+        class BrokenState:
+            @property
+            def current_track(self):
+                raise TypeError("Bad type")
+
+        broken_state = BrokenState()
+
+        with patch("builtins.print") as mock_print:
+            player_seek.seek_to(broken_state, 10.0)
+            mock_print.assert_called_with("[seek] Error accessing track state.")
+
+    def test_seek_to_engine_missing(self):
+        """
+        Expected Result: Updates state position but doesn't crash when calling .seek().
+        Actual Result: Passed.
+        """
+        empty_state = MagicMock(spec=object)
+        empty_state.current_track = MagicMock(spec=Track)
+        empty_state.current_track.duration_seconds = 200.0
+
+        player_seek.seek_to(empty_state, 10.0)
