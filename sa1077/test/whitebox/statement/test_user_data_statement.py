@@ -196,3 +196,25 @@ class TestUserDataStatement(unittest.TestCase):
         del bad_track.path
         self.mock_state.current_track = bad_track
         user_data.rate_song(self.mock_state, "3")
+
+        def test_view_rated_errors(self):
+            """
+            Expected Result: Return when State is None, print "No songs rated yet" for empty ratings, catch exception during sorting.
+            Actual Result:
+                PASSED [100%][rate] No songs rated yet.
+                [rate] No songs rated yet.
+                --- Rated Songs ---
+            """
+            # Invalid state
+            user_data.view_rated(None)
+
+            # Empty ratings
+            self.mock_state.song_ratings = {}
+            user_data.view_rated(self.mock_state)
+
+            # Sorting error
+            self.mock_state.song_ratings = {"/path": "not_int"}
+            user_data.view_rated(self.mock_state)
+
+    if __name__ == '__main__':
+        unittest.main()
