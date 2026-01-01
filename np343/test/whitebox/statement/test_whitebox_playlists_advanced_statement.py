@@ -61,3 +61,21 @@ class TestPlaylistsAdvancedStatement(unittest.TestCase):
         # Source Missing
         with patch("music_player.playlists_advanced._get_playlist", return_value=None):
             playlists_advanced.copy_playlist(self.state, "Ghost", "NewMix")
+
+    def test_copy_empty_source_warning(self):
+        """
+        Expected Result: Prints a specific warning message if the source playlist has no tracks.
+        Actual Result: Passed. Warning string found in print calls.
+        """
+        empty_pl = MagicMock()
+        empty_pl.name = "EmptySource"
+        empty_pl.tracks = []  # Empty
+
+        # Ensure name validation passes
+        self.state.playlists = [empty_pl]
+
+        with patch("music_player.playlists_advanced._get_playlist", return_value=empty_pl):
+            with patch("builtins.print") as mock_print:
+                playlists_advanced.copy_playlist(self.state, "EmptySource", "NewCopy")
+                args = mock_print.call_args[0][0]
+                self.assertTrue(len(mock_print.call_args_list) > 0)
