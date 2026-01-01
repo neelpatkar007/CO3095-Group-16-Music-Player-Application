@@ -10,3 +10,10 @@ class TestPlayerSeekStatement(unittest.TestCase):
     Testing Tool: Python unittest + unittest.mock
     Test Technique: White-Box Statement Testing
     """
+
+    def setUp(self):
+        self.state = MagicMock(spec=PlayerState)
+        self.state.current_track = MagicMock(spec=Track)
+        self.state.current_track.duration_seconds = 200.0
+        self.state.position_seconds = 50.0
+        self.state.audio_engine = MagicMock()
