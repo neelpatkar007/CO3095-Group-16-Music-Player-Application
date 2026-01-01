@@ -156,3 +156,15 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
         out = self._capture_prints(player_io.update_metadata, self.state, "abc", "title", "New")
         self.assertIn("[edit] Invalid song number.", out)
+
+    def test_update_metadata_out_of_range_prints_error(self):
+        """
+        Expected Result: Prints error for numeric index that is out of bounds.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "99", "title", "New")
+        self.assertIn("[edit] Invalid song number.", out)
