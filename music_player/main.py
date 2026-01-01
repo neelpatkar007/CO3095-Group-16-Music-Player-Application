@@ -236,7 +236,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # SPRINT 3 COMMANDS
 
-    # S3-01: Shuffle (Sunny)
+    # S3-01: Shuffle (Sanil)
     elif base == "/shuffle":
         player_queue.toggle_shuffle(state)
 
