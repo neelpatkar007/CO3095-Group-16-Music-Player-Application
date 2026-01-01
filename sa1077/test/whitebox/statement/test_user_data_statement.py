@@ -131,3 +131,39 @@ class TestUserDataStatement(unittest.TestCase):
         user_data.switch_profile(None, "p1")  # Invalid state
         user_data.switch_profile(self.mock_state, "non_existent")  # Missing
         user_data.switch_profile(self.mock_state, "default")  # Already active
+
+    def test_advanced_search_invalid_state(self):
+        """
+        Expected Result: Prints error message.
+        Actual Result: PASSED [100%][search] Error: Invalid state.
+        """
+        user_data.advanced_search(None, "query")
+
+    def test_advanced_search_none_results(self):
+        """
+        Expected Result: Handles case where library_tracks is None by treating it as empty list.
+        Actual Result: PASSED [100%][search] No matches found.
+        """
+        self.mock_state.library_tracks = None
+        user_data.advanced_search(self.mock_state, "query")
+
+    @patch("music_player.time_utils.parse_timecode", return_value=100)
+    @patch("music_player.time_utils.format_mm_ss", return_value="01:40")
+    def test_advanced_search_branches(self, mock_fmt, mock_parse):
+        """
+        Expected Result: Filter correctly by artist, duration greater than, and duration less than.
+        Actual Result:
+            PASSED [100%][search] Found 1 matches:
+              1. Song A (01:40)
+            [search] Found 1 matches:
+              1. Song A (01:40)
+            [search] Found 1 matches:
+              1. Song B (01:40)
+        """
+        t1 = MockTrack("/path/1.mp3", artist="The Band", title="Song A", duration=200)
+        t2 = MockTrack("/path/2.mp3", artist="Solo Guy", title="Song B", duration=50)
+        self.mock_state.library_tracks = [t1, t2]
+
+        user_data.advanced_search(self.mock_state, "artist:Band")
+        user_data.advanced_search(self.mock_state, "duration>1:00")
+        user_data.advanced_search(self.mock_state, "duration<1:00")
