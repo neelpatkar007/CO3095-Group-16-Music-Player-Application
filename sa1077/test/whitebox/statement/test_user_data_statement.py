@@ -75,3 +75,22 @@ class TestUserDataStatement(unittest.TestCase):
         user_data._apply_profile_data(self.mock_state, {})
         self.assertEqual(self.mock_state.liked_tracks, set())
         self.assertEqual(self.mock_state.playlists, [])
+
+    def test_load_profiles_not_exists(self):
+        """
+        Expected Result: Detected that file does not exist and calls _save_profiles to create a default.
+        Actual Result: Passed.
+        """
+        with patch("pathlib.Path.exists", return_value=False):
+            with patch("music_player.user_data._save_profiles") as mock_save:
+                user_data.load_profiles_index(self.mock_state)
+                mock_save.assert_called_once()
+
+    def test_load_profiles_exception(self):
+        """
+        Expected Result: Catches JSONDecodeError and prints error message.
+        Actual Result: PASSED [100%][profile] Error loading profiles: Expecting value: line 1 column 1 (char 0)
+        """
+        with patch("pathlib.Path.exists", return_value=True):
+            with patch("builtins.open", mock_open(read_data="INVALID JSON")):
+                user_data.load_profiles_index(self.mock_state)
