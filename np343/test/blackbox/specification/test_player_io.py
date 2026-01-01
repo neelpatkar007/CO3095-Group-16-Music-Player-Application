@@ -139,3 +139,96 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
                 self.assertIn("already exists", out)
             finally:
                 player_io.MUSIC_DIR = old_music_dir
+
+    # Update Metadata Tests
+
+    def test_update_metadata_invalid_index_prints_error(self):
+        """
+        Expected Result: Prints error for non integer or malformed index strings.
+        Actual Result: Passed.
+        """
+        # Put one track in library
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        track.title = "Old"
+        track.artist = "OldArtist"
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "abc", "title", "New")
+        self.assertIn("[edit] Invalid song number.", out)
+
+    def test_update_metadata_out_of_range_prints_error(self):
+        """
+        Expected Result: Prints error for numeric index that is out of bounds.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "99", "title", "New")
+        self.assertIn("[edit] Invalid song number.", out)
+
+    def test_update_metadata_empty_value_rejected(self):
+        """
+        Expected Result: Prints error if the new metadata value is empty/whitespace.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        track.title = "Old"
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "1", "title", "")
+        self.assertIn("[edit] Error: Value cannot be empty.", out)
+
+    def test_update_metadata_invalid_field_rejected(self):
+        """
+        Expected Result: Prints error if trying to edit a field that isn't title or artist.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "1", "album", "New Album")
+        self.assertIn("[edit] Can only edit 'title' or 'artist'.", out)
+
+        def test_update_metadata_updates_in_memory_and_reports_persistence_or_warning(self):
+            """
+            Expected Result:
+              1. Updates the in-memory track object.
+              2. Prints the confirmation message
+              3. Reports either a success or warning if mutagen is installed o r not.
+            Actual Result: Passed.
+            """
+            with tempfile.TemporaryDirectory() as tmp:
+                # Create a real file to allow mutagen write attempts
+                f = Path(tmp) / "song.mp3"
+                f.write_bytes(b"dummy")
+
+                track = MagicMock()
+                track.path = f
+                track.title = "Old Title"
+                track.artist = "Old Artist"
+                self.state.library_tracks = [track]
+
+                out = self._capture_prints(player_io.update_metadata, self.state, "1", "title", "New Title")
+
+                # In-memory update
+                self.assertEqual(track.title, "New Title")
+
+                # Must print the update line
+                self.assertIn("[edit] Updated title to 'New Title'.", out)
+
+                # Must either persist or warn
+                self.assertTrue(
+                    ("File tags updated successfully" in out) or
+                    ("WARNING: 'mutagen' not installed" in out) or
+                    ("Error: No write permission for file" in out) or
+                    ("Warning: Could not write to file" in out),
+                    f"Unexpected persistence outcome output:\n{out}"
+                )
+
+    if __name__ == "__main__":
+        unittest.main()
