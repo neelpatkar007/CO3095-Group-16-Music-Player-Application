@@ -60,3 +60,27 @@ class TestPlayerShortcutsSpec(unittest.TestCase):
         with patch("music_player.player_core.stop") as mock_stop:
             player_shortcuts.handle_keypress(self.state, "s")
             mock_stop.assert_not_called()
+
+    def test_handle_volume_up(self):
+        """
+        Expected Result : Increases volume by 10 points. If volume would exceed 100, then it clamps to 100.
+        Actual Result : PASSED [100%][shortcuts] Volume up: 100%
+        """
+        # Normal increment
+        self.state.volume = 50
+        with patch("builtins.print") as mock_print:
+            player_shortcuts.handle_keypress(self.state, "+")
+            self.assertEqual(self.state.volume, 60)
+            # Verify print confirms new volume
+            args = mock_print.call_args[0][0]
+            self.assertIn("60%", args)
+
+        # Cap at a 100
+        self.state.volume = 95
+        player_shortcuts.handle_keypress(self.state, "+")
+        self.assertEqual(self.state.volume, 100)
+
+        # Already Max -  Loop
+        self.state.volume = 100
+        player_shortcuts.handle_keypress(self.state, "+")
+        self.assertEqual(self.state.volume, 100)
