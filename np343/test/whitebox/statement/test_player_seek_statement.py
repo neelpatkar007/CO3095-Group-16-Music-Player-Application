@@ -35,3 +35,32 @@ class TestPlayerSeekStatement(unittest.TestCase):
 
         self.assertEqual(pos, 0.0)
         self.assertIsNone(duration)
+
+    def test_render_progress_null_time(self):
+        """
+        Expected Result: Returns "[Time null]" string.
+        Actual Result: Passed.
+        """
+        self.state.current_track.duration_seconds = None
+        res = player_seek.render_progress_bar(self.state)
+        self.assertEqual(res, "[Time null]")
+
+    def test_nudge_state_none(self):
+        """
+        Expected Result: Returns None immediately.
+        Actual Result: Passed.
+        """
+        player_seek.nudge(None, 5.0)
+
+    def test_nudge_pos_invalid(self):
+        """
+        Expected Result: Defaults position to 0.0 and proceeds to seek.
+        Actual Result: Passed.
+        """
+        self.state.position_seconds = "invalid"  # Force invalid type
+
+        # Should default to 5.0
+        player_seek.nudge(self.state, 5.0)
+
+        # Verify seek called with 5.0
+        self.state.audio_engine.seek.assert_called_with(5.0)
