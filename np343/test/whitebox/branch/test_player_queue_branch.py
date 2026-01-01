@@ -206,3 +206,56 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         # None List
         self.state.tracks = None
         player_queue.next_track(self.state)
+
+    # Queue Management Commands
+
+    def test_add_to_queue(self):
+        """
+        Test /q.add command.
+        Branches: Happy Path, Corrupt State Recovery, Not Found
+        """
+        # Happy Path
+        player_queue.add_to_queue(self.state, "Song 2")
+        self.assertEqual(len(self.state.tracks), 4)
+
+        # Corrupt State
+        self.state.tracks = 123
+        player_queue.add_to_queue(self.state, "Song 1")
+        self.assertEqual(len(self.state.tracks), 1)
+
+        # Not Found
+        player_queue.add_to_queue(self.state, "NonExistent")
+
+    def test_remove_from_queue(self):
+        """
+        Test /q.remove command.
+        Branches: Remove by Index, Remove by Name
+        """
+        # Remove by Index
+        self.state.current_index = 1
+        player_queue.remove_from_queue(self.state, "1")  # Remove track at index 1
+        self.assertEqual(len(self.state.tracks), 2)
+        self.assertEqual(self.state.current_index, 0)
+
+        # Remove by Name
+        self.state.tracks = [self.track1, self.track2]
+        self.state.current_index = 1
+        player_queue.remove_from_queue(self.state, "Song 1")
+        self.assertEqual(len(self.state.tracks), 1)
+        self.assertEqual(self.state.current_index, 0)
+
+    def test_clear_queue(self):
+        """
+        Test /q.clear command.
+        Branches: Keep Current, Clear Empty, Clear Corrupt
+        """
+        # Keep Current Song
+        self.state.current_index = 1
+        player_queue.clear_queue(self.state)
+        self.assertEqual(len(self.state.tracks), 1)
+        self.assertEqual(self.state.tracks[0], self.track2)
+
+        # Clear Corrupt Type
+        self.state.tracks = 123  # Int forces reset
+        player_queue.clear_queue(self.state)
+        self.assertEqual(self.state.tracks, [])
