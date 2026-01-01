@@ -93,3 +93,52 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         self.state.tracks = pl.tracks
         player_queue._ensure_queue_decoupled(self.state)
         self.assertIsNot(self.state.tracks, pl.tracks)
+
+    # Next + Previous Track Tests
+
+    def test_next_track_logic(self):
+        """
+        Test next_track navigation.
+        Branches: Sequential, End of a List, Loop All, Loop One
+        """
+        # Standard Next
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 1)
+
+        # End of Playlist
+        self.state.current_index = 2
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 2)
+
+        # Loop All
+        self.state.loop_mode = "all"
+        self.state.current_index = 2
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 0)
+
+        # Loop One
+        self.state.loop_mode = "one"
+        self.state.current_index = 1
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 1)
+
+    @patch("random.randint")
+    def test_next_track_shuffle(self, mock_rand):
+        """
+        Test next_track with Shuffle active.
+        Branches: Shuffle n=2, Shuffle n>2
+        """
+        self.state.shuffle_active = True
+
+        # n=2
+        self.state.tracks = [self.track1, self.track2]
+        self.state.current_index = 0
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 1)
+
+        # n>2
+        self.state.tracks = [self.track1, self.track2, self.track3]
+        self.state.current_index = 0
+        mock_rand.return_value = 2
+        player_queue.next_track(self.state)
+        self.assertEqual(self.state.current_index, 2)
