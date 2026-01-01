@@ -181,3 +181,15 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
         out = self._capture_prints(player_io.update_metadata, self.state, "1", "title", "")
         self.assertIn("[edit] Error: Value cannot be empty.", out)
+
+    def test_update_metadata_invalid_field_rejected(self):
+        """
+        Expected Result: Prints error if trying to edit a field that isn't title or artist.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "1", "album", "New Album")
+        self.assertIn("[edit] Can only edit 'title' or 'artist'.", out)
