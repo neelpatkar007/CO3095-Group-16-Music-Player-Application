@@ -32,3 +32,18 @@ class TestPlaylistsAdvancedStatement(unittest.TestCase):
             res = playlists_advanced._get_playlist(self.state, "   ")
             self.assertIsNone(res)
             mock_print.assert_called()
+
+    def test_merge_playlists_source_missing(self):
+        """
+        Expected Result: Function returns early without crashing if the source playlist cannot be resolved.
+        Actual Result: Passed. Silent return after helper failure.
+        """
+        # Logic requires valid destination to reach source check
+        dest_pl = MagicMock()
+        dest_pl.name = "Dest"
+        self.state.playlists = [dest_pl]
+
+        # Force _get_playlist to return None
+        with patch("music_player.playlists_advanced._get_playlist", side_effect=[dest_pl, None]):
+            with patch("builtins.print") as mock_print:
+                playlists_advanced.merge_playlists(self.state, "Dest", "Missing")
