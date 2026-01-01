@@ -94,3 +94,28 @@ class TestUserDataStatement(unittest.TestCase):
         with patch("pathlib.Path.exists", return_value=True):
             with patch("builtins.open", mock_open(read_data="INVALID JSON")):
                 user_data.load_profiles_index(self.mock_state)
+
+    def test_create_profile_invalid_state(self):
+        """
+        Expected Result: Prints error message and returns.
+        Actual Result: PASSED [100%][profile] Error: Invalid state.
+        """
+        user_data.create_profile(None, "new")
+
+    def test_create_profile_invalid_names(self):
+        """
+        Expected Result: Prints error messages for empty name, reserved name, and duplicate name.
+        Actual Result:
+            PASSED [100%][profile] Error: Name cannot be empty.
+            [profile] 'default' is reserved.
+            [profile] Profile 'ex' already exists.
+        """
+        # Empty Name
+        user_data.create_profile(self.mock_state, "")
+
+        # Reserved Name
+        user_data.create_profile(self.mock_state, "default")
+
+        # Duplicate Name
+        self.mock_state.profiles = {"ex": {}}
+        user_data.create_profile(self.mock_state, "ex")
