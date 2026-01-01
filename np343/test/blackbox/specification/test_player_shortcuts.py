@@ -43,3 +43,20 @@ class TestPlayerShortcutsSpec(unittest.TestCase):
         with patch("music_player.player_core.pause") as mock_pause:
             player_shortcuts.handle_keypress(self.state, "p")
             mock_pause.assert_called_once()
+
+    def test_handle_stop(self):
+        """
+        Expected Result : Calls stop() only if playback is currently active. If already stopped do nothing.
+        Actual Result : Passed. Verified 'stop' is only called when is_playing is True.
+        """
+        # Playing to Stopped
+        self.state.is_playing = True
+        with patch("music_player.player_core.stop") as mock_stop:
+            player_shortcuts.handle_keypress(self.state, "s")
+            mock_stop.assert_called_once()
+
+        # Stopped
+        self.state.is_playing = False
+        with patch("music_player.player_core.stop") as mock_stop:
+            player_shortcuts.handle_keypress(self.state, "s")
+            mock_stop.assert_not_called()
