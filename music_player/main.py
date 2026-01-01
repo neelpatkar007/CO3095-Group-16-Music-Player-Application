@@ -89,7 +89,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_metrics.save_data(state)
         return False
 
-    # SPRINT 1 COMMANDS
+    # SPRINT 1 COMMANDS:
 
     # Standard Playback Controls
     if base == "/play":
@@ -151,6 +151,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
         player_help.print_help(topic)
 
     # SPRINT 2 COMMANDS:
+
     # Playlists basic (S2-01, S2-05, S2-06, S2-10)
     elif base == "/pl.new":
         name = " ".join(args) if args else ""
@@ -234,7 +235,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/scan":
         library_search_scan.rescan_for_new_tracks(state)
 
-    # SPRINT 3 COMMANDS
+
+    # SPRINT 3 COMMANDS:
 
     # S3-01: Shuffle (Sanil)
     elif base == "/shuffle":
@@ -293,7 +295,9 @@ def handle_command(state: PlayerState, command: str) -> bool:
         except (IndexError, ValueError):
             print("Usage: /sleep <minutes>")
 
-    # Sprint 4 Commands
+
+    # SPRINT 4 COMMANDS:
+
     # S4-04: Import Songs
     elif base == "/import":
         player_io.import_song(state, " ".join(args))
@@ -354,7 +358,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/profile":
         user_data.show_current_profile(state)
 
-    # Unknown command
+    # Unknown command message
     else:
         print("Unknown command. Try /help")
     return True
@@ -421,11 +425,14 @@ def main() -> None:
     finally:
         # S4-03: Save Resume State BEFORE stopping
         player_time.save_resume_state(state)
+
         # Stop background playback loop
         stop_event.set()
         playback_thread.join(timeout=1.0)
+
         # S4-01: Save settings to JSON file
         player_config.save_settings(state)
+
         # S4-07: Save current profile state
         user_data._save_current_to_profile(state)
 
