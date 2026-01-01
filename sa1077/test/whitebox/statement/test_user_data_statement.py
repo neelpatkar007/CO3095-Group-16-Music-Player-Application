@@ -131,3 +131,90 @@ class TestUserDataStatement(unittest.TestCase):
         user_data.switch_profile(None, "p1")  # Invalid state
         user_data.switch_profile(self.mock_state, "non_existent")  # Missing
         user_data.switch_profile(self.mock_state, "default")  # Already active
+
+    def test_advanced_search_invalid_state(self):
+        """
+        Expected Result: Prints error message.
+        Actual Result: PASSED [100%][search] Error: Invalid state.
+        """
+        user_data.advanced_search(None, "query")
+
+    def test_advanced_search_none_results(self):
+        """
+        Expected Result: Handles case where library_tracks is None by treating it as empty list.
+        Actual Result: PASSED [100%][search] No matches found.
+        """
+        self.mock_state.library_tracks = None
+        user_data.advanced_search(self.mock_state, "query")
+
+    @patch("music_player.time_utils.parse_timecode", return_value=100)
+    @patch("music_player.time_utils.format_mm_ss", return_value="01:40")
+    def test_advanced_search_branches(self, mock_fmt, mock_parse):
+        """
+        Expected Result: Filter correctly by artist, duration greater than, and duration less than.
+        Actual Result:
+            PASSED [100%][search] Found 1 matches:
+              1. Song A (01:40)
+            [search] Found 1 matches:
+              1. Song A (01:40)
+            [search] Found 1 matches:
+              1. Song B (01:40)
+        """
+        t1 = MockTrack("/path/1.mp3", artist="The Band", title="Song A", duration=200)
+        t2 = MockTrack("/path/2.mp3", artist="Solo Guy", title="Song B", duration=50)
+        self.mock_state.library_tracks = [t1, t2]
+
+        user_data.advanced_search(self.mock_state, "artist:Band")
+        user_data.advanced_search(self.mock_state, "duration>1:00")
+        user_data.advanced_search(self.mock_state, "duration<1:00")
+
+    def test_rate_song_errors(self):
+        """
+        Expected Result: Return on State None, print "No song playing" when no track is playing, print error when rating not number .
+        Actual Result:
+            PASSED [100%][rate] No song playing.
+            [rate] No song playing.
+            [rate] Rating must be a whole number 1-5.
+            [rate] Rating must be a whole number 1-5.
+        """
+        # Invalid state
+        user_data.rate_song(None, "5")
+
+        # No track playing
+        self.mock_state.current_track = None
+        user_data.rate_song(self.mock_state, "5")
+
+        # Invalid input
+        self.mock_state.current_track = MockTrack("/p.mp3")
+        user_data.rate_song(self.mock_state, "not_a_number")
+
+        # Number out of range
+        user_data.rate_song(self.mock_state, "6")
+
+        # Track has no path
+        bad_track = MagicMock()
+        del bad_track.path
+        self.mock_state.current_track = bad_track
+        user_data.rate_song(self.mock_state, "3")
+
+        def test_view_rated_errors(self):
+            """
+            Expected Result: Return when State is None, print "No songs rated yet" for empty ratings, catch exception during sorting.
+            Actual Result:
+                PASSED [100%][rate] No songs rated yet.
+                [rate] No songs rated yet.
+                --- Rated Songs ---
+            """
+            # Invalid state
+            user_data.view_rated(None)
+
+            # Empty ratings
+            self.mock_state.song_ratings = {}
+            user_data.view_rated(self.mock_state)
+
+            # Sorting error
+            self.mock_state.song_ratings = {"/path": "not_int"}
+            user_data.view_rated(self.mock_state)
+
+    if __name__ == '__main__':
+        unittest.main()

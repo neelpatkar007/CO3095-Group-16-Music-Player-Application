@@ -10,7 +10,7 @@ class TestPlayerUISpec(unittest.TestCase):
     """
     Black-Box Specification Tests for player_ui.py.
     Testing Tool: Python unittest + unittest.mock + sys + io.
-    Test Technique: Black-Box Specification Testing
+    Test Technique: Category Partition
     Source: playerUI.txt TSL Generated Test Frames
     """
     def setUp(self):
