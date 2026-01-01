@@ -30,3 +30,24 @@ class TestUserDataBranch(unittest.TestCase):
         self.mock_state.song_ratings = {}
         self.mock_state.library_tracks = []
         self.mock_state.current_track = None
+
+    # create_profile
+
+    def test_create_profile_branches(self):
+        # State Invalid
+        user_data.create_profile(None, "valid")
+
+        # Name Invalid
+        user_data.create_profile(self.mock_state, "")
+
+        # Name == default
+        user_data.create_profile(self.mock_state, "default")
+
+        # Name exists
+        self.mock_state.profiles = {"exists": {}}
+        user_data.create_profile(self.mock_state, "exists")
+
+        # Success
+        with patch("music_player.user_data._save_profiles"):
+            user_data.create_profile(self.mock_state, "new_one")
+            self.assertIn("new_one", self.mock_state.profiles)
