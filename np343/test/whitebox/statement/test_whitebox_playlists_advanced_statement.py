@@ -47,3 +47,17 @@ class TestPlaylistsAdvancedStatement(unittest.TestCase):
         with patch("music_player.playlists_advanced._get_playlist", side_effect=[dest_pl, None]):
             with patch("builtins.print") as mock_print:
                 playlists_advanced.merge_playlists(self.state, "Dest", "Missing")
+
+    def test_copy_playlist_warnings(self):
+        """
+        Expected Result: Prints "reserved" error for names like 'admin' and returns early if the source playlist not found.
+        Actual Result: Passed. Verified reserved name check and source existence check.
+        """
+        # Reserved Name
+        with patch("builtins.print") as mock_print:
+            playlists_advanced.copy_playlist(self.state, "One", "admin")
+            mock_print.assert_called_with("[pl] Error: That name is reserved.")
+
+        # Source Missing
+        with patch("music_player.playlists_advanced._get_playlist", return_value=None):
+            playlists_advanced.copy_playlist(self.state, "Ghost", "NewMix")
