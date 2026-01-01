@@ -174,3 +174,35 @@ class TestPlayerQueueCoverage(unittest.TestCase):
 
         player_queue.previous_track(self.state)
         self.assertEqual(self.state.current_index, 1)
+
+    # Playback & Exception Handling
+
+    def test_next_track_playback_exceptions(self):
+        """
+        Test error handling during playback transition.
+        Branches: Stop fails, Play fails, Busy check fails
+        """
+        self.state.is_playing = True
+
+        # Simulate engine failures
+        self.state.audio_engine.stop = MagicMock(side_effect=Exception("Stop fail"))
+        self.state.audio_engine.play = MagicMock(side_effect=Exception("Play fail"))
+
+        player_queue.next_track(self.state)
+        self.assertFalse(self.state.is_playing)
+
+    def test_next_track_defensive(self):
+        """
+        Test checks for invalid state/inputs.
+        Branches: State is None, Tracks is None, Tracks is Empty
+        """
+        # Invalid State
+        player_queue.next_track(None)
+
+        # Empty List
+        self.state.tracks = []
+        player_queue.next_track(self.state)
+
+        # None List
+        self.state.tracks = None
+        player_queue.next_track(self.state)
