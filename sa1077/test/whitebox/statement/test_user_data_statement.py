@@ -94,3 +94,40 @@ class TestUserDataStatement(unittest.TestCase):
         with patch("pathlib.Path.exists", return_value=True):
             with patch("builtins.open", mock_open(read_data="INVALID JSON")):
                 user_data.load_profiles_index(self.mock_state)
+
+    def test_create_profile_invalid_state(self):
+        """
+        Expected Result: Prints error message and returns.
+        Actual Result: PASSED [100%][profile] Error: Invalid state.
+        """
+        user_data.create_profile(None, "new")
+
+    def test_create_profile_invalid_names(self):
+        """
+        Expected Result: Prints error messages for empty name, reserved name, and duplicate name.
+        Actual Result:
+            PASSED [100%][profile] Error: Name cannot be empty.
+            [profile] 'default' is reserved.
+            [profile] Profile 'ex' already exists.
+        """
+        # Empty Name
+        user_data.create_profile(self.mock_state, "")
+
+        # Reserved Name
+        user_data.create_profile(self.mock_state, "default")
+
+        # Duplicate Name
+        self.mock_state.profiles = {"ex": {}}
+        user_data.create_profile(self.mock_state, "ex")
+
+    def test_switch_profile_invalid(self):
+        """
+        Expected Result: Prints errors for inavlid state and non-existent profiles, switching to current profile message "already on profile".
+        Actual Result:
+            PASSED [100%][profile] Error: Invalid state.
+            [profile] Profile 'non_existent' does not exist.
+            [profile] Already on 'default'.
+        """
+        user_data.switch_profile(None, "p1")  # Invalid state
+        user_data.switch_profile(self.mock_state, "non_existent")  # Missing
+        user_data.switch_profile(self.mock_state, "default")  # Already active
