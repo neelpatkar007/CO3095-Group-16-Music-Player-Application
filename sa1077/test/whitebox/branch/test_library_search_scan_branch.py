@@ -83,3 +83,59 @@ class TestLibrarySearchScanBranch(unittest.TestCase):
         """
         self.mock_state.library_tracks = [MockTrack("/a.mp3", title="A")]
         library_search_scan.search_library(self.mock_state, "Z")
+
+    # view_artists_table Branches
+
+    def test_view_artists_skip_invalid(self):
+        """
+        Expected Result: Skips tracks that are None or have missing artist data.
+        Actual Result:
+            Artist                     Tracks      Time
+            ---------------------------------------------
+            Valid                           1     01:00
+        """
+        t_valid = MockTrack("/a.mp3", artist="Valid")
+        t_none = None
+        t_no_artist = MockTrack("/b.mp3", artist="")
+
+        self.mock_state.library_tracks = [t_valid, t_none, t_no_artist]
+        library_search_scan.view_artists_table(self.mock_state)
+
+    # rescan_for_new_tracks Branches
+
+    @patch("music_player.library_search_scan.discover_tracks")
+    def test_rescan_no_new_tracks(self, mock_discover):
+        """
+        Expected Result: Returns early and prints message if no new tracks are discovered.
+        Actual Result:
+            PASSED [100%][lib] Scanning for new tracks...
+            [lib] No new tracks found.
+        """
+        existing = MockTrack("/old.mp3")
+        self.mock_state.library_tracks = [existing]
+        mock_discover.return_value = [existing]
+
+        library_search_scan.rescan_for_new_tracks(self.mock_state)
+
+    @patch("music_player.library_search_scan.discover_tracks")
+    def test_rescan_pass_block(self, mock_discover):
+        """
+        Expected Result: Executes pass block if tracks list identity matches and if not it skips.
+        Actual Result:
+            PASSED [100%][lib] Scanning for new tracks...
+            [lib] Added 1 new track(s).
+            [lib] Scanning for new tracks...
+            [lib] No new tracks found.
+        """
+        # True branch
+        self.mock_state.tracks = self.mock_state.library_tracks
+        mock_discover.return_value = [MockTrack("/new.mp3")]
+        library_search_scan.rescan_for_new_tracks(self.mock_state)
+
+        # False branch
+        self.mock_state.tracks = []
+        library_search_scan.rescan_for_new_tracks(self.mock_state)
+
+
+if __name__ == '__main__':
+    unittest.main()
