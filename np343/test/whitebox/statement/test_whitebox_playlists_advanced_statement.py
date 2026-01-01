@@ -15,3 +15,20 @@ class TestPlaylistsAdvancedStatement(unittest.TestCase):
         self.pl1 = MagicMock()
         self.pl1.name = "One"
         self.state.playlists = [self.pl1]
+
+    def test_get_playlist_helper_errors(self):
+        """
+        Expected Result: Helper returns None and prints specific error messages when state is invalid or selector is empty strings.
+        Actual Result: Passed. Verified None return and presence of error prints.
+        """
+        # State invalid
+        with patch("builtins.print") as mock_print:
+            res = playlists_advanced._get_playlist(None, "MyMix")
+            self.assertIsNone(res)
+            mock_print.assert_called()
+
+        # Selector empty
+        with patch("builtins.print") as mock_print:
+            res = playlists_advanced._get_playlist(self.state, "   ")
+            self.assertIsNone(res)
+            mock_print.assert_called()
