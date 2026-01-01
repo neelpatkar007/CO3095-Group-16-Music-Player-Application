@@ -259,3 +259,57 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         self.state.tracks = 123  # Int forces reset
         player_queue.clear_queue(self.state)
         self.assertEqual(self.state.tracks, [])
+
+    # State Toggles & Display
+
+    def test_toggle_shuffle(self):
+        """
+        Test /shuffle.
+        Branches: Toggle On, Reset Index
+        """
+        # Toggle On
+        player_queue.toggle_shuffle(self.state)
+        self.assertTrue(self.state.shuffle_active)
+
+        # Reset Index if out of bounds
+        self.state.current_index = 10
+        player_queue.toggle_shuffle(self.state)  # Off
+        player_queue.toggle_shuffle(self.state)  # On
+        self.assertEqual(self.state.current_index, 0)
+
+    def test_set_loop_mode(self):
+        """
+        Test /loop.
+        Branches: Valid inputs, Invalid inputs, Defensive Property Check
+        """
+        # Valid
+        player_queue.set_loop_mode(self.state, "one")
+        self.assertEqual(self.state.loop_mode, "one")
+
+        # Invalid
+        player_queue.set_loop_mode(self.state, "invalid_mode")
+        self.assertEqual(self.state.loop_mode, "one")
+
+        # AttributeError
+        bad_state = MagicMock()
+        p = PropertyMock(side_effect=AttributeError)
+        type(bad_state).loop_mode = p
+        player_queue.set_loop_mode(bad_state, "all")
+
+    def test_show_queue(self):
+        """
+        Test /queue display.
+        Branches: Playing Marker, Paused Marker, Empty
+        """
+        # Playing
+        self.state.tracks = [self.track1]
+        self.state.is_playing = True
+        player_queue.show_queue(self.state)
+
+        # Paused
+        self.state.is_playing = False
+        self.state.is_paused = True
+        player_queue.show_queue(self.state)
+
+if __name__ == '__main__':
+    unittest.main()
