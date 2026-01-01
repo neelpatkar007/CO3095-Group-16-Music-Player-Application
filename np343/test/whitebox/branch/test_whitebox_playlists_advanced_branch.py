@@ -41,3 +41,26 @@ class TestPlaylistsAdvancedBranch(unittest.TestCase):
             res = playlists_advanced._get_playlist(self.state, "99")
             self.assertIsNone(res)
             mock_print.assert_called()
+
+    def test_copy_name_validation_branches(self):
+        """
+        Expected Result:
+         - 1. Prints error if name < 3 chars.
+         - 2. Prints error if name > 20 chars.
+         - 3. Prints error if name contains non-alphanumeric characters.
+        Actual Result: Passed. Verified all three validation branches trigger error messages.
+        """
+        # Name too short
+        with patch("builtins.print") as mock_print:
+            playlists_advanced.copy_playlist(self.state, "One", "Hi")
+            mock_print.assert_called()
+
+        # Name too long
+        with patch("builtins.print") as mock_print:
+            playlists_advanced.copy_playlist(self.state, "One", "A" * 21)
+            mock_print.assert_called()
+
+        # Invalid Chars
+        with patch("builtins.print") as mock_print:
+            playlists_advanced.copy_playlist(self.state, "One", "My Mix!")
+            mock_print.assert_called()
