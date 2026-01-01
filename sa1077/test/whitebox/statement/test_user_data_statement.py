@@ -38,3 +38,11 @@ class TestUserDataStatement(unittest.TestCase):
         self.mock_state.song_ratings = {}
         self.mock_state.library_tracks = []
         self.mock_state.current_track = None
+
+    def test_helpers_serialize_none(self):
+        """
+        Expected Result: Returns an empty dictionary.
+        Actual Result: Passed.
+        """
+        res = user_data._serialize_current_state(None)
+        self.assertEqual(res, {})
