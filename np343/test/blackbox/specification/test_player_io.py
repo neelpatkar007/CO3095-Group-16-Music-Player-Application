@@ -82,3 +82,37 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
             out = self._capture_prints(player_io.import_song, self.state, str(src))
             self.assertIn("[import] Error: Unsupported file type.", out)
+
+    def test_import_song_success_copies_file_and_updates_state(self):
+        """
+        Expected Result :  Prints success message, copies file to music directory, and updates library and state tracks.
+        Actual Result : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            sandbox_music_dir = Path(tmp) / "songs"
+
+            old_music_dir = player_io.MUSIC_DIR
+            player_io.MUSIC_DIR = sandbox_music_dir
+            try:
+                supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+                src = Path(tmp) / f"cool_song{supported_ext}"
+                src.write_bytes(b"not empty")
+
+                # Ensure tracks starts empty
+                self.state.tracks = []
+                self.state.library_tracks = []
+
+                out = self._capture_prints(player_io.import_song, self.state, str(src))
+
+                # Success Message
+                self.assertIn("[import] Successfully imported", out)
+
+                # File copied to MUSIC_DIR
+                dest = sandbox_music_dir / src.name
+                self.assertTrue(dest.exists(), "Expected imported file to exist in MUSIC_DIR")
+
+                # Library tracks assigned
+                self.assertIsInstance(self.state.library_tracks, list)
+
+            finally:
+                player_io.MUSIC_DIR = old_music_dir
