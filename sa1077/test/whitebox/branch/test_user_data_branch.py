@@ -99,3 +99,24 @@ class TestUserDataBranch(unittest.TestCase):
         with patch("music_player.user_data._save_current_to_profile"):
             user_data.rate_song(self.mock_state, "5")
             self.assertEqual(self.mock_state.song_ratings["/path"], 5)
+
+    # switch_profile
+
+    def test_switch_profile_branches(self):
+        self.mock_state.profiles = {"other": {"liked": []}}
+        self.mock_state.active_profile = "default"
+
+        # Does not exist
+        user_data.switch_profile(self.mock_state, "missing")
+
+        # Already active
+        user_data.switch_profile(self.mock_state, "default")
+
+        # Switch success
+        with patch("music_player.user_data._save_profiles"):
+            user_data.switch_profile(self.mock_state, "other")
+            self.assertEqual(self.mock_state.active_profile, "other")
+
+
+if __name__ == '__main__':
+    unittest.main()
