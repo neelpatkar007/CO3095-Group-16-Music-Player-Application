@@ -57,3 +57,16 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
             src_dir.mkdir()
             out = self._capture_prints(player_io.import_song, self.state, str(src_dir))
             self.assertIn("[import] Error: Source is not a file.", out)
+
+    def test_import_song_empty_file_rejected(self):
+        """
+        Expected Result : Prints error if the source file is empty.
+        Actual Result : Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+            src = Path(tmp) / f"empty{supported_ext}"
+            src.write_bytes(b"")
+
+            out = self._capture_prints(player_io.import_song, self.state, str(src))
+            self.assertIn("[import] Error: File is empty.", out)
