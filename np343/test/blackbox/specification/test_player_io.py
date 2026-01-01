@@ -36,3 +36,13 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
         """
         out = self._capture_prints(player_io.import_song, self.state, "")
         self.assertIn("[import] Usage: /import <path_to_file>", out)
+
+    def test_import_song_file_not_found(self):
+        """
+        Expected Result - Prints "File not found" error for non-existent paths.
+        Actual Result is: Passed.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = Path(tmp) / "ASDASD.mp3"
+            out = self._capture_prints(player_io.import_song, self.state, str(missing))
+            self.assertIn("[import] Error: File not found.", out)
