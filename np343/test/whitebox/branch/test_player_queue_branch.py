@@ -75,3 +75,21 @@ class TestPlayerQueueCoverage(unittest.TestCase):
         # Invalid Type
         self.state.tracks = 123
         self.assertEqual(player_queue._get_tracks_safe(self.state), [])
+
+    def test_ensure_decoupled(self):
+        """
+        Test -> _ensure_queue_decoupled.
+        Branches : Linked to Library, Linked to Playlist
+        """
+        # Tracks linked to Library
+        self.state.tracks = self.state.library_tracks
+        player_queue._ensure_queue_decoupled(self.state)
+        self.assertIsNot(self.state.tracks, self.state.library_tracks)
+
+        # Tracks linked to Playlist
+        pl = MagicMock()
+        pl.tracks = [self.track1]
+        self.state.playlists = [pl]
+        self.state.tracks = pl.tracks
+        player_queue._ensure_queue_decoupled(self.state)
+        self.assertIsNot(self.state.tracks, pl.tracks)
