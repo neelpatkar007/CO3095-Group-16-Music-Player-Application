@@ -91,3 +91,25 @@ class TestLibrarySearchScanStatement(unittest.TestCase):
         self.mock_state.library_tracks = [t1, t2]
 
         library_search_scan.view_albums_table(self.mock_state)
+
+    @patch("music_player.library_search_scan.discover_tracks")
+    def test_rescan_new_tracks_found(self, mock_discover):
+        """
+        Expected Result: Finds new tracks, adds them to library, and prints count.
+        Actual Result:
+        PASSED [100%][lib] Scanning for new tracks...
+        [lib] Added 1 new track(s).
+        """
+        existing = MockTrack("/old.mp3")
+        new_one = MockTrack("/new.mp3")
+
+        self.mock_state.library_tracks = [existing]
+        mock_discover.return_value = [existing, new_one]
+        self.mock_state.tracks = self.mock_state.library_tracks
+        library_search_scan.rescan_for_new_tracks(self.mock_state)
+
+        self.assertIn(new_one, self.mock_state.library_tracks)
+
+
+if __name__ == '__main__':
+    unittest.main()
