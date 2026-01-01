@@ -28,3 +28,11 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
         return buf.getvalue()
 
     # Import Song Tests
+
+    def test_import_song_empty_input_prints_usage(self):
+        """
+        Expected Result is that it Prints usage when input path is empty.
+        Actual Result - Passed.
+        """
+        out = self._capture_prints(player_io.import_song, self.state, "")
+        self.assertIn("[import] Usage: /import <path_to_file>", out)
