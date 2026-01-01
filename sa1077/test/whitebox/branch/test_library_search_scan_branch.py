@@ -32,3 +32,14 @@ class TestLibrarySearchScanBranch(unittest.TestCase):
         Actual Result: PASSED [100%]  (no tracks)
         """
         library_search_scan._print_tracks_table([])
+
+    def test_print_tracks_table_none_item(self):
+        """
+        Expected Result: Skips 'None' items in the list and continues printing valid tracks.
+        Actual Result:
+        No  Title                           Artist                  Time
+        -----------------------------------------------------------------
+          1  Title                           Artist                 01:00
+        """
+        tracks = [MockTrack("/a.mp3"), None]
+        library_search_scan._print_tracks_table(tracks)
