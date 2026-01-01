@@ -18,3 +18,31 @@ class MockPlaylist:
     def __init__(self, name, tracks=None):
         self.name = name
         self.tracks = tracks if tracks else []
+
+# Test Class
+
+class TestUserDataStatement(unittest.TestCase):
+
+    """
+    White-Box Statement Tests for user_data.py.
+    Testing Tool: Python unittest + unittest.mock
+    Test Technique: White-Box Statement Testing
+    """
+
+    def setUp(self):
+        self.mock_state = MagicMock(spec=PlayerState)
+        self.mock_state.profiles = {}
+        self.mock_state.active_profile = "default"
+        self.mock_state.playlists = []
+        self.mock_state.liked_tracks = set()
+        self.mock_state.song_ratings = {}
+        self.mock_state.library_tracks = []
+        self.mock_state.current_track = None
+
+    def test_helpers_serialize_none(self):
+        """
+        Expected Result: Returns an empty dictionary.
+        Actual Result: Passed.
+        """
+        res = user_data._serialize_current_state(None)
+        self.assertEqual(res, {})
