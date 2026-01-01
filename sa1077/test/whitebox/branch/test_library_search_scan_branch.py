@@ -23,3 +23,12 @@ class TestLibrarySearchScanBranch(unittest.TestCase):
     def setUp(self):
         self.mock_state = MagicMock(spec=PlayerState)
         self.mock_state.library_tracks = []
+
+    # _print_tracks_table Branches
+
+    def test_print_tracks_table_empty(self):
+        """
+        Expected Result: Prints "(no tracks)" and returns immediately when list is empty.
+        Actual Result: PASSED [100%]  (no tracks)
+        """
+        library_search_scan._print_tracks_table([])
