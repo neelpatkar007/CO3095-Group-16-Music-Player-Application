@@ -116,3 +116,26 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
             finally:
                 player_io.MUSIC_DIR = old_music_dir
+
+    def test_import_song_duplicate_name_rejected(self):
+        """
+        Expected Result is : Prints error if a file with the same name already exists in the library.
+        Actual Result:  Passed. Verified duplicate rejection logic.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            sandbox_music_dir = Path(tmp) / "songs"
+            sandbox_music_dir.mkdir()
+
+            old_music_dir = player_io.MUSIC_DIR
+            player_io.MUSIC_DIR = sandbox_music_dir
+            try:
+                supported_ext = next(iter(player_io.SUPPORTED_EXTENSIONS))
+                src = Path(tmp) / f"dup{supported_ext}"
+                src.write_bytes(b"not empty")
+
+                (sandbox_music_dir / src.name).write_bytes(b"already there")
+
+                out = self._capture_prints(player_io.import_song, self.state, str(src))
+                self.assertIn("already exists", out)
+            finally:
+                player_io.MUSIC_DIR = old_music_dir
