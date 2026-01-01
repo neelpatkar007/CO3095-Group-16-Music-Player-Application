@@ -84,3 +84,26 @@ class TestPlayerShortcutsSpec(unittest.TestCase):
         self.state.volume = 100
         player_shortcuts.handle_keypress(self.state, "+")
         self.assertEqual(self.state.volume, 100)
+
+    def test_handle_volume_down(self):
+        """
+        Expected Result: Decreases volume by 10 points. If volume would drop below 0 then clamps to 0.
+        Actual Result: PASSED [100%][shortcuts] Volume down: 0%
+        """
+        # Normal decrement
+        self.state.volume = 50
+        with patch("builtins.print") as mock_print:
+            player_shortcuts.handle_keypress(self.state, "-")
+            self.assertEqual(self.state.volume, 40)
+            args = mock_print.call_args[0][0]
+            self.assertIn("40%", args)
+
+        # Clamp at 0
+        self.state.volume = 5
+        player_shortcuts.handle_keypress(self.state, "-")
+        self.assertEqual(self.state.volume, 0)
+
+        # Already Min
+        self.state.volume = 0
+        player_shortcuts.handle_keypress(self.state, "-")
+        self.assertEqual(self.state.volume, 0)
