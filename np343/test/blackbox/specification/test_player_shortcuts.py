@@ -8,7 +8,7 @@ class TestPlayerShortcutsSpec(unittest.TestCase):
     """
     Black-Box Specification Testing for player_shortcuts.py.
     Testing Tool: Python unittest + unittest.mock
-    Test Technique: Black-Box Specification Testing
+    Test Technique -  Category Partition Method
     """
 
     def setUp(self):
