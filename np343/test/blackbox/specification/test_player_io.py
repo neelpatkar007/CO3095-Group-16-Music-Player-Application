@@ -168,3 +168,16 @@ class TestPlayerIoBlackBoxSpec(unittest.TestCase):
 
         out = self._capture_prints(player_io.update_metadata, self.state, "99", "title", "New")
         self.assertIn("[edit] Invalid song number.", out)
+
+    def test_update_metadata_empty_value_rejected(self):
+        """
+        Expected Result: Prints error if the new metadata value is empty/whitespace.
+        Actual Result: Passed.
+        """
+        track = MagicMock()
+        track.path = Path("songs/test.mp3")
+        track.title = "Old"
+        self.state.library_tracks = [track]
+
+        out = self._capture_prints(player_io.update_metadata, self.state, "1", "title", "")
+        self.assertIn("[edit] Error: Value cannot be empty.", out)
