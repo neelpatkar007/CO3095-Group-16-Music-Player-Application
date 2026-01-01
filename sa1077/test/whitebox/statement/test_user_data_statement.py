@@ -62,3 +62,16 @@ class TestUserDataStatement(unittest.TestCase):
         Actual Result: Passed.
         """
         user_data._save_current_to_profile(None)
+
+    def test_helpers_apply_data_none_or_empty(self):
+        """
+        Expected Result: If state is None then returns and when data is empty liked_tracks set and playlists list empty.
+        Actual Result: Passed.
+        """
+        # State None
+        user_data._apply_profile_data(None, {})
+
+        # Data Empty
+        user_data._apply_profile_data(self.mock_state, {})
+        self.assertEqual(self.mock_state.liked_tracks, set())
+        self.assertEqual(self.mock_state.playlists, [])
