@@ -119,3 +119,15 @@ class TestUserDataStatement(unittest.TestCase):
         # Duplicate Name
         self.mock_state.profiles = {"ex": {}}
         user_data.create_profile(self.mock_state, "ex")
+
+    def test_switch_profile_invalid(self):
+        """
+        Expected Result: Prints errors for inavlid state and non-existent profiles, switching to current profile message "already on profile".
+        Actual Result:
+            PASSED [100%][profile] Error: Invalid state.
+            [profile] Profile 'non_existent' does not exist.
+            [profile] Already on 'default'.
+        """
+        user_data.switch_profile(None, "p1")  # Invalid state
+        user_data.switch_profile(self.mock_state, "non_existent")  # Missing
+        user_data.switch_profile(self.mock_state, "default")  # Already active
