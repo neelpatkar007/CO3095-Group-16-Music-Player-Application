@@ -46,3 +46,19 @@ class TestUserDataStatement(unittest.TestCase):
         """
         res = user_data._serialize_current_state(None)
         self.assertEqual(res, {})
+
+    def test_helpers_save_profiles_error(self):
+        """
+        Expected Result: Catches the OSError/Exception and prints an error message.
+        Actual Result: PASSED [100%][profile] Error saving: Disk full
+        """
+        with patch("builtins.open", mock_open()) as m:
+            m.side_effect = OSError("Disk full")
+            user_data._save_profiles(self.mock_state)
+
+    def test_helpers_save_current_none(self):
+        """
+        Expected Result: Returns immediately without error when state is None.
+        Actual Result: Passed.
+        """
+        user_data._save_current_to_profile(None)
