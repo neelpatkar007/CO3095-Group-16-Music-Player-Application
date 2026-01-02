@@ -30,29 +30,46 @@ def _ensure_player_state(state: Any, context: str) -> PlayerState | None:
 
 def print_now_playing(state: PlayerState) -> None:
     """
-    Print the current title, artist, track status and total duration (S1-03).
+    Print the current title, artist, track status and total duration.
     """
     state = _ensure_player_state(state, "now_playing")
     if state is None:
         return
 
     track = state.current_track
-    if not isinstance(track, Track):
+
+    if track is None:
         print("[ui] No track selected.")
         return
 
-    # Format total duration in mm:ss
-    duration_str = format_mm_ss(track.duration_seconds)
+    if not isinstance(track, Track):
+        print("[ui] Error: Track data corrupted.")
+        return
 
-    # Determine status marker
+    if not hasattr(track, "display_name"):
+        print("[ui] Error: Track metadata missing.")
+        return
+
+    if not hasattr(track, "duration_seconds"):
+        duration = 0.0
+    else:
+        duration = track.duration_seconds
+
+    if duration < 0:
+        duration = 0.0
+
+    duration_str = format_mm_ss(duration)
+    status = "Stopped"
+
     if state.is_playing:
-        status = "Playing"
+        if state.is_paused:
+            status = "Paused"
+        else:
+            status = "Playing"
+
     elif state.is_paused:
         status = "Paused"
-    else:
-        status = "Stopped"
 
-    # Example output: [ui] Playing: Song Title - Artist Name [03:24]
     print(f"[ui] {status}: {track.display_name} [{duration_str}]")
 
 
