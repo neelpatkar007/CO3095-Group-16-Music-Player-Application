@@ -40,7 +40,7 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         print("[import] Error: File is empty.")
         return
 
-    # Ensure suf
+    # Ensure suffix is supported
     if src.suffix.lower() not in SUPPORTED_EXTENSIONS:
         print("[import] Error: Unsupported file type.")
         return
@@ -63,9 +63,17 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         new_tracks = library.discover_tracks()
         state.library_tracks = new_tracks
 
-        # If queue is empty, sync it with new library
+        # Find imported track in the updated library
+        imported_track = next((t for t in new_tracks if t.path.name == dest.name), None)
+
+        if imported_track:
+            # Add imported track to active queue
+            state.tracks.append(imported_track)
+            print(f"[import] Added '{imported_track.display_name}' to the bottom of the queue.")
+
         if not state.tracks:
             state.tracks = new_tracks
+
     except PermissionError:
         print("[import] Error: Permission denied.")
 
