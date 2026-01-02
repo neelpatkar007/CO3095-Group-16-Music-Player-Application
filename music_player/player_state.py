@@ -70,13 +70,13 @@ class PlayerState:
     @property
     def current_track(self) -> Optional[Track]:
         '''
-        Retrieves the currently selected track, or it's none if it is out of bounds.
+        Retrieves the currently selected track - or it's none if it is out of bounds.
         '''
         # Check if the playlist is empty
         if not self.tracks:
             return None
 
-        # Check if the index is within the valid range
+        # Check if the index is within the valid range of the tracks list
         if not (0 <= self.current_index < len(self.tracks)):
             return None
         return self.tracks[self.current_index]
