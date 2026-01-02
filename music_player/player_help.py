@@ -4,6 +4,8 @@ from typing import Optional
 def print_help(command: Optional[str] = None) -> None:
     '''
     Displays help information for the music player commands.
+    Provides detailed instructions for specific command
+    If not given a command, shows the full list of commands.
     '''
 
     # If they just type /help, give them the full run-down
@@ -33,12 +35,14 @@ def print_help(command: Optional[str] = None) -> None:
         print("\nTip: Need details? Try '/help schedule' or '/help profile'.")
         return
 
+    # Input Normalisation
     # Clean up the input so both /play and play work fine
+    # Strip whitespace and lowercase for case-insensitivity matching
     topic = command.strip().lower()
     if topic.startswith("/"):
         topic = topic[1:]
 
-    # BASIC PLAYBACK
+    # BASIC PLAYBACK COMMANDS
     if topic == "play":
         print("\n[Help] /play")
         print("Starts the music. If a session was saved, it picks up from where you left off.")
