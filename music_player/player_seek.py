@@ -92,10 +92,9 @@ def nudge(state: PlayerState, offset_seconds: float) -> None:
 
 # Function to seek to a specific time in the track
 def seek_to(state: PlayerState, text_or_seconds) -> None:
-    '''
+    """
     Seek to a specific time in the track.
-    Can accept a number or a timecode string (mm:ss).
-    '''
+    """
     if state is None:
         return
     try:
@@ -104,26 +103,27 @@ def seek_to(state: PlayerState, text_or_seconds) -> None:
         print("[seek] Error accessing track state.")
         return
 
-    # Validate that a track is loaded
     if not isinstance(track, Track):
         print("[seek] No track loaded.")
         return
 
-    # Determine if it's already a number
+    if not hasattr(track, "duration_seconds"):
+        return
+
+    duration = track.duration_seconds
+    if duration is None:
+        duration = 0.0
+
+    new_pos = 0.0
+
     if isinstance(text_or_seconds, (int, float)):
         new_pos = float(text_or_seconds)
-    else:
-        # Use timeutils to parse the timecode string
-        new_pos = parse_timecode(str(text_or_seconds))
+    elif isinstance(text_or_seconds, str):
+        new_pos = parse_timecode(text_or_seconds)
 
-    # Bound check
-    if track.duration_seconds is not None and isinstance(track.duration_seconds, (int, float)):
-        # Ensure new position is within track duration
-        new_pos = max(0.0, min(new_pos, track.duration_seconds))
+    if hasattr(state, "audio_engine"):
+        if hasattr(state.audio_engine, "seek"):
+            final_pos = max(0.0, min(new_pos, duration))
 
-    # Audio seek
-    state.position_seconds = new_pos
-
-    # Tell audio engine backend to jump to new position
-    if hasattr(state, 'audio_engine') and hasattr(state.audio_engine, 'seek'):
-        state.audio_engine.seek(new_pos)
+            state.position_seconds = final_pos
+            state.audio_engine.seek(final_pos)
