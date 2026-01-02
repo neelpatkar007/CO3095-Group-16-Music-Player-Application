@@ -275,21 +275,21 @@ def show_recently_added(state: PlayerState) -> None:
 
         # Iteration through the sorted list
         for i, t in enumerate(recent):
-            # 7. Decision: Limiting output to top 10 results
+            # Limiting output to top 10 results
             if i >= 10:
                 break
 
-            # 8. Decision: Guarding against invalid timestamps
+            # Guarding against invalid timestamps
             mtime = t.path.stat().st_mtime
             date_label = datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d') if mtime > 0 else "Unknown"
 
-            # 9. Decision: Fallback for missing display names
+            # Fallback for missing display names
             display = t.display_name if t.display_name else "Unnamed Track"
             print(f"  {i + 1}. [{date_label}] {display}")
 
-    # 10. Decision: Handling file access permission errors
+    # Handling file access permission errors
     except PermissionError:
         print("[recent] Permission denied whilst accessing track metadata.")
-    # 11. Decision: Generalised catch all for unexpected logic errors
+    # Generalised catch all for unexpected logic errors
     except Exception as e:
         print(f"[recent] Error organising recently added tracks: {e}")
