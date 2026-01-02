@@ -188,19 +188,35 @@ class AudioEngine:
             print(f"[audio] ERROR playing {path}: {e}")
 
     def _pause_real(self) -> None:
+        '''
+        This wraps the pygame pause command
+        '''
         assert pygame is not None
+        # Pauses the music playback. Makes sure does it without losing the current position.
         pygame.mixer.music.pause()
 
     def _resume_real(self) -> None:
+        '''
+        Wraps pygame unpause command to resume the playback.
+        '''
         assert pygame is not None
+        # Unpause used instead of play() - this is to avoid the restarting of the track
         pygame.mixer.music.unpause()
 
     def _stop_real(self) -> None:
+        '''
+        Wraps the pygame stop command.
+        '''
         assert pygame is not None
+        # Stops the music playback completely and resets the position to 0.
         pygame.mixer.music.stop()
 
     # Private implementation functions for simulated mode without pygame
     def _play_simulated(self, path: Path, start_pos: float) -> None:
+        '''
+        Dummy implementation if pygame is missing
+        '''
+        # This just prints to the console for simulation purposes.
         print(f"[audio] PLAY (simulated) {path.name} from {start_pos:.1f}s")
 
     # Seek Implementation functions
@@ -248,4 +264,8 @@ class AudioEngine:
             print(f"[audio] ERROR seeking: {e}")
 
     def _seek_simulated(self, seconds: float) -> None:
+        '''
+        Dummy implementation for seeking - when pygame is not available/missing
+        '''
+        # Logs the seek action to the console.
         print(f"[audio] SEEK (simulated) -> {seconds:.1f}s")
