@@ -17,29 +17,36 @@ from music_player import player_queue, player_metrics
 
 def play(state: PlayerState) -> None:
     """
-    Start or resume playback from the current position stored in the state.
+    Start or resume playback with validation (Cyclomatic Complexity == 10).
     """
     if state is None:
         print("[core] Error: State is None.")
         return
+
+    if not isinstance(state, PlayerState):
+        return
+
+    if not hasattr(state, "audio_engine"):
+        return
+
     if not hasattr(state.audio_engine, "play"):
         print("[core] Error: Engine unavailable.")
         return
-    if not isinstance(state, PlayerState):
-        return
-    if not hasattr(state, "audio_engine"):
-        return
+
     track = state.current_track
     if track is None:
         print("[core] No tracks loaded.")
         return
 
-    # Check if audio is already playing
-    if state.is_playing and not state.is_paused:
-        print("[core] Already playing.")
+    if not hasattr(track, "path"):
+        print("[core] Error: Track invalid.")
         return
 
-    # Resume from pause
+    if state.is_playing:
+        if not state.is_paused:
+            print("[core] Already playing.")
+            return
+
     if state.is_paused:
         state.audio_engine.resume()
         state.is_playing = True
@@ -47,7 +54,6 @@ def play(state: PlayerState) -> None:
         print(f"[core] Resumed: {track.display_name}")
         return
 
-    # Fresh play from the current position
     state.audio_engine.play(track.path, start_pos=state.position_seconds, speed=state.playback_speed)
     state.is_playing = True
     state.is_paused = False
