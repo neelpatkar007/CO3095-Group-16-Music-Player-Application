@@ -30,19 +30,28 @@ def _ensure_playlists(state: PlayerState) -> None:
 
 def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     """
-    Internal helper: find a playlist by number (1-based) or by name (case-insensitive).
-    Used by multiple S2 stories.
+    Internal helper: find a playlist by number or name.
     """
     _ensure_playlists(state)
-    if state is None or not hasattr(state, "playlists") or not isinstance(state.playlists, list):
+
+    if state is None:
         print("[pl] Error: State is None.")
         return None
+
+    if not hasattr(state, "playlists"):
+        print("[pl] Error: State is None.")
+        return None
+
+    if not isinstance(state.playlists, list):
+        print("[pl] Error: State is None.")
+        return None
+
     if not isinstance(selector, str):
         print("[pl] Missing playlist name or number.")
         return None
-    selector = (selector or "").strip()
 
-    # Try numeric index first
+    selector = selector.strip()
+
     try:
         idx = int(selector) - 1
     except ValueError:
@@ -54,8 +63,8 @@ def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
         print("[pl] Playlist index out of range.")
         return None
 
-    # Name match
     lowered = selector.lower()
+
     for pl in state.playlists:
         if pl.name.lower() == lowered:
             return pl
