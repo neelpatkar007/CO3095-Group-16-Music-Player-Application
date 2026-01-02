@@ -20,7 +20,9 @@ from music_player.time_utils import format_mm_ss
 
 
 def _ensure_playlists(state: PlayerState) -> None:
-    """Internal helper to ensure state.playlists exists."""
+    """
+    Internal helper to ensure state.playlists exists.
+    """
     if state is None or not hasattr(state, "playlists"):
         print("[pl] Error: State is None.")
         return
@@ -76,7 +78,7 @@ def _resolve_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
 def _set_active_by_playlist(state: PlayerState, playlist: Playlist) -> None:
     """
     Internal helper: set active_playlist_index based on playlist instance.
-    Used when opening / selecting playlists.
+    Used when opening or selecting playlists.
     """
     _ensure_playlists(state)
     try:
@@ -141,11 +143,8 @@ def create_playlist(state: PlayerState, name: str) -> None:
     """
     S2-01: Create new playlist.
 
-    Behaviours:
-      - Validate name is non-empty and unique.
-      - Append new Playlist to state.playlists.
-      - Optionally set active_playlist_index if none is active.
-      - Print confirmation.
+    Validate name is non-empty and unique. Append new Playlist to state.playlists.
+    Then set active_playlist_index if none is active and finally print confirmation.
     """
     _ensure_playlists(state)
     name = (name or "").strip()
@@ -169,10 +168,9 @@ def rename_playlist(state: PlayerState, selector: str, new_name: str) -> None:
     """
     S2-01: Rename an existing playlist.
 
-    Behaviours:
-      - Resolve playlist by selector (index or name).
-      - Validate new_name is non-empty and not already taken.
-      - Update playlist.name and print confirmation.
+    - Resolve playlist by selector (index or name).
+    - Validate new_name is non-empty and not already taken.
+    - Update playlist.name and print confirmation.
     """
     _ensure_playlists(state)
     new_name = (new_name or "").strip()
@@ -198,7 +196,6 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
     """
     S2-01: Delete an existing playlist.
 
-    Behaviours:
       - Resolve playlist.
       - Remove from state.playlists.
       - Adjust active_playlist_index if necessary.
@@ -226,7 +223,7 @@ def delete_playlist(state: PlayerState, selector: str) -> None:
 def _get_playlist_summary(pl: Playlist) -> tuple[int, float]:
     """
     S2-10 Helper: Calculates the total number of songs and total duration.
-    Returns: (track_count, total_duration_seconds)
+    Returns: track_count, total_duration_seconds
     """
     if not pl.tracks:
         return 0, 0.0
@@ -325,7 +322,7 @@ def show_current_playlist(state: PlayerState) -> None:
     """
     S2-06:
       - If an active playlist exists, print its contents.
-      - Otherwise print guidance.
+      - Otherwise it prints guidance.
     """
     _ensure_playlists(state)
     if state is None or not hasattr(state, "playlists"):
@@ -342,10 +339,8 @@ def show_current_playlist(state: PlayerState) -> None:
 def play_playlist(state: PlayerState, selector: str) -> None:
     """
     S2-06:
-    Explicit command for playing a specific playlist:
-    - resolves the playlist
-    - sets it as the active queue
-    - starts playback from the first track
+    Explicit command for playing a specific playlist: resolves the playlist
+    and sets it as the active queue and then starts playback from the first track
     """
     _ensure_playlists(state)
     pl = _resolve_playlist(state, selector)
