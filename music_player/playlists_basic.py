@@ -405,6 +405,7 @@ def _print_playlist_contents(pl: Playlist) -> None:
         dur = format_mm_ss(track.duration_seconds)
         print(f"{idx:02d}. {track.display_name} [{dur}]")
 
+#S3-10: Sort_playlist function that meets code complexity requirement
 def sort_playlist(state: PlayerState, selector: str, criteria: str) -> None:
     """
     S3-10: Sort playlist by 'artist', 'title', or 'duration'.

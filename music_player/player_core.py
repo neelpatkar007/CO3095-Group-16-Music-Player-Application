@@ -143,7 +143,7 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
             player_queue.next_track(state)
 
 
-
+#S3-12: Set_sleep_timer function that meets code complexity requirement
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
     S3-12: Set a sleep timer in minutes
@@ -216,6 +216,7 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     except Exception as e:
         print(f"[core] Unexpected error: {e}")
 
+#S3-07: Set_playback_speed function that meets code complexity requirement
 def set_playback_speed(state: PlayerState, speed: float) -> None:
     """S3-07: Set playback speed (0.5x to 2.0x)."""
     if not isinstance(state, PlayerState):
