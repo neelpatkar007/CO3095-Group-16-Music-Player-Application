@@ -10,7 +10,6 @@ from typing import Any
 def format_mm_ss(seconds: float | None) -> str:
     """
     Convert floating point number of seconds to a 'mm:ss' formatted string.
-
     Returns "??:??" for negative values or None values.
     """
     # Handle invalid input or missing values
@@ -29,8 +28,8 @@ def parse_timecode(text: Any) -> float:
     """
     Parse time string into total number of seconds (float)
     Supports 2 formats -
-        1 - Plain seconds
-        2 - Minutes and seconds
+        Plain seconds and
+        Minutes and seconds
     """
     # Normalise input to string
     if isinstance(text, bytes):
