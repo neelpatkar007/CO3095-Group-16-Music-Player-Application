@@ -239,6 +239,9 @@ def show_current_profile(state: PlayerState) -> None:
 # S4-09: Advanced Search
 
 def advanced_search(state: PlayerState, query_str: str) -> None:
+    '''
+    Filters the library based on specific syntax queries
+    '''
     if state is None or not hasattr(state, "library_tracks"):
         print("[search] Error: Invalid state.")
         return
