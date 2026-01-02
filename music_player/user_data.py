@@ -212,7 +212,8 @@ def switch_profile(state: PlayerState, name: str) -> None:
     _save_profiles(state)
 
 def list_profiles(state: PlayerState) -> None:
-    '''Display all available profiles
+    '''
+    Display all available profiles
     '''
     if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
         return
@@ -226,6 +227,9 @@ def list_profiles(state: PlayerState) -> None:
         print(f"  - {name}{marker}")
 
 def show_current_profile(state: PlayerState) -> None:
+    '''
+    Display the current active profile
+    '''
     if state is None or not hasattr(state, "active_profile"):
         print("[profile] Error: Invalid state.")
         return
