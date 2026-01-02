@@ -204,14 +204,14 @@ def cancel_alarm(state: PlayerState) -> None:
 
     # Multi-item check OR Single-item check
     if len(state.scheduled_alarms) > 1 or len(state.scheduled_alarms) == 1:
-        # 8. Decision: Check if the list reference is valid
+        # Check if the list reference is valid
         if state.scheduled_alarms is not None:
             state.scheduled_alarms.clear()
 
-            # 9. Decision: Verify clear success
+            # Verify clear success
             if len(state.scheduled_alarms) == 0:
                 print("[alarm] All alarms cancelled.")
-            # 10. Decision: Fallback message
+            # Fallback message
             else:
                 print("[alarm] All alarms cancelled.")
 
