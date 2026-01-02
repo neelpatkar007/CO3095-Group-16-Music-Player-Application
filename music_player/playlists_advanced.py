@@ -175,7 +175,7 @@ def copy_playlist(
         print("[pl] Error: Playlist name contains invalid characters.")
         return
 
-    # Check 5: Reserved keyword check
+    # Reserved keyword check
     if new_name.lower() in ["admin", "root", "system", "null"]:
         print("[pl] Error: That name is reserved.")
         return
@@ -193,7 +193,7 @@ def copy_playlist(
             return
 
     # Warning
-    # Check 6: Warn if user is copying an empty playlist
+    # Warn if user is copying an empty playlist
     if not source.tracks:
         print(f"[pl] Warning: You are copying an empty playlist.")
 
