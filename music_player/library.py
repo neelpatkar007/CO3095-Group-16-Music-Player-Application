@@ -61,6 +61,7 @@ def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
     if not HAS_MUTAGEN:
         return title, artist, duration
 
+    # Attempt to load file using mutagen
     audio = mutagen.File(path)
     if audio is None:
         return title, artist, duration
@@ -71,6 +72,7 @@ def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
         try:
             duration = float(info.length)
         except Exception:
+            # If length is malformed, we leave it as None.
             duration = None
 
     # Extract Tags (format-dependent)
