@@ -98,20 +98,23 @@ def load_resume_state(state: PlayerState) -> None:
         state.position_seconds = pos
         state.resume_active = True
 
-        # Optional: try to locate the track in library_tracks
+        # Locate the track in library_tracks
         tracks = getattr(state, "library_tracks", None)
         matched = False
+
         if isinstance(tracks, list):
-            for t in tracks:
+            target_name = Path(path_str).name
+
+            for i, t in enumerate(tracks):
                 try:
-                    if str(getattr(t, "path", "")) == path_str:
-                        state.current_track = t
+                    current_path = getattr(t, "path", None)
+                    if current_path and current_path.name == target_name:
+                        state.current_index = i
                         matched = True
                         break
                 except Exception:
                     pass
 
-        # Spec expects this substring even if no match
         if matched and hasattr(state.current_track, "display_name"):
             print(f"[state] Found resume state: {state.current_track.display_name} at {int(pos)}s.")
         else:
@@ -123,7 +126,7 @@ def load_resume_state(state: PlayerState) -> None:
         print(f"[state] Error loading state: {e}")
 
 
-# --- S4-02: Schedule Playback ---
+# S4-02: Schedule Playback
 
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """
