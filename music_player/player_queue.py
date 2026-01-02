@@ -208,7 +208,7 @@ def next_track(state: PlayerState) -> None:
 def previous_track(state: PlayerState) -> None:
     '''
     Moves playback index to the previous track in the playlist.
-    If Shuffle is active, it uses the history stack to go back correctly.
+    if shuffle is active, it uses the history stack to go back correctly.
     '''
     if state is None or isinstance(state, (str, int, float, bool)):
         return
@@ -400,7 +400,9 @@ def toggle_shuffle(state: PlayerState) -> None:
 
 
 def set_loop_mode(state: PlayerState, mode: str) -> None:
-    """S3-02: Set loop to 'off', 'one', or 'all'."""
+    """
+    S3-02: Set loop to 'off', 'one', or 'all'.
+    """
     if state is None or isinstance(state, (str, int, float, bool)):
         return
 
@@ -438,7 +440,9 @@ def set_loop_mode(state: PlayerState, mode: str) -> None:
         pass
 
 def _find_track(state: PlayerState, query: str) -> Track | None:
-    """Helper Function: Find track by Index or Name."""
+    """
+    Helper Function: Find track by Index or Name.
+    """
     try:
         query = query.strip()
         if query.isdigit():
@@ -514,7 +518,7 @@ def add_to_queue(state: PlayerState, query: str) -> None:
 
 def play_next(state: PlayerState, query: str) -> None:
     """
-    S3-05: Queue a specific song to play next (Decoupled).
+    S3-05: Queue a specific song to play next  (Decoupled).
     """
     if state is None or isinstance(state, (str, int, float, bool)):
         print("[queue] Error: State is None.")
@@ -632,13 +636,13 @@ def remove_from_queue(state: PlayerState, query: str) -> None:
 
 def clear_queue(state: PlayerState) -> None:
     """
-    S3-06: Clear the queue (keep playing current song).
+    S3-06: Clear the queue - keep playing current song.
     """
     if state is None or isinstance(state, (str, int, float, bool)):
         print("[queue] Error: State is None.")
         return
 
-    # Use safe retrieval for reading, but check type for modification
+    # Use safe retrieval for reading, - but check type for modification
     tracks_ref = getattr(state, "tracks", None)
 
     if tracks_ref is None:
