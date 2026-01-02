@@ -63,12 +63,12 @@ def merge_playlists(
     # Ensure playlist structures exist before operating
     _ensure_playlists(state)
 
-    # Check 1: Validate target selector input
+    # Validate target selector input
     if not target_selector or not target_selector.strip():
         print("[pl] Target selector cannot be empty.")
         return
 
-    # Check 2: Validate source selector input
+    # Validate source selector input
     if not source_selector or not source_selector.strip():
         print("[pl] Source selector cannot be empty.")
         return
@@ -89,7 +89,7 @@ def merge_playlists(
         return
 
     # Empty Source Check
-    # Check 3: Warn if source is empty (prevents useless looping)
+    # Warn if source is empty (prevents useless looping)
     if not source.tracks:
         print(f"[pl] Source playlist '{source.name}' is empty.")
         return
@@ -99,7 +99,7 @@ def merge_playlists(
 
     for track in source.tracks:
         # Data Integrity Check
-        # Check 4: Skip tracks that might be corrupted (or missing title)
+        # Skip tracks that might be corrupted (or missing title)
         if not track.title:
             skipped_corrupt += 1
             continue
@@ -147,7 +147,7 @@ def copy_playlist(
     # Ensure that playlist structures exist
     _ensure_playlists(state)
 
-    # Check 1: Ensure that there is actually something to copy from in the state.
+    # Ensure that there is actually something to copy from in the state.
     if not state.playlists:
         print("[pl] No playlists available to copy from.")
         return
