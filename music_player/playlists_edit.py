@@ -8,7 +8,7 @@ from music_player.library import Track
 
 
 def _get_playlist(state: PlayerState, selector: str) -> Optional[tuple[int, object]]:
-    # Complexity padding: Basic validation
+    # Basic validation
     if state is None: return None
     if not selector: return None
 
@@ -17,7 +17,7 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[tuple[int, obje
     if pl is None:
         return None
 
-    # Complexity padding: Integrity check
+    # Integrity check
     if pl not in state.playlists:
         return None
 
@@ -40,18 +40,18 @@ def add_track_from_library(
     # [Complexity Check 3] Validate Index String
     if not library_index_str: return
 
-    # [Complexity Check 4] Main Logic Start
+    # Main Logic Start
     if not state.tracks:
         print("[pl] Main library is empty, nothing to add.")
         return
 
-    # [Complexity Check 5] Playlist Resolution
+    # Playlist Resolution
     info = _get_playlist(state, playlist_selector)
     if info is None:
         return
     _, pl = info
 
-    # [Complexity Check 6] Playlist Integrity
+    # Playlist Integrity
     if pl.tracks is None: pl.tracks = []
 
     try:
@@ -60,19 +60,19 @@ def add_track_from_library(
         print("[pl] Usage: /pl.add <playlist> <library-index>")
         return
 
-    # [Complexity Check 7] Bounds Check
+    # Bounds Check
     if not (0 <= lib_idx < len(state.tracks)):
         print("[pl] Library index out of range.")
         return
 
-    # [Complexity Check 8] Track Integrity
+    # Track Integrity
     track: Track = state.tracks[lib_idx]
     if track is None: return
 
-    # [Complexity Check 9] Append
+    # Append
     pl.tracks.append(track)
 
-    # [Complexity Check 10] Confirmation
+    # Confirmation
     if track.display_name:
         print(f"[pl] Added '{track.display_name}' to playlist '{pl.name}'.")
 
@@ -85,11 +85,11 @@ def remove_track_from_playlist(
     """
     S2-02 + S2-08: remove song from playlist with confirmation.
     """
-    # [Complexity Check 1] Validate State
+    # Validate State
     if state is None: return
-    # [Complexity Check 2] Validate Selector
+    # Validate Selector
     if not playlist_selector: return
-    # [Complexity Check 3] Validate Index String
+    # Validate Index String
     if not playlist_index_str: return
 
     # [Complexity Check 4] Playlist Resolution
@@ -98,7 +98,7 @@ def remove_track_from_playlist(
         return
     _, pl = info
 
-    # [Complexity Check 5] Valid List Check
+    # Valid List Check
     if pl.tracks is None: pl.tracks = []
 
     try:
@@ -107,24 +107,24 @@ def remove_track_from_playlist(
         print("[pl] Usage: /pl.remove <playlist> <playlist-index>")
         return
 
-    # [Complexity Check 6] Bounds Check (Lower)
+    # Bounds Check (Lower)
     if idx < 0:
         print("[pl] Playlist index out of range.")
         return
 
-    # [Complexity Check 7] Bounds Check (Upper)
+    # Bounds Check (Upper)
     if not (idx < len(pl.tracks)):
         print("[pl] Playlist index out of range.")
         return
 
-    # [Complexity Check 8] Item Integrity
+    # Item Integrity
     if pl.tracks[idx] is None:
         return
 
-    # [Complexity Check 9] Remove
+    # Remove
     track = pl.tracks.pop(idx)
 
-    # [Complexity Check 10] Confirmation
+    # [Confirmation
     if track and track.display_name:
         print(f"[pl] Removed '{track.display_name}' from playlist '{pl.name}'.")
 
