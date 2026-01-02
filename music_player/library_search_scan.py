@@ -20,12 +20,16 @@ def _print_tracks_table(tracks: List[Track]) -> None:
     # Table headers with spacing
     print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
     print("-" * 65)
+
     for idx, t in enumerate(tracks, start=1):
         if t is None: continue
         # Truncate strings so that they do fit in the table nicely
         title = str(getattr(t, "title", "") or "")[:30]
         artist = str(getattr(t, "artist", "") or "")[:20]
+
         dur = format_mm_ss(getattr(t, "duration_seconds", None))
+
+        # Print row with specific column widths matching the headers
         print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
 
 
@@ -45,10 +49,13 @@ def search_library(state: PlayerState, query: str) -> None:
     results: List[Track] = []
     for t in source_list:
         if t is None: continue
+
         # Lowercase everything to make the search case-insensitive
         title = (getattr(t, "title", "") or "").lower()
         artist = (getattr(t, "artist", "") or "").lower()
         filename = ""
+
+        # Check for path existence before accessing the name to avoid any errors
         if getattr(t, "path", None) is not None:
             filename = t.path.name.lower()
 
@@ -88,6 +95,7 @@ def view_artists_table(state: PlayerState) -> None:
 
     # Sorts the artists alphabetically so that the list is predictable
     for artist, tracks in sorted(by_artist.items()):
+        # Calculate total duration for this artist
         total = sum((t.duration_seconds or 0) for t in tracks)
         print(f"{artist:<25}  {len(tracks):6d}  {format_mm_ss(total):>8}")
 
