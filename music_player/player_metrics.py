@@ -152,7 +152,9 @@ def show_liked_songs(state: PlayerState) -> None:
 
 #S3-11: Show_top_tracks function that meets code complexity requirement
 def show_top_tracks(state: PlayerState) -> None:
-     '''S3-11: Show top 10 most played songs'''
+     '''
+     S3-11: Show top 10 most played songs
+     '''
      if state is None:
         print("[metrics] Error: State is None.")
         return
