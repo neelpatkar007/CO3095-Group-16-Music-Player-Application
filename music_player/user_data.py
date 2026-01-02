@@ -94,8 +94,13 @@ def _apply_profile_data(state: PlayerState, data: dict):
 
 # S4-07: User Profiles
 
+import json
+
+
 def load_profiles_index(state: PlayerState) -> None:
-    """Loads profile metadata on startup."""
+    """
+    Loads profile metadata on startup.
+    """
     if state is None:
         return
 
@@ -106,18 +111,34 @@ def load_profiles_index(state: PlayerState) -> None:
     try:
         with open(PROFILE_FILE, "r") as f:
             data = json.load(f)
-            state.active_profile = data.get("active", "default")
-            state.profiles = data.get("profiles", {})
+
+            if not isinstance(data, dict):
+                data = {}
+
+            if "active" in data:
+                state.active_profile = data["active"]
+            else:
+                state.active_profile = "default"
+
+            if "profiles" in data:
+                state.profiles = data["profiles"]
+            else:
+                state.profiles = {}
+
             print(f"[profile] Profiles loaded. Active: '{state.active_profile}'")
 
-            # Apply the active profile data
             if state.active_profile in state.profiles:
-                _apply_profile_data(state, state.profiles[state.active_profile])
-            else:
-                # If active is default but empty then save state
-                if state.active_profile == "default":
-                    _save_current_to_profile(state)
+                profile_data = state.profiles[state.active_profile]
 
+                if profile_data is not None:
+                    _apply_profile_data(state, profile_data)
+            else:
+                if state.active_profile == "default":
+                    if "default" not in state.profiles:
+                        _save_current_to_profile(state)
+
+    except json.JSONDecodeError:
+        print("[profile] Error: Profile file contains invalid JSON.")
     except Exception as e:
         print(f"[profile] Error loading profiles: {e}")
 
