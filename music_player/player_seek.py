@@ -26,6 +26,7 @@ def get_progress(state: PlayerState) -> tuple[float, float | None]:
 
     return state.position_seconds, track.duration_seconds
 
+#S1-06: Render_progress_bar function that meets code complexity requirement
 def render_progress_bar(state: PlayerState, width: int = 15) -> str:
     """
     Generates a progress bar represents current progress for the track as a % visualised.
@@ -91,6 +92,7 @@ def nudge(state: PlayerState, offset_seconds: float) -> None:
     seek_to(state, new_pos)
 
 # Function to seek to a specific time in the track
+#S1-08: Seek_to function that meets code complexity requirement
 def seek_to(state: PlayerState, text_or_seconds) -> None:
     """
     Seek to a specific time in the track.

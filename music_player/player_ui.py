@@ -27,7 +27,7 @@ def _ensure_player_state(state: Any, context: str) -> PlayerState | None:
         return None
     return state
 
-
+#S1-05: Print_now_playing function that meets code complexity requirement
 def print_now_playing(state: PlayerState) -> None:
     """
     Print the current title, artist, track status and total duration.
@@ -103,7 +103,7 @@ def print_progress_bar(state: PlayerState) -> None:
     # Example output: [ui] ███████░░░░░░░  47%
     print(f"[ui] {bar}")
 
-
+#S1-10: Print_playlist_with_indicator function that meets code complexity requirement
 def print_playlist_with_indicator(state: PlayerState) -> None:
     """
     Prints the entire track list with a symbol indicating  currently

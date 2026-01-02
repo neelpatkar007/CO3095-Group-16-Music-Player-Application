@@ -1,4 +1,5 @@
-from __future__ import annotations
+
+rom __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -40,7 +41,7 @@ class Track:
             return f"{self.title} – {self.artist}"
         return self.title
 
-
+#S1-03: Read_metadata function that meets code complexity requirement
 def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
     """
     Read title, artist, and duration from audio file metadata.

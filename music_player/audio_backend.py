@@ -44,6 +44,8 @@ class AudioEngine:
         # Temporary file for speed-modified audio
         self.temp_file = Path("temp_speed_audio.mp3")
 
+
+    #S1-01: Play function that meets code complexity requirement
     def play(self, path: Path, start_pos: float = 0.0, speed: float = 1.0) -> None:
         '''
         Loads and starts to play an audio file from a specific position.

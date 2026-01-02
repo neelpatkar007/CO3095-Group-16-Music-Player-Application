@@ -13,6 +13,7 @@ except ImportError:  # pragma: no cover
     import player_core  # type: ignore
     import player_audio  # type: ignore
 
+#S1-07: Handle_keypress function that meets code complexity requirement
 def handle_keypress(state: PlayerState, key: str) -> None:
     """
     Interpret a keyboard key press (p, s, m) and trigger the corresponding action

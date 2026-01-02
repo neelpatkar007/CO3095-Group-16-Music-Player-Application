@@ -1,6 +1,7 @@
 from music_player.player_state import PlayerState
 # from player_state import PlayerState
 
+#S1-04: Change_volume function that meets code complexity requirement
 def change_volume(state: PlayerState, raw_input: str) -> None:
     '''
     Handles volume change command.
@@ -52,7 +53,7 @@ def change_volume(state: PlayerState, raw_input: str) -> None:
 
     print(f"[audio] Volume set to {val}%")
 
-
+#S1-09: Toggle_mute function that meets code complexity requirement
 def toggle_mute(state: PlayerState) -> None:
     '''
     Toggles mute state and saves/restores volume as needed.

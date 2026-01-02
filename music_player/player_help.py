@@ -1,6 +1,6 @@
 from typing import Optional
 
-
+#S1-11: Print_help function that meets code complexity requirement
 def print_help(command: Optional[str] = None) -> None:
     '''
     Displays help information for the music player commands.

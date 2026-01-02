@@ -94,7 +94,7 @@ def stop(state: PlayerState) -> None:
     state.position_seconds = 0.0
     print("[core] Stopped.")
 
-
+#S1-12: Update_playback function that meets code complexity requirement
 def update_playback(state: PlayerState, delta_seconds: float) -> None:
     """
     Advance the playback position based on elapsed time.
