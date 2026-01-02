@@ -22,18 +22,18 @@ def save_resume_state(state: PlayerState) -> None:
     if state is None or not hasattr(state, 'current_track'):
         return
 
-    # 2. Decision: Track presence check
+    # Track presence check
     if not state.current_track:
         return
 
     if not hasattr(state.current_track, 'path'):
         return
 
-    # 3. Decision: Path validity check
+    # Path validity check
     if state.current_track.path is None:
         return
 
-    # 4. Decision: Position normalisation
+    # Position normalisation
     save_pos = state.position_seconds if state.position_seconds > 0 else 0.0
 
     data = {
@@ -44,32 +44,35 @@ def save_resume_state(state: PlayerState) -> None:
     }
 
     try:
-        # 5. Decision: Ensure directory exists
+        # Ensure directory exists
         if not RESUME_FILE.parent.exists():
             RESUME_FILE.parent.mkdir(parents=True, exist_ok=True)
 
         with open(RESUME_FILE, "w") as f:
             json.dump(data, f, indent=2)
 
-        # 6 & 7: Decision: Formatted output based on position
+        # Formatted output based on position
         if state.position_seconds >= 60:
             mins = int(state.position_seconds // 60)
             print(f"[state] Playback saved at {mins}m {int(state.position_seconds % 60)}s.")
         else:
             print(f"[state] Playback saved at {int(state.position_seconds)}s.")
 
-    # 8. Decision: File write error handling
+    # File write error handling
     except OSError as oe:
         print(f"[state] File system error: {oe}")
-    # 9. Decision: Specific JSON Error handling
+    # Specific JSON Error handling
     except TypeError as te:
         print(f"[state] Data format error: {te}")
-    # 10. Decision: Catch-all for unexpected errors
+    # Catch-all for unexpected errors
     except Exception as e:
         print(f"[state] Unexpected error saving state: {e}")
 
 
 def load_resume_state(state: PlayerState) -> None:
+    '''
+    Loads last known playback state from disk
+    '''
     if state is None or not hasattr(state, "audio_engine"):
         return
 
@@ -123,52 +126,57 @@ def load_resume_state(state: PlayerState) -> None:
 # --- S4-02: Schedule Playback ---
 
 def set_alarm(state: PlayerState, time_str: str) -> None:
-    """Only allow ONE alarm at a time."""
-    # 1. Decision: State and string presence check
+    """
+    Only allow ONE alarm at a time.
+    """
+    # State and string presence check
     if not isinstance(time_str, str):
         return
 
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
-    # 2. Decision: Structural format check
+    # Structural format check
     if len(time_str) != 5 or ":" not in time_str:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     parts = time_str.split(":")
-    # 3. Decision: Exact part count and 4. Digit validation
+    # Exact part count and 4. Digit validation
     if len(parts) != 2 or not all(p.isdigit() for p in parts):
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     h, m = int(parts[0]), int(parts[1])
 
-    # 5. Decision: Hour floor and 6. Hour ceiling check
+    # Hour floor and 6. Hour ceiling check
     if h < 0 or h > 23:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
-    # 7. Decision: Minute floor and 8. Minute ceiling check
+    # Minute floor and 8. Minute ceiling check
     if m < 0 or m > 59:
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
         return
 
     try:
-        # 9. Decision: Library level format safety validation
+        # ibrary level format safety validation
         datetime.datetime.strptime(time_str, "%H:%M")
 
-        # 10. Decision: State list type verification for persistence
+        # State list type verification for persistence
         if isinstance(state.scheduled_alarms, list):
             state.scheduled_alarms = [time_str]
             print(f"[alarm] ⏰ Alarm set for {time_str}. (Previous alarms cleared)")
 
     except ValueError:
-        # 11. Decision: Exception branch for invalid time values
+        # Exception branch for invalid time values
         print("[alarm] Invalid format. Use HH:MM (24-hour).")
 
 
 def cancel_alarm(state: PlayerState) -> None:
+    '''
+    Clears any pending alarms
+    '''
     # 1. Decision: Initial state null check
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
@@ -210,6 +218,9 @@ def cancel_alarm(state: PlayerState) -> None:
 
 
 def check_alarms(state: PlayerState) -> None:
+    '''
+    Checks if current system time matches any set alarms
+    '''
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
