@@ -26,6 +26,7 @@ def play(state: PlayerState) -> None:
     if not isinstance(state, PlayerState):
         return
 
+    # Ensure backend audio driver is loaded
     if not hasattr(state, "audio_engine"):
         return
 
@@ -42,11 +43,13 @@ def play(state: PlayerState) -> None:
         print("[core] Error: Track invalid.")
         return
 
+    # If already playing, do nothing
     if state.is_playing:
         if not state.is_paused:
             print("[core] Already playing.")
             return
 
+    # If paused, the Resume instead of restarting
     if state.is_paused:
         state.audio_engine.resume()
         state.is_playing = True
@@ -54,6 +57,7 @@ def play(state: PlayerState) -> None:
         print(f"[core] Resumed: {track.display_name}")
         return
 
+    # If stopped, then start fresh from a specific position
     state.audio_engine.play(track.path, start_pos=state.position_seconds, speed=state.playback_speed)
     state.is_playing = True
     state.is_paused = False
@@ -61,7 +65,9 @@ def play(state: PlayerState) -> None:
 
 
 def pause(state: PlayerState) -> None:
-    """Pause playback without resetting position."""
+    """
+    Pause playback without resetting position.
+    """
     if not state.is_playing or state.is_paused:
         print("[core] Nothing to pause.")
         return
@@ -73,7 +79,9 @@ def pause(state: PlayerState) -> None:
 
 
 def stop(state: PlayerState) -> None:
-    """Stop playback and reset position to 0."""
+    """
+    Stop playback and reset position to 0.
+    """
     if not state.is_playing and not state.is_paused:
         print("[core] Nothing is playing.")
         return
@@ -81,12 +89,13 @@ def stop(state: PlayerState) -> None:
     state.audio_engine.stop()
     state.is_playing = False
     state.is_paused = False
+
+    # Reset position so next play starts from beginning
     state.position_seconds = 0.0
     print("[core] Stopped.")
 
 
 def update_playback(state: PlayerState, delta_seconds: float) -> None:
-    # Skip if not playing
     """
     Advance the playback position based on elapsed time.
 
@@ -96,12 +105,15 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
     Extended for Sprint 2:
     - If the current queue is a playlist (state.tracks is not state.library_tracks),
       automatically advance to the next track when the current one finishes.
-    - If using the main library queue, keep original behaviour (stop at end).
+    - If using the main library queue, then keep original behaviour (stop at end).
     """
+
+    # Skip if not playing
     if not isinstance(state, PlayerState):
         return
     if not isinstance(delta_seconds, (int, float)):
         return
+
     # S3-12: Check Sleep Timer
     if hasattr(state, "sleep_deadline") and state.sleep_deadline and time.time() > state.sleep_deadline:
         print("\n[timer] Sleep timer reached. Stopping playback.")
@@ -112,6 +124,7 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
     # Skip if time delta is invalid
     if delta_seconds <= 0:
         return
+
     # Only update position if currently playing
     if not state.is_playing or state.is_paused:
         return
@@ -133,7 +146,7 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
 def set_sleep_timer(state: PlayerState, minutes: float) -> None:
     """
-    S3-12: Set a sleep timer. Final high-complexity version.
+    S3-12: Set a sleep timer in minutes
     """
     if not isinstance(state, PlayerState):
         print("[core] Error: State is None.")
@@ -162,6 +175,7 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
         return
 
     # Boundary logic
+    # A max limit of 24 hours (1440 minutes) to prevent any accidental infinite waits
     if minutes >= 1440:
         if minutes > 1440:
             print("[core] Error: Max 24 hours.")
@@ -178,6 +192,7 @@ def set_sleep_timer(state: PlayerState, minutes: float) -> None:
                 print(f"[core] Replacing {remaining:.1f}m timer.")
 
     try:
+        # Calculate absolute timestamp for deadline
         deadline = time.time() + (minutes * 60)
         if deadline <= time.time():
             print("[core] Error: Time calculation error.")
@@ -209,15 +224,20 @@ def set_playback_speed(state: PlayerState, speed: float) -> None:
     if not isinstance(speed, (int, float)):
         print("[core] Error: Speed must be a number.")
         return
+
+    # Limit range to prevent distortion
     if speed < 0.5 or speed > 2.0:
         print("[core] Speed must be between 0.5x and 2.0x.")
         return
+
     if hasattr(state, "playback_speed") and state.playback_speed == speed:
         print(f"[core] Speed is already {speed}x.")
         return
 
     state.playback_speed = speed
     print(f"[core] Playback speed set to {speed}x.")
+
+    # If playing, must restart the track to apply new speed
     if state.is_playing:
         print("[core] Applying speed change...")
         state.is_playing = False
