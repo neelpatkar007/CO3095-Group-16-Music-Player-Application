@@ -1,5 +1,5 @@
 """
-Backbone: Sprint 2 – playlists_basic
+Module: Sprint 2 – playlists_basic
 
 Stories:
 - S2-01: Create, rename, delete playlists

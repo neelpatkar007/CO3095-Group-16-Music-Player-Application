@@ -1,5 +1,5 @@
 """
-Sprint 4 Module: Configuration & Insights
+Sprint 4 Module: player_config
 Stories:
  - S4-01: Remember Settings
  - S4-05: Custom Tags
