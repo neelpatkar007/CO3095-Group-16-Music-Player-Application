@@ -91,16 +91,13 @@ def _activate_playlist_queue(
     auto_play: bool = True,
 ) -> None:
     """
-    S2-06:
-    Make the given playlist the current playback queue.
-    Sets state.tracks to the playlist's tracks.
-    Resets current_index and position.
-    Keeps a reference to the original library in state.library_tracks.
+    S2-06: Make the given playlist the current playback queue.
     """
+    _ensure_playlists(state)
+
     if state is None:
         print("[pl] Error: State is None.")
         return
-    _ensure_playlists(state)
 
     if playlist is None:
         print("[pl] Error: Playlist is None.")
@@ -110,34 +107,31 @@ def _activate_playlist_queue(
         print("[pl] Error: Playlist invalid.")
         return
 
-    if not playlist.tracks:
-        print("[pl] Warning: Playlist is empty.")
-        return
-
     if not isinstance(playlist.tracks, list):
         print("[pl] Error: Playlist tracks corrupted.")
         return
 
-    # Ensure library_tracks is initialised
+    if not playlist.tracks:
+        print("[pl] Warning: Playlist is empty.")
+        return
+
     if not hasattr(state, "library_tracks"):
         state.library_tracks = state.tracks
-    else:
-        if state.library_tracks is None:
-             state.library_tracks = []
+
+    if state.library_tracks is None:
+        state.library_tracks = []
 
     _set_active_by_playlist(state, playlist)
 
-    # Queue is now the playlist tracks
     state.tracks = playlist.tracks
     state.current_index = 0
     state.position_seconds = 0.0
 
-    # Auto Play Logic
     if auto_play:
         if hasattr(player_core, "play"):
-             player_core.play(state)
+            player_core.play(state)
         else:
-             print("[pl] Error: Player core not available.")
+            print("[pl] Error: Player core not available.")
 
 
 # S2-01: create, rename, delete playlists
