@@ -371,6 +371,7 @@ def main() -> None:
     Main execution loop for the music player application.
     Initialises components, discovers tracks, and enters the command loop.
     '''
+    print("Initialising Music Player Application...")
     # Initialise audio engine and discover tracks
     audio_engine = AudioEngine()
     tracks = discover_tracks()
@@ -391,7 +392,7 @@ def main() -> None:
     user_data.load_profiles_index(state)
 
     # Startup display welcome message and available commands summary
-    print("Music Player Application")
+    print("Music Player Ready. Type /help for a list of commands.")
     print(
         "Core: /play /pause /stop /next /prev /seek /rw /ff /volume /mute /unmute "
         "/info /progress /bar /list /help /quit /speed /sleep"
@@ -400,10 +401,12 @@ def main() -> None:
         "Queue: /queue /q.add /q.remove /playnext /q.clear /shuffle /loop"
     )
     print(
-        "Playlists: /pl.new /pl.rename /pl.del /pl.list /pl.open /pl.show "
-        "/pl.play /pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort"
+        "Playlists: /pl.new /pl.rename /pl.del /pl.list /pl.open /pl.show /pl.play"
+        "/pl.close /pl.add /pl.remove /pl.move /pl.merge /pl.copy /pl.sort /pl.export"
     )
-    print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top")
+    print("Library & Stats: /search /songs /artists /albums /scan /like /likes /top /stats")
+    print("Files & Tags: /import /edit /tag.add /tags /tag.filter /advanced.search")
+    print("User: /profile.new /profile.switch /profiles /profile /rate /rated")
     print("Scheduling: /schedule HH:MM, /schedule.cancel, /recent")
 
     # start background playback thread
