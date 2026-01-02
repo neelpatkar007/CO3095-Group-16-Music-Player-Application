@@ -24,7 +24,7 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[tuple[int, obje
     idx = state.playlists.index(pl)
     return idx, pl
 
-
+#S2-07: Add_track_from_library function that meets code complexity requirement
 def add_track_from_library(
         state: PlayerState,
         playlist_selector: str,
@@ -76,7 +76,7 @@ def add_track_from_library(
     if track.display_name:
         print(f"[pl] Added '{track.display_name}' to playlist '{pl.name}'.")
 
-
+#S2-08: Remove_track_from_playlist function that meets code complexity requirement
 def remove_track_from_playlist(
         state: PlayerState,
         playlist_selector: str,
@@ -128,7 +128,7 @@ def remove_track_from_playlist(
     if track and track.display_name:
         print(f"[pl] Removed '{track.display_name}' from playlist '{pl.name}'.")
 
-
+#S2-02: Move_track_within_playlist function that meets code complexity requirement
 def move_track_within_playlist(
         state: PlayerState,
         playlist_selector: str,

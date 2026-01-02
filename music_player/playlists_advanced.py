@@ -45,7 +45,7 @@ def _get_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     print(f"[pl] Error: Playlist '{selector}' not found.")
     return None
 
-
+#S2-11: Merge_playlists function that meets code complexity requirement
 def merge_playlists(
         state: PlayerState,
         target_selector: str,
@@ -120,7 +120,7 @@ def merge_playlists(
         f"'{target.name}' ({dedupe_text})."
     )
 
-
+#S2-12: Copy_playlist function that meets code complexity requirement
 def copy_playlist(
         state: PlayerState,
         source_selector: str,
