@@ -27,26 +27,47 @@ def get_progress(state: PlayerState) -> tuple[float, float | None]:
     return state.position_seconds, track.duration_seconds
 
 def render_progress_bar(state: PlayerState, width: int = 15) -> str:
-    '''
-    Generates a visual progress bar for the current track.
-    '''
+    """
+    Generates a progress bar represents current progress for the track as a % visualised.
+    Example   output: ██████░░░░░░░ 40%
+    """
+    if state is None:
+        return "[ui error]"
+
+    if not isinstance(width, int):
+        return "[ui error]"
+
+    if width <= 0:
+        return "[ui error]"
+
     pos, total = get_progress(state)
 
-    # Cannot render progress bar if total duration is unknown or invalid
-    if total is None or not isinstance(total, (int, float)) or total <= 0:
+    if total is None:
         return "[Time null]"
+
+    if not isinstance(total, (int, float)):
+        return "[Time error]"
+
+    if total <= 0:
+        return "[Time zero]"
+
+    if pos is None:
+        pos = 0.0
+
     if not isinstance(pos, (int, float)):
         pos = 0.0
-    # Calculate fill ratio
-    ratio = max(0.0,min(1.0,pos/total))
 
-    # Calculate character counts for filled and empty parts
-    filledCount = int(ratio * width)
+    if pos < 0:
+        pos = 0.0
+
+    ratio = pos / total
+    final_ratio = min(1.0, max(0.0, ratio))
+
+    filledCount = int(final_ratio * width)
     emptyCount = width - filledCount
 
-    # Build the progress bar string
-    bar = ("█" * filledCount) + ("░"  * emptyCount)
-    percentage = int(ratio * 100)
+    bar = ("█" * filledCount) + ("░" * emptyCount)
+    percentage = int(final_ratio * 100)
 
     return f"{bar} {percentage:3d}%"
 
