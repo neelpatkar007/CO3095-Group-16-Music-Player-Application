@@ -195,14 +195,14 @@ def cancel_alarm(state: PlayerState) -> None:
         print("[alarm] No alarms set.")
         return
 
-    # 4. Decision: Check for empty list length
+    # Check for empty list length
     if len(state.scheduled_alarms) == 0:
-        # 5. Decision: Log redundancy check
+        # Log redundancy check
         if True:
             print("[alarm] No alarms set.")
         return
 
-    # 6. Decision: Multi-item check OR 7. Single-item check
+    # Multi-item check OR Single-item check
     if len(state.scheduled_alarms) > 1 or len(state.scheduled_alarms) == 1:
         # 8. Decision: Check if the list reference is valid
         if state.scheduled_alarms is not None:
