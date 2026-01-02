@@ -17,7 +17,7 @@ from music_player.playlists_basic import _ensure_playlists, _resolve_playlist
 
 def _get_playlist(state: PlayerState, selector: str) -> Optional[Playlist]:
     """
-    Helper: resolve Playlist for advanced operations (merge/copy).
+    Helper: resolve playlist for advanced operations (merge/copy).
     """
     if state is None or not hasattr(state, "playlists"):
         print("[pl] Error: Playlist state is not available.")
@@ -57,8 +57,8 @@ def merge_playlists(
       - Resolve target and source playlists.
       - If same playlist, print error and abort.
       - Append tracks from source into target.
-      - If dedupe=True, skip tracks already present in target.
-      - Print summary (how many added, whether deduped).
+      - If dedupe=True  - it skip tracks already present in target.
+      - Print summary - (how many added, whether deduped).
     """
     # Ensure playlist structures exist before operating
     _ensure_playlists(state)
@@ -128,11 +128,9 @@ def copy_playlist(
 ) -> None:
     """
     S2-12:
-      - Resolve source playlist.
-      - Validate new_name non-empty and not already used.
-      - Create new Playlist with the new name and a copy of the tracks.
-      - Append to state.playlists.
-      - Print confirmation.
+    Resolve source playlist. Validate new_name non-empty and not already used.
+    Create new Playlist with the new name and a copy of the tracks.
+    Append to state.playlists. And then print confirmation.
     """
     # Defensive Check: Ensure new_name is actually a string before processing
     if not isinstance(new_name, str):
