@@ -18,9 +18,9 @@ from music_player.library import Track
 
 def _ensure_player_state(state: Any, context: str) -> PlayerState | None:
     """
-    Internal helper: validate that `state` is a PlayerState object.
+    Internal helper - validate that `state` is a PlayerState object.
     Protects against unexpected inputs and provides clear warnings if a
-    module attempts to pass something else (invalid data).
+    module attempts to pass something else - invalid data
     """
     if not isinstance(state, PlayerState):
         print(f"[ui] Invalid player state for {context}.")
