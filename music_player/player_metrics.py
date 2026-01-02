@@ -18,13 +18,16 @@ def load_data(state: PlayerState) -> None:
     try:
         with open(DATA_FILE, "r") as f:
             data = json.load(f)
+            # Sets are used for lookup for liked status
             state.liked_tracks = set(data.get("likes", []))
             state.play_counts = data.get("counts", {})
     except Exception as e:
         print(f"[metrics] Error loading data: {e}")
 
 def save_data(state: PlayerState) -> None:
-    """Save likes and play counts to JSON."""
+    """
+    Save likes and play counts to JSON.
+    """
     if state is None:
         return
     data = {
@@ -38,6 +41,10 @@ def save_data(state: PlayerState) -> None:
         print(f"[metrics] Error saving data: {e}")
 
 def toggle_like(state: PlayerState) -> None:
+    '''
+    Toggle like status of the currently playing track.
+    Validation is high to prevent any crashes on edge cases
+    '''
     if state is None:
         print("[metrics] Error: State is None.")
         return
@@ -85,6 +92,9 @@ def toggle_like(state: PlayerState) -> None:
     save_data(state)
 
 def record_play(state: PlayerState) -> None:
+    '''
+    Increments play count for current track - called automatically by player core
+    '''
     if state is None: return
     if not hasattr(state, "current_track"): return
 
@@ -105,7 +115,9 @@ def record_play(state: PlayerState) -> None:
     save_data(state)
 
 def show_liked_songs(state: PlayerState) -> None:
-    """S3-09: View all liked songs."""
+    """
+    S3-09: View all liked songs.
+    """
     print("[metrics] --- Liked Songs ---")
 
     if state is None:
@@ -137,6 +149,7 @@ def show_liked_songs(state: PlayerState) -> None:
         print("  (Liked songs not found in current library scan)")
 
 def show_top_tracks(state: PlayerState) -> None:
+     '''S3-11: Show top 10 most played songs'''
      if state is None:
         print("[metrics] Error: State is None.")
         return
