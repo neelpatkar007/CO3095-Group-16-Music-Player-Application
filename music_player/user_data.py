@@ -290,6 +290,9 @@ def advanced_search(state: PlayerState, query_str: str) -> None:
 # S4-12: Rate Songs
 
 def rate_song(state: PlayerState, rating_str: str) -> None:
+    '''
+    Assigns a rating from 1-5 to the currently playing song
+    '''
     if state is None or not hasattr(state, "current_track"):
         print("[rate] No song playing.")
         return
