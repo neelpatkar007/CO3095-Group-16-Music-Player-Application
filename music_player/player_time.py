@@ -185,12 +185,12 @@ def cancel_alarm(state: PlayerState) -> None:
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
-    # 2. Decision: Explicit check if alarms list is missing
+    # Explicit check if alarms list is missing
     if state.scheduled_alarms is None:
         print("[alarm] No alarms set.")
         return
 
-    # 3. Decision: Verify object type is list
+    # Verify object type is list
     if not isinstance(state.scheduled_alarms, list):
         print("[alarm] No alarms set.")
         return
