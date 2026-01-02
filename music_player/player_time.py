@@ -181,7 +181,7 @@ def cancel_alarm(state: PlayerState) -> None:
     '''
     Clears any pending alarms
     '''
-    # 1. Decision: Initial state null check
+    # Initial state null check
     if state is None or not hasattr(state, 'scheduled_alarms'):
         return
 
