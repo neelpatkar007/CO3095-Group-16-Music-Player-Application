@@ -215,7 +215,7 @@ def cancel_alarm(state: PlayerState) -> None:
             else:
                 print("[alarm] All alarms cancelled.")
 
-    # 11. Decision: Catch all logic branch
+    # Catch all logic branch
     else:
         if not state.scheduled_alarms:
             print("[alarm] No alarms set.")
@@ -252,7 +252,7 @@ def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).
     """
-    # 1. Decision: Validating state initialisation
+    # Validating state initialisation
     if state is None or not hasattr(state, 'library_tracks'):
         return
 
@@ -262,7 +262,7 @@ def show_recently_added(state: PlayerState) -> None:
 
     print("--- Recently Added Songs ---")
     try:
-        # 3. Decision: Checking for path validity
+        # Checking for path validity
         # 4. Decision: Verifying physical existence on disk
         valid_tracks = [t for t in state.library_tracks if t.path and t.path.exists()]
 
