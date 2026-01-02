@@ -25,6 +25,8 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         return
 
     src = Path(source_path_str)
+
+    # File validations
     if not src.exists():
         print("[import] Error: File not found.")
         return
@@ -33,17 +35,21 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         print("[import] Error: Source is not a file.")
         return
 
+    # Check for empty file
     if src.stat().st_size == 0:
         print("[import] Error: File is empty.")
         return
 
+    # Ensure suf
     if src.suffix.lower() not in SUPPORTED_EXTENSIONS:
         print("[import] Error: Unsupported file type.")
         return
 
+    # Check music directory exists
     if not MUSIC_DIR.exists():
         MUSIC_DIR.mkdir()
 
+    # Prevent overwriting existing files
     dest = MUSIC_DIR / src.name
     if dest.exists():
         print(f"[import] Error: File '{src.name}' already exists in library.")
@@ -53,9 +59,11 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         shutil.copy2(src, dest)
         print(f"[import] Successfully imported '{src.name}'.")
 
+        # Refresh library so the new track appears
         new_tracks = library.discover_tracks()
         state.library_tracks = new_tracks
 
+        # If queue is empty, sync it with new library
         if not state.tracks:
             state.tracks = new_tracks
     except PermissionError:
@@ -100,6 +108,7 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
             output_filename += ".m3u"
 
     try:
+        # Write M3U format
         with open(output_filename, "w", encoding="utf-8") as f:
             f.write("#EXTM3U\n")
             for t in target_tracks:
@@ -128,6 +137,7 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
     if not index_str:
         return
 
+    # Validate Index
     try:
         idx = int(index_str) - 1
         if not (0 <= idx < len(state.library_tracks)): raise ValueError
@@ -141,6 +151,7 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
         print("[edit] Error: Value cannot be empty.")
         return
 
+    # Ensures UI updates immediately even if file save fails
     if field == "title":
         track.title = value
     elif field == "artist":
@@ -151,11 +162,13 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
 
     print(f"[edit] Updated {field} to '{value}'.")
 
+    # Check OS write permission
     if not os.access(track.path, os.W_OK):
         print("[edit] Error: No write permission for file.")
         return
 
     try:
+        # Use mutagen to write tags
         from mutagen.easyid3 import EasyID3
         from mutagen.id3 import ID3NoHeaderError
 
@@ -167,6 +180,7 @@ def update_metadata(state: PlayerState, index_str: str, field: str, value: str) 
             audio.save()  # Creating a header
             audio = EasyID3(track.path)
 
+        # Write specific tag
         audio[field] = value
         audio.save()
         print("[edit] File tags updated successfully (Persistent).")
