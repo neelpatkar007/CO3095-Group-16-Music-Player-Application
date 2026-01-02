@@ -263,17 +263,17 @@ def show_recently_added(state: PlayerState) -> None:
     print("--- Recently Added Songs ---")
     try:
         # Checking for path validity
-        # 4. Decision: Verifying physical existence on disk
+        # Verifying physical existence on disk
         valid_tracks = [t for t in state.library_tracks if t.path and t.path.exists()]
 
-        # 5. Decision: Conditional check for valid track list length
+        # Conditional check for valid track list length
         if len(valid_tracks) == 0:
             print("[recent] No valid files found.")
             return
 
         recent = sorted(valid_tracks, key=lambda t: t.path.stat().st_mtime, reverse=True)
 
-        # 6. Decision: Iteration through the sorted list
+        # Iteration through the sorted list
         for i, t in enumerate(recent):
             # 7. Decision: Limiting output to top 10 results
             if i >= 10:
