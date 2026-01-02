@@ -101,11 +101,6 @@ def update_playback(state: PlayerState, delta_seconds: float) -> None:
 
     Called periodically from the CLI loop so that playback continues
     while the user types commands (S1-12).
-
-    Extended for Sprint 2:
-    - If the current queue is a playlist (state.tracks is not state.library_tracks),
-      automatically advance to the next track when the current one finishes.
-    - If using the main library queue, then keep original behaviour (stop at end).
     """
 
     # Skip if not playing
