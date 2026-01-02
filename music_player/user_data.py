@@ -179,8 +179,10 @@ def create_profile(state: PlayerState, name: str) -> None:
     _save_profiles(state)
 
 def switch_profile(state: PlayerState, name: str) -> None:
-    '''Switches the active user. Saves old users data
-    Then clears the state and loads the new users data'''
+    '''
+    Switches the active user. Saves old users data
+    Then clears the state and loads the new users data
+    '''
     if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
         print("[profile] Error: Invalid state.")
         return
