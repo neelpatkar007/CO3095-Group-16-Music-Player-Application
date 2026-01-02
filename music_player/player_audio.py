@@ -9,6 +9,7 @@ def change_volume(state: PlayerState, raw_input: str) -> None:
     if state is None:
         return
 
+    # Check to ensure state object has necessary attributes
     if not hasattr(state, 'volume') or not hasattr(state, 'audio_engine'):
         return
 
@@ -104,6 +105,7 @@ def toggle_mute(state: PlayerState) -> None:
 def handle_mute_command(state: PlayerState, raw: str) -> None:
     '''
     Handles /mute and /unmute commands.
+    Acts as a wrapper around toggle_mute to prevent any double toggles
     '''
     if state is None:
         return
@@ -118,11 +120,13 @@ def handle_mute_command(state: PlayerState, raw: str) -> None:
     is_muted = getattr(state, 'is_muted', False)
 
     if cmd == "/mute":
+        # Only mute if not already muted
         if is_muted:
             print("[audio] Already muted.")
         else:
             toggle_mute(state)
     elif cmd == "/unmute":
+        # Only unmute if currently muted
         if not is_muted:
             print("[audio] Already unmuted.")
         else:
