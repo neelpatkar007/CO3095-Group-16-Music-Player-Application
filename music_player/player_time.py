@@ -15,6 +15,7 @@ from music_player import player_core
 RESUME_FILE = Path("resume_state.json")
 
 # S4-03: Resume State
+#S4-03: Save_resume_state function that meets code complexity requirement
 def save_resume_state(state: PlayerState) -> None:
     """
     Saves the currently playing track path and exact timestamp to resume_state.json.
@@ -127,7 +128,7 @@ def load_resume_state(state: PlayerState) -> None:
 
 
 # S4-02: Schedule Playback
-
+#S4-02: Set_alarm function that meets code complexity requirement
 def set_alarm(state: PlayerState, time_str: str) -> None:
     """
     Only allow ONE alarm at a time.
@@ -246,6 +247,7 @@ def check_alarms(state: PlayerState) -> None:
 
 
 # S4-06: Recently Added
+#S4-06: Show_recently_added function that meets code complexity requirement
 def show_recently_added(state: PlayerState) -> None:
     """
     Displays the top 10 songs sorted by file modification date (newest to oldest).

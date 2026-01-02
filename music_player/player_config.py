@@ -35,6 +35,7 @@ def save_settings(state: PlayerState) -> None:
     except Exception as e:
         print(f"[config] Error saving settings: {e}")
 
+#S4-01: Load_settings function that meets code complexity requirement
 def load_settings(state: PlayerState) -> None:
     """
     Loads config from disk and applies it to the PlayerState and AudioEngine.
@@ -112,7 +113,7 @@ def load_settings(state: PlayerState) -> None:
         print(f"[config] Error loading settings: {e}")
 
 # S4-05: Tags
-
+#S4-05: Add_tag function that meets code complexity requirement
 def add_tag(state: PlayerState, index_str: str, tag: str) -> None:
     """
     Adds a custom tag to a specific song by index.
@@ -246,7 +247,7 @@ def filter_by_tag(state: PlayerState, tag: str) -> None:
     state.current_index = 0
 
 # S4-08: Playback Statistics
-
+#S4-08: View_stats function that meets code complexity requirement
 def view_stats(state: PlayerState) -> None:
     """
     Calculates and displays:

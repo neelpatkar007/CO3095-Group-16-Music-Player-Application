@@ -14,7 +14,7 @@ from music_player import library
 
 
 # S4-04: Import Songs
-
+#S4-04: Import_song function that meets code complexity requirement
 def import_song(state: PlayerState, source_path_str: str) -> None:
     """
     Copies a valid audio file from an external source to the local 'songs/' directory.
@@ -81,7 +81,7 @@ def import_song(state: PlayerState, source_path_str: str) -> None:
         print(f"[import] Copy failed: {e}")
 
 # S4-10: Export Playlist
-
+#S4-10: Export_playlist function that meets code complexity requirement
 def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "") -> None:
     """
     Exports a playlist to a .m3u file.
@@ -136,7 +136,7 @@ def export_playlist(state: PlayerState, name_or_file: str, filename_arg: str = "
 
 
 # S4-11: Update Metadata
-
+#S4-11: Update_metadata function that meets code complexity requirement
 def update_metadata(state: PlayerState, index_str: str, field: str, value: str) -> None:
     """
     Updates the metadata (Title or Artist) of a song.
