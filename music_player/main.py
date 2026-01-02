@@ -46,6 +46,7 @@ from music_player import (
 def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
     """
     Background loop that periodically advances playback time.
+    It runs in a separate thread to ensure that the UI remains responsive.
     """
     last = time.time()
     while not stop_event.is_set():
@@ -53,6 +54,7 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
         delta = now - last
         last = now
 
+        # Advanced the logical timer only if the audio is playing
         if state.is_playing and not state.is_paused:
             player_core.update_playback(state, delta)
             state.total_play_time += delta
@@ -61,7 +63,7 @@ def _playback_worker(state: PlayerState, stop_event: threading.Event) -> None:
         if int(now) % 10 == 0:
             player_time.check_alarms(state)
 
-        # Sleep a little so we don't spin too fast
+        # Sleep for a little so we don't spin the CPU too fast
         time.sleep(0.1)
 
 def handle_command(state: PlayerState, command: str) -> bool:
@@ -75,6 +77,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # S1-07 keyboard shortcuts (single letters)
     # Check for single-letter keyboard shortcuts (p, s, m)
+    # Allows for quick control without typing the full commands.
     if len(raw) == 1 and raw.lower() in {"p", "s", "m"}:
         player_shortcuts.handle_keypress(state, raw)
         return True
@@ -93,7 +96,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # Standard Playback Controls
     if base == "/play":
-        # S4-03: Resume Logic (Apply seek if first play)
+        # S4-03: Resume Logic (Apply seek if this is the first play on startup)
         if state.resume_active and state.current_track:
             print(f"[resume] Seeking to saved position: {int(state.position_seconds)}s...")
             player_core.play(state)
@@ -177,8 +180,8 @@ def handle_command(state: PlayerState, command: str) -> bool:
     elif base == "/pl.show":
         playlists_basic.show_current_playlist(state)
     elif base == "/pl.play":
-        # /pl.play           -> play active playlist
-        # /pl.play MyMix    -> play named/indexed playlist
+        # /pl.play -> play active playlist
+        # /pl.play MyMix -> play named/indexed playlist
         if args:
             playlists_basic.play_playlist(state, args[0])
         else:
@@ -238,7 +241,7 @@ def handle_command(state: PlayerState, command: str) -> bool:
 
     # SPRINT 3 COMMANDS:
 
-    # S3-01: Shuffle (Sanil)
+    # S3-01: Shuffle
     elif base == "/shuffle":
         player_queue.toggle_shuffle(state)
 
@@ -274,7 +277,6 @@ def handle_command(state: PlayerState, command: str) -> bool:
     # S3-08: Like a song
     elif base == "/like":
         player_metrics.toggle_like(state)
-
     # S3-09: View Liked
     elif base == "/likes":
         player_metrics.show_liked_songs(state)
@@ -382,6 +384,7 @@ def main() -> None:
     player_metrics.load_data(state)
 
     # S4-03: Load resume state from previous session
+    # This restores the exact track and position where to user left off from
     player_time.load_resume_state(state)
 
     # S4-07: Load user profiles
@@ -404,6 +407,7 @@ def main() -> None:
     print("Scheduling: /schedule HH:MM, /schedule.cancel, /recent")
 
     # start background playback thread
+    # this thread handles the time tracking and alarm check independently of user input
     stop_event = threading.Event()
     playback_thread = threading.Thread(
         target=_playback_worker,
@@ -411,6 +415,7 @@ def main() -> None:
         daemon=True,
     )
     playback_thread.start()
+
     # Get user command input
     try:
         while True:
@@ -423,6 +428,8 @@ def main() -> None:
             if not handle_command(state, command):
                 break
     finally:
+        # SHUTDOWN SEQUENCE
+
         # S4-03: Save Resume State BEFORE stopping
         player_time.save_resume_state(state)
 
