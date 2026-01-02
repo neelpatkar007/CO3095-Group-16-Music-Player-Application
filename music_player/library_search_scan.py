@@ -20,94 +20,122 @@ def _print_tracks_table(tracks: List[Track]) -> None:
     # Table headers with spacing
     print(f"{'No':>3}  {'Title':<30}  {'Artist':<20}  {'Time':>6}")
     print("-" * 65)
-
     for idx, t in enumerate(tracks, start=1):
         if t is None: continue
         # Truncate strings so that they do fit in the table nicely
         title = str(getattr(t, "title", "") or "")[:30]
         artist = str(getattr(t, "artist", "") or "")[:20]
-
         dur = format_mm_ss(getattr(t, "duration_seconds", None))
-
-        # Print row with specific column widths matching the headers
         print(f"{idx:3d}  {title:<30}  {artist:<20}  {dur:>6}")
 
 
 def search_library(state: PlayerState, query: str) -> None:
     '''
-    Filters the library tracks based on a users search term.
-    And checks title, artist, and filename.
+    Filters the library tracks based on a users search.
     '''
-    if state is None: return
-    query = (query or "").strip().lower()
-    if not query:
-        print("[lib] Usage: /search <text>")
+    if state is None:
         return
 
-    source_list = state.library_tracks
+    if not query:
+        print("[search] Usage: /search <query>")
+        return
 
-    results: List[Track] = []
-    for t in source_list:
-        if t is None: continue
+    if not hasattr(state, "library_tracks"):
+        print("[search] Error: Library unavailable.")
+        return
 
-        # Lowercase everything to make the search case-insensitive
-        title = (getattr(t, "title", "") or "").lower()
-        artist = (getattr(t, "artist", "") or "").lower()
-        filename = ""
+    if not isinstance(state.library_tracks, list):
+        print("[search] Error: Library corrupted.")
+        return
 
-        # Check for path existence before accessing the name to avoid any errors
-        if getattr(t, "path", None) is not None:
-            filename = t.path.name.lower()
+    q = query.lower()
+    results = []
 
-        # Check for matches in title, artist or filename
-        if query in title or query in artist or query in filename:
+    for t in state.library_tracks:
+        if t is None:
+            continue
+
+        if q in (t.title or "").lower():
+            results.append(t)
+            continue
+
+        if q in (t.artist or "").lower():
+            results.append(t)
+            continue
+
+        if t.path and q in t.path.name.lower():
             results.append(t)
 
     if not results:
-        print("[lib] No matches found.")
+        print("[search] No matches found.")
     else:
-        print(f"[lib] Search results for '{query}':")
+        print(f"[search] Found {len(results)} matches:")
         _print_tracks_table(results)
 
 
-# Library viewing functions
-
 def view_songs_table(state: PlayerState) -> None:
-    '''
-    A simple wrapper to dump the whole library on screen.
-    '''
-    print("[lib] Songs (library):")
+    print("[lib] --- All Songs ---")
+    if not state or not state.library_tracks:
+        print("  (empty library)")
+        return
     _print_tracks_table(state.library_tracks)
 
 
 def view_artists_table(state: PlayerState) -> None:
     '''
-    Groups the songs by artist so that the user can see their collection and
-    this also calculates the total runtime for each artist.
+    Groups the library by artist and displays a summary table.
     '''
-    by_artist: dict[str, List[Track]] = defaultdict(list)
+    if state is None:
+        return
+
+    if not hasattr(state, "library_tracks"):
+        print("[lib] Error: Library unavailable.")
+        return
+
+    by_artist = defaultdict(list)
+
     for t in state.library_tracks:
-        if not t or not getattr(t, "artist", None): continue
-        by_artist[t.artist].append(t)
+        if t is None:
+            continue
+
+        if not hasattr(t, "artist"):
+            by_artist["Unknown"].append(t)
+            continue
+
+        if t.artist is None:
+            by_artist["Unknown"].append(t)
+            continue
+
+        if not str(t.artist).strip():
+            by_artist["Unknown"].append(t)
+        else:
+            by_artist[t.artist].append(t)
+
+    if not by_artist:
+        print("  (no artists found)")
+        return
 
     print(f"{'Artist':<25}  {'Tracks':>6}  {'Time':>8}")
     print("-" * 45)
 
-    # Sorts the artists alphabetically so that the list is predictable
     for artist, tracks in sorted(by_artist.items()):
-        # Calculate total duration for this artist
-        total = sum((t.duration_seconds or 0) for t in tracks)
+        total = 0
+        for tr in tracks:
+            if tr and getattr(tr, 'duration_seconds', None):
+                total += tr.duration_seconds
+
         print(f"{artist:<25}  {len(tracks):6d}  {format_mm_ss(total):>8}")
 
 
 def view_albums_table(state: PlayerState) -> None:
     '''
-    Uses the folder names as album names to group the tracks as we are not using a database.
-    This is a quick way to organise the music without any complex tagging.
+    This uses the folder structure as a quick way to organise the music without any complex tagging.
     '''
+    if not state or not state.library_tracks:
+        return
+
     by_album: dict[str, List[Track]] = defaultdict(list)
     for t in state.library_tracks:
-        # Because we dont have a database, the folders name is the most reliable title
         album = t.path.parent.name or "(no folder)"
         by_album[album].append(t)
 
@@ -117,31 +145,45 @@ def view_albums_table(state: PlayerState) -> None:
         total = sum((t.duration_seconds or 0) for t in tracks)
         print(f"{album:<25}  {len(tracks):6d}  {format_mm_ss(total):>8}")
 
-# System Maintenance Functions
 
 def rescan_for_new_tracks(state: PlayerState) -> None:
     '''
     This syncs the internal library with the actual files on disk.
-    It looks for any new files that were not there during the last scan
     '''
+    if state is None:
+        print("[lib] Error: State is None.")
+        return
+
     print("[lib] Scanning for new tracks...")
 
-    # Track paths that are already in the library
-    current_paths = {t.path for t in state.library_tracks}
+    if not hasattr(state, "library_tracks"):
+        state.library_tracks = []
+
+    if not isinstance(state.library_tracks, list):
+        state.library_tracks = []
+
+    current_paths = set()
+
+    for t in state.library_tracks:
+        if t and hasattr(t, "path") and t.path:
+            current_paths.add(t.path)
+
     discovered = discover_tracks()
 
-    # Only take the ones that are not already in the library
-    new_tracks = [t for t in discovered if t.path not in current_paths]
+    if not discovered:
+        print("[lib] No files found on disk.")
+        return
+
+    new_tracks = []
+
+    for t in discovered:
+        if t.path not in current_paths:
+            new_tracks.append(t)
 
     if not new_tracks:
         print("[lib] No new tracks found.")
         return
 
-    # Add the new tracks to the library
-    state.library_tracks.extend(new_tracks)
-
-
-    if state.tracks is state.library_tracks:
-        pass
-
-    print(f"[lib] Added {len(new_tracks)} new track(s).")
+    if new_tracks:
+        state.library_tracks.extend(new_tracks)
+        print(f"[lib] Added {len(new_tracks)} new tracks.")
