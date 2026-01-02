@@ -160,17 +160,17 @@ def copy_playlist(
         return
 
     # Name Validation Check
-    # Check 2: Minimum length enforcement
+    # Minimum length enforcement
     if len(new_name) < 3:
         print("[pl] Error: Playlist name must be at least 3 characters.")
         return
 
-    # Check 3: Maximum length enforcement
+    # Maximum length enforcement
     if len(new_name) > 20:
         print("[pl] Error: Playlist name must be under 20 characters.")
         return
 
-    # Check 4: Character validation (for example - alphanumeric only)
+    # Character validation (for example - alphanumeric only)
     if not new_name.replace("_", "").isalnum():
         print("[pl] Error: Playlist name contains invalid characters.")
         return
