@@ -17,6 +17,10 @@ PROFILE_FILE = Path("profiles.json")
 # Helpers
 
 def _serialize_current_state(state: PlayerState) -> dict:
+    '''
+    Converts current users runtime data into a dictionary format
+    which is suitable for JSON storage
+    '''
     if state is None or not hasattr(state, "playlists"):
         return {}
 
@@ -37,7 +41,9 @@ def _serialize_current_state(state: PlayerState) -> dict:
     }
 
 def _save_profiles(state: PlayerState):
-    """Persist all profiles to JSON."""
+    """
+    Persist all profiles to JSON.
+    """
     if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
         return
 
@@ -52,7 +58,9 @@ def _save_profiles(state: PlayerState):
         print(f"[profile] Error saving: {e}")
 
 def _save_current_to_profile(state: PlayerState):
-    """Snapshot current state variables into the profiles dict storage."""
+    """
+    Snapshot current state variables into the profiles dict storage.
+    """
     if state is None or not hasattr(state, "profiles") or not hasattr(state, "active_profile"):
         return
 
@@ -62,6 +70,10 @@ def _save_current_to_profile(state: PlayerState):
         _save_profiles(state)
 
 def _apply_profile_data(state: PlayerState, data: dict):
+    '''
+    Restores user data from a dictionary into active PlayerState
+    '''
+
     if state is None:
         return
 
@@ -143,6 +155,7 @@ def load_profiles_index(state: PlayerState) -> None:
         print(f"[profile] Error loading profiles: {e}")
 
 def create_profile(state: PlayerState, name: str) -> None:
+    '''Creates a new empty profile'''
     if state is None or not hasattr(state, "profiles"):
         print("[profile] Error: Invalid state.")
         return
