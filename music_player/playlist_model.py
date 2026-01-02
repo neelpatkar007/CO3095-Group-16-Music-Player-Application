@@ -24,17 +24,18 @@ class Playlist:
     Core model for playlist.
 
     Fields used by:
+
       - S2-01: name, tracks
       - S2-05/S2-10: num_tracks, total_duration_mm_ss
       - S2-06: iteration over tracks with durations
-      - S2-11/S2-12: cloning & merging lists of tracks
+      - S2-11/S2-12: cloning & merging - lists of tracks
     """
     name: str
     tracks: List[Track] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         """
-        Default initialization and type normalisation.
+        Default initialisation and type normalisation.
         """
         if not isinstance(self.name, str):
             self.name = str(self.name)
@@ -47,12 +48,16 @@ class Playlist:
 
     @property
     def num_tracks(self) -> int:
-        """Total duration as in seconds (S2-05, S2-10)."""
+        """
+        Total duration as in seconds (S2-05, S2-10).
+        """
         return len(self.tracks)
 
     @property
     def total_duration_seconds(self) -> float:
-        """Total duration as in seconds (S2-05, S2-10)."""
+        """
+        Total duration as in seconds (S2-05, S2-10).
+        """
         total = 0.0
         for t in self.tracks:
             dur = getattr(t, "duration_seconds", None)
@@ -62,7 +67,9 @@ class Playlist:
 
     @property
     def total_duration_mm_ss(self) -> str:
-        """Total duration as mm:ss string (S2-05, S2-10)."""
+        """
+        Total duration as mm:ss string (S2-05, S2-10).
+        """
         if not self.tracks:
             return "00:00"
         return format_mm_ss(self.total_duration_seconds)
