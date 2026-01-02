@@ -294,8 +294,20 @@ def rate_song(state: PlayerState, rating_str: str) -> None:
     # Auto-save
     _save_current_to_profile(state)
 
+
 def view_rated(state: PlayerState) -> None:
-    if state is None or not hasattr(state, "song_ratings") or state.song_ratings is None:
+    """
+    View list of rated songs sorted by highest rating.
+    """
+    if state is None:
+        print("[rate] No songs rated yet.")
+        return
+
+    if not hasattr(state, "song_ratings"):
+        print("[rate] No songs rated yet.")
+        return
+
+    if state.song_ratings is None:
         print("[rate] No songs rated yet.")
         return
 
@@ -304,24 +316,30 @@ def view_rated(state: PlayerState) -> None:
         return
 
     print("--- Rated Songs ---")
+
     try:
         sorted_paths = sorted(state.song_ratings.items(), key=lambda x: x[1], reverse=True)
     except Exception:
         print("[rate] Error sorting ratings.")
         return
 
-    # Check for library existence
     lib_tracks = getattr(state, "library_tracks", []) or []
 
     for path_str, rating in sorted_paths:
         try:
             val = int(rating)
-        except (ValueError, TypeError):
+        except ValueError:
+            continue
+        except TypeError:
             continue
 
         name = "Unknown File"
+
         for t in lib_tracks:
-            if t and hasattr(t, "path") and str(t.path) == path_str:
-                name = getattr(t, "display_name", "Unknown")
-                break
+            if t:
+                if hasattr(t, "path"):
+                    if str(t.path) == path_str:
+                        name = getattr(t, "display_name", "Unknown")
+                        break
+
         print(f"  {'★' * val} ({val}) - {name}")
