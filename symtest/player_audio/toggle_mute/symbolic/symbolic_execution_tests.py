@@ -1,15 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, Mock
+import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Assuming the function is imported from the module
-# from source.audio_manager import toggle_mute
-# For this file block context, we define a placeholder or assume import availability.
-
-def toggle_mute(state):
-    # (The function code provided in the prompt would be imported here)
-    # Re-pasting strictly avoided to comply with prompt, assuming import.
-    pass
+from music_player.player_audio import toggle_mute
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -28,39 +26,6 @@ class TestSymbolicExecution(unittest.TestCase):
 
     The average test coverage for this suite is measured at 100%.
     """
-
-    def setUp(self):
-        # We manually inject the function definition for the purpose of this standalone block
-        # if it were not importable.
-        # Here we assume the function 'toggle_mute' is available in the scope.
-        # Below is the implementation for the runner to execute:
-        global toggle_mute
-
-        def toggle_mute_impl(state):
-            if state is None: return
-            if not hasattr(state, 'is_muted') or not hasattr(state, 'audio_engine'): return
-            if state.is_muted:
-                state.is_muted = False
-                saved = getattr(state, 'saved_volume', None)
-                restored = saved if saved is not None else getattr(state, 'volume', 50)
-                state.volume = restored
-                if state.audio_engine:
-                    if hasattr(state.audio_engine, 'set_muted'):
-                        state.audio_engine.set_muted(False)
-                    if hasattr(state.audio_engine, 'set_volume'):
-                        state.audio_engine.set_volume(restored)
-                print(f"[audio] Unmuted (volume back to {restored}%)")
-                return
-            state.is_muted = True
-            state.saved_volume = getattr(state, 'volume', 0)
-            if state.audio_engine:
-                if hasattr(state.audio_engine, 'set_muted'):
-                    state.audio_engine.set_muted(True)
-                if hasattr(state.audio_engine, 'set_volume'):
-                    state.audio_engine.set_volume(0)
-            print("[audio] Muted")
-
-        toggle_mute = toggle_mute_impl
 
     def test_pc1_state_none(self):
         """

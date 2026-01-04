@@ -1,31 +1,13 @@
 import unittest
 from unittest.mock import MagicMock
+import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Re-defining function for scope isolation within this file block
-def toggle_mute(state):
-    if state is None: return
-    if not hasattr(state, 'is_muted') or not hasattr(state, 'audio_engine'): return
-    if state.is_muted:
-        state.is_muted = False
-        saved = getattr(state, 'saved_volume', None)
-        restored = saved if saved is not None else getattr(state, 'volume', 50)
-        state.volume = restored
-        if state.audio_engine:
-            if hasattr(state.audio_engine, 'set_muted'):
-                state.audio_engine.set_muted(False)
-            if hasattr(state.audio_engine, 'set_volume'):
-                state.audio_engine.set_volume(restored)
-        print(f"[audio] Unmuted (volume back to {restored}%)")
-        return
-    state.is_muted = True
-    state.saved_volume = getattr(state, 'volume', 0)
-    if state.audio_engine:
-        if hasattr(state.audio_engine, 'set_muted'):
-            state.audio_engine.set_muted(True)
-        if hasattr(state.audio_engine, 'set_volume'):
-            state.audio_engine.set_volume(0)
-    print("[audio] Muted")
+from music_player.player_audio import toggle_mute
 
 
 class TestConcolicExecution(unittest.TestCase):

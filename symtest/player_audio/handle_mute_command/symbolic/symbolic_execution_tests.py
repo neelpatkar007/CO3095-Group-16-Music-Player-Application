@@ -1,7 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
-# Assuming the function is located in a module named 'game_logic'
-from game_logic import handle_mute_command
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_audio import handle_mute_command
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -28,7 +34,7 @@ class TestSymbolicExecution(unittest.TestCase):
         # S1 is mocked to represent the PlayerState object
         self.mock_state = MagicMock()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc1_s1_is_none(self, mock_toggle):
         """
         PC_1: S1 IS None.
@@ -41,7 +47,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
         mock_toggle.assert_not_called()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc2_s2_is_not_string(self, mock_toggle):
         """
         PC_2: S1 IS NOT None AND S2 IS NOT str.
@@ -55,7 +61,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_toggle.assert_not_called()
 
     @patch('sys.stdout')
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc3_mute_when_already_muted(self, mock_toggle, mock_stdout):
         """
         PC_3: S1 NOT None, S2='/mute', S3 (is_muted)=True.
@@ -68,10 +74,8 @@ class TestSymbolicExecution(unittest.TestCase):
         handle_mute_command(S1, S2)
 
         mock_toggle.assert_not_called()
-        # Verify print output indirectly (if needed by harness) or logic flow
-        # In a real academic harness, we might capture stdout.
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc4_mute_when_unmuted(self, mock_toggle):
         """
         PC_4: S1 NOT None, S2='/mute', S3 (is_muted)=False.
@@ -85,7 +89,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
         mock_toggle.assert_called_once_with(S1)
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc5_unmute_when_already_unmuted(self, mock_toggle):
         """
         PC_5: S1 NOT None, S2='/unmute', S3 (is_muted)=False.
@@ -99,7 +103,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
         mock_toggle.assert_not_called()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc6_unmute_when_muted(self, mock_toggle):
         """
         PC_6: S1 NOT None, S2='/unmute', S3 (is_muted)=True.
@@ -113,7 +117,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
         mock_toggle.assert_called_once_with(S1)
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_pc7_unknown_command(self, mock_toggle):
         """
         PC_7: S1 NOT None, S2='unknown'.

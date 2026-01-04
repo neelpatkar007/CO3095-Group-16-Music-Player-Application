@@ -2,33 +2,13 @@ import unittest
 from unittest.mock import MagicMock
 import io
 import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Redefining function for context
-def change_volume(state, raw_input):
-    if state is None: return
-    if not hasattr(state, 'volume') or not hasattr(state, 'audio_engine'): return
-    if not raw_input:
-        print(f"[audio] Current Volume: {state.volume}%")
-        return
-    if not isinstance(raw_input, (str, int, float)): return
-    try:
-        val = int(raw_input)
-    except (ValueError, TypeError):
-        print("[audio] Error: Volume must be a number.")
-        return
-    if not (0 <= val <= 100):
-        print("[audio] Error: Volume must be between 0 and 100.")
-        return
-    state.volume = val
-    if getattr(state, 'is_muted', False):
-        state.is_muted = False
-        state.saved_volume = None
-        if state.audio_engine and hasattr(state.audio_engine, 'set_muted'):
-            state.audio_engine.set_muted(False)
-    if state.audio_engine and hasattr(state.audio_engine, 'set_volume'):
-        state.audio_engine.set_volume(val)
-    print(f"[audio] Volume set to {val}%")
+from music_player.player_audio import change_volume
 
 
 class TestConcolicDriven(unittest.TestCase):

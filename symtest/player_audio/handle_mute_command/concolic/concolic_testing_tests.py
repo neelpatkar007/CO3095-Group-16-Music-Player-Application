@@ -1,15 +1,13 @@
-# python
 import unittest
 from unittest.mock import MagicMock, patch
-import os
 import sys
+from pathlib import Path
 
-# Robust import: try direct import, otherwise adjust sys.path to find project package
-try:
-    from game_logic import handle_mute_command
-except Exception:
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))
-    from game_logic import handle_mute_command
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_audio import handle_mute_command
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -35,7 +33,7 @@ class TestConcolicExecution(unittest.TestCase):
     def setUp(self):
         self.mock_state = MagicMock()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_iteration_1_null_state(self, mock_toggle):
         """
         Iteration 1: Constraint S1 == None.
@@ -49,7 +47,7 @@ class TestConcolicExecution(unittest.TestCase):
         # Validation of Path PC_1
         mock_toggle.assert_not_called()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_iteration_2_invalid_type(self, mock_toggle):
         """
         Iteration 2: Constraint NOT isinstance(S2, str).
@@ -63,7 +61,7 @@ class TestConcolicExecution(unittest.TestCase):
         # Validation of Path PC_2
         mock_toggle.assert_not_called()
 
-    @patch('game_logic.toggle_mute')
+    @patch('music_player.player_audio.toggle_mute')
     def test_iteration_3_unknown_command(self, mock_toggle):
         """
         Iteration 3: Constraints S4 != '/mute' AND S4 != '/unmute'.
