@@ -2,12 +2,14 @@ import unittest
 from unittest.mock import MagicMock, patch, mock_open
 import json
 import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Assuming the function is in a module named 'engine_config'
-# For the purpose of this file, we import the function logic if it were in a file.
-# We will define the function here for the context of the test runner as requested
-# or assume it's available. To adhere to strict file structure, I will mock the context.
+from music_player.player_config import load_settings
+
 
 # -------------------------------------------------------------------------
 # Test Results Table
@@ -23,16 +25,6 @@ import sys
 # The average test coverage for this suite is measured at 100%.
 # -------------------------------------------------------------------------
 
-class PlayerState:
-    def __init__(self):
-        self.volume = 0
-        self.shuffle_active = False
-        self.loop_mode = "off"
-        self.playback_speed = 1.0
-        self.song_tags = {}
-        self.total_play_time = 0.0
-        self.audio_engine = MagicMock()
-
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -41,8 +33,14 @@ class TestSymbolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        self.state = PlayerState()
-        self.mock_path = MagicMock()
+        self.state = MagicMock()
+        self.state.volume = 0
+        self.state.shuffle_active = False
+        self.state.loop_mode = "off"
+        self.state.playback_speed = 1.0
+        self.state.song_tags = {}
+        self.state.total_play_time = 0.0
+        self.state.audio_engine = MagicMock()
 
     @patch('pathlib.Path.exists')
     def test_pc1_file_missing(self, mock_exists):
@@ -53,17 +51,9 @@ class TestSymbolicExecution(unittest.TestCase):
         """
         mock_exists.return_value = False
 
-        # Inject the mock path globally or locally as needed.
-        # Since we cannot modify the source, we assume CONFIG_FILE is patched
-        # or we patch the module where CONFIG_FILE is defined.
-        with patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings  # Assuming function is in main for this context
+        load_settings(self.state)
 
-            # Action
-            load_settings(self.state)
-
-            # Assert
-            self.state.audio_engine.set_volume.assert_not_called()
+        self.state.audio_engine.set_volume.assert_not_called()
 
     @patch('builtins.open')
     @patch('pathlib.Path.exists')
@@ -76,13 +66,9 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_exists.return_value = True
         mock_file.side_effect = IOError("Disk Error")
 
-        with patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings
+        load_settings(self.state)
 
-            load_settings(self.state)
-
-            # Assert logic didn't proceed to set_volume
-            self.state.audio_engine.set_volume.assert_not_called()
+        self.state.audio_engine.set_volume.assert_not_called()
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
@@ -102,17 +88,14 @@ class TestSymbolicExecution(unittest.TestCase):
             "total_time": 120.0
         }
 
-        with patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings
+        load_settings(self.state)
 
-            load_settings(self.state)
-
-            self.assertEqual(self.state.volume, 50)
-            self.assertEqual(self.state.shuffle_active, True)
-            self.assertEqual(self.state.loop_mode, "one")
-            self.assertEqual(self.state.playback_speed, 1.5)
-            self.assertEqual(self.state.song_tags, {"genre": "jazz"})
-            self.assertEqual(self.state.total_play_time, 120.0)
+        self.assertEqual(self.state.volume, 50)
+        self.assertEqual(self.state.shuffle_active, True)
+        self.assertEqual(self.state.loop_mode, "one")
+        self.assertEqual(self.state.playback_speed, 1.5)
+        self.assertEqual(self.state.song_tags, {"genre": "jazz"})
+        self.assertEqual(self.state.total_play_time, 120.0)
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
@@ -125,27 +108,22 @@ class TestSymbolicExecution(unittest.TestCase):
         """
         mock_exists.return_value = True
         mock_json.return_value = {
-            "volume": "loud",  # Invalid Type
-            "shuffle": 1,  # Invalid Type (strictly checked as bool in logic?)
-            # Note: In Python isinstance(True, int) is True,
-            # but isinstance(1, bool) is False. logic checks bool.
-            "loop": 123,  # Invalid Type
-            "speed": "fast",  # Invalid Type
-            "tags": [],  # Invalid Type
-            "total_time": "ten"  # Invalid Type
+            "volume": "loud",
+            "shuffle": 1,
+            "loop": 123,
+            "speed": "fast",
+            "tags": [],
+            "total_time": "ten"
         }
 
-        with patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings
+        load_settings(self.state)
 
-            load_settings(self.state)
-
-            self.assertEqual(self.state.volume, 100)
-            self.assertEqual(self.state.shuffle_active, False)
-            self.assertEqual(self.state.loop_mode, "off")
-            self.assertEqual(self.state.playback_speed, 1.0)
-            self.assertEqual(self.state.song_tags, {})
-            self.assertEqual(self.state.total_play_time, 0.0)
+        self.assertEqual(self.state.volume, 100)
+        self.assertEqual(self.state.shuffle_active, False)
+        self.assertEqual(self.state.loop_mode, "off")
+        self.assertEqual(self.state.playback_speed, 1.0)
+        self.assertEqual(self.state.song_tags, {})
+        self.assertEqual(self.state.total_play_time, 0.0)
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
@@ -158,26 +136,21 @@ class TestSymbolicExecution(unittest.TestCase):
         """
         mock_exists.return_value = True
         mock_json.return_value = {
-            "volume": 150,  # Out of range > 100
-            "shuffle": True,  # Valid
-            "loop": "random",  # Valid Type, Invalid Value
-            "speed": 3.0,  # Out of range > 2.0
-            "tags": {},  # Valid
-            "total_time": -10.0  # Out of range < 0
+            "volume": 150,
+            "shuffle": True,
+            "loop": "random",
+            "speed": 3.0,
+            "tags": {},
+            "total_time": -10.0
         }
 
-        with patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings
+        load_settings(self.state)
 
-            load_settings(self.state)
-
-            self.assertEqual(self.state.volume, 100)
-            self.assertEqual(self.state.loop_mode, "all")  # Logic defaults to 'all' on unknown string
-            self.assertEqual(self.state.playback_speed, 1.0)
-            self.assertEqual(self.state.total_play_time, 0.0)
+        self.assertEqual(self.state.volume, 100)
+        self.assertEqual(self.state.loop_mode, "all")
+        self.assertEqual(self.state.playback_speed, 1.0)
+        self.assertEqual(self.state.total_play_time, 0.0)
 
 
 if __name__ == '__main__':
-    # Setup global mocks for standalone execution
-    CONFIG_FILE = MagicMock()
     unittest.main()
