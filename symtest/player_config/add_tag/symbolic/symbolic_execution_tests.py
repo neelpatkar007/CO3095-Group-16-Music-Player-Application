@@ -2,10 +2,14 @@ import unittest
 from unittest.mock import MagicMock
 import io
 import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Note: In a real environment, we would import the function.
-# For this suite to be self-contained, we assume the existence of the function add_tag.
+from music_player.player_config import add_tag
+
 
 class TestSymbolicExecution(unittest.TestCase):
     """

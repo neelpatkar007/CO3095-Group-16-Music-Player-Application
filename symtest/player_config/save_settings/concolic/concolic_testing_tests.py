@@ -1,40 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-import json
+import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Definition of PlayerState for standalone execution validity
-class PlayerState:
-    def __init__(self, volume, shuffle, loop, speed, tags, time):
-        self.volume = volume
-        self.shuffle_active = shuffle
-        self.loop_mode = loop
-        self.playback_speed = speed
-        self.song_tags = tags
-        self.total_play_time = time
-
-
-CONFIG_FILE = "player_config.json"
-
-
-# Target function logic maintained strictly as provided
-def save_settings(state: PlayerState) -> None:
-    if state is None:
-        return
-    data = {
-        "volume": state.volume,
-        "shuffle": state.shuffle_active,
-        "loop": state.loop_mode,
-        "speed": state.playback_speed,
-        "tags": state.song_tags,
-        "total_time": state.total_play_time
-    }
-    try:
-        with open(CONFIG_FILE, "w") as f:
-            json.dump(data, f, indent=2)
-        print("[config] Settings saved.")
-    except Exception as e:
-        print(f"[config] Error saving settings: {e}")
+from music_player.player_config import save_settings
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -53,7 +26,13 @@ class TestConcolicExecution(unittest.TestCase):
 
     def setUp(self):
         # Base valid object for iterations where S1 != None
-        self.concrete_state = PlayerState(50, False, True, 1.5, [], 0.0)
+        self.concrete_state = MagicMock()
+        self.concrete_state.volume = 50
+        self.concrete_state.shuffle_active = False
+        self.concrete_state.loop_mode = "one"
+        self.concrete_state.playback_speed = 1.5
+        self.concrete_state.song_tags = {}
+        self.concrete_state.total_play_time = 0.0
 
     def test_iteration_1_initial_seed(self):
         """
@@ -75,7 +54,6 @@ class TestConcolicExecution(unittest.TestCase):
         Path: PC_2 (Happy Path).
         """
         S1 = self.concrete_state
-        # S2 is implicitly True by default mock_open behaviour
 
         with patch("builtins.open", mock_open()) as mock_file:
             save_settings(S1)
@@ -91,13 +69,11 @@ class TestConcolicExecution(unittest.TestCase):
         """
         S1 = self.concrete_state
 
-        # Force S2 to False via side_effect
         with patch("builtins.open", mock_open()) as mock_file:
             mock_file.side_effect = OSError("Disk Full")
 
             save_settings(S1)
 
-            # Verify the logic traversed the except block
             mock_print.assert_called_with("[config] Error saving settings: Disk Full")
 
 

@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
 import json
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_config import load_settings
 
 
 # -------------------------------------------------------------------------
@@ -17,16 +25,6 @@ import json
 # The average test coverage for this suite is measured at 100%.
 # -------------------------------------------------------------------------
 
-class PlayerState:
-    def __init__(self):
-        self.volume = 0
-        self.shuffle_active = False
-        self.loop_mode = "off"
-        self.playback_speed = 1.0
-        self.song_tags = {}
-        self.total_play_time = 0.0
-        self.audio_engine = MagicMock()
-
 
 class TestConcolicExecution(unittest.TestCase):
     """
@@ -36,19 +34,21 @@ class TestConcolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        self.state = PlayerState()
-        self.mock_path = MagicMock()
+        self.state = MagicMock()
+        self.state.volume = 0
+        self.state.shuffle_active = False
+        self.state.loop_mode = "off"
+        self.state.playback_speed = 1.0
+        self.state.song_tags = {}
+        self.state.total_play_time = 0.0
+        self.state.audio_engine = MagicMock()
 
     def run_concolic_iteration(self, input_seed):
         """Helper to run a single iteration with a concrete seed."""
         with patch('pathlib.Path.exists') as mock_exists, \
-                patch('builtins.open', new_callable=mock_open) as mock_file, \
-                patch('json.load') as mock_json, \
-                patch('__main__.CONFIG_FILE', self.mock_path):
-            from __main__ import load_settings
-
+                patch('builtins.open', new_callable=mock_open, read_data=json.dumps(input_seed)) as mock_file, \
+                patch('json.load', return_value=input_seed):
             mock_exists.return_value = True
-            mock_json.return_value = input_seed
             load_settings(self.state)
 
     def test_iter1_base_seed(self):
@@ -63,19 +63,19 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter2_flip_vol_type(self):
         """Iteration 2: Flip (S2 is int) -> S2='invalid'."""
-        seed = {"volume": "invalid", "shuffle": True}  # simplified other fields
+        seed = {"volume": "invalid", "shuffle": True}
         self.run_concolic_iteration(seed)
-        self.assertEqual(self.state.volume, 100)  # Reset triggered
+        self.assertEqual(self.state.volume, 100)
 
     def test_iter3_flip_vol_range(self):
         """Iteration 3: Flip (0 <= S2 <= 100) -> S2=150."""
         seed = {"volume": 150, "shuffle": True}
         self.run_concolic_iteration(seed)
-        self.assertEqual(self.state.volume, 100)  # Reset triggered
+        self.assertEqual(self.state.volume, 100)
 
     def test_iter4_flip_shuff_type(self):
         """Iteration 4: Flip (S3 is bool) -> S3=1 (Int)."""
-        seed = {"shuffle": 1}  # 1 is int, not bool in strict Python type check
+        seed = {"shuffle": 1}
         self.run_concolic_iteration(seed)
         self.assertEqual(self.state.shuffle_active, False)
 
@@ -89,7 +89,7 @@ class TestConcolicExecution(unittest.TestCase):
         """Iteration 6: Flip (S4 in valid) -> S4='unknown'."""
         seed = {"loop": "unknown"}
         self.run_concolic_iteration(seed)
-        self.assertEqual(self.state.loop_mode, "all")  # Warning triggered, default to all
+        self.assertEqual(self.state.loop_mode, "all")
 
     def test_iter7_flip_speed_type(self):
         """Iteration 7: Flip (S5 is num) -> S5='fast'."""
@@ -123,5 +123,4 @@ class TestConcolicExecution(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    CONFIG_FILE = MagicMock()
     unittest.main()

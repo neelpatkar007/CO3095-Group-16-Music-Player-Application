@@ -1,35 +1,13 @@
 import unittest
 from io import StringIO
 import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Redefinition for standalone context as per instructions
-class PlayerState:
-    pass
-
-
-def list_all_tags(state: PlayerState) -> None:
-    if state is None:
-        print("[tags] Error: State is None.")
-        return
-    if not hasattr(state, "song_tags") or not isinstance(state.song_tags, dict):
-        print("[tags] Error: Tag data is unavailable/corrupted.")
-        return
-    if not hasattr(state, "library_tracks") or not isinstance(state.library_tracks, list):
-        print("[tags] Error: Library tracks missing/corrupted.")
-        return
-    unique_tags = set()
-    for tags in state.song_tags.values():
-        unique_tags.update(tags)
-
-    if not unique_tags:
-        print("[tags] No tags created yet.")
-        return
-
-    print("--- Custom Tags ---")
-    for t in sorted(unique_tags):
-        count = sum(1 for tags in state.song_tags.values() if t in tags)
-        print(f"  #{t} ({count} songs)")
+from music_player.player_config import list_all_tags
 
 
 class TestConcolicGenerative(unittest.TestCase):
@@ -67,7 +45,8 @@ class TestConcolicGenerative(unittest.TestCase):
         Iteration 2: Flip (S1 == None) -> S1 != None.
         Logic: S1 is an object, but S2 (song_tags) is missing. Traverses PC_2.
         """
-        s1 = PlayerState()
+        from unittest.mock import MagicMock
+        s1 = MagicMock(spec=[])
         # Implicitly missing song_tags
         list_all_tags(s1)
         self.assertIn("Tag data is unavailable", self.held_output.getvalue())
@@ -77,7 +56,8 @@ class TestConcolicGenerative(unittest.TestCase):
         Iteration 3: Flip (isinstance S2 dict).
         Logic: S1 exists, S2 exists but is incorrect type. Traverses PC_2 (Type check).
         """
-        s1 = PlayerState()
+        from unittest.mock import MagicMock
+        s1 = MagicMock()
         s1.song_tags = "InvalidString"  # Concrete value derived from constraint negation
         list_all_tags(s1)
         self.assertIn("Tag data is unavailable", self.held_output.getvalue())
@@ -87,9 +67,10 @@ class TestConcolicGenerative(unittest.TestCase):
         Iteration 4: Flip (hasattr/isinstance S3).
         Logic: S1 valid, S2 valid, but S3 (library_tracks) is missing. Traverses PC_3.
         """
-        s1 = PlayerState()
+        from unittest.mock import MagicMock
+        s1 = MagicMock()
         s1.song_tags = {}
-        # s1.library_tracks is missing
+        del s1.library_tracks
         list_all_tags(s1)
         self.assertIn("Library tracks missing", self.held_output.getvalue())
 
@@ -98,7 +79,8 @@ class TestConcolicGenerative(unittest.TestCase):
         Iteration 5: Flip (unique_tags is Empty).
         Logic: All structural constraints satisfied. S4 populated with data. Traverses PC_5.
         """
-        s1 = PlayerState()
+        from unittest.mock import MagicMock
+        s1 = MagicMock()
         s1.song_tags = {"id_01": ["Electronic"], "id_02": ["Electronic", "Ambient"]}
         s1.library_tracks = ["track1", "track2"]  # Satisfying S3 constraint
 
