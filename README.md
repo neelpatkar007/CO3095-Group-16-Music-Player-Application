@@ -9,6 +9,38 @@
 ## About the Project:
 A command-line music player application developed as part of the CO3095 Software Measurement and Quality Assurance module at the University of Leicester. 
 
+### Project Structure:
+- `music_player/`: Main package containing the source code for the music player application.
+- Inside the `music_player` python package:
+   - `main.py`: Entry point, command routing and main CLI loop.
+   - `config.py`: global configuration constants.
+   - `library.py`: Loads tracks from disk into the library, reads metadata.
+   - `player_core.py`: Core playback functionality - play, pause, stop.
+   - `player_audio.py`: Audio controls setting volume level and mute
+   - `player_seek.py`: Seek backwards or forwards within a track to any time. 
+  - `player_state.py`: Shared player state.
+  - `player_queue.py`: Queue management - add, remove, next, previous.
+  - `player_help.py`: Help commands.
+  - `player_ui.py`: progress bar, list and other visual outputs.
+  - `player_shortcuts.py`: Shortcut commands for core features.
+  - `playlist_model.py`, `playlists_basic.py`, `playlists_edit.py`, `playlists_advanced.py`: Playlist features.
+  - `player_metrics.py`: Likes and top tracks.
+  - `player_config.py`: Persistent player settings and tagging.
+  - `player_time.py`: Resume track state, scheduling alarms, recently added songs.
+  - `player_io.py`: Import songs, export playlists and update metadata.
+  - `user_data.py`: User profiles, advanced search, ratings.
+  - `audio_backend.py`: Audio playback backend implementation using pygame or simulated without pygame.
+  - `library_search_scan.py`: Library search and scanning.
+  - `time_utils.py`: Time formatting utilities.
+- `songs/`: Directory where audio files should be placed for playback.
+- `ra495/`, `np343/`, `sp871/`, `sa1077/`: Directories that contains all of the testing files including:
+  - Black-box Specification
+  - Black-box Random
+  - White-box Statement
+  - White-box Branch
+  - White-box Symbolic
+  - White-box Concolic
+
 ## Prerequisites:
 - Python 3.10.x installed on your system.
   - verify installation by running `python --version` or `python3 --version` in your terminal or command prompt.
@@ -64,6 +96,9 @@ A command-line music player application developed as part of the CO3095 Software
 - Right-click on `main.py` and select "Run 'main'".
 - The application should start running in the terminal within PyCharm.
 - Follow the on-screen instructions to use the music player application.
+
+### Key Commands:
+- 
 
 ## Adding Audio Files:
 - The application does not include any audio files by default.
