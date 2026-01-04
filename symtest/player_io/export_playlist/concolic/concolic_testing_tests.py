@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from export_module import export_playlist, PlayerState, Playlist, Track
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_io import export_playlist
+from music_player.player_state import PlayerState
 
 """
 Test Results Table
@@ -13,34 +21,50 @@ test_iteration_4_pc4 | OS Error | OS Error   | Passed
 The average test coverage for this suite is measured at 100%.
 """
 
+
 class TestConcolicExport(unittest.TestCase):
 
     def test_iteration_1_pc2(self):
-        # Derived from Flip Table Iteration 1
-        state = PlayerState(playlists=[], tracks=[])
+        """PC_2: Empty playlists and tracks"""
+        state = MagicMock(spec=PlayerState)
+        state.playlists = []
+        state.tracks = []
         with patch('builtins.print') as mock_print:
             export_playlist(state, "S2_val", "")
             mock_print.assert_any_call("[export] Nothing to export.")
 
     @patch("builtins.open", create=True)
     def test_iteration_2_pc3(self, mock_file):
-        # Derived from Flip Table Iteration 2 (Library export)
+        """PC_3: Library export with tracks"""
         track = MagicMock()
         track.duration_seconds = 100
-        state = PlayerState(playlists=[], tracks=[track])
+        track.display_name = "Test Track"
+        track.path = MagicMock()
+        track.path.resolve.return_value = "/path/to/track.mp3"
+
+        state = MagicMock(spec=PlayerState)
+        state.playlists = []
+        state.tracks = [track]
+
         export_playlist(state, "library", "")
-        # Verifies it proceeds to file logic
         self.assertTrue(mock_file.called)
 
     @patch("builtins.open", side_effect=OSError)
     def test_iteration_4_pc4(self, mock_file):
-        # Derived from Flip Table Iteration 4 (OS Error path)
+        """PC_4: OS Error handling"""
         track = MagicMock()
         track.duration_seconds = 100
-        state = PlayerState(playlists=[], tracks=[track])
+        track.display_name = "Test Track"
+        track.path = MagicMock()
+
+        state = MagicMock(spec=PlayerState)
+        state.playlists = []
+        state.tracks = [track]
+
         with patch('builtins.print') as mock_print:
             export_playlist(state, "invalid/path", "")
             mock_print.assert_any_call("[export] Error writing file (OS): Check permissions or path.")
+
 
 if __name__ == '__main__':
     unittest.main()

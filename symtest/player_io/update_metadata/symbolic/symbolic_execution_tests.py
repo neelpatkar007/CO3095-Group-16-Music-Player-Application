@@ -1,6 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import os
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_io import update_metadata
 
 """
 Test Results Table:
