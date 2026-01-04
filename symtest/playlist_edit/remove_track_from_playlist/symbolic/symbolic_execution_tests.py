@@ -1,5 +1,13 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path
+project_root = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(project_root))
+
+from music_player.playlists_edit import remove_track_from_playlist
 
 # [Method] | [Actual] | [Expected] | [Status]
 # test_pc1_none_state | None | None | Passed
@@ -35,24 +43,26 @@ class TestSymbolicExecution(unittest.TestCase):
         result = remove_track_from_playlist(self.mock_state, "p1", "")
         self.assertIsNone(result)
 
-    def test_pc5_invalid_int(self):
+    @patch('music_player.playlists_edit._get_playlist')
+    def test_pc5_invalid_int(self, mock_get):
         # PC_5: S6 is Exception (non-integer string)
-        # Mocking _get_playlist to avoid PC_4
-        with unittest.mock.patch('__main__._get_playlist', return_value=(None, self.mock_playlist)):
-            remove_track_from_playlist(self.mock_state, "p1", "not_a_number")
-            # Analysis of printed output or side effect
+        mock_get.return_value = (None, self.mock_playlist)
+        remove_track_from_playlist(self.mock_state, "p1", "not_a_number")
+        # Analysis of printed output or side effect
 
-    def test_pc7_out_of_bounds(self):
+    @patch('music_player.playlists_edit._get_playlist')
+    def test_pc7_out_of_bounds(self, mock_get):
         # PC_7: NOT S6 < len S5 (Index too high)
-        with unittest.mock.patch('__main__._get_playlist', return_value=(None, self.mock_playlist)):
-            remove_track_from_playlist(self.mock_state, "p1", "10")
-            # Verify list size remains 1
+        mock_get.return_value = (None, self.mock_playlist)
+        remove_track_from_playlist(self.mock_state, "p1", "10")
+        # Verify list size remains 1
 
-    def test_pc9_success(self):
+    @patch('music_player.playlists_edit._get_playlist')
+    def test_pc9_success(self, mock_get):
         # PC_9: All conditions satisfied
-        with unittest.mock.patch('__main__._get_playlist', return_value=(None, self.mock_playlist)):
-            remove_track_from_playlist(self.mock_state, "p1", "1")
-            self.assertEqual(len(self.mock_playlist.tracks), 0)
+        mock_get.return_value = (None, self.mock_playlist)
+        remove_track_from_playlist(self.mock_state, "p1", "1")
+        self.assertEqual(len(self.mock_playlist.tracks), 0)
 
 if __name__ == '__main__':
     unittest.main()

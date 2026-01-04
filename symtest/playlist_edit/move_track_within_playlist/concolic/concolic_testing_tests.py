@@ -1,5 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path
+project_root = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(project_root))
+
+from music_player.playlists_edit import move_track_within_playlist
 
 """
 [Method]                   | [Actual] | [Expected] | [Status]
@@ -21,7 +29,7 @@ class TestConcolicTesting(unittest.TestCase):
         self.mock_playlist.tracks = [self.mock_track, MagicMock()]
         self.mock_playlist.name = "PlaylistName"
 
-    @patch('__main__._get_playlist')
+    @patch('music_player.playlists_edit._get_playlist')
     def test_PC6_from_out_bounds(self, mock_get):
         # Derived input: S3 is out of range of len(S6)
         mock_get.return_value = (None, self.mock_playlist)
@@ -29,7 +37,7 @@ class TestConcolicTesting(unittest.TestCase):
             move_track_within_playlist(self.mock_state, "S2", "5", "1")
             mock_print.assert_called_with("[pl] 'from' index out of range.")
 
-    @patch('__main__._get_playlist')
+    @patch('music_player.playlists_edit._get_playlist')
     def test_PC7_to_out_bounds(self, mock_get):
         # Derived input: S4 is out of range
         mock_get.return_value = (None, self.mock_playlist)
@@ -37,7 +45,7 @@ class TestConcolicTesting(unittest.TestCase):
             move_track_within_playlist(self.mock_state, "S2", "1", "10")
             mock_print.assert_called_with("[pl] 'to' index out of range.")
 
-    @patch('__main__._get_playlist')
+    @patch('music_player.playlists_edit._get_playlist')
     def test_PC10_successful_move(self, mock_get):
         # Constraint: S7 (display_name) exists, Valid indices
         mock_get.return_value = (None, self.mock_playlist)

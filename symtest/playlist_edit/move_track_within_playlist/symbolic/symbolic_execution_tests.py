@@ -1,5 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path
+project_root = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(project_root))
+
+from music_player.playlists_edit import move_track_within_playlist
 
 """
 [Method]                   | [Actual] | [Expected] | [Status]
@@ -36,7 +44,7 @@ class TestSymbolicExecution(unittest.TestCase):
         result = move_track_within_playlist(self.mock_state, "S2", "", "2")
         self.assertIsNone(result)
 
-    @patch('__main__._get_playlist')
+    @patch('music_player.playlists_edit._get_playlist')
     def test_PC5_invalid_int(self, mock_get):
         # S3/S4 cannot be converted to int
         mock_get.return_value = (None, self.mock_playlist)
@@ -44,7 +52,7 @@ class TestSymbolicExecution(unittest.TestCase):
             move_track_within_playlist(self.mock_state, "S2", "NaN", "2")
             mock_print.assert_called_with("[pl] Usage: /pl.move <playlist> <from> <to>")
 
-    @patch('__main__._get_playlist')
+    @patch('music_player.playlists_edit._get_playlist')
     def test_PC8_redundant_move(self, mock_get):
         # from_idx == to_idx (S3 == S4)
         mock_get.return_value = (None, self.mock_playlist)

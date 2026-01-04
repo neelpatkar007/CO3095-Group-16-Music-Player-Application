@@ -1,5 +1,13 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add the project root to sys.path
+project_root = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(project_root))
+
+from music_player.playlists_edit import add_track_from_library
 
 """
 [Method]             | [Actual] | [Expected] | [Status]
@@ -37,19 +45,21 @@ class TestSymbolicExecution(unittest.TestCase):
         result = add_track_from_library(self.state, "selector", "")
         self.assertIsNone(result)
 
-    def test_PC_4_empty_lib(self):
+    @patch('music_player.playlists_edit._get_playlist')
+    def test_PC_4_empty_lib(self, mock_get_playlist):
         # PC_4: S1.tracks is empty list
         self.state.tracks = []
+        mock_get_playlist.return_value = (None, self.playlist)
         add_track_from_library(self.state, "sel", "1")
         # Function returns early after print
 
-    def test_PC_9_success(self):
+    @patch('music_player.playlists_edit._get_playlist')
+    def test_PC_9_success(self, mock_get_playlist):
         # PC_9: Success path with display_name
         self.state.tracks = [self.track]
-        # Mocking internal _get_playlist
-        with unittest.mock.patch('__main__._get_playlist', return_value=(None, self.playlist)):
-            add_track_from_library(self.state, "sel", "1")
-            self.assertIn(self.track, self.playlist.tracks)
+        mock_get_playlist.return_value = (None, self.playlist)
+        add_track_from_library(self.state, "sel", "1")
+        self.assertIn(self.track, self.playlist.tracks)
 
 if __name__ == '__main__':
     unittest.main()
