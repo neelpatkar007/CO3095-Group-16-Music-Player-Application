@@ -1,8 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Assuming the function is in a module named 'main_player'
+from music_player.main import handle_command
+
 
 class TestConcolicExecution(unittest.TestCase):
     """
@@ -34,13 +40,11 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_state.resume_active = s2_resume
         self.mock_state.current_track = s3_track
         self.mock_state.position_seconds = s4_pos
-
-        from main_player import handle_command
         return handle_command(self.mock_state, s1_command)
 
-    @patch('player_core.play')
-    @patch('player_seek.seek_to')
-    @patch('player_shortcuts.handle_keypress')
+    @patch('music_player.player_core.play')
+    @patch('music_player.player_seek.seek_to')
+    @patch('music_player.player_shortcuts.handle_keypress')
     def test_iterative_path_discovery(self, mock_keypress, mock_seek, mock_play):
         # Iteration 1: Empty Input (PC_1)
         # Constraint: NOT S1
@@ -53,7 +57,7 @@ class TestConcolicExecution(unittest.TestCase):
 
         # Iteration 3: Flip to Quit (PC_3)
         # Constraint: Base in {/quit...}
-        with patch('player_metrics.save_data') as mock_save:
+        with patch('music_player.player_metrics.save_data') as mock_save:
             res = self.run_concolic_step("/quit", False, None, 0.0)
             self.assertFalse(res)
 
@@ -75,7 +79,7 @@ class TestConcolicExecution(unittest.TestCase):
         self.run_concolic_step("/play", True, MagicMock(), 155.0)
         mock_seek.assert_called_with(self.mock_state, "155.0")
 
-    @patch('player_seek.seek_to')
+    @patch('music_player.player_seek.seek_to')
     def test_argument_boundary_conditions(self, mock_seek):
         # Iteration 7: Boundary Check - Missing Arguments (PC_13)
         # Constraint: Base == /seek AND Args Empty

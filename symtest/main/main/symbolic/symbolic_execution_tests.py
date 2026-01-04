@@ -1,10 +1,13 @@
 import unittest
-from unittest.mock import MagicMock, patch, ANY
-import threading
+from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
 
-# Assuming the function is located in src.main
-# We import the module to patch it during testing
-from src import main as app_main
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player import main as app_main
 
 
 class TestSymbolicMain(unittest.TestCase):
@@ -23,13 +26,13 @@ class TestSymbolicMain(unittest.TestCase):
 
     def setUp(self):
         # Common mocks for all paths to prevent side effects
-        self.mock_audio = patch('src.main.AudioEngine').start()
-        self.mock_tracks = patch('src.main.discover_tracks').start()
-        self.mock_state_cls = patch('src.main.PlayerState').start()
-        self.mock_config = patch('src.main.player_config').start()
-        self.mock_metrics = patch('src.main.player_metrics').start()
-        self.mock_time = patch('src.main.player_time').start()
-        self.mock_user = patch('src.main.user_data').start()
+        self.mock_audio = patch('music_player.main.AudioEngine').start()
+        self.mock_tracks = patch('music_player.main.discover_tracks').start()
+        self.mock_state_cls = patch('music_player.main.PlayerState').start()
+        self.mock_config = patch('music_player.main.player_config').start()
+        self.mock_metrics = patch('music_player.main.player_metrics').start()
+        self.mock_time = patch('music_player.main.player_time').start()
+        self.mock_user = patch('music_player.main.user_data').start()
         self.mock_thread = patch('threading.Thread').start()
         self.mock_event = patch('threading.Event').start()
 
@@ -67,7 +70,7 @@ class TestSymbolicMain(unittest.TestCase):
         '''
         # S1 = "/quit", S3 = False
         with patch('builtins.input', return_value="/quit"):
-            with patch('src.main.handle_command', return_value=False) as mock_handle:
+            with patch('music_player.main.handle_command', return_value=False) as mock_handle:
                 with patch('builtins.print'):
                     app_main.main()
 
@@ -87,7 +90,7 @@ class TestSymbolicMain(unittest.TestCase):
         # Iteration 1: S1="/play", S3=True (PC_3)
         # Iteration 2: S1="/quit", S3=False (PC_2 - needed to terminate test)
         with patch('builtins.input', side_effect=["/play", "/quit"]):
-            with patch('src.main.handle_command', side_effect=[True, False]) as mock_handle:
+            with patch('music_player.main.handle_command', side_effect=[True, False]) as mock_handle:
                 with patch('builtins.print'):
                     app_main.main()
 

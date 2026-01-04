@@ -1,9 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Assuming the function is in a module named 'main_player'
-# from main_player import handle_command
+from music_player.main import handle_command
+
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -31,10 +36,9 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.current_track = None
         self.mock_state.position_seconds = 0.0
 
-    @patch('player_shortcuts.handle_keypress')
+    @patch('music_player.player_shortcuts.handle_keypress')
     def test_pc1_and_pc2_shortcuts(self, mock_keypress):
         # PC_1: NOT S1 (Empty)
-        from main_player import handle_command
         result = handle_command(self.mock_state, "")
         self.assertTrue(result)
 
@@ -43,20 +47,17 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertTrue(result)
         mock_keypress.assert_called_with(self.mock_state, "p")
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     def test_pc3_quit_command(self, mock_save):
         # PC_3: S1 in {/quit, /exit, q}
-        from main_player import handle_command
         result = handle_command(self.mock_state, "/quit")
         self.assertFalse(result)  # Must return False to signal exit
         mock_save.assert_called_once()
 
-    @patch('player_core.play')
-    @patch('player_seek.seek_to')
+    @patch('music_player.player_core.play')
+    @patch('music_player.player_seek.seek_to')
     def test_pc4_play_resume_with_seek(self, mock_seek, mock_play):
         # PC_4: /play AND S2 AND S3 AND S4 > 0
-        from main_player import handle_command
-
         # Setting Symbolic Variables
         self.mock_state.resume_active = True  # S2
         self.mock_state.current_track = MagicMock()  # S3 (Truthy)
@@ -68,19 +69,16 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_seek.assert_called_with(self.mock_state, "45.0")
         self.assertFalse(self.mock_state.resume_active)  # Check state consumption
 
-    @patch('player_core.play')
+    @patch('music_player.player_core.play')
     def test_pc6_play_standard(self, mock_play):
         # PC_6: /play AND NOT (S2 AND S3)
-        from main_player import handle_command
-
         # S2 is False by default in setUp
         handle_command(self.mock_state, "/play")
         mock_play.assert_called_once()
 
-    @patch('player_seek.seek_to')
+    @patch('music_player.player_seek.seek_to')
     def test_pc13_and_pc14_seek_logic(self, mock_seek):
         # PC_13: /seek with no args
-        from main_player import handle_command
         with patch('builtins.print') as mock_print:
             handle_command(self.mock_state, "/seek")
             mock_print.assert_called_with("[main] Usage: /seek <mm:ss or seconds>")
@@ -92,7 +90,6 @@ class TestSymbolicExecution(unittest.TestCase):
 
     def test_pc21_unknown_command(self):
         # PC_21: Fallback
-        from main_player import handle_command
         with patch('builtins.print') as mock_print:
             result = handle_command(self.mock_state, "/notacommand")
             self.assertTrue(result)

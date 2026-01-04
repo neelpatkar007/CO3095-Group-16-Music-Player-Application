@@ -1,6 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from src import main as app_main
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player import main as app_main
 
 
 class TestConcolicMain(unittest.TestCase):
@@ -19,14 +26,14 @@ class TestConcolicMain(unittest.TestCase):
     '''
 
     def setUp(self):
-        self.mock_state_cls = patch('src.main.PlayerState').start()
+        self.mock_state_cls = patch('music_player.main.PlayerState').start()
         # Patch dependencies to isolate control flow
-        patch('src.main.AudioEngine').start()
-        patch('src.main.discover_tracks').start()
-        patch('src.main.player_config').start()
-        patch('src.main.player_metrics').start()
-        patch('src.main.player_time').start()
-        patch('src.main.user_data').start()
+        patch('music_player.main.AudioEngine').start()
+        patch('music_player.main.discover_tracks').start()
+        patch('music_player.main.player_config').start()
+        patch('music_player.main.player_metrics').start()
+        patch('music_player.main.player_time').start()
+        patch('music_player.main.user_data').start()
         patch('threading.Thread').start()
         patch('threading.Event').start()
         self.mock_state = self.mock_state_cls.return_value
@@ -42,7 +49,7 @@ class TestConcolicMain(unittest.TestCase):
         '''
         # We must allow termination to complete the test, so we chain PC_2 after PC_3
         with patch('builtins.input', side_effect=["/play", "/quit"]):
-            with patch('src.main.handle_command', side_effect=[True, False]) as mock_handle:
+            with patch('music_player.main.handle_command', side_effect=[True, False]) as mock_handle:
                 with patch('builtins.print'):
                     app_main.main()
 
@@ -58,7 +65,7 @@ class TestConcolicMain(unittest.TestCase):
         Traverses PC_2 (Logic Break).
         '''
         with patch('builtins.input', return_value="/quit"):
-            with patch('src.main.handle_command', return_value=False) as mock_handle:
+            with patch('music_player.main.handle_command', return_value=False) as mock_handle:
                 with patch('builtins.print'):
                     app_main.main()
 
@@ -74,7 +81,7 @@ class TestConcolicMain(unittest.TestCase):
         Traverses PC_1 (Exception Break).
         '''
         with patch('builtins.input', side_effect=EOFError):
-            with patch('src.main.handle_command') as mock_handle:
+            with patch('music_player.main.handle_command') as mock_handle:
                 with patch('builtins.print'):
                     app_main.main()
 
