@@ -110,11 +110,17 @@ A command-line music player application developed as part of the CO3095 Software
 ## Testing:
 - Test types include:
   - Black-box Specification
+    - Command: ```pytest np343/test/blackbox/specification ra495/test/blackbox/specification sa1077/test/blackbox/specification sp871/test/blackbox/specification --cov=music_player --cov-report=term-missing --cov-report=html```
   - Black-box Random
+    - Command: ```pytest np343/test/blackbox/random ra495/test/blackbox/random sa1077/test/blackbox/random sp871/test/blackbox/random --cov=music_player --cov-report=term-missing --cov-report=html```
   - White-box Statement
+    - Command: ```pytest np343/test/whitebox/statement ra495/test/whitebox/statement sa1077/test/whitebox/statement sp871/test/whitebox/statement --cov=music_player --cov-report=term-missing --cov-report=html```
   - White-box Branch
+    - Command: ```pytest np343/test/whitebox/branch ra495/test/whitebox/branch sa1077/test/whitebox/branch sp871/test/whitebox/branch --cov=music_player --cov-report=term-missing --cov-report=html```
   - White-box Symbolic
+    - Command: ```pytest np343/test/whitebox/symbolic ra495/test/whitebox/symbolic sa1077/test/whitebox/symbolic sp871/test/whitebox/symbolic --cov=music_player --cov-report=term-missing --cov-report=html```
   - White-box Concolic
+    - Command: ```pytest np343/test/whitebox/concolic ra495/test/whitebox/concolic sa1077/test/whitebox/concolic sp871/test/whitebox/concolic --cov=music_player --cov-report=term-missing --cov-report=html```
 - Create a venv to run test cases in:
   1. In PyCharm open the settings menu.
   ![img.png](README Screenshots/img.png)
