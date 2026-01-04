@@ -2,13 +2,14 @@ import unittest
 from io import StringIO
 import sys
 from pathlib import Path
+from music_player.player_config import view_stats
+from unittest.mock import MagicMock
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_config import view_stats
-from unittest.mock import MagicMock
+
 
 
 class MockTrack:

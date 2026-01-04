@@ -2,12 +2,12 @@ import unittest
 from io import StringIO
 import sys
 from pathlib import Path
+from music_player.player_config import list_all_tags
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_config import list_all_tags
 
 
 class TestConcolicGenerative(unittest.TestCase):

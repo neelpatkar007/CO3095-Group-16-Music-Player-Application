@@ -2,12 +2,12 @@ import unittest
 from unittest.mock import MagicMock
 import sys
 from pathlib import Path
+from music_player.player_audio import toggle_mute
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_audio import toggle_mute
 
 
 class TestConcolicExecution(unittest.TestCase):

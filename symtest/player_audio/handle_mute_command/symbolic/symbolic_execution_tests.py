@@ -2,12 +2,12 @@ import unittest
 from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
+from music_player.player_audio import handle_mute_command
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_audio import handle_mute_command
 
 
 class TestSymbolicExecution(unittest.TestCase):

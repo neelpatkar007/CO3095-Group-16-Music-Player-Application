@@ -3,12 +3,12 @@ from unittest.mock import MagicMock
 import io
 import sys
 from pathlib import Path
+from music_player.player_config import add_tag
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_config import add_tag
 
 
 class TestSymbolicExecution(unittest.TestCase):
