@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-
+from music_player.player_core import pause  # Fixed import at the top
 
 # Context: The path conditions derived from FILE 1 are strictly applied here.
 # PC_1: (NOT S1) OR S2
@@ -37,7 +37,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.is_paused = False
 
         # Execute Function Under Test
-        from src.player import pause  # Assuming function resides here
         pause(self.mock_state)
 
         # Assertions for PC_1
@@ -58,7 +57,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.is_paused = False
 
         # Execute Function Under Test
-        from src.player import pause
         pause(self.mock_state)
 
         # Assertions for PC_2
