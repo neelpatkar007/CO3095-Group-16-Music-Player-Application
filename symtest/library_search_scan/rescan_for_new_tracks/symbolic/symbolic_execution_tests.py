@@ -1,82 +1,16 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import sys
+from pathlib import Path
 import io
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# -------------------------------------------------------------------------
-# MOCK DOMAIN OBJECTS
-# -------------------------------------------------------------------------
+from music_player.player_state import PlayerState
+from music_player.library_search_scan import rescan_for_new_tracks
 
-class PlayerState:
-    """Mock PlayerState object acting as S1."""
-
-    def __init__(self):
-        self.library_tracks = []
-
-
-class Track:
-    """Mock Track object."""
-
-    def __init__(self, path):
-        self.path = path
-
-
-# -------------------------------------------------------------------------
-# FUNCTION UNDER TEST (S2-09)
-# -------------------------------------------------------------------------
-
-def discover_tracks():
-    """Mock external dependency."""
-    return []
-
-
-def rescan_for_new_tracks(state: PlayerState) -> None:
-    '''
-    This syncs the internal library with the actual files on disk.
-    '''
-    if state is None:
-        print("[lib] Error: State is None.")
-        return
-
-    print("[lib] Scanning for new tracks...")
-
-    if not hasattr(state, "library_tracks"):
-        state.library_tracks = []
-
-    if not isinstance(state.library_tracks, list):
-        state.library_tracks = []
-
-    current_paths = set()
-
-    for t in state.library_tracks:
-        if t and hasattr(t, "path") and t.path:
-            current_paths.add(t.path)
-
-    discovered = discover_tracks()
-
-    if not discovered:
-        print("[lib] No files found on disk.")
-        return
-
-    new_tracks = []
-
-    for t in discovered:
-        if t.path not in current_paths:
-            new_tracks.append(t)
-
-    if not new_tracks:
-        print("[lib] No new tracks found.")
-        return
-
-    if new_tracks:
-        state.library_tracks.extend(new_tracks)
-        print(f"[lib] Added {len(new_tracks)} new tracks.")
-
-
-# -------------------------------------------------------------------------
-# SYMBOLIC TEST SUITE
-# -------------------------------------------------------------------------
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -107,23 +41,19 @@ class TestSymbolicExecution(unittest.TestCase):
         Symbolic Path PC_1: S1 is None.
         Condition: S1 == None.
         """
-        # S1: None
         state = None
-
         rescan_for_new_tracks(state)
-
         output = self.held_output.getvalue()
         self.assertIn("Error: State is None", output)
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_pc2_no_files(self, mock_discover):
         """
         Symbolic Path PC_2: S1 valid, S2 empty.
         Condition: NOT S1 AND (NOT S2).
         """
-        # S1: Valid object
-        state = PlayerState()
-        # S2: Empty list (False in boolean context)
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
         mock_discover.return_value = []
 
         rescan_for_new_tracks(state)
@@ -132,47 +62,47 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertIn("Scanning for new tracks...", output)
         self.assertIn("No files found on disk", output)
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_pc3_no_new(self, mock_discover):
         """
         Symbolic Path PC_3: S1 valid, S2 has items, Intersect(S2, S3) is complete.
         Condition: All discovered tracks already exist in library.
         """
-        # S3: Library has 'song1.mp3'
-        state = PlayerState()
-        t1 = Track("song1.mp3")
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+
+        t1 = MagicMock()
+        t1.path = "song1.mp3"
         state.library_tracks = [t1]
 
-        # S2: Discovered has 'song1.mp3'
-        t2 = Track("song1.mp3")  # Same path
+        t2 = MagicMock()
+        t2.path = "song1.mp3"
         mock_discover.return_value = [t2]
 
         rescan_for_new_tracks(state)
 
         output = self.held_output.getvalue()
         self.assertIn("No new tracks found", output)
-        # Verify state did not grow
         self.assertEqual(len(state.library_tracks), 1)
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_pc4_success(self, mock_discover):
         """
         Symbolic Path PC_4: S1 valid, S2 has items, New items found.
         Condition: Discovered contains items NOT in library.
         """
-        # S3: Library is empty
-        state = PlayerState()
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
         state.library_tracks = []
 
-        # S2: Discovered has 'song_new.mp3'
-        new_track = Track("song_new.mp3")
+        new_track = MagicMock()
+        new_track.path = "song_new.mp3"
         mock_discover.return_value = [new_track]
 
         rescan_for_new_tracks(state)
 
         output = self.held_output.getvalue()
         self.assertIn("Added 1 new tracks", output)
-        # Verify side effect
         self.assertEqual(len(state.library_tracks), 1)
         self.assertEqual(state.library_tracks[0].path, "song_new.mp3")
 

@@ -1,71 +1,16 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import sys
+from pathlib import Path
 import io
 
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# -------------------------------------------------------------------------
-# MOCK DOMAIN OBJECTS & FUNCTION COPY
-# -------------------------------------------------------------------------
+from music_player.player_state import PlayerState
+from music_player.library_search_scan import rescan_for_new_tracks
 
-class PlayerState:
-    def __init__(self):
-        self.library_tracks = []
-
-
-class Track:
-    def __init__(self, path):
-        self.path = path
-
-
-def discover_tracks():
-    return []
-
-
-def rescan_for_new_tracks(state: PlayerState) -> None:
-    # Exact function copy for testing context
-    if state is None:
-        print("[lib] Error: State is None.")
-        return
-
-    print("[lib] Scanning for new tracks...")
-
-    if not hasattr(state, "library_tracks"):
-        state.library_tracks = []
-
-    if not isinstance(state.library_tracks, list):
-        state.library_tracks = []
-
-    current_paths = set()
-
-    for t in state.library_tracks:
-        if t and hasattr(t, "path") and t.path:
-            current_paths.add(t.path)
-
-    discovered = discover_tracks()
-
-    if not discovered:
-        print("[lib] No files found on disk.")
-        return
-
-    new_tracks = []
-
-    for t in discovered:
-        if t.path not in current_paths:
-            new_tracks.append(t)
-
-    if not new_tracks:
-        print("[lib] No new tracks found.")
-        return
-
-    if new_tracks:
-        state.library_tracks.extend(new_tracks)
-        print(f"[lib] Added {len(new_tracks)} new tracks.")
-
-
-# -------------------------------------------------------------------------
-# CONCOLIC TESTING SUITE
-# -------------------------------------------------------------------------
 
 class TestConcolicGenerations(unittest.TestCase):
     """
@@ -96,14 +41,11 @@ class TestConcolicGenerations(unittest.TestCase):
         Generated Seed: None.
         Expected: Early return PC_1.
         """
-        # Concrete Seed
         s1_seed = None
-
         rescan_for_new_tracks(s1_seed)
-
         self.assertIn("Error: State is None", self.held_output.getvalue())
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_iteration_2_flip_null_check(self, mock_discover):
         """
         Iteration 2: Flip (S1 == None) -> (S1 != None).
@@ -111,9 +53,9 @@ class TestConcolicGenerations(unittest.TestCase):
         Generated Seed: S1=Object, S2=[].
         Expected: PC_2.
         """
-        # Concrete Seed
-        s1_seed = PlayerState()
-        mock_discover.return_value = []  # S2
+        mock_audio_engine = MagicMock()
+        s1_seed = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+        mock_discover.return_value = []
 
         rescan_for_new_tracks(s1_seed)
 
@@ -121,7 +63,7 @@ class TestConcolicGenerations(unittest.TestCase):
         self.assertIn("Scanning for new tracks...", output)
         self.assertIn("No files found on disk", output)
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_iteration_3_flip_discovery_check(self, mock_discover):
         """
         Iteration 3: Flip (NOT S2) -> (S2 is valid).
@@ -129,32 +71,32 @@ class TestConcolicGenerations(unittest.TestCase):
         Generated Seed: S1 with Track 'A', S2 with Track 'A'.
         Expected: PC_3.
         """
-        # Concrete Seed setup to force Intersection to Empty
-        s1_seed = PlayerState()
-        track_a = Track("A.mp3")
+        mock_audio_engine = MagicMock()
+        s1_seed = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+        track_a = MagicMock()
+        track_a.path = "A.mp3"
         s1_seed.library_tracks = [track_a]
 
-        # S2 mirrors S3
-        mock_discover.return_value = [Track("A.mp3")]
+        mock_discover.return_value = [track_a]
 
         rescan_for_new_tracks(s1_seed)
 
         output = self.held_output.getvalue()
         self.assertIn("No new tracks found", output)
 
-    @patch(f'{__name__}.discover_tracks')
+    @patch('music_player.library_search_scan.discover_tracks')
     def test_iteration_4_flip_new_tracks_check(self, mock_discover):
         """
         Iteration 4: Flip (new_tracks is Empty) -> (new_tracks has items).
         Generated Seed: S1 Empty, S2 has Track 'B'.
         Expected: PC_4 (Path Complete).
         """
-        # Concrete Seed setup to force Intersection to Non-Empty
-        s1_seed = PlayerState()
-        s1_seed.library_tracks = []
+        mock_audio_engine = MagicMock()
+        s1_seed = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+        track_b = MagicMock()
+        track_b.path = "B.mp3"
 
-        # S2 provides unique item
-        mock_discover.return_value = [Track("B.mp3")]
+        mock_discover.return_value = [track_b]
 
         rescan_for_new_tracks(s1_seed)
 

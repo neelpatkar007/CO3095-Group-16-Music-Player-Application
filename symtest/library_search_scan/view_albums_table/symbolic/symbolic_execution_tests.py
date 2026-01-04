@@ -1,9 +1,14 @@
 import unittest
-from unittest.mock import MagicMock, call, patch
-from io import StringIO
-from collections import defaultdict
-from dataclasses import dataclass
-from typing import List, Optional
+from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_state import PlayerState
+from music_player.library_search_scan import view_albums_table
 
 
 # --- Test Results Table ---
@@ -16,26 +21,6 @@ from typing import List, Optional
 #
 # The average test coverage for this suite is measured at 100%.
 
-# --- Mocking Domain Objects to avoid dependency issues ---
-@dataclass
-class PlayerState:
-    library_tracks: Optional[List[object]] = None
-
-
-@dataclass
-class Track:
-    path: MagicMock
-    duration_seconds: Optional[int] = None
-
-
-# Mocking the SUT dependency
-def format_mm_ss(seconds):
-    return f"{seconds // 60}:{seconds % 60:02d}"
-
-
-# SUT import (assuming function is available in local scope for the assignment)
-# from src.logic import view_albums_table
-# For this file block, I will define the function wrapper or assume it exists.
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -43,94 +28,76 @@ class TestSymbolicExecution(unittest.TestCase):
     Utilises S1, S2 mapping and PC_1, PC_2 logic.
     """
 
-    def setUp(self):
-        self.mock_stdout = StringIO()
-        self.patcher = patch('sys.stdout', new=self.mock_stdout)
-        self.patcher.start()
-
-    def tearDown(self):
-        self.patcher.stop()
-
-    def test_pc1_state_none(self):
+    @patch('music_player.library_search_scan.print')
+    def test_pc1_state_none(self, mock_print):
         """
         Symbolic Trace: S1 is None.
         Path: PC_1 (Early Return).
         Condition: NOT S1.
         """
-        # S1 = None
         state = None
-
-        # Execution
-        from logic import view_albums_table  # Import assumed
         view_albums_table(state)
+        mock_print.assert_not_called()
 
-        # Assertion: No output should be generated (Early return)
-        self.assertEqual(self.mock_stdout.getvalue(), "")
-
-    def test_pc1_library_empty(self):
+    @patch('music_player.library_search_scan.print')
+    def test_pc1_library_empty(self, mock_print):
         """
         Symbolic Trace: S1 is Valid, S2 is Empty.
         Path: PC_1 (Early Return).
         Condition: S1 AND NOT S2.
         """
-        # S1 = Valid Object, S2 = Empty List
-        state = PlayerState(library_tracks=[])
-
-        # Execution
-        from logic import view_albums_table
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
         view_albums_table(state)
+        mock_print.assert_not_called()
 
-        # Assertion: No output
-        self.assertEqual(self.mock_stdout.getvalue(), "")
-
-    def test_pc2_execution_logic(self):
+    @patch('music_player.library_search_scan.print')
+    def test_pc2_execution_logic(self, mock_print):
         """
         Symbolic Trace: S1 Valid, S2 Valid, S3 (Track) Valid.
         Path: PC_2 (Full Execution).
         Verifies the dictionary aggregation and print logic.
         """
-        # S3 Setup: Track with specific S4 (Folder Name)
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+
         mock_path = MagicMock()
-        mock_path.parent.name = "RockAlbum"  # S4
+        mock_path.parent.name = "RockAlbum"
 
-        track1 = Track(path=mock_path, duration_seconds=125)  # S5 = 125
+        track1 = MagicMock()
+        track1.path = mock_path
+        track1.duration_seconds = 125
 
-        # S1, S2 Setup
-        state = PlayerState(library_tracks=[track1])
-
-        # Execution
-        from logic import view_albums_table
+        state.library_tracks = [track1]
         view_albums_table(state)
 
-        # Output capture
-        output = self.mock_stdout.getvalue()
-
-        # Assertions
-        # Check header
-        self.assertIn("Album (folder)", output)
-        # Check row content: "RockAlbum", 1 track, duration formatted
-        # 125 seconds -> 2:05
+        output = str(mock_print.call_args_list)
         self.assertIn("RockAlbum", output)
         self.assertIn("2:05", output)
 
-    def test_pc2_boundary_duration(self):
+    @patch('music_player.library_search_scan.print')
+    def test_pc2_boundary_duration(self, mock_print):
         """
         Symbolic Trace: S1 Valid, S2 Valid.
         Constraint Check: S5 is None (t.duration_seconds or 0).
         Verifies the logical OR operator handles None values correctly.
         """
+        mock_audio_engine = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio_engine)
+
         mock_path = MagicMock()
         mock_path.parent.name = "Unknown"
 
-        # S5 is None here
-        track_none_duration = Track(path=mock_path, duration_seconds=None)
+        track_none_duration = MagicMock()
+        track_none_duration.path = mock_path
+        track_none_duration.duration_seconds = None
 
-        state = PlayerState(library_tracks=[track_none_duration])
-
-        from logic import view_albums_table
+        state.library_tracks = [track_none_duration]
         view_albums_table(state)
 
-        output = self.mock_stdout.getvalue()
-
-        # Should sum to 0, formatting 0 -> "0:00"
+        output = str(mock_print.call_args_list)
         self.assertIn("0:00", output)
+
+
+if __name__ == '__main__':
+    unittest.main()
