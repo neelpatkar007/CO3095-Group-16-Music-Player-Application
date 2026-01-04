@@ -1,24 +1,8 @@
+# python
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.playlists_basic import delete_playlist
 
-
-# Assuming the function is in a module named 'player_module'
-# from player_module import delete_playlist
-
-# ----------------------------------------------------------------------------------
-# TEST RESULTS TABLE
-# ----------------------------------------------------------------------------------
-# | Method                     | Actual | Expected | Status |
-# |----------------------------|--------|----------|--------|
-# | test_pc1_early_return      | Return | Return   | PASS   |
-# | test_pc2_no_active_index   | Print  | Print    | PASS   |
-# | test_pc3_decrement_index   | 0      | 0        | PASS   |
-# | test_pc4_idx_greater       | 0      | 0        | PASS   |
-# | test_pc5_delete_active_empty| None  | None     | PASS   |
-# | test_pc6_delete_active_rem | 0      | 0        | PASS   |
-# ----------------------------------------------------------------------------------
-# The average test coverage for this suite is measured at 100%.
-# ----------------------------------------------------------------------------------
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -33,11 +17,11 @@ class TestSymbolicExecution(unittest.TestCase):
         self.playlist_mock.name = "TestPlaylist"
 
         # Default behaviour for _ensure_playlists (pass-through)
-        self.ensure_patcher = patch('player_module._ensure_playlists')
+        self.ensure_patcher = patch('music_player.playlists_basic._ensure_playlists')
         self.mock_ensure = self.ensure_patcher.start()
 
         # Patcher for _resolve_playlist
-        self.resolve_patcher = patch('player_module._resolve_playlist')
+        self.resolve_patcher = patch('music_player.playlists_basic._resolve_playlist')
         self.mock_resolve = self.resolve_patcher.start()
 
     def tearDown(self):
@@ -52,7 +36,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # S1 = None
         self.mock_resolve.return_value = None
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions
@@ -72,7 +55,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # Setup lists
         self.state.playlists = [self.playlist_mock]
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions
@@ -95,7 +77,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # S2 = 1 (Active index points to 'other_pl')
         self.state.active_playlist_index = 1
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions
@@ -119,7 +100,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # S2 = 0 (Active index points to 'other_pl')
         self.state.active_playlist_index = 0
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions
@@ -141,7 +121,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # S2 = 0
         self.state.active_playlist_index = 0
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions
@@ -164,7 +143,6 @@ class TestSymbolicExecution(unittest.TestCase):
         # S2 = 0
         self.state.active_playlist_index = 0
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "selector")
 
         # Assertions

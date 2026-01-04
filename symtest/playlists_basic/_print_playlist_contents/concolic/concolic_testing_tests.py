@@ -2,20 +2,7 @@ import unittest
 from unittest.mock import Mock, patch
 import io
 import sys
-
-
-# Re-declaration of function and dependencies for isolated execution context
-def _print_playlist_contents(pl) -> None:
-    if not pl.tracks:
-        print("  (empty)")
-        return
-
-    for idx, track in enumerate(pl.tracks, start=1):
-        dur = format_mm_ss(track.duration_seconds)
-        print(f"{idx:02d}. {track.display_name} [{dur}]")
-
-
-format_mm_ss = Mock()
+from music_player.playlists_basic import _print_playlist_contents
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -34,7 +21,6 @@ class TestConcolicExecution(unittest.TestCase):
     def setUp(self):
         self.captured_output = io.StringIO()
         sys.stdout = self.captured_output
-        format_mm_ss.reset_mock()
 
     def tearDown(self):
         sys.stdout = sys.__stdout__
@@ -54,7 +40,8 @@ class TestConcolicExecution(unittest.TestCase):
         output = self.captured_output.getvalue().rstrip()
         self.assertEqual(output, "  (empty)", "Concolic Iteration 1 Failed.")
 
-    def test_iteration_2_seed_populated(self):
+    @patch("music_player.playlists_basic.format_mm_ss")
+    def test_iteration_2_seed_populated(self, mock_format):
         """
         Iteration 2: Derived Input from Negated Constraint.
         Previous Path Constraint: NOT S1.
@@ -69,7 +56,7 @@ class TestConcolicExecution(unittest.TestCase):
         mock_playlist = Mock()
         mock_playlist.tracks = [mock_track]
 
-        format_mm_ss.return_value = "02:30"
+        mock_format.return_value = "02:30"
 
         _print_playlist_contents(mock_playlist)
 
@@ -77,7 +64,7 @@ class TestConcolicExecution(unittest.TestCase):
         expected_output = "01. Concrete Hit [02:30]"
 
         self.assertEqual(output, expected_output, "Concolic Iteration 2 Failed.")
-        format_mm_ss.assert_called_with(150)
+        mock_format.assert_called_with(150)
 
 
 if __name__ == '__main__':

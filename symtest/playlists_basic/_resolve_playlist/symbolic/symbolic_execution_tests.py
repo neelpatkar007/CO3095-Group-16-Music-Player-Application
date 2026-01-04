@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, Mock
-
+from music_player.playlists_basic import _resolve_playlist
 
 # Assuming the function is located in a module named 'player_logic'
 # from player_logic import _resolve_playlist
@@ -9,48 +9,6 @@ from unittest.mock import MagicMock, Mock
 def _ensure_playlists(state):
     pass  # Mocked side-effect function
 
-
-def _resolve_playlist(state, selector):
-    # Embedded for self-contained execution context as per instructions
-    _ensure_playlists(state)
-
-    if state is None:
-        print("[pl] Error: State is None.")
-        return None
-
-    if not hasattr(state, "playlists"):
-        print("[pl] Error: State is None.")
-        return None
-
-    if not isinstance(state.playlists, list):
-        print("[pl] Error: State is None.")
-        return None
-
-    if not isinstance(selector, str):
-        print("[pl] Missing playlist name or number.")
-        return None
-
-    selector = selector.strip()
-
-    try:
-        idx = int(selector) - 1
-    except ValueError:
-        idx = None
-
-    if idx is not None:
-        if 0 <= idx < len(state.playlists):
-            return state.playlists[idx]
-        print("[pl] Playlist index out of range.")
-        return None
-
-    lowered = selector.lower()
-
-    for pl in state.playlists:
-        if pl.name.lower() == lowered:
-            return pl
-
-    print(f"[pl] Playlist '{selector}' not found.")
-    return None
 
 
 class TestSymbolicExecution(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import sort_playlist
 
 # Assuming the function is imported from the module 'playlist_manager'
 # from playlist_manager import sort_playlist
@@ -66,7 +66,7 @@ class TestSymbolicExecution(unittest.TestCase):
             mock_print.assert_called_with("[pl] Error: Sort criteria must be a valid string.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')  # Placeholder for actual import path
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC4_resolve_returns_none(self, mock_resolve, mock_print):
         """Path Condition 4: S4 (Playlist) is None."""
         S1 = self.mock_state
@@ -82,7 +82,7 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertFalse(mock_print.called or "Error" in str(mock_print.call_args))
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC5_tracks_corrupted(self, mock_resolve, mock_print):
         """Path Condition 5: S4 Valid, but S5 (tracks) missing or None."""
         S1 = self.mock_state
@@ -104,7 +104,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error: Playlist tracks corrupted.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC6_tracks_empty(self, mock_resolve, mock_print):
         """Path Condition 6: S5 is empty list."""
         S1 = self.mock_state
@@ -120,7 +120,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Playlist 'TestPL' is empty, nothing to sort.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC7_sort_title_success(self, mock_resolve, mock_print):
         """Path Condition 7: Criteria 'title', Sort Success."""
         S1 = self.mock_state
@@ -141,7 +141,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'TestPL' by title.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC8_sort_title_exception(self, mock_resolve, mock_print):
         """Path Condition 8: Criteria 'title', Exception during sort."""
         S1 = self.mock_state
@@ -157,7 +157,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error sorting by title: SortFail")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC9_sort_artist_success(self, mock_resolve, mock_print):
         """Path Condition 9: Criteria 'artist', Sort Success."""
         S1 = self.mock_state
@@ -176,7 +176,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'TestPL' by artist.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC10_sort_artist_exception(self, mock_resolve, mock_print):
         """Path Condition 10: Criteria 'artist', Exception."""
         mock_pl = MagicMock()
@@ -187,7 +187,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error sorting by artist: ArtistFail")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC11_sort_duration_success(self, mock_resolve, mock_print):
         """Path Condition 11: Criteria 'duration', Sort Success."""
         S1 = self.mock_state
@@ -206,7 +206,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'TestPL' by duration.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC12_sort_duration_exception(self, mock_resolve, mock_print):
         """Path Condition 12: Criteria 'duration', Exception."""
         mock_pl = MagicMock()
@@ -217,7 +217,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error sorting by duration: DurFail")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_PC13_invalid_criteria(self, mock_resolve, mock_print):
         """Path Condition 13: Criteria not title, artist, or duration."""
         S1 = self.mock_state

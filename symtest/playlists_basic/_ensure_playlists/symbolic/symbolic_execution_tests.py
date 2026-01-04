@@ -2,25 +2,12 @@ import unittest
 from unittest.mock import MagicMock
 from io import StringIO
 import sys
+from music_player.playlists_basic import _ensure_playlists
 
 
-# Assume the function is imported from the main module
-# from source import _ensure_playlists
 
-# For the purpose of this assignment, the function is defined inline
 class PlayerState:
     pass
-
-
-def _ensure_playlists(state: PlayerState) -> None:
-    """
-    Internal helper to ensure state.playlists exists.
-    """
-    if state is None or not hasattr(state, "playlists"):
-        print("[pl] Error: State is None.")
-        return
-    if state.playlists is None:
-        state.playlists = []
 
 
 class TestSymbolicExecution(unittest.TestCase):

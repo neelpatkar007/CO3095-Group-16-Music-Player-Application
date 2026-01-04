@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.playlists_basic import open_playlist
 
 
 # -------------------------------------------------------------------------
@@ -22,10 +23,10 @@ class TestConcolicOpenPlaylist(unittest.TestCase):
         # Base symbolic variable S1
         self.S1 = MagicMock()
 
-    @patch('music_player.commands._activate_playlist_queue')
-    @patch('music_player.commands._print_playlist_contents')
-    @patch('music_player.commands._resolve_playlist')
-    @patch('music_player.commands._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._print_playlist_contents')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_iter1_neg_path(self, mock_ensure, mock_resolve, mock_print_contents, mock_activate):
         """
         Iteration 1: Validation of the initial concrete execution.
@@ -36,17 +37,17 @@ class TestConcolicOpenPlaylist(unittest.TestCase):
         S2 = "invalid_id"
         mock_resolve.return_value = None
 
-        from music_player.commands import open_playlist
+
         open_playlist(self.S1, S2)
 
         # Assert flow restricted to PC_1
         mock_resolve.assert_called_with(self.S1, S2)
         mock_activate.assert_not_called()
 
-    @patch('music_player.commands._activate_playlist_queue')
-    @patch('music_player.commands._print_playlist_contents')
-    @patch('music_player.commands._resolve_playlist')
-    @patch('music_player.commands._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._print_playlist_contents')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     @patch('builtins.print')
     def test_iter2_pos_path(self, mock_print, mock_ensure, mock_resolve, mock_print_contents, mock_activate):
         """
@@ -62,7 +63,6 @@ class TestConcolicOpenPlaylist(unittest.TestCase):
         # Simulating the solver finding a valid playlist mapping
         mock_resolve.return_value = mock_pl
 
-        from music_player.commands import open_playlist
         open_playlist(self.S1, S2)
 
         # Assert flow reached PC_2 terminal state

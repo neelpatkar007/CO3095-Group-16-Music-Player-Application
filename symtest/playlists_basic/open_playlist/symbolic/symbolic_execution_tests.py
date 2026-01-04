@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch, call
-
+from music_player.playlists_basic import open_playlist
 
 # Assuming the function is located in 'music_player.commands'
 # from music_player.commands import open_playlist
@@ -25,10 +25,10 @@ class TestSymbolicOpenPlaylist(unittest.TestCase):
         self.S1 = MagicMock()  # S1: PlayerState
         self.S2 = "test_selector"  # S2: Selector string
 
-    @patch('music_player.commands._activate_playlist_queue')
-    @patch('music_player.commands._print_playlist_contents')
-    @patch('music_player.commands._resolve_playlist')
-    @patch('music_player.commands._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._print_playlist_contents')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     @patch('builtins.print')
     def test_pc1_not_found(self, mock_print, mock_ensure, mock_resolve, mock_print_contents, mock_activate):
         """
@@ -40,7 +40,7 @@ class TestSymbolicOpenPlaylist(unittest.TestCase):
         mock_resolve.return_value = None
 
         # Execute
-        from music_player.commands import open_playlist
+
         open_playlist(self.S1, self.S2)
 
         # Verification
@@ -52,10 +52,10 @@ class TestSymbolicOpenPlaylist(unittest.TestCase):
         mock_print_contents.assert_not_called()
         mock_activate.assert_not_called()
 
-    @patch('music_player.commands._activate_playlist_queue')
-    @patch('music_player.commands._print_playlist_contents')
-    @patch('music_player.commands._resolve_playlist')
-    @patch('music_player.commands._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._print_playlist_contents')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     @patch('builtins.print')
     def test_pc2_success(self, mock_print, mock_ensure, mock_resolve, mock_print_contents, mock_activate):
         """
@@ -69,7 +69,7 @@ class TestSymbolicOpenPlaylist(unittest.TestCase):
         mock_resolve.return_value = mock_pl
 
         # Execute
-        from music_player.commands import open_playlist
+
         open_playlist(self.S1, self.S2)
 
         # Verification

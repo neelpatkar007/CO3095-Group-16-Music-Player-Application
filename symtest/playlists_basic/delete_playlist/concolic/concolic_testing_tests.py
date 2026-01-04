@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import delete_playlist
 
 # Assuming the function is in a module named 'player_module'
 # from player_module import delete_playlist
@@ -31,10 +31,10 @@ class TestConcolicGeneration(unittest.TestCase):
         self.playlist_mock = MagicMock()
         self.playlist_mock.name = "ConcolicPL"
 
-        self.ensure_patcher = patch('player_module._ensure_playlists')
+        self.ensure_patcher = patch('music_player.playlists_basic._ensure_playlists')
         self.mock_ensure = self.ensure_patcher.start()
 
-        self.resolve_patcher = patch('player_module._resolve_playlist')
+        self.resolve_patcher = patch('music_player.playlists_basic._resolve_playlist')
         self.mock_resolve = self.resolve_patcher.start()
 
     def tearDown(self):
@@ -49,7 +49,6 @@ class TestConcolicGeneration(unittest.TestCase):
         """
         self.mock_resolve.return_value = None
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         # Verification of path traversal
@@ -66,7 +65,6 @@ class TestConcolicGeneration(unittest.TestCase):
         self.state.active_playlist_index = None  # S2
         self.state.playlists = [self.playlist_mock]
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         self.assertIsNone(self.state.active_playlist_index)
@@ -83,7 +81,6 @@ class TestConcolicGeneration(unittest.TestCase):
         self.state.playlists = [self.playlist_mock, other]
         self.state.active_playlist_index = 1  # S2
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         # 1 decremented to 0
@@ -101,7 +98,6 @@ class TestConcolicGeneration(unittest.TestCase):
         self.state.playlists = [other, self.playlist_mock]
         self.state.active_playlist_index = 0  # S2
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         # 0 remains 0
@@ -118,7 +114,6 @@ class TestConcolicGeneration(unittest.TestCase):
         self.state.playlists = [self.playlist_mock]
         self.state.active_playlist_index = 0  # S2
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         # List is empty, index becomes None
@@ -135,7 +130,6 @@ class TestConcolicGeneration(unittest.TestCase):
         self.state.playlists = [self.playlist_mock, other]
         self.state.active_playlist_index = 0  # S2
 
-        from player_module import delete_playlist
         delete_playlist(self.state, "sel")
 
         # List not empty, index set to 0

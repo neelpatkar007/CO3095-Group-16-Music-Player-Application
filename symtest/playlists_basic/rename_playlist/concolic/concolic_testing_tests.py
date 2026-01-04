@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 from typing import List
+from music_player.playlists_basic import rename_playlist
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -29,14 +30,14 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_state.playlists = [self.pl_alpha, self.pl_beta]
 
     @patch('builtins.print')
-    @patch('module_under_test._resolve_playlist')
-    @patch('module_under_test._ensure_playlists')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_concolic_iterations(self, mock_ensure, mock_resolve, mock_print):
         """
         Executes the explicit iteration table defined in the Concolic Analysis.
         Progression: PC_1 -> PC_2 -> PC_3 -> PC_4
         """
-        from module_under_test import rename_playlist
+
 
         # ======================================================
         # Iteration 1: PC_1 (Early Return on Empty Input)

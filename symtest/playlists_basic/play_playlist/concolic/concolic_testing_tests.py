@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.playlists_basic import play_playlist
 # Assuming the function is in a module named 'player_controller'
 # from player_controller import play_playlist
 
@@ -20,9 +21,9 @@ class TestConcolicTesting(unittest.TestCase):
     def setUp(self):
         self.S1 = MagicMock()
 
-    @patch('player_controller._activate_playlist_queue')
-    @patch('player_controller._resolve_playlist')
-    @patch('player_controller._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_iter_1_PC_1_concrete_seed_invalid_selector(self, mock_ensure, mock_resolve, mock_activate):
         """
         Iteration 1 (Concrete Seed):

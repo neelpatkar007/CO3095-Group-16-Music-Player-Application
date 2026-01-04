@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 # Assuming the function is in a module named 'player_controller'
 # from player_controller import play_playlist
+from music_player.playlists_basic import play_playlist
 
 class TestSymbolicExecution(unittest.TestCase):
     """
@@ -23,9 +24,9 @@ class TestSymbolicExecution(unittest.TestCase):
         # S2 represents the symbolic selector string
         self.S2 = "symbolic_selector"
 
-    @patch('player_controller._activate_playlist_queue')
-    @patch('player_controller._resolve_playlist')
-    @patch('player_controller._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_PC_1_early_return_when_playlist_is_none(self, mock_ensure, mock_resolve, mock_activate):
         """
         Symbolic Path PC_1:
@@ -43,9 +44,9 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_resolve.assert_called_once_with(self.S1, self.S2)
         mock_activate.assert_not_called()
 
-    @patch('player_controller._activate_playlist_queue')
-    @patch('player_controller._resolve_playlist')
-    @patch('player_controller._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_PC_2_activate_queue_when_playlist_resolved(self, mock_ensure, mock_resolve, mock_activate):
         """
         Symbolic Path PC_2:

@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import play_active_playlist
 
 # Assuming the function is located in 'music_player.py'
 # from music_player import play_active_playlist
@@ -25,8 +25,8 @@ class TestSymbolicExecution(unittest.TestCase):
     def setUp(self):
         self.mock_state = MagicMock()
         # Mock dependencies ensuring isolation
-        self.patcher_ensure = patch('music_player._ensure_playlists')
-        self.patcher_activate = patch('music_player._activate_playlist_queue')
+        self.patcher_ensure = patch('music_player.playlists_basic._ensure_playlists')
+        self.patcher_activate = patch('music_player.playlists_basic._activate_playlist_queue')
         self.patcher_print = patch('builtins.print')
 
         self.mock_ensure = self.patcher_ensure.start()
@@ -48,7 +48,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.playlists = ["MockPlaylist"]  # S2 (Irrelevant due to short-circuit)
 
         # Execution
-        from music_player import play_active_playlist
         play_active_playlist(self.mock_state)
 
         # Verification
@@ -66,7 +65,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.playlists = []  # S2
 
         # Execution
-        from music_player import play_active_playlist
         play_active_playlist(self.mock_state)
 
         # Verification
@@ -85,7 +83,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.playlists = [mock_playlist_obj]  # S2
 
         # Execution
-        from music_player import play_active_playlist
         play_active_playlist(self.mock_state)
 
         # Verification

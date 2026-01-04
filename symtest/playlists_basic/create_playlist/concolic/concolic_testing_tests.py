@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from dataclasses import dataclass, field
 from typing import List
-
+from music_player.playlists_basic import create_playlist
 
 # Mock definitions to support the Concolic test environment
 @dataclass
@@ -13,23 +13,7 @@ class Playlist:
 @dataclass
 class PlayerState:
     playlists: List[Playlist] = field(default_factory=list)
-
-
-def _ensure_playlists(state):
-    pass
-
-
-def create_playlist(state: PlayerState, name: str) -> None:
-    _ensure_playlists(state)
-    name = (name or "").strip()
-    if not name:
-        print("[pl] Usage: /pl.new <name>")
-        return
-
-    for pl in state.playlists:
-        if pl.name.lower() == name.lower():
-            print(f"[pl] A playlist named '{name}' already exists.")
-            return
+    active_playlist_index: int | None = None
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -55,7 +39,7 @@ class TestConcolicExecution(unittest.TestCase):
         S1 = PlayerState()
         S2 = ""
 
-        with patch('builtins.print') as mocked_print:
+        with patch("builtins.print") as mocked_print:
             create_playlist(S1, S2)
             mocked_print.assert_called_with("[pl] Usage: /pl.new <name>")
 
@@ -63,15 +47,14 @@ class TestConcolicExecution(unittest.TestCase):
         """
         Iteration 2: Negating the 'Empty' constraint.
         New Seed: Derived from negating (S2 == "").
-        Target: PC_3 (Success path default)
+        Target: PC_3 (Success path)
         """
         S1 = PlayerState()
-        S2 = "Jazz"  # Derived concrete input
+        S2 = "Jazz"
 
-        with patch('builtins.print') as mocked_print:
+        with patch("builtins.print") as mocked_print:
             create_playlist(S1, S2)
-            # Expectation: The loop completes without finding a duplicate.
-            mocked_print.assert_not_called()
+            mocked_print.assert_called_with("[pl] Created playlist 'Jazz'.")
 
     def test_iteration_3_negate_existence(self):
         """
@@ -80,13 +63,14 @@ class TestConcolicExecution(unittest.TestCase):
         Target: PC_2
         """
         S2 = "Jazz"
-        # We mathematically derive S1 to contain S2 to force the branch flip
         S1 = PlayerState(playlists=[Playlist(name="Jazz")])
 
-        with patch('builtins.print') as mocked_print:
+        with patch("builtins.print") as mocked_print:
             create_playlist(S1, S2)
-            mocked_print.assert_called_with(f"[pl] A playlist named '{S2}' already exists.")
+            mocked_print.assert_called_with(
+                f"[pl] A playlist named '{S2}' already exists."
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

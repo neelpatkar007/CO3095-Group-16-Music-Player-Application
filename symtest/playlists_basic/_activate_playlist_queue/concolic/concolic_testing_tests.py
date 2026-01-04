@@ -1,7 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
-
+from music_player.playlists_basic import _activate_playlist_queue
+from music_player.playlists_basic import _ensure_playlists
+from music_player.playlists_basic import _set_active_by_playlist
 class TestConcolicExecution(unittest.TestCase):
     """
     White-Box Testing Suite: Concolic Testing (Hybrid)
@@ -21,14 +22,17 @@ class TestConcolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        self.ensure_patcher = patch('media_player.queue_manager._ensure_playlists')
-        self.set_active_patcher = patch('media_player.queue_manager._set_active_by_playlist')
+        self.ensure_patcher = patch('music_player.playlists_basic._ensure_playlists')
+        self.set_active_patcher = patch('music_player.playlists_basic._set_active_by_playlist')
         self.mock_ensure = self.ensure_patcher.start()
         self.mock_set_active = self.set_active_patcher.start()
 
-        # Environmental Mock (S4)
-        self.player_core_patcher = patch('media_player.queue_manager.player_core', create=True)
+        # player_core mock
+        self.player_core_patcher = patch('music_player.playlists_basic.player_core', create=True)
         self.mock_player_core = self.player_core_patcher.start()
+
+        # Ensure .play exists
+        self.mock_player_core.play = MagicMock()
 
     def tearDown(self):
         self.ensure_patcher.stop()
@@ -41,7 +45,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: S1 is None -> S1 is NOT None.
         Result: Triggers PC_1.
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = None
         S2 = None
         S3 = True
@@ -56,7 +59,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: S2 is None -> S2 is NOT None.
         Result: Triggers PC_2.
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()  # Flipping S1 to Valid
         S2 = None
         S3 = True
@@ -71,7 +73,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: hasattr(S2, 'tracks') is False -> True.
         Result: Triggers PC_3.
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         del S2.tracks  # Enforcing the concrete constraint
@@ -87,7 +88,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: isinstance(tracks, list) is False -> True.
         Result: Triggers PC_4.
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         S2.tracks = "Not List"  # Enforcing concrete constraint
@@ -103,7 +103,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: tracks is Empty -> tracks is Not Empty.
         Result: Triggers PC_5.
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         S2.tracks = []  # Enforcing concrete constraint
@@ -119,7 +118,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: S3 (auto_play) is False -> True.
         Result: Triggers PC_6 (Success path, no play).
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         S2.tracks = ['Item']  # Flipping S2 to Valid
@@ -134,7 +132,6 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint to Flip: hasattr(S4, 'play') is True -> False.
         Result: Triggers PC_7 (Success path, with play).
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         S2.tracks = ['Item']
@@ -151,7 +148,6 @@ class TestConcolicExecution(unittest.TestCase):
         Iteration 8: Seed(S1_Valid, S2_Valid, True, S4_Broken).
         Result: Triggers PC_8 (Error print due to missing player core attr).
         """
-        from media_player.queue_manager import _activate_playlist_queue
         S1 = MagicMock()
         S2 = MagicMock()
         S2.tracks = ['Item']

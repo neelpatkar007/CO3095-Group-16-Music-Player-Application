@@ -1,20 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-
-
-# TARGET FUNCTION
-def _set_active_by_playlist(state, playlist):
-    _ensure_playlists(state)
-    try:
-        idx = state.playlists.index(playlist)
-    except ValueError:
-        return
-    state.active_playlist_index = idx
-
-
-# Mocking external dependency
-def _ensure_playlists(state):
-    pass
+from music_player.playlists_basic import _set_active_by_playlist
 
 
 class TestConcolicExecution(unittest.TestCase):

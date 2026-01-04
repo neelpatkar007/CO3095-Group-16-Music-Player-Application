@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 from io import StringIO
 import sys
-
+from music_player.playlists_basic import list_playlists
 
 class TestConcolicExecution(unittest.TestCase):
     """
@@ -25,9 +25,9 @@ class TestConcolicExecution(unittest.TestCase):
     def setUp(self):
         self.captured_output = StringIO()
         sys.stdout = self.captured_output
-        self.mock_ensure = patch('source._ensure_playlists').start()
-        self.mock_summary = patch('source._get_playlist_summary').start()
-        self.mock_format = patch('source.format_mm_ss').start()
+        self.mock_ensure = patch('music_player.playlists_basic._ensure_playlists').start()
+        self.mock_summary = patch('music_player.playlists_basic._get_playlist_summary').start()
+        self.mock_format = patch('music_player.playlists_basic.format_mm_ss').start()
 
     def tearDown(self):
         patch.stopall()
@@ -35,7 +35,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iteration_01_seed_null(self):
         """Iteration 1: Base concrete seed is None."""
-        from source import list_playlists
         list_playlists(None)
         self.assertIn("State is missing", self.captured_output.getvalue())
 
@@ -44,7 +43,6 @@ class TestConcolicExecution(unittest.TestCase):
         S1 = MagicMock()
         object.__setattr__(S1, 'playlists', None)
 
-        from source import list_playlists
         list_playlists(S1)
         self.assertEqual("", self.captured_output.getvalue().strip())
 
@@ -53,7 +51,6 @@ class TestConcolicExecution(unittest.TestCase):
         S1 = MagicMock()
         S1.playlists = 12345  # Concrete value derived from solver to fail isinstance
 
-        from source import list_playlists
         list_playlists(S1)
         self.assertIn("data is corrupted", self.captured_output.getvalue())
 
@@ -62,7 +59,6 @@ class TestConcolicExecution(unittest.TestCase):
         S1 = MagicMock()
         S1.playlists = []
 
-        from source import list_playlists
         list_playlists(S1)
         self.assertIn("No playlists defined", self.captured_output.getvalue())
 
@@ -71,7 +67,6 @@ class TestConcolicExecution(unittest.TestCase):
         S1 = MagicMock()
         S1.playlists = [None]
 
-        from source import list_playlists
         list_playlists(S1)
         self.assertIn("Invalid Playlist", self.captured_output.getvalue())
 
@@ -86,7 +81,6 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_summary.return_value = (10, 600)
         self.mock_format.return_value = "10:00"
 
-        from source import list_playlists
         list_playlists(S1)
 
         output = self.captured_output.getvalue()
@@ -107,8 +101,9 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_summary.return_value = (1, 120)
         self.mock_format.return_value = "02:00"
 
-        from source import list_playlists
         list_playlists(S1)
 
         output = self.captured_output.getvalue()
         # Expecting asterisk and singular
+        self.assertIn("* Deep Path", output)
+        self.assertIn("1 song", output)

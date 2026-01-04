@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import _activate_playlist_queue
 
 # Assuming the function is located in 'media_player.queue_manager'
 # Since the code was provided directly, we will import it or define it in a context where it can be tested.
@@ -25,16 +25,17 @@ class TestSymbolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        # We must patch the external dependencies implied in the function
-        self.ensure_patcher = patch('media_player.queue_manager._ensure_playlists')
-        self.set_active_patcher = patch('media_player.queue_manager._set_active_by_playlist')
-
+        self.ensure_patcher = patch('music_player.playlists_basic._ensure_playlists')
+        self.set_active_patcher = patch('music_player.playlists_basic._set_active_by_playlist')
         self.mock_ensure = self.ensure_patcher.start()
         self.mock_set_active = self.set_active_patcher.start()
 
-        # The function relies on a global 'player_core'. We will patch this in individual tests or setup.
-        self.player_core_patcher = patch('media_player.queue_manager.player_core', create=True)
+        # player_core mock
+        self.player_core_patcher = patch('music_player.playlists_basic.player_core', create=True)
         self.mock_player_core = self.player_core_patcher.start()
+
+        # Ensure .play exists
+        self.mock_player_core.play = MagicMock()
 
     def tearDown(self):
         self.ensure_patcher.stop()
@@ -47,7 +48,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Print Error, Early Return.
         """
         # S1 = None, S2 = Mock
-        from media_player.queue_manager import _activate_playlist_queue
 
         with patch('builtins.print') as mock_print:
             _activate_playlist_queue(None, MagicMock(), True)
@@ -59,7 +59,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Print Error, Early Return.
         """
         # S1 = Mock, S2 = None
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
 
@@ -73,7 +72,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Print Error, Early Return.
         """
         # S1 = Mock, S2 = Object without 'tracks'
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         S2 = MagicMock()
@@ -89,7 +87,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Print Error, Early Return.
         """
         # S1 = Mock, S2.tracks = "Not a list"
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         S2 = MagicMock()
@@ -105,7 +102,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Print Warning, Early Return.
         """
         # S1 = Mock, S2.tracks = []
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         S2 = MagicMock()
@@ -121,7 +117,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: State updated, Player NOT called.
         """
         # S1 = Mock, S2.tracks = ['track1'], S3 = False
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         S1.library_tracks = None  # Force internal assignment logic
@@ -148,7 +143,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: State updated, Player.play(state) called.
         """
         # S1 = Mock, S2.tracks = ['track1'], S3 = True
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         # Pre-set library_tracks to skip internal assignment logic for variety
@@ -173,7 +167,6 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: State updated, Error Printed.
         """
         # S1 = Mock, S2.tracks = ['track1'], S3 = True
-        from media_player.queue_manager import _activate_playlist_queue
 
         S1 = MagicMock()
         S2 = MagicMock()

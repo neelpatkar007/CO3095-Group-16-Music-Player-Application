@@ -1,32 +1,8 @@
 import unittest
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 import io
 import sys
-
-
-# Assumption: The function _print_playlist_contents is imported from the source module.
-# For the purpose of this self-contained suite, the function is defined below.
-# In a real environment, this would be: from src.playlist import _print_playlist_contents
-
-def _print_playlist_contents(pl) -> None:
-    """
-    This is a helper function that prints the contents of a playlist,
-    showing each track's index, title, and duration in mm:ss format.
-    If the playlist has no tracks, prints "(empty)" instead.
-    """
-    if not pl.tracks:
-        print("  (empty)")
-        return
-
-    for idx, track in enumerate(pl.tracks, start=1):
-        # We assume format_mm_ss is globally available or imported.
-        # It will be mocked in the test setup.
-        dur = format_mm_ss(track.duration_seconds)
-        print(f"{idx:02d}. {track.display_name} [{dur}]")
-
-
-# Global mock for dependency injection simulation
-format_mm_ss = Mock()
+from music_player.playlists_basic import _print_playlist_contents
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -45,11 +21,10 @@ class TestSymbolicExecution(unittest.TestCase):
     def setUp(self):
         """
         Prepare the test harness. Redirect stdout to capture print statements
-        and reset mocks to ensure isolation between PC_1 and PC_2 verification.
+        and ensure isolation between PC_1 and PC_2 verification.
         """
         self.captured_output = io.StringIO()
         sys.stdout = self.captured_output
-        format_mm_ss.reset_mock()
 
     def tearDown(self):
         sys.stdout = sys.__stdout__
@@ -69,7 +44,8 @@ class TestSymbolicExecution(unittest.TestCase):
         output = self.captured_output.getvalue().rstrip()
         self.assertEqual(output, "  (empty)", "PC_1 Failed: Did not print empty message.")
 
-    def test_pc2_populated_playlist(self):
+    @patch("music_player.playlists_basic.format_mm_ss")
+    def test_pc2_populated_playlist(self, mock_format):
         """
         Verifies Path Condition 2 (PC_2): S1.
         Constraint: pl.tracks is populated (S1 is True).
@@ -84,7 +60,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_playlist.tracks = [mock_track]
 
         # Mock external dependency
-        format_mm_ss.return_value = "03:00"
+        mock_format.return_value = "03:00"
 
         _print_playlist_contents(mock_playlist)
 
@@ -94,7 +70,7 @@ class TestSymbolicExecution(unittest.TestCase):
         # Verify Output
         self.assertEqual(output, expected_output, "PC_2 Failed: Output format incorrect.")
         # Verify dependency interaction
-        format_mm_ss.assert_called_once_with(180)
+        mock_format.assert_called_once_with(180)
 
 
 if __name__ == '__main__':

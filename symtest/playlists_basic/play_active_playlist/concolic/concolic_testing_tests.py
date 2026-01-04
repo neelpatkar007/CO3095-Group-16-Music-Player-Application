@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import play_active_playlist
 
 class TestConcolicGenerations(unittest.TestCase):
     """
@@ -22,9 +22,9 @@ class TestConcolicGenerations(unittest.TestCase):
 
     def setUp(self):
         self.mock_state = MagicMock()
-        self.patcher_activate = patch('music_player._activate_playlist_queue')
+        self.patcher_activate = patch('music_player.playlists_basic._activate_playlist_queue')
         self.patcher_print = patch('builtins.print')
-        self.patcher_ensure = patch('music_player._ensure_playlists')
+        self.patcher_ensure = patch('music_player.playlists_basic._ensure_playlists')
 
         self.mock_activate = self.patcher_activate.start()
         self.mock_print = self.patcher_print.start()
@@ -44,7 +44,7 @@ class TestConcolicGenerations(unittest.TestCase):
         self.mock_state.active_playlist_index = None
         self.mock_state.playlists = []
 
-        from music_player import play_active_playlist
+
         play_active_playlist(self.mock_state)
 
         # Assert Path PC_1 taken (Early Return)
@@ -60,7 +60,7 @@ class TestConcolicGenerations(unittest.TestCase):
         self.mock_state.active_playlist_index = 0
         self.mock_state.playlists = []
 
-        from music_player import play_active_playlist
+
         play_active_playlist(self.mock_state)
 
         # Assert Path PC_2 taken (Early Return via list check)
@@ -77,7 +77,7 @@ class TestConcolicGenerations(unittest.TestCase):
         self.mock_state.active_playlist_index = 0
         self.mock_state.playlists = [target_playlist]
 
-        from music_player import play_active_playlist
+
         play_active_playlist(self.mock_state)
 
         # Assert Path PC_3 taken (Full Execution)

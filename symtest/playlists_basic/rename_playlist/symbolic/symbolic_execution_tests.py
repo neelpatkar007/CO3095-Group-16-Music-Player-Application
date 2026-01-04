@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 from typing import List
-
+from music_player.playlists_basic import rename_playlist
 
 # Assuming the function is imported from the module 'music_player'
 # from music_player import rename_playlist
@@ -35,8 +35,8 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.playlists = [self.mock_playlist_1, self.mock_playlist_2]
 
     @patch('builtins.print')
-    @patch('module_under_test._resolve_playlist')
-    @patch('module_under_test._ensure_playlists')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_pc_1_empty_input_validation(self, mock_ensure, mock_resolve, mock_print):
         """
         PC_1: Verify path where S3 (after strip) is empty.
@@ -48,7 +48,7 @@ class TestSymbolicExecution(unittest.TestCase):
         S3 = "   "  # Whitespace simulates empty after strip
 
         # Execution
-        from module_under_test import rename_playlist
+
         rename_playlist(S1, S2, S3)
 
         # Assertions
@@ -56,8 +56,8 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_resolve.assert_not_called()  # Logic should return before resolution
 
     @patch('builtins.print')
-    @patch('module_under_test._resolve_playlist')
-    @patch('module_under_test._ensure_playlists')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_pc_2_resolution_failure(self, mock_ensure, mock_resolve, mock_print):
         """
         PC_2: Verify path where playlist resolution fails (returns None).
@@ -72,7 +72,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_resolve.return_value = None
 
         # Execution
-        from module_under_test import rename_playlist
+
         rename_playlist(S1, S2, S3)
 
         # Assertions
@@ -82,8 +82,8 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertEqual(self.mock_playlist_1.name, "Classic")
 
     @patch('builtins.print')
-    @patch('module_under_test._resolve_playlist')
-    @patch('module_under_test._ensure_playlists')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_pc_3_name_collision(self, mock_ensure, mock_resolve, mock_print):
         """
         PC_3: Verify path where S3 conflicts with an existing playlist name.
@@ -98,7 +98,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_resolve.return_value = self.mock_playlist_2
 
         # Execution
-        from module_under_test import rename_playlist
+
         rename_playlist(S1, S2, S3)
 
         # Assertions
@@ -108,8 +108,8 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertEqual(self.mock_playlist_2.name, "Jazz")
 
     @patch('builtins.print')
-    @patch('module_under_test._resolve_playlist')
-    @patch('module_under_test._ensure_playlists')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_pc_4_successful_rename(self, mock_ensure, mock_resolve, mock_print):
         """
         PC_4: Verify path where all validations pass and renaming occurs.
@@ -124,7 +124,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_resolve.return_value = self.mock_playlist_2
 
         # Execution
-        from module_under_test import rename_playlist
+
         rename_playlist(S1, S2, S3)
 
         # Assertions

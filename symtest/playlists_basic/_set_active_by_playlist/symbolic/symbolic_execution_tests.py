@@ -1,21 +1,11 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.playlists_basic import _set_active_by_playlist
 
 
-# TARGET FUNCTION (Injected for testing context as per instructions)
-# In a real environment, this would be imported from the module.
-def _set_active_by_playlist(state, playlist):
-    _ensure_playlists(state)
-    try:
-        idx = state.playlists.index(playlist)
-    except ValueError:
-        return
-    state.active_playlist_index = idx
 
 
-# Mocking the external dependency strictly for unit isolation
-def _ensure_playlists(state):
-    pass
+
 
 
 class TestSymbolicExecution(unittest.TestCase):

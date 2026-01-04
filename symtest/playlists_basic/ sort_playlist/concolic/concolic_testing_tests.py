@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.playlists_basic import sort_playlist
+from music_player.playlists_basic import _resolve_playlist
 
 # Assuming the function is imported from the module 'playlist_manager'
 # from playlist_manager import sort_playlist
@@ -56,7 +57,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error: Sort criteria must be a valid string.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_4_pc4(self, mock_resolve, mock_print):
         """Iteration 4: Flip S3=Valid. Derived Constraint S4=None. Path: PC_4."""
         S1, S2, S3 = self.mock_state, "sel", "title"
@@ -66,7 +67,7 @@ class TestConcolicGenerations(unittest.TestCase):
         self.assertFalse(mock_print.called)
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_5_pc5(self, mock_resolve, mock_print):
         """Iteration 5: Flip S4!=None. Derived Constraint S5 (tracks) is None. Path: PC_5."""
         S1, S2, S3 = self.mock_state, "sel", "title"
@@ -78,7 +79,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Error: Playlist tracks corrupted.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_6_pc6(self, mock_resolve, mock_print):
         """Iteration 6: Flip S5!=None. Derived Constraint S5 is Empty. Path: PC_6."""
         S1, S2, S3 = self.mock_state, "sel", "title"
@@ -91,7 +92,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Playlist 'EmptyPL' is empty, nothing to sort.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_7_pc7(self, mock_resolve, mock_print):
         """Iteration 7: Flip S5 not Empty. S3 is 'title'. Path: PC_7."""
         S1, S2, S3 = self.mock_state, "sel", "title"
@@ -104,7 +105,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'ConcolicPL' by title.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_8_pc9(self, mock_resolve, mock_print):
         """Iteration 8: Flip S3!=title. S3 becomes 'artist'. Path: PC_9."""
         S1, S2, S3 = self.mock_state, "sel", "artist"
@@ -117,7 +118,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'ConcolicPL' by artist.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_9_pc11(self, mock_resolve, mock_print):
         """Iteration 9: Flip S3!=artist. S3 becomes 'duration'. Path: PC_11."""
         S1, S2, S3 = self.mock_state, "sel", "duration"
@@ -130,7 +131,7 @@ class TestConcolicGenerations(unittest.TestCase):
         mock_print.assert_called_with("[pl] Sorted playlist 'ConcolicPL' by duration.")
 
     @patch('builtins.print')
-    @patch('function_source._resolve_playlist')
+    @patch('music_player.playlists_basic._resolve_playlist')
     def test_iter_10_pc13(self, mock_resolve, mock_print):
         """Iteration 10: Flip S3!=duration. S3 becomes 'genre' (Invalid). Path: PC_13."""
         S1, S2, S3 = self.mock_state, "sel", "genre"
