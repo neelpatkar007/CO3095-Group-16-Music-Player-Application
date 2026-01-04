@@ -1,5 +1,5 @@
 import unittest
-from main import parse_timecode
+from music_player.time_utils import parse_timecode
 
 """
 Test Results Table:
