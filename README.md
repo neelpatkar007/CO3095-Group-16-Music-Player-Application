@@ -108,19 +108,6 @@ A command-line music player application developed as part of the CO3095 Software
 - Currently supported audio formats are mp3, wav, flac, m4a and ogg.
 
 ## Testing:
-- Test types include:
-  - Black-box Specification
-    - Command: ```pytest np343/test/blackbox/specification ra495/test/blackbox/specification sa1077/test/blackbox/specification sp871/test/blackbox/specification --cov=music_player --cov-report=term-missing --cov-report=html```
-  - Black-box Random
-    - Command: ```pytest np343/test/blackbox/random ra495/test/blackbox/random sa1077/test/blackbox/random sp871/test/blackbox/random --cov=music_player --cov-report=term-missing --cov-report=html```
-  - White-box Statement
-    - Command: ```pytest np343/test/whitebox/statement ra495/test/whitebox/statement sa1077/test/whitebox/statement sp871/test/whitebox/statement --cov=music_player --cov-report=term-missing --cov-report=html```
-  - White-box Branch
-    - Command: ```pytest np343/test/whitebox/branch ra495/test/whitebox/branch sa1077/test/whitebox/branch sp871/test/whitebox/branch --cov=music_player --cov-report=term-missing --cov-report=html```
-  - White-box Symbolic
-    - Command: ```pytest np343/test/whitebox/symbolic ra495/test/whitebox/symbolic sa1077/test/whitebox/symbolic sp871/test/whitebox/symbolic --cov=music_player --cov-report=term-missing --cov-report=html```
-  - White-box Concolic
-    - Command: ```pytest np343/test/whitebox/concolic ra495/test/whitebox/concolic sa1077/test/whitebox/concolic sp871/test/whitebox/concolic --cov=music_player --cov-report=term-missing --cov-report=html```
 - Create a venv to run test cases in:
   1. In PyCharm open the settings menu.
   ![img.png](README Screenshots/img.png)
@@ -143,6 +130,19 @@ A command-line music player application developed as part of the CO3095 Software
 ![img_6.png](README Screenshots/img_6.png)
   9. venv is confirmed and testing can now be performed.
 ![img_7.png](README Screenshots/img_7.png)
+- Test types include:
+  - Black-box Specification
+    - Command: ```pytest np343/test/blackbox/specification ra495/test/blackbox/specification sa1077/test/blackbox/specification sp871/test/blackbox/specification --cov=music_player --cov-report=term-missing --cov-report=html```
+  - Black-box Random
+    - Command: ```pytest np343/test/blackbox/random ra495/test/blackbox/random sa1077/test/blackbox/random sp871/test/blackbox/random --cov=music_player --cov-report=term-missing --cov-report=html```
+  - White-box Statement
+    - Command: ```pytest np343/test/whitebox/statement ra495/test/whitebox/statement sa1077/test/whitebox/statement sp871/test/whitebox/statement --cov=music_player --cov-report=term-missing --cov-report=html```
+  - White-box Branch
+    - Command: ```pytest np343/test/whitebox/branch ra495/test/whitebox/branch sa1077/test/whitebox/branch sp871/test/whitebox/branch --cov=music_player --cov-report=term-missing --cov-report=html```
+  - White-box Symbolic
+    - Command: ```pytest np343/test/whitebox/symbolic ra495/test/whitebox/symbolic sa1077/test/whitebox/symbolic sp871/test/whitebox/symbolic --cov=music_player --cov-report=term-missing --cov-report=html```
+  - White-box Concolic
+    - Command: ```pytest np343/test/whitebox/concolic ra495/test/whitebox/concolic sa1077/test/whitebox/concolic sp871/test/whitebox/concolic --cov=music_player --cov-report=term-missing --cov-report=html```
 - To run all tests with a coverage report use this command:
   ```pytest --cov=music_player --cov-report=term-missing --cov-report=html```
 - A new directory will be created called `htmlcov` that will contain the coverage report that can be viewed in a web browser as well as being visible inside terminal.
