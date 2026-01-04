@@ -55,6 +55,9 @@ def print_now_playing(state: PlayerState) -> None:
     else:
         duration = track.duration_seconds
 
+    if duration is None:
+        duration = 0.0
+
     if duration < 0:
         duration = 0.0
 
