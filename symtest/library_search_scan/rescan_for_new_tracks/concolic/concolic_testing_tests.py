@@ -3,13 +3,14 @@ from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
 import io
+from music_player.player_state import PlayerState
+from music_player.library_search_scan import rescan_for_new_tracks
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_state import PlayerState
-from music_player.library_search_scan import rescan_for_new_tracks
+
 
 
 class TestConcolicGenerations(unittest.TestCase):

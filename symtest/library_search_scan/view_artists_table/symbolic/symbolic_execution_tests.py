@@ -2,13 +2,13 @@ import unittest
 from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
+from music_player.player_state import PlayerState
+from music_player.library_search_scan import view_artists_table
 
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.player_state import PlayerState
-from music_player.library_search_scan import view_artists_table
 
 
 class TestSymbolicExecution(unittest.TestCase):

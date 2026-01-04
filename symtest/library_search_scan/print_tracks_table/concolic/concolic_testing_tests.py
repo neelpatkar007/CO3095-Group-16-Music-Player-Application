@@ -3,12 +3,12 @@ from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
 from types import SimpleNamespace
-
+from music_player.library_search_scan import _print_tracks_table
 # Add project root to path
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from music_player.library_search_scan import _print_tracks_table
+
 
 
 class TestConcolicExecution(unittest.TestCase):

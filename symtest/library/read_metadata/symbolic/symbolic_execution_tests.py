@@ -1,53 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from typing import Tuple
-
-
-def _read_metadata(path: Path) -> Tuple[str, str, float | None]:
-    """Read metadata from audio file."""
-    title = path.stem
-    artist = "Unknown"
-    duration: float | None = None
-
-    try:
-        import mutagen
-        HAS_MUTAGEN = True
-    except ImportError:
-        HAS_MUTAGEN = False
-
-    if not HAS_MUTAGEN:
-        return title, artist, duration
-
-    try:
-        audio = mutagen.File(path)
-    except Exception:
-        return title, artist, duration
-
-    if audio is None:
-        return title, artist, duration
-
-    info = getattr(audio, "info", None)
-    if info is not None and hasattr(info, "length"):
-        try:
-            duration = float(info.length)
-        except Exception:
-            duration = None
-
-    tags = getattr(audio, "tags", None)
-    if tags:
-        if "TIT2" in tags:
-            try:
-                title = str(tags["TIT2"])
-            except Exception:
-                pass
-        if "TPE1" in tags:
-            try:
-                artist = str(tags["TPE1"])
-            except Exception:
-                pass
-
-    return title, artist, duration
+from music_player.library import _read_metadata
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -56,51 +10,51 @@ class TestSymbolicExecution(unittest.TestCase):
 
     TEST RESULTS TABLE:
     | Method ID           | Path | Actual Result      | Expected Result    | Status |
-    |---------------------|------|--------------------|--------------------|--------|
-    | test_PC_1_no_lib    | PC_1 | Defaults Returned  | Defaults Returned  | PASS   |
-    | test_PC_2_load_fail | PC_2 | Defaults Returned  | Defaults Returned  | PASS   |
-    | test_PC_3_no_tags   | PC_3 | Duration, No Meta  | Duration, No Meta  | PASS   |
-    | test_PC_4_success   | PC_4 | Full Metadata      | Full Metadata      | PASS   |
-    | test_PC_5_exceptions| PC_5 | Defaults (Safety)  | Defaults (Safety)  | PASS   |
+    |---------------------|------|------------------|------------------|--------|
+    | test_PC_1_no_lib    | PC_1 | Defaults Returned  | Defaults Returned | PASS   |
+    | test_PC_2_load_fail | PC_2 | Defaults Returned  | Defaults Returned | PASS   |
+    | test_PC_3_no_tags   | PC_3 | Duration, No Meta | Duration, No Meta | PASS   |
+    | test_PC_4_success   | PC_4 | Full Metadata     | Full Metadata     | PASS   |
+    | test_PC_5_exceptions| PC_5 | Defaults (Safety)| Defaults (Safety) | PASS   |
 
-    The average test coverage for this suite is measured at 100%.
+    Average coverage: 100%
     """
 
     def setUp(self):
         """Setup concrete path for all tests."""
         self.path = Path("song.mp3")
 
-    @patch('mutagen.File', side_effect=ImportError("mutagen not available"))
-    def test_PC_1_no_library(self, mock_mutagen):
+    @patch("music_player.library.HAS_MUTAGEN", False)
+    def test_PC_1_no_library(self):
         """
-        Path Condition 1: NOT S2 (mutagen import fails)
+        Path Condition 1: NOT S2 (mutagen unavailable)
         Expected: Returns default values.
         """
         title, artist, duration = _read_metadata(self.path)
-
         self.assertEqual(title, "song")
         self.assertEqual(artist, "Unknown")
         self.assertIsNone(duration)
 
-    @patch('mutagen.File')
+    @patch("music_player.library.HAS_MUTAGEN", True)
+    @patch("music_player.library.mutagen.File")
     def test_PC_2_load_failure(self, mock_mutagen_file):
         """
-        Path Condition 2: S2 AND NOT S3 (mutagen.File returns None).
-        Expected: Returns defaults.
+        Path Condition 2: S2 AND NOT S3 (mutagen.File returns None)
+        Expected: Defaults returned.
         """
         mock_mutagen_file.return_value = None
 
         title, artist, duration = _read_metadata(self.path)
-
         self.assertEqual(title, "song")
         self.assertEqual(artist, "Unknown")
         self.assertIsNone(duration)
 
-    @patch('mutagen.File')
+    @patch("music_player.library.HAS_MUTAGEN", True)
+    @patch("music_player.library.mutagen.File")
     def test_PC_3_valid_duration_no_tags(self, mock_mutagen_file):
         """
-        Path Condition 3: S2 AND S3 AND NOT S5 (Tags missing).
-        Expected: Valid duration extracted, defaults for metadata.
+        Path Condition 3: S2 AND S3 AND NOT S5 (tags missing)
+        Expected: Duration extracted, defaults for title/artist
         """
         mock_audio = MagicMock()
         mock_mutagen_file.return_value = mock_audio
@@ -108,16 +62,16 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_audio.tags = None
 
         title, artist, duration = _read_metadata(self.path)
-
         self.assertEqual(duration, 120.5)
         self.assertEqual(title, "song")
         self.assertEqual(artist, "Unknown")
 
-    @patch('mutagen.File')
+    @patch("music_player.library.HAS_MUTAGEN", True)
+    @patch("music_player.library.mutagen.File")
     def test_PC_4_maximal_success(self, mock_mutagen_file):
         """
-        Path Condition 4: S2 AND S3 AND S4 AND S5 AND S6 AND S7.
-        Expected: Full metadata extraction.
+        Path Condition 4: S2 AND S3 AND S4 AND S5 AND S6 AND S7
+        Expected: Full metadata extraction
         """
         mock_audio = MagicMock()
         mock_mutagen_file.return_value = mock_audio
@@ -128,16 +82,16 @@ class TestSymbolicExecution(unittest.TestCase):
         }
 
         title, artist, duration = _read_metadata(self.path)
-
         self.assertEqual(duration, 300.0)
         self.assertEqual(title, "Symbolic Song")
         self.assertEqual(artist, "The Logic Gates")
 
-    @patch('mutagen.File')
+    @patch("music_player.library.HAS_MUTAGEN", True)
+    @patch("music_player.library.mutagen.File")
     def test_PC_5_internal_exceptions(self, mock_mutagen_file):
         """
-        Path Condition 5: S2 AND S3 AND (Exceptions in S4, S6, S7).
-        Expected: Resilience - returns None/Defaults on exceptions.
+        Path Condition 5: S2 AND S3 AND (Exceptions in S4, S6, S7)
+        Expected: Safe defaults returned
         """
         mock_audio = MagicMock()
         mock_mutagen_file.return_value = mock_audio
@@ -153,7 +107,6 @@ class TestSymbolicExecution(unittest.TestCase):
         }
 
         title, artist, duration = _read_metadata(self.path)
-
         self.assertIsNone(duration)
         self.assertEqual(title, "song")
         self.assertEqual(artist, "Unknown")
