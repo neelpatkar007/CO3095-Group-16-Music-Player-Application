@@ -33,13 +33,8 @@ A command-line music player application developed as part of the CO3095 Software
   - `library_search_scan.py`: Library search and scanning.
   - `time_utils.py`: Time formatting utilities.
 - `songs/`: Directory where audio files should be placed for playback.
-- `ra495/`, `np343/`, `sp871/`, `sa1077/`: Directories that contains all of the testing files including:
-  - Black-box Specification
-  - Black-box Random
-  - White-box Statement
-  - White-box Branch
-  - White-box Symbolic
-  - White-box Concolic
+- `ra495/`, `np343/`, `sp871/`, `sa1077/`: Directories that contains all of the testing files.
+- `Evidence/`: Contains documentated evidence of compliance with each of the CMMI Level 2 Process Areas. 
 
 ## Prerequisites:
 - Python 3.10.x installed on your system.
@@ -52,17 +47,18 @@ A command-line music player application developed as part of the CO3095 Software
   - From the Blackboard submission.
 
 ## Uncompressing the Project:
-- Extract the contents of the zip file to a desired location on your system using whatever extraction tool you prefer (Windows built in extraction, Winrar, 7-Zip, etc.). 
-- At the location you extracted the zip file, you should see a folder named "CO3095-Group-16-Music-Player-Application-1.0".
-- You have now successfully uncompressed the project.
+1. Extract the contents of the zip file to a desired location on your system using whatever extraction tool you prefer (Windows built in extraction, Winrar, 7-Zip, etc.). 
+2. At the location you extracted the zip file, you should see a folder named "CO3095-Group-16-Music-Player-Application-1.0". 
+3. You have now successfully uncompressed the project.
 
 ## Importing the Project into PyCharm:
 - Right click the uncompressed extracted folder "CO3095-Group-16-Music-Player-Application-1.0" and select "Open as PyCharm Project".
-- Or, alternatively, open PyCharm, select "Open", and navigate to the location where you extracted the zip file and select the folder "CO3095-Group-16-Music-Player-Application-1.0".
-- PyCharm will now load the project.
-- Wait for PyCharm to finish indexing the project files.
-- Once indexing is complete, you should see the project files in the "Project" pane on the left side of the PyCharm window.
-- You have now successfully imported the project into PyCharm.
+- Or, alternatively:
+  1. Open PyCharm, select "Open", and navigate to the location where you extracted the zip file and select the folder "CO3095-Group-16-Music-Player-Application-1.0". 
+  2. PyCharm will now load the project. 
+  3. Wait for PyCharm to finish indexing the project files. 
+  4. Once indexing is complete, you should see the project files in the "Project" pane on the left side of the PyCharm window that contains all of the same files from in the Project Structure. 
+  5. You have now successfully imported the project into PyCharm.
 
 ## Installing Dependencies (requirements.txt):
 - Run the following command in the terminal to install most of the required dependencies:
@@ -77,30 +73,39 @@ A command-line music player application developed as part of the CO3095 Software
     sudo apt-get install ffmpeg
     ```
     - If this does not work download from https://ffmpeg.org/download.html and select the appropriate build for your distribution (Ubuntu).
-    - Follow the instructions provided on the website for installation.
+    - Then follow steps 2-6 of the Windows installation instructions.
 - Windows installation instructions:
-  - Download the Windows build from https://ffmpeg.org/download.html
-  - Extract the downloaded zip file to a location of your choice.
-  - Add the `bin` folder inside the extracted folder to your system's PATH environment variable.
-    - For example, if you extracted ffmpeg to `C:\ffmpeg`, add `C:\ffmpeg\bin` to your PATH.
-  - To verify the installation, open a new command prompt and run:
+  1. Download the Windows build from https://ffmpeg.org/download.html
+  2. Extract the downloaded zip file to a location of your choice.
+  3. Add the `bin` folder inside the extracted folder to your system's PATH environment variable. 
+     - For example, if you extracted ffmpeg to `C:\ffmpeg`, add `C:\ffmpeg\bin` to your PATH.
+  4. To verify the installation, open a new command prompt and run:
     ```
     ffmpeg -version
     ```
-  - If the installation was successful, you should see the version information for ffmpeg displayed in the terminal.
-  - You have now successfully installed ffmpeg.
+  5. If the installation was successful, you should see the version information for ffmpeg displayed in the terminal.
+  6. You have now successfully installed ffmpeg.
 
 ## How to Run the Application:
-- Once you have installed all the dependencies, you can run the music player application.
-- In PyCharm, open the `music_player` python package project folder. Inside should be a file named `main.py`.
-- Right-click on `main.py` and select "Run 'main'".
-- The application should start running in the terminal within PyCharm.
-- Follow the on-screen instructions to use the music player application.
-
-### Key Commands:
-- 
+1. Once you have installed all the dependencies, you can run the music player application.
+2. In PyCharm, open the `music_player` python package project folder. Inside should be a file named `main.py`.
+3. Right-click on `main.py` and select "Run 'main'".
+4. The application should start running in the terminal within PyCharm.
+5. Follow the on-screen instructions to use the music player application.
 
 ## Adding Audio Files:
-- The application does not include any audio files by default.
+- The final version of the application does not include any audio files.
 - If you want to test the application with audio files, you will need to add your own audio files to the `songs` directory located inside the project folder `music_player`.
 - Currently supported audio formats are mp3, wav, flac, m4a and ogg.
+
+## Testing:
+- Test types include:
+  - Black-box Specification
+  - Black-box Random
+  - White-box Statement
+  - White-box Branch
+  - White-box Symbolic
+  - White-box Concolic
+- To run all tests with a coverage report use this command:
+  ```pytest --cov=music_player --cov-report=term-missing --cov-report=html```
+- A new directory will be created called `htmlcov` that will contain the coverage report that can be viewed in a web browser.
