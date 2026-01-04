@@ -1,32 +1,6 @@
 import unittest
-from unittest.mock import MagicMock
-
-
-# Re-defining structure for self-contained execution context
-class AudioController:
-    def __init__(self):
-        self.current_path = None
-        self.playing = False
-        self.paused = False
-
-    def _seek_real(self, seconds):
-        pass
-
-    def _seek_simulated(self, seconds):
-        pass
-
-    def seek(self, seconds: float) -> None:
-        global HAS_PYGAME
-        if not self.current_path:
-            return
-
-        self.playing = True
-        self.paused = False
-
-        if HAS_PYGAME:
-            self._seek_real(seconds)
-        else:
-            self._seek_simulated(seconds)
+from unittest.mock import patch
+from music_player.audio_backend import AudioEngine
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -43,31 +17,25 @@ class TestConcolicExecution(unittest.TestCase):
     The average test coverage for this suite is measured at 100%.
     """
 
-    def setUp(self):
-        self.controller = AudioController()
-        self.controller._seek_real = MagicMock()
-        self.controller._seek_simulated = MagicMock()
-
     def test_iteration_1_base_case(self):
         """
         Iteration 1: Initial Seed
         Inputs: S1=False, S2=False, S3=10.0
         Expected Path: PC_1 (Early Return)
         """
-        # S1
-        self.controller.current_path = None
-        # S2
-        global HAS_PYGAME
-        HAS_PYGAME = False
-        # S3
+        audio = AudioEngine()
+        audio.current_path = None
         seconds = 10.0
 
-        self.controller.seek(seconds)
+        with patch('music_player.audio_backend.HAS_PYGAME', False):
+            with patch.object(audio, '_seek_real') as mock_seek_real:
+                with patch.object(audio, '_seek_simulated') as mock_seek_simulated:
+                    audio.seek(seconds)
 
-        # Verification of PC_1
-        self.assertFalse(self.controller.playing)
-        self.controller._seek_real.assert_not_called()
-        self.controller._seek_simulated.assert_not_called()
+                    # Verification of PC_1
+                    self.assertFalse(audio.playing)
+                    mock_seek_real.assert_not_called()
+                    mock_seek_simulated.assert_not_called()
 
     def test_iteration_2_flip_S1(self):
         """
@@ -75,19 +43,17 @@ class TestConcolicExecution(unittest.TestCase):
         Inputs: S1=True, S2=False, S3=10.0
         Expected Path: PC_3 (Simulated Seek)
         """
-        # S1 (Flipped from previous iteration)
-        self.controller.current_path = "valid_path.wav"
-        # S2 (Kept constant)
-        global HAS_PYGAME
-        HAS_PYGAME = False
-        # S3
+        audio = AudioEngine()
+        audio.current_path = "valid_path.wav"
         seconds = 10.0
 
-        self.controller.seek(seconds)
+        with patch('music_player.audio_backend.HAS_PYGAME', False):
+            with patch.object(audio, '_seek_simulated') as mock_seek_simulated:
+                audio.seek(seconds)
 
-        # Verification of PC_3
-        self.assertTrue(self.controller.playing)
-        self.controller._seek_simulated.assert_called_with(seconds)
+                # Verification of PC_3
+                self.assertTrue(audio.playing)
+                mock_seek_simulated.assert_called_with(seconds)
 
     def test_iteration_3_flip_S2(self):
         """
@@ -95,19 +61,17 @@ class TestConcolicExecution(unittest.TestCase):
         Inputs: S1=True, S2=True, S3=10.0
         Expected Path: PC_2 (Real Seek)
         """
-        # S1 (Kept constant)
-        self.controller.current_path = "valid_path.wav"
-        # S2 (Flipped from previous iteration)
-        global HAS_PYGAME
-        HAS_PYGAME = True
-        # S3
+        audio = AudioEngine()
+        audio.current_path = "valid_path.wav"
         seconds = 10.0
 
-        self.controller.seek(seconds)
+        with patch('music_player.audio_backend.HAS_PYGAME', True):
+            with patch.object(audio, '_seek_real') as mock_seek_real:
+                audio.seek(seconds)
 
-        # Verification of PC_2
-        self.assertTrue(self.controller.playing)
-        self.controller._seek_real.assert_called_with(seconds)
+                # Verification of PC_2
+                self.assertTrue(audio.playing)
+                mock_seek_real.assert_called_with(seconds)
 
 
 if __name__ == '__main__':

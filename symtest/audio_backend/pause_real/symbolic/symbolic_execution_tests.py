@@ -1,12 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
-# In a real-world scenario, the function would be imported from the source module.
-# For the purpose of this assignment, the function is defined here to ensure self-contained execution.
-try:
-    import pygame
-except ImportError:
-    pygame = None
+from music_player.audio_backend import AudioEngine
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -22,39 +16,18 @@ class TestSymbolicExecution(unittest.TestCase):
     The average test coverage for this suite is measured at 100%.
     """
 
-    def setUp(self):
-        """
-        Setup defines the mock container for the method 'self' (S2).
-        """
-        self.mock_self = MagicMock()
-
-    def _target_function(self):
-        """
-        Wrapper to invoke the function under test.
-        We act as if _pause_real is a method bound to self.mock_self.
-        """
-
-        # We define the function inside the test scope to patch the global namespace dynamically
-        def _pause_real(self) -> None:
-            '''
-            This wraps the pygame pause command
-            '''
-            assert pygame is not None
-            # Pauses the music playback. Makes sure does it without losing the current position.
-            pygame.mixer.music.pause()
-
-        return _pause_real(self.mock_self)
-
     def test_pc1_assertion_failure(self):
         """
         Symbolic Path PC_1: NOT S1 AND S2 (implied S2 existence).
         Condition: S1 (pygame) is None.
         Expected Behaviour: The code must raise an AssertionError.
         """
-        # We patch 'pygame' in the local scope where the function is defined/executed.
-        with patch.dict(globals(), {'pygame': None}):
+        audio = AudioEngine()
+
+        # Patch pygame to None at the module level
+        with patch('music_player.audio_backend.pygame', None):
             with self.assertRaises(AssertionError):
-                self._target_function()
+                audio._pause_real()
 
     def test_pc2_nominal_execution(self):
         """
@@ -62,15 +35,16 @@ class TestSymbolicExecution(unittest.TestCase):
         Condition: S1 (pygame) is a valid object with mixer.music.pause capabilities.
         Expected Behaviour: The assertion passes, and the pause method is invoked.
         """
-        # Create a mock for S1 that satisfies the structural requirements of the code
-        s1_mock = MagicMock()
+        audio = AudioEngine()
+        mock_pygame = MagicMock()
 
-        with patch.dict(globals(), {'pygame': s1_mock}):
+        # Patch pygame with a mock object at the module level
+        with patch('music_player.audio_backend.pygame', mock_pygame):
             # Execute
-            self._target_function()
+            audio._pause_real()
 
             # Verify symbolic state transition (Side Effect Verification)
-            s1_mock.mixer.music.pause.assert_called_once()
+            mock_pygame.mixer.music.pause.assert_called_once()
 
 
 if __name__ == '__main__':

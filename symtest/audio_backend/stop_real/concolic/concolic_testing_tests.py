@@ -1,67 +1,48 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+from music_player.audio_backend import AudioEngine
 
 
 class TestConcolicStopReal(unittest.TestCase):
     """
-    Concolic Testing Suite for _stop_real.
+    Concolic Testing Suite for `_stop_real` method.
 
     Test Results Table:
     | Method                      | Actual | Expected | Status |
     |-----------------------------|--------|----------|--------|
-    | test_iteration_1_nominal    | Called | Called   | PASS   |
-    | test_iteration_2_negation   | Raised | Raised   | PASS   |
+    | test_iteration_1_pygame_ok  | Called | Called   | PASS   |
+    | test_iteration_2_no_pygame  | Raised | Raised   | PASS   |
 
     The average test coverage for this suite is measured at 100%.
     """
 
-    def test_iteration_1_nominal(self):
+    def test_iteration_1_pygame_ok(self):
         """
-        Iteration 1: Concrete Seed (S1 = MockObject).
+        Iteration 1: Concrete Seed (S1 = pygame available).
 
-        Constraint: S1 != None.
-        Path Taken: PC_2.
+        Constraint: pygame is not None.
+        Path Taken: PC_1.
         """
-        # Concrete Seed Generation: Create a valid object
-        concrete_s1 = MagicMock()
+        audio = AudioEngine()
 
-        with patch('pygame', concrete_s1):
-            # Injected function logic for test scope
-            def _stop_real_func(self):
-                global pygame
-                assert pygame is not None
-                pygame.mixer.music.stop()
+        with patch('music_player.audio_backend.pygame') as mock_pygame:
+            audio._stop_real()
 
-            # Execution
-            context = MagicMock()
-            _stop_real_func(context)
+            mock_pygame.mixer.music.stop.assert_called_once()
 
-            # Verification of constraints
-            concrete_s1.mixer.music.stop.assert_called_once()
-
-    def test_iteration_2_negation(self):
+    def test_iteration_2_no_pygame(self):
         """
         Iteration 2: Derived Input from Constraint Negation.
 
-        Previous Constraint: S1 != None.
-        Negated Constraint: NOT (S1 != None) -> S1 == None.
-        New Input: None.
-        Path Taken: PC_1.
+        Previous Constraint: pygame is not None.
+        Negated Constraint: pygame is None.
+        Path Taken: PC_2.
         """
-        # Derived Input: None
-        concrete_s1 = None
+        audio = AudioEngine()
 
-        with patch('pygame', concrete_s1):
-            # Injected function logic for test scope
-            def _stop_real_func(self):
-                global pygame
-                assert pygame is not None
-                pygame.mixer.music.stop()
-
-            # Execution expecting crash due to negated constraint
-            context = MagicMock()
+        with patch('music_player.audio_backend.pygame', None):
             with self.assertRaises(AssertionError):
-                _stop_real_func(context)
+                audio._stop_real()
 
 
 if __name__ == '__main__':

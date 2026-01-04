@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import MagicMock
-import io
-import sys
+from unittest.mock import patch
+from pathlib import Path
+from music_player.audio_backend import AudioEngine
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -16,19 +16,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     The average test coverage for this suite is measured at 100%.
     """
-
-    def setUp(self):
-        self.capturedOutput = io.StringIO()
-        sys.stdout = self.capturedOutput
-
-    def tearDown(self):
-        sys.stdout = sys.__stdout__
-
-    def _play_simulated(self, path, start_pos: float) -> None:
-        """
-        The function under test.
-        """
-        print(f"[audio] PLAY (simulated) {path.name} from {start_pos:.1f}s")
 
     def test_iteration_1(self):
         """
@@ -45,20 +32,14 @@ class TestConcolicExecution(unittest.TestCase):
         is required, and this single test confirms the validity of the
         primary execution path.
         """
-        # S2: Concrete Seed
-        S2 = MagicMock()
-        S2.name = "concrete_seed.mp3"
+        audio = AudioEngine()
+        test_path = Path("concrete_seed.mp3")
 
-        # S3: Concrete Seed
-        S3 = 0.0
+        with patch('builtins.print') as mock_print:
+            audio._play_simulated(test_path, 0.0)
 
-        # Act
-        self._play_simulated(S2, S3)
-
-        # Assert
-        # Check explicit formatting logic derived from S3:.1f
-        expected_output = "[audio] PLAY (simulated) concrete_seed.mp3 from 0.0s\n"
-        self.assertEqual(self.capturedOutput.getvalue(), expected_output)
+            expected_output = f"[audio] PLAY (simulated) {test_path.name} from 0.0s"
+            mock_print.assert_called_once_with(expected_output)
 
 
 if __name__ == '__main__':

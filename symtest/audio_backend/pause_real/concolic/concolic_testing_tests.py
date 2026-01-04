@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.audio_backend import AudioEngine
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -15,20 +16,6 @@ class TestConcolicExecution(unittest.TestCase):
     The average test coverage for this suite is measured at 100%.
     """
 
-    def setUp(self):
-        self.mock_self = MagicMock()
-
-    def _execute_target(self):
-        """
-        Internal helper to execute the _pause_real logic within the controlled scope.
-        """
-
-        def _pause_real(self) -> None:
-            assert pygame is not None
-            pygame.mixer.music.pause()
-
-        return _pause_real(self.mock_self)
-
     def test_iteration_1_concrete_seed_none(self):
         """
         Iteration 1:
@@ -40,14 +27,12 @@ class TestConcolicExecution(unittest.TestCase):
         into the assertion failure branch.
         """
         # Apply Concrete Seed S1 = None
-        with patch.dict(globals(), {'pygame': None}):
-            try:
-                self._execute_target()
-            except AssertionError:
+        audio = AudioEngine()
+
+        with patch('music_player.audio_backend.pygame', None):
+            with self.assertRaises(AssertionError):
                 # This confirms we traversed PC_1 as predicted by the symbolic engine
-                pass
-            else:
-                self.fail("Concolic Divergence: Input 'None' failed to trigger PC_1.")
+                audio._pause_real()
 
     def test_iteration_2_derived_input_mock(self):
         """
@@ -60,16 +45,16 @@ class TestConcolicExecution(unittest.TestCase):
         the previous constraint and forces traversal of the alternative branch.
         """
         # Apply Derived Input S1 = Mock Object
-        s1_derived = MagicMock()
+        audio = AudioEngine()
+        mock_pygame = MagicMock()
 
-        with patch.dict(globals(), {'pygame': s1_derived}):
+        with patch('music_player.audio_backend.pygame', mock_pygame):
             # Execute
-            self._execute_target()
+            audio._pause_real()
 
             # Verify we are physically in PC_2 by checking the distinct side effect
             # that only occurs in this path.
-            if not s1_derived.mixer.music.pause.called:
-                self.fail("Concolic Divergence: Derived input failed to execute PC_2 logic.")
+            mock_pygame.mixer.music.pause.assert_called_once()
 
 
 if __name__ == '__main__':
