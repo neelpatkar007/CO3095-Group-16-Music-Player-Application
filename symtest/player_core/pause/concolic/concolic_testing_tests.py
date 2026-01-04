@@ -1,10 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-
-
-# Context: The inputs here are derived from the Concolic Flip Table in FILE 2.
-# Iteration 1 Seed: (False, False) -> Targets PC_1
-# Iteration 2 Seed: (True, False)  -> Targets PC_2
+from music_player.player_core import pause
+from music_player.player_state import PlayerState
 
 class TestConcolicExecution(unittest.TestCase):
     """
@@ -15,46 +12,49 @@ class TestConcolicExecution(unittest.TestCase):
     |----------------------|-------------|-------------|--------|
     | test_iter_1_pc_1     | No Action   | Early Ret   | PASS   |
     | test_iter_2_pc_2     | Paused      | Action Exec | PASS   |
-
-    The average test coverage for this suite is measured at 100%.
     """
 
     def setUp(self):
-        self.mock_state = MagicMock()
-        self.mock_state.audio_engine = MagicMock()
+        """Setup a reusable PlayerState with mocked audio engine and track."""
+        self.mock_engine = MagicMock()
+        self.mock_track = MagicMock()
+        self.mock_track.path = "/dummy"
+        self.mock_track.display_name = "Test Track"
+        self.mock_track.duration_seconds = 300  # Optional
+
+        self.state = PlayerState(tracks=[self.mock_track], audio_engine=self.mock_engine)
+        self.state.position_seconds = 0
+        self.state.playback_speed = 1.0
 
     def test_iter_1_pc_1(self):
         """
-        Iteration 1: Concrete Seed (S1=False, S2=False).
-        Constraint: NOT S1 OR S2.
-        Result: Hits Guard Clause (PC_1).
+        Iteration 1: is_playing=False, is_paused=False
+        Constraint: NOT S1 OR S2 -> hits guard clause (nothing to pause)
         """
-        self.mock_state.is_playing = False
-        self.mock_state.is_paused = False
+        self.state.is_playing = False
+        self.state.is_paused = False
 
-        from src.player import pause
-        pause(self.mock_state)
+        pause(self.state)
 
-        # Verification of Path 1 execution
-        self.mock_state.audio_engine.pause.assert_not_called()
+        # Verify pause() was not called
+        self.mock_engine.pause.assert_not_called()
+        self.assertFalse(self.state.is_playing)
+        self.assertFalse(self.state.is_paused)
 
     def test_iter_2_pc_2(self):
         """
-        Iteration 2: Derived Seed (S1=True, S2=False).
-        Derived via negation of Iteration 1 constraint.
-        Constraint: S1 AND NOT S2.
-        Result: Hits Action Block (PC_2).
+        Iteration 2: is_playing=True, is_paused=False
+        Constraint: S1 AND NOT S2 -> hits action block (pause)
         """
-        self.mock_state.is_playing = True
-        self.mock_state.is_paused = False
+        self.state.is_playing = True
+        self.state.is_paused = False
 
-        from src.player import pause
-        pause(self.mock_state)
+        pause(self.state)
 
-        # Verification of Path 2 execution and side effects
-        self.mock_state.audio_engine.pause.assert_called_once()
-        self.assertEqual(self.mock_state.is_playing, False)
-        self.assertEqual(self.mock_state.is_paused, True)
+        # Verify pause() was called and flags updated
+        self.mock_engine.pause.assert_called_once()
+        self.assertFalse(self.state.is_playing)
+        self.assertTrue(self.state.is_paused)
 
 
 if __name__ == '__main__':
