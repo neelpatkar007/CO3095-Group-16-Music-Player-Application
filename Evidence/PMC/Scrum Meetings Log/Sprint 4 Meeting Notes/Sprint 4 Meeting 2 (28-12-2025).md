@@ -1,5 +1,5 @@
 Date: 28-12-2025
-Time: 08:30 PM - 09:00 PM
+Time: 08:00 PM - 09:00 PM
 
 Attendees: Raiyan Alam (Scrum Master), Neel Patkar, Sanil Panchal, Samuel Ameyaw
 
