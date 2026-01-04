@@ -9,11 +9,7 @@ class TestConcolicExecution(unittest.TestCase):
     """
 
     def test_iter1_path_pc1(self):
-        """
-        Iteration 1: Initial Concrete Seed.
-        Inputs: S1=True, S4=True.
-        Constraint Collected: S1.
-        """
+
         # Concrete Seed Injection
         with patch('music_player.audio_backend.HAS_PYGAME', True):
             with patch('music_player.audio_backend.pygame') as mock_pygame:
