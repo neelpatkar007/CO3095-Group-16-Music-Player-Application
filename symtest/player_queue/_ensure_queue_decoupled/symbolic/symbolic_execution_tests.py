@@ -1,6 +1,6 @@
 import unittest
 from types import SimpleNamespace
-
+from music_player.player_queue import _ensure_queue_decoupled
 
 # -------------------------------------------------------------------------
 # TEST RESULTS TABLE
@@ -15,24 +15,6 @@ from types import SimpleNamespace
 # -------------------------------------------------------------------------
 # The average test coverage for this suite is measured at 100%.
 # -------------------------------------------------------------------------
-
-# Target function included for context (assumed import in real scenario)
-def _ensure_queue_decoupled(state) -> None:
-    if not hasattr(state, "tracks") or not hasattr(state, "library_tracks"):
-        return
-
-    tracks = getattr(state, "tracks", None)
-    library_tracks = getattr(state, "library_tracks", None)
-
-    if tracks is library_tracks and tracks is not None:
-        state.tracks = list(library_tracks) if isinstance(library_tracks, (list, tuple, set)) else []
-        return
-
-    if hasattr(state, "playlists"):
-        for pl in state.playlists:
-            if tracks is pl.tracks:
-                state.tracks = list(pl.tracks)
-                return
 
 
 class TestSymbolicExecution(unittest.TestCase):

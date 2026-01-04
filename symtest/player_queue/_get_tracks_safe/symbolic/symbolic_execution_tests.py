@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-
+from music_player.player_state import PlayerState
+from music_player.library import Track
+from music_player.audio_backend import AudioEngine
 
 # -------------------------------------------------------------------------
 # TEST RESULTS TABLE
@@ -14,11 +16,6 @@ from unittest.mock import MagicMock
 # -------------------------------------------------------------------------
 # The average test coverage for this suite is measured at 100%.
 # -------------------------------------------------------------------------
-
-class PlayerState:
-    """Mock class to simulate S1 input."""
-    pass
-
 
 # Function Implementation (Analysis Target)
 def _get_tracks_safe(state: PlayerState) -> list:
@@ -46,8 +43,18 @@ class TestSymbolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        """Initialise S1 (PlayerState) before each test."""
-        self.s1 = PlayerState()
+        """Initialise S1 (PlayerState) before each test with real class."""
+        # Mock audio engine
+        self.mock_engine = MagicMock(spec=AudioEngine)
+
+        # Mock a track object for PlayerState initialization
+        self.mock_track = MagicMock(spec=Track)
+        self.mock_track.path = "/dummy"
+        self.mock_track.display_name = "Test Track"
+        self.mock_track.duration_seconds = 300
+
+        # Real PlayerState instance
+        self.s1 = PlayerState(tracks=[self.mock_track], audio_engine=self.mock_engine)
 
     def test_pc1_none(self):
         """
@@ -55,7 +62,9 @@ class TestSymbolicExecution(unittest.TestCase):
         Logic: getattr returns default None.
         Expected: Return empty list [].
         """
-        # S1 is empty, so S2 (getattr) defaults to None
+        # Remove tracks attribute to simulate None
+        del self.s1.tracks
+
         result = _get_tracks_safe(self.s1)
         self.assertEqual(result, [], "PC_1 failed: Should return [] when tracks is None")
 
@@ -65,7 +74,7 @@ class TestSymbolicExecution(unittest.TestCase):
         Logic: isinstance(S2, list) is True.
         Expected: Return raw_tracks as is.
         """
-        expected_s2 = ["track1", "track2"]
+        expected_s2 = ["a", "b"]
         self.s1.tracks = expected_s2
 
         result = _get_tracks_safe(self.s1)
@@ -80,11 +89,11 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Return converted list.
         """
         # S2 is a tuple (iterable but not a list)
-        self.s1.tracks = ("track1", "track2")
+        self.s1.tracks = ("a", "b")
 
         result = _get_tracks_safe(self.s1)
 
-        self.assertEqual(result, ["track1", "track2"], "PC_3 failed: Should convert tuple to list")
+        self.assertEqual(result, ["a", "b"], "PC_3 failed: Should convert tuple to list")
         self.assertIsInstance(result, list, "PC_3 failed: Output type must be list")
 
     def test_pc4_exception(self):

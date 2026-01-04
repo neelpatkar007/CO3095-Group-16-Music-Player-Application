@@ -1,5 +1,9 @@
 import unittest
-
+from unittest.mock import MagicMock
+from music_player.player_queue import _get_tracks_safe
+from music_player.player_state import PlayerState
+from music_player.library import Track
+from music_player.audio_backend import AudioEngine
 
 # -------------------------------------------------------------------------
 # TEST RESULTS TABLE
@@ -14,30 +18,6 @@ import unittest
 # The average test coverage for this suite is measured at 100%.
 # -------------------------------------------------------------------------
 
-class PlayerState:
-    """Mock class to simulate S1 input."""
-    pass
-
-
-# Function Implementation (Analysis Target)
-def _get_tracks_safe(state: PlayerState) -> list:
-    """
-    Helper to safely retrieve tracks as a list.
-    """
-    raw_tracks = getattr(state, "tracks", None)
-
-    if raw_tracks is None:
-        return []
-
-    if isinstance(raw_tracks, list):
-        return raw_tracks
-
-    try:
-        return list(raw_tracks)
-    except Exception:
-        return []
-
-
 class TestConcolicExecution(unittest.TestCase):
     """
     Concolic testing suite based on the Iteration/Flip Table (FILE 2).
@@ -45,7 +25,20 @@ class TestConcolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        self.s1 = PlayerState()
+        """Setup a reusable PlayerState with mocked audio engine and track."""
+        # Mock audio engine
+        self.mock_engine = MagicMock(spec=AudioEngine)
+
+        # Mock a track object
+        self.mock_track = MagicMock(spec=Track)
+        self.mock_track.path = "/dummy"
+        self.mock_track.display_name = "Test Track"
+        self.mock_track.duration_seconds = 300  # Optional
+
+        # Real PlayerState
+        self.s1 = PlayerState(tracks=[self.mock_track], audio_engine=self.mock_engine)
+        self.s1.position_seconds = 0
+        self.s1.playback_speed = 1.0
 
     def test_iter1_initial_seed(self):
         """
@@ -53,7 +46,9 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint: S2 == None.
         Path: PC_1 (Early Return).
         """
-        # No 'tracks' attribute set on S1
+        # Remove tracks attribute to simulate S2 == None
+        del self.s1.tracks
+
         result = _get_tracks_safe(self.s1)
         self.assertEqual(result, [], "Iteration 1 failed")
 
@@ -63,7 +58,7 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint: type(S2) == list.
         Path: PC_2 (Is Instance).
         """
-        # Generated Seed: A concrete list
+        # Concrete list
         generated_seed = [10, 20]
         self.s1.tracks = generated_seed
 
@@ -76,7 +71,7 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint: list(S2) conversion succeeds.
         Path: PC_3 (Conversion Success).
         """
-        # Generated Seed: A concrete tuple (Not a list, but iterable)
+        # Tuple (iterable, but not a list)
         generated_seed = (10, 20)
         self.s1.tracks = generated_seed
 
@@ -89,7 +84,7 @@ class TestConcolicExecution(unittest.TestCase):
         Constraint: list(S2) raises Exception.
         Path: PC_4 (Exception Handling).
         """
-        # Generated Seed: An integer (Not a list, not iterable)
+        # Integer (not iterable)
         generated_seed = 999
         self.s1.tracks = generated_seed
 

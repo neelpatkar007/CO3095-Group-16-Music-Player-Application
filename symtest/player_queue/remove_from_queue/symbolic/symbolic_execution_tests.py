@@ -1,81 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-
-# Assuming the function is in a module named 'music_queue'
-# For this file block, we will define a dummy import or rely on the context that
-# the function is available. In a real scenario, this would be:
-# from src.queue import remove_from_queue
-
-# RE-INJECTING FUNCTION FOR INDEPENDENT FILE EXECUTION CONTEXT
-def remove_from_queue(state, query: str) -> None:
-    """
-    S3-04: Remove a song from the queue by Index or Name.
-    """
-    if state is None or isinstance(state, (str, int, float, bool)): return
-
-    if not hasattr(state, "tracks") or not isinstance(state.tracks, list):
-        print("[queue] Queue is empty.")
-        return
-
-    tracks = state.tracks
-    if not tracks:
-        print("[queue] Queue is empty.")
-        return
-
-    if not query or not isinstance(query, str):
-        print("[queue] Usage: /q.remove <index|name>")
-        return
-
-    # Mocking external dependency for isolation
-    if hasattr(state, "_ensure_queue_decoupled_called"):
-        state._ensure_queue_decoupled_called = True
-
-    if query.isdigit():
-        try:
-            idx = int(query) - 1
-            if 0 <= idx < len(tracks):
-                removed = tracks.pop(idx)
-
-                current_index = getattr(state, "current_index", 0)
-                if current_index is None: current_index = 0
-
-                if idx < current_index:
-                    state.current_index = current_index - 1
-
-                name = getattr(removed, "display_name", "Unknown")
-                print(f"[queue] Removed '{name}' from queue.")
-                return
-            else:
-                print("[queue] Index out of range.")
-                return
-        except ValueError:
-            print("[queue] Error parsing index.")
-            return
-
-    query_lower = query.lower()
-
-    for i, t in enumerate(tracks):
-        if t is None: continue
-        if not hasattr(t, "display_name"): continue
-
-        if query_lower in t.display_name.lower():
-            removed = tracks.pop(i)
-
-            current_index = getattr(state, "current_index", 0)
-            if current_index is None: current_index = 0
-
-            if i < current_index:
-                state.current_index = current_index - 1
-
-            print(f"[queue] Removed '{removed.display_name}' from queue.")
-            return
-
-    print(f"[queue] '{query}' not found in current queue.")
-
-
-def _ensure_queue_decoupled(state):
-    pass
+from music_player.player_queue import remove_from_queue
+from music_player.player_queue import _ensure_queue_decoupled
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -97,6 +24,9 @@ class TestSymbolicExecution(unittest.TestCase):
     The average test coverage for this suite is measured at 100%.
     """
 
+    def _ensure_queue_decoupled(state):
+        pass
+    
     def setUp(self):
         # Patch builtin print to suppress output and verify logic
         self.patcher = patch('builtins.print')

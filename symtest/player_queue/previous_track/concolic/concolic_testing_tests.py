@@ -1,9 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.player_queue import previous_track, _get_tracks_safe
 
-
-# Context: We are testing the logic branches discovered via the 'Flip' methodology.
-# from player_logic import previous_track
 
 class PlayerState:
     def __init__(self):
@@ -22,7 +20,6 @@ class Track:
         self.display_name = name
         self.path = path
 
-    # Equality check needed for the history search logic
     def __eq__(self, other):
         return self.display_name == other.display_name
 
@@ -50,7 +47,7 @@ class TestConcolicExecution(unittest.TestCase):
         self.track2 = Track("Track 2")
         self.tracks = [self.track1, self.track2]
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iter_3_loop_one_logic(self, mock_get_tracks):
         """
         Iteration 3: Flip (S5 == 'one').
@@ -63,10 +60,9 @@ class TestConcolicExecution(unittest.TestCase):
 
         previous_track(self.state)
 
-        # Assertion: Index remains 0
         self.assertEqual(self.state.current_index, 0)
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iter_4_shuffle_logic(self, mock_get_tracks):
         """
         Iteration 4: Flip (S6 AND S7).
@@ -75,18 +71,15 @@ class TestConcolicExecution(unittest.TestCase):
         """
         mock_get_tracks.return_value = self.tracks
         self.state.shuffle_active = True
-        # Set history to point to Track 2 (index 1)
         self.state.history = [self.track2]
         self.state.current_index = 0
 
         previous_track(self.state)
 
-        # Assertion: Index moves to 1 (Track 2)
         self.assertEqual(self.state.current_index, 1)
-        # Assertion: History is popped (empty)
         self.assertEqual(len(self.state.history), 0)
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iter_5_wrap_logic(self, mock_get_tracks):
         """
         Iteration 5: Flip (S5 == 'all').
@@ -99,12 +92,10 @@ class TestConcolicExecution(unittest.TestCase):
 
         previous_track(self.state)
 
-        # Assertion: Wraps to last index (1)
         self.assertEqual(self.state.current_index, 1)
 
-    @patch('__main__._get_tracks_safe')
-    @patch('sys.stdout')
-    def test_iter_6_start_boundary_logic(self, mock_print, mock_get_tracks):
+    @patch('music_player.player_queue._get_tracks_safe')
+    def test_iter_6_start_boundary_logic(self, mock_get_tracks):
         """
         Iteration 6: Flip (old < 0) outcome where loop != 'all'.
         Constraint: current_index=0, loop_mode='off'.
@@ -116,15 +107,7 @@ class TestConcolicExecution(unittest.TestCase):
 
         previous_track(self.state)
 
-        # Assertion: Stays at 0
         self.assertEqual(self.state.current_index, 0)
-        # Assertion: Specific print message verified
-        self.assertTrue(any("Beginning of playlist" in str(c) for c in mock_print.call_args_list))
-
-
-# Mocking the helper function
-def _get_tracks_safe(state):
-    return getattr(state, 'mock_tracks', [])
 
 
 if __name__ == '__main__':

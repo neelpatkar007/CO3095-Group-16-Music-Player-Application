@@ -1,27 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-
-
-# Redefining function here for self-contained context
-def _find_track(state, query):
-    try:
-        query = query.strip()
-        if query.isdigit():
-            idx = int(query) - 1
-            if hasattr(state, "library_tracks") and isinstance(state.library_tracks, list):
-                if 0 <= idx < len(state.library_tracks):
-                    return state.library_tracks[idx]
-        query_lower = query.lower()
-
-        if hasattr(state, "library_tracks") and isinstance(state.library_tracks, list):
-            for t in state.library_tracks:
-                if not hasattr(t, "display_name"):
-                    continue
-                if query_lower in t.display_name.lower():
-                    return t
-    except Exception:
-        return None
-    return None
+from music_player.player_queue import _find_track
 
 
 class TestConcolicExecution(unittest.TestCase):
