@@ -1,6 +1,14 @@
 import unittest
-from unittest.mock import MagicMock, patch, ANY
-from player_metrics import toggle_like, PlayerState
+from unittest.mock import MagicMock, patch
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import toggle_like, save_data
+from music_player.player_state import PlayerState
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -56,7 +64,7 @@ class TestSymbolicExecution(unittest.TestCase):
         toggle_like(self.mock_state)
         mock_print.assert_called_with("[metrics] Error: Track path is empty.")
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     @patch('builtins.print')
     def test_pc5_unlike_success(self, mock_print, mock_save):
         """
@@ -73,7 +81,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_print.assert_called_with("[metrics] Unliked 'Song A'.")
         mock_save.assert_called_once()
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     @patch('builtins.print')
     def test_pc7_like_success(self, mock_print, mock_save):
         """
@@ -88,3 +96,7 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertIn(path, self.mock_state.liked_tracks)
         mock_print.assert_called_with("[metrics] Liked 'Song A'.")
         mock_save.assert_called_once()
+
+
+if __name__ == '__main__':
+    unittest.main()

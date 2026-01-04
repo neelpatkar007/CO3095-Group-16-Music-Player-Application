@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from player_metrics import record_play, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import record_play
+from music_player.player_state import PlayerState
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -24,7 +32,7 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_track.path = "/music/song.mp3"
         self.mock_state.current_track = self.mock_track
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     def test_iter_init_dict(self, mock_save):
         """
         Iteration: Derived from checking S4 (play_counts existence).
@@ -39,7 +47,7 @@ class TestConcolicExecution(unittest.TestCase):
         self.assertIsInstance(self.mock_state.play_counts, dict)
         self.assertEqual(self.mock_state.play_counts["/music/song.mp3"], 1)
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     def test_iter_sanitize_str(self, mock_save):
         """
         Iteration: Derived from negating S5 (Is Instance Int).
@@ -55,7 +63,7 @@ class TestConcolicExecution(unittest.TestCase):
         # Logic check: Should not crash, should reset to 0+1 = 1
         self.assertEqual(self.mock_state.play_counts[path], 1)
 
-    @patch('player_metrics.save_data')
+    @patch('music_player.player_metrics.save_data')
     def test_iter_sanitize_none(self, mock_save):
         """
         Iteration: Derived from negating S5 (Is Instance Int).
@@ -69,3 +77,7 @@ class TestConcolicExecution(unittest.TestCase):
         record_play(self.mock_state)
 
         self.assertEqual(self.mock_state.play_counts[path], 1)
+
+
+if __name__ == '__main__':
+    unittest.main()

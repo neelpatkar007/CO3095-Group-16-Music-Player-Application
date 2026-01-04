@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-from player_metrics import save_data, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import save_data
+from music_player.player_state import PlayerState
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -25,7 +33,7 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.liked_tracks = {"song_a"}
         self.mock_state.play_counts = {"song_a": 10}
 
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     @patch('builtins.open', new_callable=mock_open)
     def test_pc1_state_none(self, mock_file_open, mock_data_file):
         """
@@ -42,7 +50,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
     @patch('json.dump')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc2_write_success(self, mock_data_file, mock_file_open, mock_json_dump):
         """
         Path Condition 2: (S1 != None) AND S2.
@@ -74,7 +82,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
     @patch('json.dump')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc3_exception(self, mock_data_file, mock_file_open, mock_json_dump):
         """
         Path Condition 3: (S1 != None) AND NOT S2.
@@ -93,3 +101,7 @@ class TestSymbolicExecution(unittest.TestCase):
             mock_print.assert_called()
             args, _ = mock_print.call_args
             self.assertIn("Access Denied", args[0])
+
+
+if __name__ == '__main__':
+    unittest.main()

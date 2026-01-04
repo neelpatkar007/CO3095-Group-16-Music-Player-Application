@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-from player_metrics import load_data, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import load_data
+from music_player.player_state import PlayerState
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -25,7 +33,7 @@ class TestSymbolicExecution(unittest.TestCase):
         self.mock_state.liked_tracks = set()
         self.mock_state.play_counts = {}
 
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc1_state_none(self, mock_data_file):
         """
         Path Condition 1: S1 == None OR NOT S2
@@ -42,7 +50,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_data_file.exists.assert_called()
         # Since state is None, we just return. No verification on state needed.
 
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc1_file_missing(self, mock_data_file):
         """
         Path Condition 1: S1 == None OR NOT S2
@@ -60,7 +68,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc2_load_success(self, mock_data_file, mock_file_open, mock_json_load):
         """
         Path Condition 2: S2 AND (S1 != None) AND S3
@@ -81,7 +89,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_pc3_exception(self, mock_data_file, mock_file_open, mock_json_load):
         """
         Path Condition 3: S2 AND (S1 != None) AND NOT S3
@@ -101,3 +109,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
         # Verification: State should remain untouched/default
         self.assertEqual(s1.liked_tracks, set())
+
+
+if __name__ == '__main__':
+    unittest.main()

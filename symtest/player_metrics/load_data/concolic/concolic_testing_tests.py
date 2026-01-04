@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-from player_metrics import load_data, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import load_data
+from music_player.player_state import PlayerState
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -22,7 +30,7 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_state = MagicMock(spec=PlayerState)
         self.mock_state.liked_tracks = set()
 
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_iter1_base_case(self, mock_data_file):
         """
         Iteration 1: Base Case.
@@ -40,7 +48,7 @@ class TestConcolicExecution(unittest.TestCase):
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_iter2_derive_valid_execution(self, mock_data_file, mock_file_open, mock_json_load):
         """
         Iteration 2: Derived from negating PC_1 constraints.
@@ -62,7 +70,7 @@ class TestConcolicExecution(unittest.TestCase):
 
     @patch('json.load')
     @patch('builtins.open', new_callable=mock_open)
-    @patch('player_metrics.DATA_FILE')
+    @patch('music_player.player_metrics.DATA_FILE')
     def test_iter3_derive_exception_path(self, mock_data_file, mock_file_open, mock_json_load):
         """
         Iteration 3: Derived from negating S3 (internal constraint).
@@ -82,3 +90,7 @@ class TestConcolicExecution(unittest.TestCase):
             mock_print.assert_called()
             args, _ = mock_print.call_args
             self.assertIn("Disk Read Error", args[0])
+
+
+if __name__ == '__main__':
+    unittest.main()

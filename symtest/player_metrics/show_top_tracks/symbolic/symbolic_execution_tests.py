@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from player_metrics import show_top_tracks, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import show_top_tracks
+from music_player.player_state import PlayerState
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -45,7 +53,7 @@ class TestSymbolicExecution(unittest.TestCase):
         show_top_tracks(self.mock_state)
         mock_print.assert_any_call("[metrics] No play history yet.")
 
-    @patch('builtins.sorted')  # Patch sorted to simulate S5 failure
+    @patch('builtins.sorted')
     @patch('builtins.print')
     def test_pc5_sort_fail(self, mock_print, mock_sorted):
         """PC_5: S5 is False (Exception during sort)"""
@@ -68,6 +76,9 @@ class TestSymbolicExecution(unittest.TestCase):
 
         show_top_tracks(self.mock_state)
 
-        # Verify header and row printing
         mock_print.assert_any_call("[metrics] --- Top Played Songs ---")
         mock_print.assert_any_call("  100 plays: Greatest Hit")
+
+
+if __name__ == '__main__':
+    unittest.main()

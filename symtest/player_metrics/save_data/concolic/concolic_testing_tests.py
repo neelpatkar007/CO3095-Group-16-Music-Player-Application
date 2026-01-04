@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch, mock_open
-from player_metrics import save_data, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import save_data
+from music_player.player_state import PlayerState
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -77,3 +85,7 @@ class TestConcolicExecution(unittest.TestCase):
             mock_print.assert_called()
             args, _ = mock_print.call_args
             self.assertIn("Object not serializable", args[0])
+
+
+if __name__ == '__main__':
+    unittest.main()

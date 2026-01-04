@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from player_metrics import toggle_like, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import toggle_like
+from music_player.player_state import PlayerState
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -68,3 +76,7 @@ class TestConcolicExecution(unittest.TestCase):
         # Verify we hit the "Failed to add" branch
         fake_set.add.assert_called_with(path)
         mock_print.assert_called_with("[metrics] Error: Failed to add like.")
+
+
+if __name__ == '__main__':
+    unittest.main()

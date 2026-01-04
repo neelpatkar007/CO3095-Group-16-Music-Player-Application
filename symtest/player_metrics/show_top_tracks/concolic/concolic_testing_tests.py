@@ -1,6 +1,14 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from player_metrics import show_top_tracks, PlayerState
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_metrics import show_top_tracks
+from music_player.player_state import PlayerState
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -90,3 +98,7 @@ class TestConcolicExecution(unittest.TestCase):
 
         expected_msg = f"  50 plays: Unknown (File: {path})"
         mock_print.assert_any_call(expected_msg)
+
+
+if __name__ == '__main__':
+    unittest.main()
