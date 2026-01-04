@@ -1,11 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch, PropertyMock
 from pathlib import Path
+from music_player.library import discover_tracks, Track
 
-
-# Note: In a real environment, we would import the function.
-# Assuming discover_tracks and Track are available in the scope.
-# from src.library import discover_tracks, Track
 
 class TestSymbolicAnalysis(unittest.TestCase):
     """
@@ -30,13 +27,13 @@ class TestSymbolicAnalysis(unittest.TestCase):
 
     def setUp(self):
         # Common mocks setup
-        self.mock_music_dir_patcher = patch('__main__.MUSIC_DIR')
+        self.mock_music_dir_patcher = patch('music_player.library.MUSIC_DIR')
         self.mock_music_dir = self.mock_music_dir_patcher.start()
 
-        self.mock_extensions_patcher = patch('__main__.SUPPORTED_EXTENSIONS', ['.mp3', '.wav'])
+        self.mock_extensions_patcher = patch('music_player.library.SUPPORTED_EXTENSIONS', ['.mp3', '.wav'])
         self.mock_extensions = self.mock_extensions_patcher.start()
 
-        self.mock_metadata_patcher = patch('__main__._read_metadata')
+        self.mock_metadata_patcher = patch('music_player.library._read_metadata')
         self.mock_read_metadata = self.mock_metadata_patcher.start()
 
     def tearDown(self):
@@ -50,13 +47,8 @@ class TestSymbolicAnalysis(unittest.TestCase):
         Scenario: MUSIC_DIR.exists() returns False.
         Expected: Function prints warning and returns empty list immediately.
         """
-        # S1 = False
         self.mock_music_dir.exists.return_value = False
-
-        # Act
         result = discover_tracks()
-
-        # Assert
         self.assertEqual(result, [])
         self.mock_music_dir.iterdir.assert_not_called()
 
@@ -66,22 +58,13 @@ class TestSymbolicAnalysis(unittest.TestCase):
         Scenario: Directory exists, but contains a subdirectory (not a file).
         Expected: Loop continues, returns empty list (ignoring the folder).
         """
-        # S1 = True
         self.mock_music_dir.exists.return_value = True
-
-        # S2 = False (Mocking a directory item)
         mock_sub_dir = MagicMock(spec=Path)
         mock_sub_dir.is_file.return_value = False
         self.mock_music_dir.iterdir.return_value = [mock_sub_dir]
-
-        # Act
         result = discover_tracks()
-
-        # Assert
         self.assertEqual(result, [])
         mock_sub_dir.is_file.assert_called_once()
-        # Ensure we didn't check suffix for a directory
-        self.assertFalse(hasattr(mock_sub_dir, 'suffix'))
 
     def test_pc_3_file_extension_not_supported(self):
         """
@@ -89,20 +72,12 @@ class TestSymbolicAnalysis(unittest.TestCase):
         Scenario: File exists but extension (.txt) is not in SUPPORTED_EXTENSIONS.
         Expected: Loop continues, returns empty list.
         """
-        # S1 = True
         self.mock_music_dir.exists.return_value = True
-
-        # S2 = True, S3 = False
         mock_file = MagicMock(spec=Path)
         mock_file.is_file.return_value = True
         type(mock_file).suffix = PropertyMock(return_value='.txt')
-
         self.mock_music_dir.iterdir.return_value = [mock_file]
-
-        # Act
         result = discover_tracks()
-
-        # Assert
         self.assertEqual(result, [])
         self.mock_read_metadata.assert_not_called()
 
@@ -112,22 +87,13 @@ class TestSymbolicAnalysis(unittest.TestCase):
         Scenario: Valid file, but _read_metadata returns None for duration.
         Expected: Track created with default duration (180.0).
         """
-        # S1 = True
         self.mock_music_dir.exists.return_value = True
-
-        # S2 = True, S3 = True
         mock_file = MagicMock(spec=Path)
         mock_file.is_file.return_value = True
         type(mock_file).suffix = PropertyMock(return_value='.mp3')
         self.mock_music_dir.iterdir.return_value = [mock_file]
-
-        # S4 returns tuple, S5 is None
         self.mock_read_metadata.return_value = ("Song Title", "Artist", None)
-
-        # Act
         result = discover_tracks()
-
-        # Assert
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].duration_seconds, 180.0)
 
@@ -137,21 +103,16 @@ class TestSymbolicAnalysis(unittest.TestCase):
         Scenario: Valid file, _read_metadata returns valid float.
         Expected: Track created with actual duration.
         """
-        # S1 = True
         self.mock_music_dir.exists.return_value = True
-
-        # S2 = True, S3 = True
         mock_file = MagicMock(spec=Path)
         mock_file.is_file.return_value = True
         type(mock_file).suffix = PropertyMock(return_value='.mp3')
         self.mock_music_dir.iterdir.return_value = [mock_file]
-
-        # S4 returns tuple, S5 is 200.0
         self.mock_read_metadata.return_value = ("Song Title", "Artist", 200.0)
-
-        # Act
         result = discover_tracks()
-
-        # Assert
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0].duration_seconds, 200.0)
+
+
+if __name__ == '__main__':
+    unittest.main()

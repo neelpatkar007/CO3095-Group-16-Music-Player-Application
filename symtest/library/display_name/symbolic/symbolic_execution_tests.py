@@ -1,46 +1,26 @@
 import unittest
-
-"""
-WHITE-BOX TESTING SUITE: SYMBOLIC EXECUTION
--------------------------------------------------------------------------
-Target Function: display_name
-Methodology: Symbolic Path Verification
-Coverage Target: 100% Branch Coverage
-
-TEST RESULTS TABLE
--------------------------------------------------------------------------
-| Method ID | Path ID | Actual Result         | Expected Result       | Status |
-|-----------|---------|-----------------------|-----------------------|--------|
-| test_01   | PC_2    | "Bohemian Rhapsody"   | "Bohemian Rhapsody"   | PASS   |
-| test_02   | PC_1    | "Imagine – Lennon"    | "Imagine – Lennon"    | PASS   |
--------------------------------------------------------------------------
-
-The average test coverage for this suite is measured at 100%.
-"""
-
-
-class TrackStub:
-    """
-    A stub class to simulate the context (self) required by the property.
-    Maps symbolic variables S1 (title) and S2 (artist).
-    """
-
-    def __init__(self, title, artist):
-        self.title = title  # S1
-        self.artist = artist  # S2
-
-    @property
-    def display_name(self) -> str:
-        """
-        Return a formatted display name of the track (e.g. "Song Title - Artist").
-        """
-        # Only show artist if available and not empty
-        if self.artist:
-            return f"{self.title} – {self.artist}"
-        return self.title
+from pathlib import Path
+from music_player.library import Track
 
 
 class TestSymbolicExecution(unittest.TestCase):
+    """
+    WHITE-BOX TESTING SUITE: SYMBOLIC EXECUTION
+    -------------------------------------------------------------------------
+    Target Function: display_name
+    Methodology: Symbolic Path Verification
+    Coverage Target: 100% Branch Coverage
+
+    TEST RESULTS TABLE
+    -------------------------------------------------------------------------
+    | Method ID | Path ID | Actual Result         | Expected Result       | Status |
+    |-----------|---------|-----------------------|-----------------------|--------|
+    | test_01   | PC_2    | "Bohemian Rhapsody"   | "Bohemian Rhapsody"   | PASS   |
+    | test_02   | PC_1    | "Imagine – Lennon"    | "Imagine – Lennon"    | PASS   |
+    -------------------------------------------------------------------------
+
+    The average test coverage for this suite is measured at 100%.
+    """
 
     def setUp(self):
         """Pre-test initialisation."""
@@ -53,7 +33,7 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Returns S1
         """
         # S1 = "Bohemian Rhapsody", S2 = ""
-        track = TrackStub("Bohemian Rhapsody", "")
+        track = Track(path=Path("test.mp3"), title="Bohemian Rhapsody", artist="", duration_seconds=0.0)
 
         result = track.display_name
         expected = "Bohemian Rhapsody"
@@ -67,7 +47,7 @@ class TestSymbolicExecution(unittest.TestCase):
         Expected: Returns S1 – S2
         """
         # S1 = "Imagine", S2 = "Lennon"
-        track = TrackStub("Imagine", "Lennon")
+        track = Track(path=Path("test.mp3"), title="Imagine", artist="Lennon", duration_seconds=0.0)
 
         result = track.display_name
         expected = "Imagine – Lennon"

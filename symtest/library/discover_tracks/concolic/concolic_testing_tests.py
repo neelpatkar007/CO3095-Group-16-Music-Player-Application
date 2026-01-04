@@ -1,10 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch, PropertyMock
 from pathlib import Path
+from music_player.library import discover_tracks, Track
 
-
-# Note: Imports assumed available from environment
-# from src.library import discover_tracks, Track
 
 class TestConcolicIntegration(unittest.TestCase):
     """
@@ -29,13 +27,13 @@ class TestConcolicIntegration(unittest.TestCase):
     """
 
     def setUp(self):
-        self.mock_music_dir_patcher = patch('__main__.MUSIC_DIR')
+        self.mock_music_dir_patcher = patch('music_player.library.MUSIC_DIR')
         self.mock_music_dir = self.mock_music_dir_patcher.start()
 
-        self.mock_extensions_patcher = patch('__main__.SUPPORTED_EXTENSIONS', ['.mp3', '.wav'])
+        self.mock_extensions_patcher = patch('music_player.library.SUPPORTED_EXTENSIONS', ['.mp3', '.wav'])
         self.mock_extensions = self.mock_extensions_patcher.start()
 
-        self.mock_metadata_patcher = patch('__main__._read_metadata')
+        self.mock_metadata_patcher = patch('music_player.library._read_metadata')
         self.mock_read_metadata = self.mock_metadata_patcher.start()
 
     def tearDown(self):
@@ -65,7 +63,7 @@ class TestConcolicIntegration(unittest.TestCase):
         self.mock_music_dir.exists.return_value = True
 
         mock_dir_item = MagicMock(spec=Path)
-        mock_dir_item.is_file.return_value = False  # S2 Flips to False
+        mock_dir_item.is_file.return_value = False
         self.mock_music_dir.iterdir.return_value = [mock_dir_item]
 
         result = discover_tracks()
@@ -82,7 +80,7 @@ class TestConcolicIntegration(unittest.TestCase):
 
         mock_file = MagicMock(spec=Path)
         mock_file.is_file.return_value = True
-        type(mock_file).suffix = PropertyMock(return_value='.jpg')  # S3 Flips to False
+        type(mock_file).suffix = PropertyMock(return_value='.jpg')
         self.mock_music_dir.iterdir.return_value = [mock_file]
 
         result = discover_tracks()
@@ -102,7 +100,6 @@ class TestConcolicIntegration(unittest.TestCase):
         type(mock_file).suffix = PropertyMock(return_value='.mp3')
         self.mock_music_dir.iterdir.return_value = [mock_file]
 
-        # S4 is invoked, S5 is None -> Trigger fallback
         self.mock_read_metadata.return_value = ("Track A", "Artist A", None)
 
         result = discover_tracks()
@@ -122,8 +119,11 @@ class TestConcolicIntegration(unittest.TestCase):
         type(mock_file).suffix = PropertyMock(return_value='.mp3')
         self.mock_music_dir.iterdir.return_value = [mock_file]
 
-        # S5 is Valid
         self.mock_read_metadata.return_value = ("Track B", "Artist B", 245.0)
 
         result = discover_tracks()
         self.assertEqual(result[0].duration_seconds, 245.0, "Failed to read actual duration")
+
+
+if __name__ == '__main__':
+    unittest.main()

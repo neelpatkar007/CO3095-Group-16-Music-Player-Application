@@ -1,42 +1,26 @@
 import unittest
-
-"""
-WHITE-BOX TESTING SUITE: CONCOLIC EXECUTION
--------------------------------------------------------------------------
-Target Function: display_name
-Methodology: Directed Automated Random Testing (DART) / Concolic
-Coverage Target: 100% Path Coverage
-
-TEST RESULTS TABLE
--------------------------------------------------------------------------
-| Iteration | Seed Inputs (S1, S2) | Path | Status |
-|-----------|----------------------|------|--------|
-| 1         | ("Test", None)       | PC_2 | PASS   |
-| 2         | ("Test", "Artist")   | PC_1 | PASS   |
--------------------------------------------------------------------------
-
-The average test coverage for this suite is measured at 100%.
-"""
-
-
-class TrackStub:
-    """
-    A stub class representing the concrete implementation for analysis.
-    """
-
-    def __init__(self, title, artist):
-        self.title = title  # S1
-        self.artist = artist  # S2
-
-    @property
-    def display_name(self) -> str:
-        # Only show artist if available and not empty
-        if self.artist:
-            return f"{self.title} – {self.artist}"
-        return self.title
+from pathlib import Path
+from music_player.library import Track
 
 
 class TestConcolicExecution(unittest.TestCase):
+    """
+    WHITE-BOX TESTING SUITE: CONCOLIC EXECUTION
+    -------------------------------------------------------------------------
+    Target Function: display_name
+    Methodology: Directed Automated Random Testing (DART) / Concolic
+    Coverage Target: 100% Path Coverage
+
+    TEST RESULTS TABLE
+    -------------------------------------------------------------------------
+    | Iteration | Seed Inputs (S1, S2) | Path | Status |
+    |-----------|----------------------|------|--------|
+    | 1         | ("Test", None)       | PC_2 | PASS   |
+    | 2         | ("Test", "Artist")   | PC_1 | PASS   |
+    -------------------------------------------------------------------------
+
+    The average test coverage for this suite is measured at 100%.
+    """
 
     def test_iteration_1_baseline_path(self):
         """
@@ -45,10 +29,7 @@ class TestConcolicExecution(unittest.TestCase):
         Path Executed: PC_2
         """
         # Concrete Seed: S1="Test", S2=None
-        s1_val = "Test"
-        s2_val = None
-
-        track = TrackStub(s1_val, s2_val)
+        track = Track(path=Path("test.mp3"), title="Test", artist=None, duration_seconds=0.0)
 
         # Execution Trace
         if track.artist:
@@ -67,10 +48,7 @@ class TestConcolicExecution(unittest.TestCase):
         Path Executed: PC_1
         """
         # Derived Input: S1="Test", S2="Artist"
-        s1_val = "Test"
-        s2_val = "Artist"
-
-        track = TrackStub(s1_val, s2_val)
+        track = Track(path=Path("test.mp3"), title="Test", artist="Artist", duration_seconds=0.0)
 
         # Execution Trace
         if track.artist:
