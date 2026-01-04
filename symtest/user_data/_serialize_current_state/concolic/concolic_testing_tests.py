@@ -1,4 +1,5 @@
 import unittest
+from music_player.user_data import _serialize_current_state
 
 '''
 Test Results Table:
@@ -45,24 +46,6 @@ class TestConcolicTesting(unittest.TestCase):
         result = _serialize_current_state(state)
         # Tracks should be filtered out because hasattr(t, "path") is False
         self.assertEqual(result["playlists"][0]["tracks"], [])
-
-
-def _serialize_current_state(state):
-    if state is None or not hasattr(state, "playlists"):
-        return {}
-    pl_data = []
-    if state.playlists:
-        for pl in state.playlists:
-            if pl:
-                pl_data.append({
-                    "name": getattr(pl, "name", "Unknown"),
-                    "tracks": [str(t.path) for t in pl.tracks if hasattr(t, "path")]
-                })
-    return {
-        "liked": list(getattr(state, "liked_tracks", [])),
-        "ratings": getattr(state, "song_ratings", {}),
-        "playlists": pl_data
-    }
 
 
 if __name__ == "__main__":

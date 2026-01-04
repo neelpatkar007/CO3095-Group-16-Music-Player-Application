@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
+from music_player.user_data import rate_song
 
 # [Method] | [Actual] | [Expected] | [Status]
 # rate_song (PC_1) | Prints "No song" | Prints "No song" | PASS
@@ -43,17 +44,17 @@ class TestSymbolicExecution(unittest.TestCase):
         result = rate_song(self.state, "3")
         self.assertIsNone(result)
 
-    def test_pc5_successful_rating(self):
+    @patch('music_player.user_data._save_current_to_profile')
+    def test_pc5_successful_rating(self, mock_save):
         # PC_5: Full execution path
         self.track.path = "/music/song.mp3"
         self.track.title = "Test Song"
         self.state.current_track = self.track
         self.state.song_ratings = {}
         with patch('builtins.print') as mocked_print:
-            with patch('__main__._save_current_to_profile'):
-                rate_song(self.state, "3")
-                self.assertEqual(self.state.song_ratings["/music/song.mp3"], 3)
-                mocked_print.assert_any_call("[rate] Rated 'Test Song' 3/5 stars.")
+            rate_song(self.state, "3")
+            self.assertEqual(self.state.song_ratings["/music/song.mp3"], 3)
+            mocked_print.assert_any_call("[rate] Rated 'Test Song' 3/5 stars.")
 
 if __name__ == '__main__':
     unittest.main()

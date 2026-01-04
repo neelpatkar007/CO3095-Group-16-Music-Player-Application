@@ -1,5 +1,7 @@
 import unittest
-from dataclasses import dataclass, field
+from unittest.mock import MagicMock
+from music_player.player_state import PlayerState
+from music_player.user_data import _apply_profile_data
 
 
 # [Method]             | [Actual]            | [Expected]          | [Status]
@@ -14,7 +16,8 @@ class TestConcolicTesting(unittest.TestCase):
 
     def test_PC_4_iteration(self):
         # Iteration 4: Concrete inputs to trigger full playlist restoration
-        state = PlayerState()
+        mock_audio = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio)
         data = {
             "playlists": [{"name": "Rock", "tracks": ["path/to/song"]}]
         }
@@ -28,9 +31,9 @@ class TestConcolicTesting(unittest.TestCase):
             def __init__(self, path):
                 self.path = path
 
-        state = PlayerState()
+        mock_audio = MagicMock()
         t1 = MockTrack("path/1")
-        state.library_tracks = [t1]
+        state = PlayerState(tracks=[t1], audio_engine=mock_audio)
 
         data = {
             "playlists": [{"name": "MyList", "tracks": ["path/1"]}]

@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
+from music_player.user_data import rate_song
 
 # [Method] | [Actual] | [Expected] | [Status]
 # Iteration 1 (PC_1) | Returns None | Returns None | PASS
@@ -42,7 +43,8 @@ class TestConcolicTesting(unittest.TestCase):
         with patch('builtins.print'):
             rate_song(state, "3")
 
-    def test_iteration_5_terminal_path(self):
+    @patch('music_player.user_data._save_current_to_profile')
+    def test_iteration_5_terminal_path(self, mock_save):
         # Final satisfying assignment -> PC_5
         state = Mock()
         track = Mock()
@@ -50,10 +52,9 @@ class TestConcolicTesting(unittest.TestCase):
         track.title = "Concolic Trace"
         state.current_track = track
         state.song_ratings = None # Test lazy-initialisation
-        with patch('__main__._save_current_to_profile'):
-            with patch('builtins.print'):
-                rate_song(state, "5")
-                self.assertEqual(state.song_ratings["track_001"], 5)
+        with patch('builtins.print'):
+            rate_song(state, "5")
+            self.assertEqual(state.song_ratings["track_001"], 5)
 
 if __name__ == '__main__':
     unittest.main()

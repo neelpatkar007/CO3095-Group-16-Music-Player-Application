@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from music_player.user_data import show_current_profile
 
 # [Method] | [Actual] | [Expected] | [Status]
 # PC_1     | Error Msg| Error Msg  | Passed

@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
+from music_player.user_data import create_profile
 
 # [Method] | [Actual] | [Expected] | [Status]
 # PC_1     | Error printed | Error printed | PASSED
@@ -17,37 +18,32 @@ class TestSymbolicExecution(unittest.TestCase):
     @patch('builtins.print')
     def test_path_pc_1(self, mock_print):
         """Test PC_1: S1 is None."""
-        from profile_manager import create_profile # Assuming filename
         create_profile(None, "Alice")
         mock_print.assert_called_with("[profile] Error: Invalid state.")
 
     @patch('builtins.print')
     def test_path_pc_2(self, mock_print):
         """Test PC_2: S2 is invalid (empty string)."""
-        from profile_manager import create_profile
         create_profile(self.mock_state, "")
         mock_print.assert_called_with("[profile] Error: Name cannot be empty.")
 
     @patch('builtins.print')
     def test_path_pc_3(self, mock_print):
         """Test PC_3: S2 is 'default'."""
-        from profile_manager import create_profile
         create_profile(self.mock_state, "default")
         mock_print.assert_called_with("[profile] 'default' is reserved.")
 
     @patch('builtins.print')
     def test_path_pc_4(self, mock_print):
         """Test PC_4: S2 exists in S1.profiles."""
-        from profile_manager import create_profile
         self.mock_state.profiles = {"Alice": {}}
         create_profile(self.mock_state, "Alice")
         mock_print.assert_called_with("[profile] Profile 'Alice' already exists.")
 
-    @patch('profile_manager._save_profiles')
+    @patch('music_player.user_data._save_profiles')
     @patch('builtins.print')
     def test_path_pc_5(self, mock_print, mock_save):
         """Test PC_5: Successful creation."""
-        from profile_manager import create_profile
         self.mock_state.profiles = {}
         create_profile(self.mock_state, "Bob")
         self.assertIn("Bob", self.mock_state.profiles)

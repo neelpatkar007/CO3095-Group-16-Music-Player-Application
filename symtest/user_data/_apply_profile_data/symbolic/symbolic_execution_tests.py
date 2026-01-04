@@ -1,18 +1,7 @@
 import unittest
-from dataclasses import dataclass, field
-from typing import List, Set, Dict
-
-@dataclass
-class Playlist:
-    name: str
-    tracks: List = field(default_factory=list)
-
-@dataclass
-class PlayerState:
-    liked_tracks: Set = field(default_factory=set)
-    song_ratings: Dict = field(default_factory=dict)
-    playlists: List = field(default_factory=list)
-    library_tracks: List = field(default_factory=list)
+from music_player.player_state import PlayerState
+from music_player.user_data import _apply_profile_data
+from unittest.mock import MagicMock
 
 # [Method]             | [Actual]            | [Expected]          | [Status]
 # test_PC_1            | None                | None                | Passed
@@ -34,7 +23,9 @@ class TestSymbolicExecution(unittest.TestCase):
 
     def test_PC_2(self):
         # PC_2: S1 is object, S2 (data) is empty
-        state = PlayerState(liked_tracks={"old_track"})
+        mock_audio = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio)
+        state.liked_tracks.add("old_track")
         data = {}
         _apply_profile_data(state, data)
         self.assertEqual(len(state.liked_tracks), 0)
@@ -42,7 +33,8 @@ class TestSymbolicExecution(unittest.TestCase):
 
     def test_PC_3(self):
         # PC_3: S1 is object, S2 is object, but playlists key is missing/empty
-        state = PlayerState()
+        mock_audio = MagicMock()
+        state = PlayerState(tracks=[], audio_engine=mock_audio)
         data = {"liked": ["t1"], "ratings": {"t1": 5}}
         _apply_profile_data(state, data)
         self.assertIn("t1", state.liked_tracks)

@@ -1,6 +1,7 @@
 import unittest
 from dataclasses import dataclass
 from typing import List, Any
+from music_player.user_data import _serialize_current_state
 
 
 # Mocking structures to match the symbolic analysis requirements
@@ -58,24 +59,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertEqual(result["playlists"][0]["name"], "Favourites")
         self.assertEqual(result["playlists"][0]["tracks"], ["/vol/music/01.mp3"])
         self.assertEqual(result["liked"], ["Track 1"])
-
-
-def _serialize_current_state(state):
-    if state is None or not hasattr(state, "playlists"):
-        return {}
-    pl_data = []
-    if state.playlists:
-        for pl in state.playlists:
-            if pl:
-                pl_data.append({
-                    "name": getattr(pl, "name", "Unknown"),
-                    "tracks": [str(t.path) for t in pl.tracks if hasattr(t, "path")]
-                })
-    return {
-        "liked": list(getattr(state, "liked_tracks", [])),
-        "ratings": getattr(state, "song_ratings", {}),
-        "playlists": pl_data
-    }
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from music_player.user_data import show_current_profile
 
 # [Method] | [Actual] | [Expected] | [Status]
 # Iteration 1 | PC_1 Taken | PC_1 Targeted | Passed

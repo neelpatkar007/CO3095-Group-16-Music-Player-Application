@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from music_player.user_data import view_rated
 
 # [Method] | [Actual] | [Expected] | [Status]
 # test_pc1_none_state | Prints "[rate] No songs..." | Prints "[rate] No songs..." | PASSED
@@ -15,25 +16,21 @@ class TestSymbolicExecution(unittest.TestCase):
 
     def test_pc1_none_state(self):
         """Tests PC_1: S1 is None."""
-        from your_module import view_rated
         view_rated(None)
 
     def test_pc2_no_attribute(self):
         """Tests PC_2: NOT S1 AND NOT S2."""
-        from your_module import view_rated
         # S1 exists, but S2 (hasattr) is false
         del self.state.song_ratings
         view_rated(self.state)
 
     def test_pc4_empty_ratings(self):
         """Tests PC_4: NOT S1 AND S2 AND NOT S3 AND NOT S4 (Empty Dict)."""
-        from your_module import view_rated
         self.state.song_ratings = {}
         view_rated(self.state)
 
     def test_pc7_full_path(self):
         """Tests PC_7: Successful traversal through all conditions (S1-S7)."""
-        from your_module import view_rated
         # Configure S3 and S4
         self.state.song_ratings = {"path/1": 5}
         # Configure S7 (Track path match)

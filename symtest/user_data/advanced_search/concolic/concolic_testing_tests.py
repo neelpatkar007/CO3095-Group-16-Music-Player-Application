@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from music_player.user_data import advanced_search
 
 """
 Test Results Table:
@@ -33,7 +34,6 @@ class TestConcolicTesting(unittest.TestCase):
     def run_search(self, query):
         import io
         from contextlib import redirect_stdout
-        from src.app import advanced_search
         f = io.StringIO()
         with redirect_stdout(f):
             advanced_search(self.state, query)

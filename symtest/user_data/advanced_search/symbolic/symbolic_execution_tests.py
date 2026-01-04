@@ -1,5 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
+from music_player.user_data import advanced_search
+import io
+from contextlib import redirect_stdout
 
 """
 Test Results Table:
@@ -26,10 +29,6 @@ class TestSymbolicExecution(unittest.TestCase):
     def test_pc1_invalid_state(self):
         """Path PC_1: S1 is None"""
         # S1 = None, S2 = "any"
-        from src.app import advanced_search  # Assume module name
-        import io
-        from contextlib import redirect_stdout
-
         f = io.StringIO()
         with redirect_stdout(f):
             advanced_search(None, "artist:test")
@@ -41,11 +40,8 @@ class TestSymbolicExecution(unittest.TestCase):
         state = MagicMock()
         state.library_tracks = []
 
-        import io
-        from contextlib import redirect_stdout
         f = io.StringIO()
         with redirect_stdout(f):
-            from src.app import advanced_search
             advanced_search(state, "")
         self.assertIn("[search] Usage: /advanced.search <query>", f.getvalue())
 
@@ -56,11 +52,8 @@ class TestSymbolicExecution(unittest.TestCase):
         track.artist = "Real Artist"
         state.library_tracks = [track]
 
-        import io
-        from contextlib import redirect_stdout
         f = io.StringIO()
         with redirect_stdout(f):
-            from src.app import advanced_search
             advanced_search(state, "artist:NonExistent")
         self.assertIn("[search] No matches found.", f.getvalue())
 
@@ -73,11 +66,8 @@ class TestSymbolicExecution(unittest.TestCase):
         track.duration_seconds = 216
         state.library_tracks = [track]
 
-        import io
-        from contextlib import redirect_stdout
         f = io.StringIO()
         with redirect_stdout(f):
-            from src.app import advanced_search
             advanced_search(state, "artist:Linkin")
         self.assertIn("Found 1 matches:", f.getvalue())
 
