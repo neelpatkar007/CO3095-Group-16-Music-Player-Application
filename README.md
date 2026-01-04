@@ -65,7 +65,7 @@ A command-line music player application developed as part of the CO3095 Software
 - The application should start running in the terminal within PyCharm.
 - Follow the on-screen instructions to use the music player application.
 
-### Adding Audio Files:
+## Adding Audio Files:
 - The application does not include any audio files by default.
 - If you want to test the application with audio files, you will need to add your own audio files to the `songs` directory located inside the project folder `music_player`.
 - Currently supported audio formats are mp3, wav, flac, m4a and ogg.
