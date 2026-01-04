@@ -1,79 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
-
-# Assuming the function clear_queue is imported from the source module
-# For the purpose of this assignment, we define the signature based on the provided code.
-# In a real scenario: from src.queue_manager import clear_queue
-
-# --- Stubbing the function for Context ---
-def clear_queue(state) -> None:
-    # (The function body provided in the prompt would reside here)
-    # Re-pasting strictly avoided as per prompt instructions to not refactor.
-    # We assume 'clear_queue' is available in the scope.
-    pass
-
-
-# We must paste the function to make the tests runnable for this specific output block
-def clear_queue(state) -> None:
-    if state is None or isinstance(state, (str, int, float, bool)):
-        print("[queue] Error: State is None.")
-        return
-
-    tracks_ref = getattr(state, "tracks", None)
-
-    if tracks_ref is None:
-        print("[queue] Queue is already missing.")
-        try:
-            state.tracks = []
-        except AttributeError:
-            pass
-        return
-
-    if not isinstance(tracks_ref, list):
-        try:
-            state.tracks = list(tracks_ref)
-            tracks_ref = state.tracks
-        except:
-            print("[queue] Queue corrupted (invalid type).")
-            state.tracks = []
-            return
-
-    if not tracks_ref:
-        print("[queue] Queue is already empty.")
-        return
-
-    # Mocking the decoupled helper as it's outside the unit scope
-    try:
-        _ensure_queue_decoupled(state)
-    except NameError:
-        pass
-
-    current = None
-    current_index = getattr(state, "current_index", 0)
-    if current_index is None: current_index = 0
-    if not isinstance(current_index, int): current_index = 0
-
-    if 0 <= current_index < len(tracks_ref):
-        current = tracks_ref[current_index]
-
-    if current:
-        if not hasattr(current, "display_name"):
-            print("[queue] Warning: Current track data seems corrupted.")
-
-        state.tracks = [current]
-        state.current_index = 0
-        print("[queue] Queue cleared (current song retained).")
-    else:
-        state.tracks = []
-        state.current_index = 0
-        print("[queue] Queue completely cleared.")
-
-    if len(state.tracks) > 1:
-        print("[queue] Error: Queue failed to clear.")
-
-    if not getattr(state, "is_playing", False) and not getattr(state, "is_paused", False):
-        print("[queue] (Player is stopped)")
+from music_player.player_queue import clear_queue  # Import the real function
 
 
 class TestSymbolicExecution(unittest.TestCase):
@@ -109,7 +36,6 @@ class TestSymbolicExecution(unittest.TestCase):
             pass
 
         s1 = State()
-        # S2 is implicitly None via getattr
         with patch('builtins.print') as mocked_print:
             clear_queue(s1)
             mocked_print.assert_called_with("[queue] Queue is already missing.")
@@ -119,10 +45,9 @@ class TestSymbolicExecution(unittest.TestCase):
         """PC_3: S1 AND S2 (!List) AND Conversion Fail"""
 
         class State:
-            tracks = 123  # Int is not iterable, list(123) raises TypeError
+            tracks = 123  # Not iterable, list() conversion fails
 
         s1 = State()
-
         with patch('builtins.print') as mocked_print:
             clear_queue(s1)
             mocked_print.assert_called_with("[queue] Queue corrupted (invalid type).")
@@ -135,7 +60,6 @@ class TestSymbolicExecution(unittest.TestCase):
             tracks = []
 
         s1 = State()
-
         with patch('builtins.print') as mocked_print:
             clear_queue(s1)
             mocked_print.assert_called_with("[queue] Queue is already empty.")
@@ -181,5 +105,9 @@ class TestSymbolicExecution(unittest.TestCase):
         s1 = State()
         with patch('builtins.print') as mocked_print:
             clear_queue(s1)
-            # Verify the last print call was the stopped message
+            # Verify the stopped message was printed
             mocked_print.assert_any_call("[queue] (Player is stopped)")
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,33 +1,16 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.player_queue import toggle_shuffle
 
 # Dependency injection for context
 class PlayerState:
     pass
 
-
 class TestConcolicIntegration(unittest.TestCase):
-    """
-    White-Box Testing Suite based on Concolic Analysis (FILE 2).
-    This suite simulates the iterative generation of inputs derived from constraint flipping.
-
-    Test Results Table:
-    | Iteration | Input Config | Path Logic Checked | Status |
-    |-----------|--------------|--------------------|--------|
-    | Iter_1 | S1=None | Initial concrete seed failure | PASS |
-    | Iter_2 | S1=Obj (No Tracks) | Derived from flipping 'S1 is None' | PASS |
-    | Iter_3 | S2=0 (Empty) | Derived from flipping 'hasattr' | PASS |
-    | Iter_4 | S2=1 (Single) | Derived from flipping 'S2 == 0' | PASS |
-    | Iter_5 | S4=3 (OOB) | Derived from flipping 'S2 == 1' | PASS |
-    | Iter_6 | S3=True (Toggle Off) | Derived from flipping 'S4 < S2' | PASS |
-    | Iter_7 | S5='one' | Derived from flipping 'NOT S3' | PASS |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
-        self.mock_get_tracks = patch('__main__._get_tracks_safe').start()
+        # Patch the helper in its defining module, not __main__
+        self.mock_get_tracks = patch('music_player.player_queue._get_tracks_safe').start()
         self.mock_print = patch('builtins.print').start()
 
     def tearDown(self):

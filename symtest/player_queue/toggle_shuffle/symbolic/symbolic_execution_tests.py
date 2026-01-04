@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
+from music_player.player_queue import toggle_shuffle
+from music_player.player_queue import PlayerState
+from music_player.player_queue import _get_tracks_safe
 
 # Note: In a real environment, the function would be imported from the source module.
 # For this suite, we assume the function provided is available in the context.
@@ -30,7 +32,7 @@ class TestSymbolicExecution(unittest.TestCase):
     """
 
     def setUp(self):
-        self.mock_get_tracks = patch('__main__._get_tracks_safe').start()
+        self.mock_get_tracks = patch('music_player.player_queue._get_tracks_safe').start()
         # Mock print to verify console output logic
         self.mock_print = patch('builtins.print').start()
 

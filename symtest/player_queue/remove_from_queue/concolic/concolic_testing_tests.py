@@ -1,58 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
-
-# RE-INJECTING FUNCTION FOR INDEPENDENT FILE EXECUTION CONTEXT
-# (Identical to symbolic file, ensuring standalone validity)
-def remove_from_queue(state, query: str) -> None:
-    if state is None or isinstance(state, (str, int, float, bool)): return
-    if not hasattr(state, "tracks") or not isinstance(state.tracks, list):
-        print("[queue] Queue is empty.")
-        return
-    tracks = state.tracks
-    if not tracks:
-        print("[queue] Queue is empty.")
-        return
-    if not query or not isinstance(query, str):
-        print("[queue] Usage: /q.remove <index|name>")
-        return
-
-    # Mocking hook
-    if hasattr(state, "_ensure_queue_decoupled_called"):
-        state._ensure_queue_decoupled_called = True
-
-    if query.isdigit():
-        try:
-            idx = int(query) - 1
-            if 0 <= idx < len(tracks):
-                removed = tracks.pop(idx)
-                current_index = getattr(state, "current_index", 0)
-                if current_index is None: current_index = 0
-                if idx < current_index:
-                    state.current_index = current_index - 1
-                name = getattr(removed, "display_name", "Unknown")
-                print(f"[queue] Removed '{name}' from queue.")
-                return
-            else:
-                print("[queue] Index out of range.")
-                return
-        except ValueError:
-            print("[queue] Error parsing index.")
-            return
-
-    query_lower = query.lower()
-    for i, t in enumerate(tracks):
-        if t is None: continue
-        if not hasattr(t, "display_name"): continue
-        if query_lower in t.display_name.lower():
-            removed = tracks.pop(i)
-            current_index = getattr(state, "current_index", 0)
-            if current_index is None: current_index = 0
-            if i < current_index:
-                state.current_index = current_index - 1
-            print(f"[queue] Removed '{removed.display_name}' from queue.")
-            return
-    print(f"[queue] '{query}' not found in current queue.")
+from music_player.player_queue import remove_from_queue
 
 
 class TestConcolicExecution(unittest.TestCase):

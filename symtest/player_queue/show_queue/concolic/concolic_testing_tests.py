@@ -2,7 +2,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 from io import StringIO
 import sys
-
+from music_player.player_queue import show_queue
+from music_player.player_queue import _get_tracks_safe
 
 # Assumption: show_queue is available in the namespace.
 
@@ -38,7 +39,7 @@ class TestConcolicExecution(unittest.TestCase):
         show_queue(None)
         self.assertEqual(self.captured_output.getvalue(), "")
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iteration_2_boundary_flip(self, mock_get_tracks):
         """
         Iteration 2: Flip S1 validity. New constraint S3 >= Len(S2).
@@ -53,7 +54,7 @@ class TestConcolicExecution(unittest.TestCase):
         show_queue(state)
         self.assertIn("(End of queue)", self.captured_output.getvalue())
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iteration_3_playing_flip(self, mock_get_tracks):
         """
         Iteration 3: Flip S3 constraint (S3 < Len(S2)).
@@ -72,7 +73,7 @@ class TestConcolicExecution(unittest.TestCase):
         show_queue(state)
         self.assertIn("▶", self.captured_output.getvalue())
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iteration_4_paused_flip(self, mock_get_tracks):
         """
         Iteration 4: Flip S4 constraint (S4 False).
@@ -91,7 +92,7 @@ class TestConcolicExecution(unittest.TestCase):
         show_queue(state)
         self.assertIn("‖", self.captured_output.getvalue())
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_iteration_5_shuffle_flip(self, mock_get_tracks):
         """
         Iteration 5: Flip S5 constraint (S5 False).

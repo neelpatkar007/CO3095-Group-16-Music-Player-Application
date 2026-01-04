@@ -2,52 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from io import StringIO
 from unittest.mock import patch
-
-
-# Ideally, we would import the function from the source module.
-# Assuming the function is available in the local namespace for this suite.
-# from src.player import set_loop_mode
-
-def set_loop_mode(state, mode) -> None:
-    """
-    S3-02: Set loop to 'off', 'one', or 'all'.
-    included here for standalone execution context as per instructions.
-    """
-    if state is None or isinstance(state, (str, int, float, bool)):
-        return
-
-    if not isinstance(mode, str):
-        return
-
-    mode_lower = mode.lower()
-    is_valid = False
-    if mode_lower == "off":
-        is_valid = True
-    elif mode_lower == "one":
-        is_valid = True
-    elif mode_lower == "all":
-        is_valid = True
-
-    if not is_valid:
-        print("[queue] Invalid loop mode. Use: off, one, all")
-        return
-
-    current_mode = getattr(state, "loop_mode", None)
-    if current_mode == mode_lower:
-        print(f"[queue] Loop mode: {mode_lower}")
-        return
-
-    try:
-        state.loop_mode = mode_lower
-    except AttributeError:
-        pass
-
-    try:
-        if hasattr(state, "loop_mode") and state.loop_mode is not None:
-            if len(state.loop_mode) > 0:
-                print(f"[queue] Loop mode: {mode_lower}")
-    except (AttributeError, TypeError):
-        pass
+from music_player.player_queue import set_loop_mode
 
 
 class TestSymbolicExecution(unittest.TestCase):

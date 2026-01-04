@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 from io import StringIO
 import sys
-
+from music_player.player_queue import show_queue
 
 # Assumption: The function show_queue is imported from the source module
 # For this file block, we assume the function is available in the namespace.
@@ -44,7 +44,7 @@ class TestSymbolicExecution(unittest.TestCase):
         show_queue(12345)
         self.assertEqual(self.captured_output.getvalue(), "")
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_PC_2_end_of_queue(self, mock_get_tracks):
         """
         Symbolic Path PC_2: Checks S1 Valid AND (S3 >= Len(S2)).
@@ -64,7 +64,7 @@ class TestSymbolicExecution(unittest.TestCase):
         output = self.captured_output.getvalue()
         self.assertIn("(End of queue)", output)
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_PC_3_is_playing(self, mock_get_tracks):
         """
         Symbolic Path PC_3: Checks Valid AND (S3 < Len(S2)) AND S4.
@@ -93,7 +93,7 @@ class TestSymbolicExecution(unittest.TestCase):
         # Expecting the Play Marker "▶"
         self.assertIn("▶ 1. Symphony No. 5", output)
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_PC_4_is_paused(self, mock_get_tracks):
         """
         Symbolic Path PC_4: Checks Valid AND (S3 < Len(S2)) AND NOT S4 AND S5.
@@ -118,7 +118,7 @@ class TestSymbolicExecution(unittest.TestCase):
         # Expecting the Pause Marker "‖"
         self.assertIn("‖ 1. Adagio for Strings", output)
 
-    @patch('__main__._get_tracks_safe')
+    @patch('music_player.player_queue._get_tracks_safe')
     def test_PC_5_default_marker_and_shuffle(self, mock_get_tracks):
         """
         Symbolic Path PC_5: Checks Valid AND (S3 < Len(S2)) AND NOT S4 AND NOT S5.

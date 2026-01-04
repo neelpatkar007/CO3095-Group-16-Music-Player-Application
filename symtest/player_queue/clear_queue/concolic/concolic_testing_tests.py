@@ -1,55 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-
-
-# Re-define function for context (Standard practice in single-file submissions)
-def clear_queue(state) -> None:
-    if state is None or isinstance(state, (str, int, float, bool)):
-        print("[queue] Error: State is None.")
-        return
-    tracks_ref = getattr(state, "tracks", None)
-    if tracks_ref is None:
-        print("[queue] Queue is already missing.")
-        try:
-            state.tracks = []
-        except AttributeError:
-            pass
-        return
-    if not isinstance(tracks_ref, list):
-        try:
-            state.tracks = list(tracks_ref)
-            tracks_ref = state.tracks
-        except:
-            print("[queue] Queue corrupted (invalid type).")
-            state.tracks = []
-            return
-    if not tracks_ref:
-        print("[queue] Queue is already empty.")
-        return
-    try:
-        _ensure_queue_decoupled(state)
-    except NameError:
-        pass
-    current = None
-    current_index = getattr(state, "current_index", 0)
-    if current_index is None: current_index = 0
-    if not isinstance(current_index, int): current_index = 0
-    if 0 <= current_index < len(tracks_ref):
-        current = tracks_ref[current_index]
-    if current:
-        if not hasattr(current, "display_name"):
-            print("[queue] Warning: Current track data seems corrupted.")
-        state.tracks = [current]
-        state.current_index = 0
-        print("[queue] Queue cleared (current song retained).")
-    else:
-        state.tracks = []
-        state.current_index = 0
-        print("[queue] Queue completely cleared.")
-    if len(state.tracks) > 1:
-        print("[queue] Error: Queue failed to clear.")
-    if not getattr(state, "is_playing", False) and not getattr(state, "is_paused", False):
-        print("[queue] (Player is stopped)")
+from music_player.player_queue import clear_queue  # Import the real function
 
 
 class TestConcolicExecution(unittest.TestCase):
@@ -80,7 +31,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter2_seed_missing(self):
         """Iteration 2: Seed S1 = Object, S2 = None"""
-
         class ConcolicState:
             pass  # No tracks attr
 
@@ -93,7 +43,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter3_seed_bad_type(self):
         """Iteration 3: Seed S1 = Obj, S2 = Unconvertible (int)"""
-
         class ConcolicState:
             tracks = 9999
 
@@ -105,7 +54,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter4_seed_empty(self):
         """Iteration 4: Seed S1 = Obj, S2 = [] (Converted/Explicit)"""
-
         class ConcolicState:
             tracks = []
 
@@ -117,7 +65,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter5_seed_valid_retain(self):
         """Iteration 5: Seed S1 = Obj, S2 = [T], S3 = 0 (Constraint: Index Valid)"""
-
         class ConcolicState:
             tracks = [self.track_a]
             current_index = 0
@@ -132,7 +79,6 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iter6_seed_out_of_bounds(self):
         """Iteration 6: Seed S1 = Obj, S2 = [T], S3 = 99 (Constraint: Index Invalid)"""
-
         class ConcolicState:
             tracks = [self.track_a]
             current_index = 99
@@ -144,3 +90,7 @@ class TestConcolicExecution(unittest.TestCase):
             clear_queue(seed_s1)
             mock_p.assert_called_with("[queue] Queue completely cleared.")
             self.assertEqual(seed_s1.tracks, [])
+
+
+if __name__ == '__main__':
+    unittest.main()
