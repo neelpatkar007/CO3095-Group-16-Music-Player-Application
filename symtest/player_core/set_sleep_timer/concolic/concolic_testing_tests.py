@@ -1,69 +1,15 @@
 import unittest
 import time
 from unittest.mock import MagicMock
+import sys
+from pathlib import Path
 
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-# Re-defining dependencies to ensure strict file isolation as per instructions
-class PlayerState:
-    def __init__(self):
-        self.audio_engine = MagicMock()
-        self.sleep_deadline = None
-        self.is_playing = True
-
-
-def set_sleep_timer(state: PlayerState, minutes: float) -> None:
-    # (Exact copy of function required for self-contained execution context)
-    if not isinstance(state, PlayerState):
-        print("[core] Error: State is None.")
-        return
-    if state is None:
-        print("[core] Error: State is None.")
-        return
-    if not hasattr(state, "audio_engine") or state.audio_engine is None:
-        print("[core] Error: Engine unavailable.")
-        return
-    if not isinstance(minutes, (int, float)):
-        print("[core] Error: Numeric input required.")
-        return
-    if not hasattr(state, "sleep_deadline"):
-        state.sleep_deadline = None
-    if minutes <= 0:
-        if state.sleep_deadline is not None:
-            state.sleep_deadline = None
-            print("[core] Sleep timer cancelled.")
-        else:
-            print("[core] No active sleep timer to cancel.")
-        return
-    if minutes >= 1440:
-        if minutes > 1440:
-            print("[core] Error: Max 24 hours.")
-            return
-        print("[core] Timer: 24-hour max limit selected.")
-    if state.sleep_deadline is not None:
-        remaining = (state.sleep_deadline - time.time()) / 60
-        if remaining > 0:
-            if remaining > 60:
-                print(f"[core] Replacing {remaining / 60:.1f}h timer.")
-            else:
-                print(f"[core] Replacing {remaining:.1f}m timer.")
-    try:
-        deadline = time.time() + (minutes * 60)
-        if deadline <= time.time():
-            print("[core] Error: Time calculation error.")
-            return
-        state.sleep_deadline = deadline
-        if not state.is_playing:
-            print("[core] Warning: Timer set but nothing is currently playing.")
-        if minutes >= 60:
-            print(f"[core] Sleep timer set for {minutes / 60:.1f} hours.")
-        elif minutes < 1:
-            print(f"[core] Sleep timer set for {minutes * 60:.0f} seconds.")
-        else:
-            print(f"[core] Sleep timer set for {minutes} minutes.")
-    except (ValueError, TypeError) as e:
-        print(f"[core] Input error: {e}")
-    except Exception as e:
-        print(f"[core] Unexpected error: {e}")
+from music_player.player_core import set_sleep_timer
+from music_player.player_state import PlayerState
 
 
 class TestConcolicGenerations(unittest.TestCase):
@@ -84,7 +30,10 @@ class TestConcolicGenerations(unittest.TestCase):
     """
 
     def setUp(self):
-        self.s1 = PlayerState()
+        mock_audio_engine = MagicMock()
+        mock_tracks = []
+        self.s1 = PlayerState(tracks=mock_tracks, audio_engine=mock_audio_engine)
+        self.s1.is_playing = True
 
     def test_iteration_1_invalid_type_flip(self):
         """

@@ -1,6 +1,13 @@
 import unittest
 from unittest.mock import MagicMock
+import sys
+from pathlib import Path
 
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from music_player.player_core import stop
 
 # -------------------------------------------------------------------------
 # Test Suite: Symbolic Execution for 'stop' function
@@ -18,30 +25,14 @@ from unittest.mock import MagicMock
 # -------------------------------------------------------------------------
 
 class PlayerState:
-    """Mock implementation of the state object for white-box testing."""
-
-    def __init__(self, is_playing: bool, is_paused: bool):
+    """Mock implementation of the state object for concolic testing."""
+    def __init__(self, is_playing: bool = True, is_paused: bool = False):
         self.is_playing = is_playing
         self.is_paused = is_paused
         self.audio_engine = MagicMock()
-        self.position_seconds = 100.0  # Arbitrary non-zero start
+        self.sleep_deadline = None
+        self.position_seconds = 100.0
 
-
-def stop(state: PlayerState) -> None:
-    """
-    Stop playback and reset position to 0.
-    """
-    if not state.is_playing and not state.is_paused:
-        print("[core] Nothing is playing.")
-        return
-
-    state.audio_engine.stop()
-    state.is_playing = False
-    state.is_paused = False
-
-    # Reset position so next play starts from beginning
-    state.position_seconds = 0.0
-    print("[core] Stopped.")
 
 
 class TestSymbolicExecution(unittest.TestCase):
