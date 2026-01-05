@@ -2,6 +2,7 @@ import unittest
 import datetime
 from io import StringIO
 import sys
+from music_player.player_time import set_alarm
 
 # Mock PlayerState as required for the concolic suite
 class PlayerState:

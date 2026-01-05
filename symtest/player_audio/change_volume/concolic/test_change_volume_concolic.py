@@ -2,34 +2,9 @@ import unittest
 from unittest.mock import MagicMock
 import io
 import sys
-from pathlib import Path
 from music_player.player_audio import change_volume
 
-# Add project root to path
-project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-
-
 class TestConcolicDriven(unittest.TestCase):
-    """
-    Concolic-Driven Test Suite.
-    This suite uses the concrete seeds derived from the Flip Table in FILE 2.
-
-    Test Results Table:
-    | Iteration | Seed S1 | Seed S2 | Expected Path | Status |
-    | :--- | :--- | :--- | :--- | :--- |
-    | 1 | None | "50" | PC_1 | PASS |
-    | 2 | Incomplete Obj | "50" | PC_2 | PASS |
-    | 3 | Valid Obj | "" | PC_3 | PASS |
-    | 4 | Valid Obj | [] | PC_4 | PASS |
-    | 5 | Valid Obj | "abc" | PC_5 | PASS |
-    | 6 | Valid Obj | "-1" | PC_6 | PASS |
-    | 7 | Muted Obj | "50" | PC_7 | PASS |
-    | 8 | Unmuted Obj | "50" | PC_8 | PASS |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         self.held_output = io.StringIO()
@@ -39,15 +14,12 @@ class TestConcolicDriven(unittest.TestCase):
         sys.stdout = sys.__stdout__
 
     def test_iteration_1_null_state(self):
-        # Derived from Flip Table Iteration 1
         S1 = None
         S2 = "50"
         change_volume(S1, S2)
         self.assertEqual(self.held_output.getvalue(), "")
 
     def test_iteration_2_missing_structure(self):
-        # Derived from Flip Table Iteration 2
-        # Negating: S1 is None -> S1 is Object (but missing attributes)
         class EmptyState: pass
 
         S1 = EmptyState()
@@ -56,8 +28,6 @@ class TestConcolicDriven(unittest.TestCase):
         self.assertEqual(self.held_output.getvalue(), "")
 
     def test_iteration_3_empty_input(self):
-        # Derived from Flip Table Iteration 3
-        # Negating: hasattr -> True, but S2 is empty
         class State:
             volume = 30
             audio_engine = None
@@ -68,8 +38,6 @@ class TestConcolicDriven(unittest.TestCase):
         self.assertIn("Current Volume: 30%", self.held_output.getvalue())
 
     def test_iteration_4_invalid_type_structure(self):
-        # Derived from Flip Table Iteration 4
-        # Negating: S2 is empty -> S2 is list (invalid type)
         class State:
             volume = 30
             audio_engine = None
@@ -80,8 +48,6 @@ class TestConcolicDriven(unittest.TestCase):
         self.assertEqual(self.held_output.getvalue(), "")
 
     def test_iteration_5_conversion_error(self):
-        # Derived from Flip Table Iteration 5
-        # Negating: Type check -> Valid type, but non-numeric content
         class State:
             volume = 30
             audio_engine = None
@@ -92,52 +58,43 @@ class TestConcolicDriven(unittest.TestCase):
         self.assertIn("Error: Volume must be a number", self.held_output.getvalue())
 
     def test_iteration_6_boundary_violation(self):
-        # Derived from Flip Table Iteration 6
-        # Negating: int(S2) throws -> int(S2) works, but out of bounds
         class State:
             volume = 30
             audio_engine = None
 
         S1 = State()
-        S2 = "-10"  # Lower bound violation
+        S2 = "-10"
         change_volume(S1, S2)
         self.assertIn("Error: Volume must be between 0 and 100", self.held_output.getvalue())
 
     def test_iteration_7_deep_state_mutation(self):
-        # Derived from Flip Table Iteration 7
-        # Negating: Range check -> Valid range, exploring is_muted path
         mock_eng = MagicMock()
 
         class State:
             volume = 30
             audio_engine = mock_eng
-            is_muted = True  # Forces PC_7
+            is_muted = True
             saved_volume = 30
 
         S1 = State()
         S2 = "75"
         change_volume(S1, S2)
 
-        # Validation of the deep path execution
         self.assertEqual(S1.is_muted, False)
         self.assertIn("Volume set to 75%", self.held_output.getvalue())
 
     def test_iteration_8_standard_success(self):
-        # Derived from Flip Table Iteration 8
-        # Negating: is_muted True -> is_muted False (Standard PC_8)
         mock_eng = MagicMock()
 
         class State:
             volume = 30
             audio_engine = mock_eng
-            is_muted = False  # Forces PC_8
+            is_muted = False
             saved_volume = None
 
         S1 = State()
         S2 = "25"
         change_volume(S1, S2)
-
-        # Validation that unmute logic was SKIPPED but volume was set
         mock_eng.set_muted.assert_not_called()
         mock_eng.set_volume.assert_called_with(25)
         self.assertIn("Volume set to 25%", self.held_output.getvalue())

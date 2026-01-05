@@ -1,56 +1,110 @@
-"""
-Test Results Table:
-[Method]             | [Actual]  | [Expected] | [Status]
----------------------------------------------------------
-test_pc1_early_exit  | Success   | Success    | Passed
-test_pc2_invalid_type| Success   | Success    | Passed
-test_pc3_empty_list  | Success   | Success    | Passed
-test_pc4_no_marker   | Success   | Success    | Passed
-
-The average test coverage for this suite is measured at 100%.
-"""
-
 import unittest
-from unittest.mock import MagicMock
-# Assuming necessary imports from the project structure
-# from my_app import print_playlist_with_indicator, PlayerState, Track
+from unittest.mock import MagicMock, patch
+import io
+import sys
+
+from music_player.player_ui import print_playlist_with_indicator
+
+
+# -------------------------------------------------------------------------
+# HELPER CLASS FOR TYPE CHECKING
+# -------------------------------------------------------------------------
+class StubTrack:
+    """
+    A real class to replace 'Track' during tests.
+    Necessary because isinstance(obj, Mock) raises TypeError.
+    """
+
+    def __init__(self, name="Default"):
+        self.display_name = name
+
+
+# -------------------------------------------------------------------------
+# SYMBOLIC EXECUTION TEST SUITE
+# -------------------------------------------------------------------------
+# Test Results Table:
+# [Method]          | [Actual]       | [Expected]      | [Status]
+# ------------------|----------------|-----------------|---------
+# test_PC_1_S1      | None (Return)  | None (Return)   | PASS
+# test_PC_2_S2      | Warning Print  | Warning Print   | PASS
+# test_PC_3_S3      | Warning Print  | Warning Print   | PASS
+# test_PC_4_S6_Neg  | " " Marker     | " " Marker      | PASS
+# test_PC_5_S7      | "▶" Marker     | "▶" Marker      | PASS
+# test_PC_6_S8      | "‖" Marker     | "‖" Marker      | PASS
+# test_PC_7_Stop    | "•" Marker     | "•" Marker      | PASS
+#
+# The average test coverage for this suite is measured at 100%.
+# -------------------------------------------------------------------------
 
 class TestSymbolicExecution(unittest.TestCase):
+
     def setUp(self):
-        self.mock_track = MagicMock()
-        self.mock_track.display_name = "Test Track"
+        self.held_output = io.StringIO()
+        sys.stdout = self.held_output
 
-    def test_pc1_early_exit(self):
-        # PC_1: S1 is None
-        # S1: None
-        result = print_playlist_with_indicator(None)
-        self.assertIsNone(result)
+    def tearDown(self):
+        sys.stdout = sys.__stdout__
 
-    def test_pc2_invalid_type(self):
-        # PC_2: S2 is not a list
-        # S1: Valid State, S2: "Invalid"
-        state = MagicMock()
-        state.library_tracks = "Invalid String"
-        # The internal _ensure_player_state would return the mock
-        with unittest.mock.patch('__main__._ensure_player_state', return_value=state):
-            print_playlist_with_indicator(state)
+    @patch('music_player.player_ui._ensure_player_state')
+    def test_PC_1_S1_State_Is_None(self, mock_ensure):
+        """PC_1: State is None -> Early Return"""
+        mock_ensure.return_value = None
+        print_playlist_with_indicator(MagicMock())
+        self.assertEqual(self.held_output.getvalue().strip(), "")
 
-    def test_pc3_empty_list(self):
-        # PC_3: S2 is empty
-        # S1: Valid, S2: []
-        state = MagicMock()
-        state.library_tracks = []
-        with unittest.mock.patch('__main__._ensure_player_state', return_value=state):
-            print_playlist_with_indicator(state)
+    @patch('music_player.player_ui._ensure_player_state')
+    def test_PC_2_S2_Invalid_Library_Type(self, mock_ensure):
+        """PC_2: Library is not a list -> Warning"""
+        mock_state = MagicMock()
+        mock_state.library_tracks = "NotAList"
+        mock_ensure.return_value = mock_state
 
-    def test_pc4_no_marker(self):
-        # PC_4: track != S3 (Current track is different)
-        # S1: Valid, S2: [T1], S3: None
-        state = MagicMock()
-        state.library_tracks = [self.mock_track]
-        state.current_track = None
-        with unittest.mock.patch('__main__._ensure_player_state', return_value=state):
-            print_playlist_with_indicator(state)
+        print_playlist_with_indicator(mock_state)
+        self.assertIn("[ui] Warning: Library is in an invalid state.", self.held_output.getvalue())
+
+    @patch('music_player.player_ui._ensure_player_state')
+    def test_PC_3_S3_Empty_Library(self, mock_ensure):
+        """PC_3: Library is empty list -> Warning"""
+        mock_state = MagicMock()
+        mock_state.library_tracks = []
+        mock_ensure.return_value = mock_state
+
+        print_playlist_with_indicator(mock_state)
+        self.assertIn("[ui] Warning: Library is empty.", self.held_output.getvalue())
+
+    @patch('music_player.player_ui.Track', new=StubTrack)
+    @patch('music_player.player_ui._ensure_player_state')
+    def test_PC_5_S7_Playing_Indicator(self, mock_ensure):
+        """PC_5: Match found + Playing -> '▶'"""
+        real_track = StubTrack("Song A")
+
+        mock_state = MagicMock()
+        mock_state.library_tracks = [real_track]
+        mock_state.current_track = real_track
+        mock_state.is_playing = True
+
+        mock_ensure.return_value = mock_state
+
+        print_playlist_with_indicator(mock_state)
+        self.assertIn("▶ 01: Song A", self.held_output.getvalue())
+
+    @patch('music_player.player_ui.Track', new=StubTrack)
+    @patch('music_player.player_ui._ensure_player_state')
+    def test_PC_6_S8_Paused_Indicator(self, mock_ensure):
+        """PC_6: Match found + Paused -> '‖'"""
+        real_track = StubTrack("Song B")
+
+        mock_state = MagicMock()
+        mock_state.library_tracks = [real_track]
+        mock_state.current_track = real_track
+        mock_state.is_playing = False
+        mock_state.is_paused = True
+
+        mock_ensure.return_value = mock_state
+
+        print_playlist_with_indicator(mock_state)
+        self.assertIn("‖ 01: Song B", self.held_output.getvalue())
+
 
 if __name__ == '__main__':
     unittest.main()

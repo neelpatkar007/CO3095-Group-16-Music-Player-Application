@@ -1,16 +1,7 @@
 import unittest
 from typing import Any
-
-
-# Mocking PlayerState for the purpose of the test suite
-class PlayerState:
-    pass
-
-
-def _ensure_player_state(state: Any, context: str) -> PlayerState | None:
-    if not isinstance(state, PlayerState):
-        return None
-    return state
+from music_player.player_ui import _ensure_player_state
+from music_player.player_state import PlayerState
 
 
 """
@@ -38,11 +29,12 @@ class TestSymbolicExecution(unittest.TestCase):
     def test_pc_2_acceptance(self):
         """Validates PC_2: isinstance S1, PlayerState"""
         # S1 is a PlayerState instance, S2 is a string
-        s1_symbolic = PlayerState()
+        # Provide dummy constructor arguments
+        s1_symbolic = PlayerState(tracks=[], audio_engine=None)
         s2_symbolic = "ui_context"
 
         result = _ensure_player_state(s1_symbolic, s2_symbolic)
-        self.assertIsInstance(result, PlayerState, "Logic should return the object for PlayerState inputs (PC_2).")
+        self.assertIs(result, s1_symbolic, "Logic should return the object for PlayerState inputs (PC_2).")
 
 
 if __name__ == '__main__':

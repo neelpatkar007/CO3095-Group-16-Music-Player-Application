@@ -5,13 +5,7 @@ from music_player.player_state import PlayerState
 
 
 class TestConcolicGeneration(unittest.TestCase):
-    """
-    This suite reflects the systematic input generation documented in the
-    Concolic Analysis Iteration Table.
-    """
-
     def create_symbolic_state(self):
-        """Helper to create a fresh base state for modification."""
         track = MagicMock()
         track.path = "/dummy"
         track.display_name = "Dummy Track"
@@ -36,7 +30,7 @@ class TestConcolicGeneration(unittest.TestCase):
 
     def test_iteration_4_flip_engine_method(self):
         s1 = self.create_symbolic_state()
-        s1.audio_engine = Mock(spec=[])  # No play method
+        s1.audio_engine = Mock(spec=[])
         play(s1)
 
     def test_iteration_5_flip_track_none(self):
