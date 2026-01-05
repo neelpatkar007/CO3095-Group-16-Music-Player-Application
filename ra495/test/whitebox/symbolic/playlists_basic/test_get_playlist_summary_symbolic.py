@@ -2,32 +2,14 @@ import unittest
 from unittest.mock import Mock
 from music_player.playlists_basic import _get_playlist_summary
 
-# -------------------------------------------------------------------------
-# Test Results Table
-# -------------------------------------------------------------------------
-# | Method                     | Actual | Expected   | Status |
-# |----------------------------|--------|------------|--------|
-# | test_PC_1_empty_list       | (0, 0) | (0, 0.0)   | PASS   |
-# | test_PC_2_invalid_duration | (1, 0) | (1, 0.0)   | PASS   |
-# | test_PC_3_valid_track      | (1, 12)| (1, 120.0) | PASS   |
-#
-# The average test coverage for this suite is measured at 100%.
-# -------------------------------------------------------------------------
-
 class Playlist:
-    """Mock Playlist class structure for Symbolic S1 variable."""
 
     def __init__(self, tracks):
         self.tracks = tracks
 
 
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    Symbolic Execution Test Suite.
-    Focus: Verifying logic based on the Static Control Flow Graph paths (PC_1, PC_2, PC_3).
-    """
 
-    # Connect the function under test
     _get_playlist_summary_target = staticmethod(_get_playlist_summary)
 
     def test_PC_1_empty_list(self):
