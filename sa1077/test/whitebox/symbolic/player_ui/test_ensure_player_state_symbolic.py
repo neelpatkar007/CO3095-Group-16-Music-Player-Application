@@ -4,22 +4,9 @@ from music_player.player_ui import _ensure_player_state
 from music_player.player_state import PlayerState
 
 
-"""
-Test Results Table
-[Method]             | [Actual]     | [Expected]   | [Status]
--------------------------------------------------------------
-test_pc_1_rejection  | None         | None         | PASSED
-test_pc_2_acceptance | PlayerState  | PlayerState  | PASSED
-
-The average test coverage for this suite is measured at 100%.
-"""
-
-
 class TestSymbolicExecution(unittest.TestCase):
 
     def test_pc_1_rejection(self):
-        """Validates PC_1: NOT isinstance S1, PlayerState"""
-        # S1 is an integer, S2 is a string
         s1_symbolic = 404
         s2_symbolic = "network_context"
 
@@ -27,9 +14,6 @@ class TestSymbolicExecution(unittest.TestCase):
         self.assertIsNone(result, "Logic should return None for non-PlayerState inputs (PC_1).")
 
     def test_pc_2_acceptance(self):
-        """Validates PC_2: isinstance S1, PlayerState"""
-        # S1 is a PlayerState instance, S2 is a string
-        # Provide dummy constructor arguments
         s1_symbolic = PlayerState(tracks=[], audio_engine=None)
         s2_symbolic = "ui_context"
 

@@ -7,25 +7,6 @@ from music_player.player_ui import print_now_playing
 
 
 class TestConcolicTesting(unittest.TestCase):
-    """
-    White-box concolic testing suite derived from DART methodology.
-
-    -------------------------------------------------------
-    | Method      | Actual | Expected | Status            |
-    |-------------|--------|----------|-------------------|
-    | test_iter_1 | Return | Return   | PASS              |
-    | test_iter_2 | Print  | Print    | PASS              |
-    | test_iter_3 | Print  | Print    | PASS              |
-    | test_iter_4 | Print  | Print    | PASS              |
-    | test_iter_5 | Print  | Print    | PASS              |
-    | test_iter_6 | Print  | Print    | PASS              |
-    | test_iter_7 | Print  | Print    | PASS              |
-    | test_iter_8 | Print  | Print    | PASS              |
-    | test_edge_A | Print  | Print    | PASS (Data flow)  |
-    | test_edge_B | Print  | Print    | PASS (Data flow)  |
-    -------------------------------------------------------
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         self.held, sys.stdout = sys.stdout, StringIO()
@@ -51,13 +32,10 @@ class TestConcolicTesting(unittest.TestCase):
         self.track_patcher.stop()
 
     def test_iterations_structural(self):
-        """Traverses iterative flips for PC_1 through PC_4."""
-        # PC_1
         self.mock_ensure.return_value = None
         print_now_playing(MagicMock())
         self.assertEqual(sys.stdout.getvalue().strip(), "")
 
-        # PC_2
         sys.stdout = StringIO()
         s2 = MagicMock();
         s2.current_track = None
@@ -65,7 +43,6 @@ class TestConcolicTesting(unittest.TestCase):
         print_now_playing(s2)
         self.assertEqual(sys.stdout.getvalue().strip(), "[ui] No track selected.")
 
-        # PC_3
         sys.stdout = StringIO()
         s3 = MagicMock();
         s3.current_track = "Invalid Type"
@@ -74,7 +51,6 @@ class TestConcolicTesting(unittest.TestCase):
         self.assertEqual(sys.stdout.getvalue().strip(), "[ui] Error: Track data corrupted.")
 
     def test_iterations_status(self):
-        """Systematic branch negation for playback status flags (PC_5-PC_8)."""
 
         def run_status(playing, paused):
             sys.stdout = StringIO()
@@ -95,19 +71,16 @@ class TestConcolicTesting(unittest.TestCase):
         self.assertIn("Stopped:", run_status(False, False))  # PC_8
 
     def test_edge_cases_data_flow(self):
-        """Tests concolic data-flow constraints for duration sanitisation."""
         state = MagicMock()
         track = self.RealTrackClass()
         track.display_name = "Edge"
         state.current_track = track
         self.mock_ensure.return_value = state
 
-        # Case A: Duration is None
         track.duration_seconds = None
         print_now_playing(state)
         self.mock_format.assert_any_call(0.0)
 
-        # Case B: Duration is Negative
         track.duration_seconds = -1.0
         print_now_playing(state)
         self.mock_format.assert_any_call(0.0)

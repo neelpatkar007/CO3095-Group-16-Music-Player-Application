@@ -22,8 +22,8 @@ class TestConcolicExecution(unittest.TestCase):
 
 
         audio = AudioEngine()
-        audio.playing = True   # S1
-        audio.paused = False   # S2
+        audio.playing = True
+        audio.paused = False
 
         with patch('music_player.audio_backend.HAS_PYGAME', True):
             with patch('music_player.audio_backend.pygame') as mock_pygame:
@@ -39,8 +39,8 @@ class TestConcolicExecution(unittest.TestCase):
 
 
         audio = AudioEngine()
-        audio.playing = True   # S1
-        audio.paused = False   # S2
+        audio.playing = True
+        audio.paused = False
 
         with patch('music_player.audio_backend.HAS_PYGAME', False):
             with patch('builtins.print') as mock_print:
