@@ -1,10 +1,10 @@
 # Symbolic Analysis for `change_volume` Function
 
 ## Symbolic Inputs
-| Variable  | Symbol | Type                         |
-| --------- | ------ | ---------------------------- |
-| state     | S1     | Object (PlayerState) OR None |
-| raw_input | S2     | str OR int OR float OR Any   |
+| Variable    | Symbol  | Type                         |
+|-------------|---------|------------------------------|
+| state       | S1      | Object (PlayerState) OR None |
+| raw_input   | S2      | str OR int OR float OR Any   |
 
 
 ## Path Conditions (PCs)
