@@ -4,29 +4,10 @@ from music_player.audio_backend import AudioEngine
 
 
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    White-box test suite verifying the Symbolic Analysis derived in FILE 1.
-    Focus: Verification of PC_1 (Unconditional Path) using S1.
 
-    Test Results Table:
-    | Method                  | Actual             | Expected           | Status |
-    |-------------------------|--------------------|--------------------|--------|
-    | test_PC_1_unconditional | [audio] SEEK...    | [audio] SEEK...    | PASS   |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def test_PC_1_unconditional(self):
-        """
-        Validates Path Condition 1 (PC_1).
 
-        Symbolic Mapping:
-        S1 (seconds) = 15.0
-
-        Logic:
-        PC_1 entails unconditional execution of the print statement.
-        We verify that S1 is correctly formatted and emitted to stdout.
-        """
         audio = AudioEngine()
         audio.current_path = None
         audio.current_speed = 1.0

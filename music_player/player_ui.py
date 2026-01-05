@@ -153,3 +153,4 @@ def print_playlist_with_indicator(state: PlayerState) -> None:
             marker = " "  # No Indicator
 
         print(f"{marker} {idx + 1:02d}: {track.display_name}")
+

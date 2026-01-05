@@ -1,16 +1,7 @@
 import unittest
 from typing import Any
-
-
-class PlayerState:
-    pass
-
-
-def _ensure_player_state(state: Any, context: str) -> PlayerState | None:
-    if not isinstance(state, PlayerState):
-        return None
-    return state
-
+from music_player.player_ui import _ensure_player_state
+from music_player.player_ui import PlayerState
 
 """
 Test Results Table
@@ -37,13 +28,12 @@ class TestConcolicTesting(unittest.TestCase):
 
     def test_iteration_2_flip(self):
         """Simulates Iteration 2 using the solver-derived input"""
-        # Input derived by negating the PC_1 constraint to satisfy PC_2
-        s1_concrete = PlayerState()
+        s1_concrete = PlayerState(tracks=[], audio_engine=None)
         s2_concrete = "derived_input"
 
         result = _ensure_player_state(s1_concrete, s2_concrete)
-        # This confirms the PC_2 path discovered via systematic constraint flipping
-        self.assertEqual(result, s1_concrete)
+        # The function should return the same object, not None
+        self.assertIs(result, s1_concrete)
 
 
 if __name__ == '__main__':

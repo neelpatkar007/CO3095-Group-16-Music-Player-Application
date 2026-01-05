@@ -1,30 +1,22 @@
 import unittest
 import io
 import sys
-from unittest.mock import patch
-
-# Import the function from your application code
-# Update the module path to wherever print_help is actually defined
 from music_player.player_help import print_help
 
 class TestSymbolicExecution(unittest.TestCase):
 
     def setUp(self):
-        """Redirect stdout to capture print statements for verification."""
         self.held_output = io.StringIO()
         self.original_stdout = sys.stdout
         sys.stdout = self.held_output
 
     def tearDown(self):
-        """Restore stdout."""
         sys.stdout = self.original_stdout
 
     def assertOutputContains(self, substring):
-        """Helper to verify output contains the expected help string."""
         output = self.held_output.getvalue()
         self.assertIn(substring, output)
 
-    # --- PC_1: Null or Empty ---
     def test_PC_1_none(self):
         print_help(None)
         self.assertOutputContains("--- Music Player: Help Menu ---")
@@ -33,7 +25,6 @@ class TestSymbolicExecution(unittest.TestCase):
         print_help("")
         self.assertOutputContains("--- Music Player: Help Menu ---")
 
-    # --- PC_2 to PC_15: Explicit Checks ---
     def test_PC_2_play(self):
         print_help("play")
         self.assertOutputContains("[Help] /play")
@@ -94,7 +85,7 @@ class TestSymbolicExecution(unittest.TestCase):
         print_help("queue")
         self.assertOutputContains("[Help] /queue")
 
-    # --- Representative Tests for Remaining Branches ---
+    # Tests for Remaining Branches
     def test_sprint4_search(self):
         print_help("search")
         self.assertOutputContains("[Help] /search")
@@ -107,11 +98,9 @@ class TestSymbolicExecution(unittest.TestCase):
         print_help("quit")
         self.assertOutputContains("[Help] /quit")
 
-    # --- PC_ELSE: Fallback ---
     def test_PC_ELSE_unknown(self):
         print_help("unknown_command")
         self.assertOutputContains("I couldn't find a command named '/unknown_command'")
-
 
 if __name__ == '__main__':
     unittest.main()

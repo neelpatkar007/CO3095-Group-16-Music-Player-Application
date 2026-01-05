@@ -1,35 +1,12 @@
 import unittest
 from typing import List, Optional
+from music_player.player_time import cancel_alarm
 
 # Mock PlayerState for testing purposes
 class PlayerState:
     def __init__(self, alarms: Optional[List] = None, add_attr: bool = True):
         if add_attr:
             self.scheduled_alarms = alarms
-
-def cancel_alarm(state: PlayerState) -> None:
-    if state is None or not hasattr(state, 'scheduled_alarms'):
-        return
-    if state.scheduled_alarms is None:
-        print("[alarm] No alarms set.")
-        return
-    if not isinstance(state.scheduled_alarms, list):
-        print("[alarm] No alarms set.")
-        return
-    if len(state.scheduled_alarms) == 0:
-        if True:
-            print("[alarm] No alarms set.")
-        return
-    if len(state.scheduled_alarms) > 1 or len(state.scheduled_alarms) == 1:
-        if state.scheduled_alarms is not None:
-            state.scheduled_alarms.clear()
-            if len(state.scheduled_alarms) == 0:
-                print("[alarm] All alarms cancelled.")
-            else:
-                print("[alarm] All alarms cancelled.")
-    else:
-        if not state.scheduled_alarms:
-            print("[alarm] No alarms set.")
 
 class TestSymbolicExecution(unittest.TestCase):
     """

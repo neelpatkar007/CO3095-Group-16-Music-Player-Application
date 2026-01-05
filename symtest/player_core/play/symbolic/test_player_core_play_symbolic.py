@@ -7,14 +7,12 @@ from music_player.player_state import PlayerState
 class TestSymbolicExecution(unittest.TestCase):
 
     def setUp(self):
-        """Setup common mocks to be reused in multiple tests."""
         self.mock_engine = MagicMock()
         self.mock_track = MagicMock()
         self.mock_track.display_name = "Test Track"
         self.mock_track.path = "/music/test.mp3"
 
     def create_state(self, is_playing=False, is_paused=False, track=None):
-        """Helper to create a PlayerState instance with optional track."""
         track_list = [track] if track else []
         state = PlayerState(tracks=track_list, audio_engine=self.mock_engine)
         state.current_index = 0
@@ -39,7 +37,7 @@ class TestSymbolicExecution(unittest.TestCase):
 
     def test_PC_4_engine_no_play(self):
         state = self.create_state(track=self.mock_track)
-        state.audio_engine = Mock(spec=[])  # No play method
+        state.audio_engine = Mock(spec=[])
         play(state)
 
     def test_PC_5_track_none(self):
@@ -47,7 +45,7 @@ class TestSymbolicExecution(unittest.TestCase):
         play(state)
 
     def test_PC_6_track_invalid(self):
-        invalid_track = Mock(spec=[])  # No path attribute
+        invalid_track = Mock(spec=[])
         state = self.create_state(track=invalid_track)
         play(state)
 
