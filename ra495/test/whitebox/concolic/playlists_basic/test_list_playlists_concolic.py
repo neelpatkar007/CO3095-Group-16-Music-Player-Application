@@ -71,12 +71,12 @@ class TestConcolicExecution(unittest.TestCase):
         self.assertIn("Invalid Playlist", self.captured_output.getvalue())
 
     def test_iteration_06_flip_element_validity(self):
-        """Iteration 6: Constraint flipped (S5 valid), Testing Active Logic."""
+        """Iteration 6: Constraint flipped (S5 valid), Testing Active Logic with plural songs."""
         S1 = MagicMock()
         pl = MagicMock()
         pl.name = "Concolic Hits"
         S1.playlists = [pl]
-        S1.active_playlist_index = None  # Concrete value to fail active check
+        S1.active_playlist_index = None  # Inactive
 
         self.mock_summary.return_value = (10, 600)
         self.mock_format.return_value = "10:00"
@@ -84,26 +84,28 @@ class TestConcolicExecution(unittest.TestCase):
         list_playlists(S1)
 
         output = self.captured_output.getvalue()
-        # Expecting no asterisk, plural songs
         self.assertIn("Concolic Hits", output)
         self.assertNotIn("*", output)
         self.assertIn("songs", output)
 
     def test_iteration_07_flip_active_and_plurality(self):
-        """Iteration 7: Constraint flipped (Active=True) and (Count=1)."""
+        """Iteration 7: Constraint flipped (Active=True) and single song."""
         S1 = MagicMock()
         pl = MagicMock()
         pl.name = "Deep Path"
         S1.playlists = [pl]
-        S1.active_playlist_index = 0  # Matches index 0
+        S1.active_playlist_index = 0  # Active playlist
 
-        # Flipped constraint for singular song text
         self.mock_summary.return_value = (1, 120)
         self.mock_format.return_value = "02:00"
+
+        # Clear captured output
+        self.captured_output.truncate(0)
+        self.captured_output.seek(0)
 
         list_playlists(S1)
 
         output = self.captured_output.getvalue()
-        # Expecting asterisk and singular
-        self.assertIn("* Deep Path", output)
+        # Active playlist has asterisk at the end
+        self.assertIn("Deep Path*", output)
         self.assertIn("1 song", output)

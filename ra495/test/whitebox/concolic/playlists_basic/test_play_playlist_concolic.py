@@ -41,9 +41,9 @@ class TestConcolicTesting(unittest.TestCase):
         # Verify adherence to PC_1
         mock_activate.assert_not_called()
 
-    @patch('player_controller._activate_playlist_queue')
-    @patch('player_controller._resolve_playlist')
-    @patch('player_controller._ensure_playlists')
+    @patch('music_player.playlists_basic._activate_playlist_queue')
+    @patch('music_player.playlists_basic._resolve_playlist')
+    @patch('music_player.playlists_basic._ensure_playlists')
     def test_iter_2_PC_2_derived_input_valid_selector(self, mock_ensure, mock_resolve, mock_activate):
         """
         Iteration 2 (derived from Flip):
