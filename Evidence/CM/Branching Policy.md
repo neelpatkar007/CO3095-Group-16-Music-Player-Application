@@ -1,69 +1,56 @@
-# Branching Policy for Music Player Application
+# Branching Policy - Music Player Application
 
-Version: 1.2
-Date: 2025-12-17
+Version: 1.3
+Date: 2026-01-05
 To: All Contributors
 
 
-## 1. Goal
-We need a stricter version control process to meet the CMMI Level 2 - Configuration Management (CM) requirements. This is to ensure that we have a clear and auditable trail for every single line of code that's written.
+## 1. Objective
+The document outlines the version control standard for our group. We are using these rules to meet the requirements of Configuration Management (CM) process area.
+The goal is - if a piece of code exists, we must be able to trace it back to a specific user story and a sprint. 
 
 
-## 2. Branching Strategy
-- Default Branch (main): This should always be stable and deployable as this is our production code.
-- Development Branches: Create a new branch for every single user story or feature or bug fix.
-- Tagging: Semantic versioning used per sprint (e.g., v0.1.0, v0.2.0).
-- Retention Rules: Do not delete any branches after merging as we must keep these as evidence of the process and traceability during the audit.
+## 2. Branch Structure
+- Default Branch (main) - This is the production baseline. And any code in main must work. Must not make any direct commits and all changes must come from a Pull Request. 
+- Development Branches - Create a new branch for every single user story or feature or bug fix. And make sure not to delete the branches after merging as we need them as evidence for the final report and the CMMI audit trail.
 
 
-## 3. Branches Naming Conventions
-Each branch should link to a specific GitHub Issue (user story) for traceability and use the following format:
-The format is: <type>/<sprint-id>-<story-id>-<short-description>
-- Some Examples:
+## 3. Branches Naming Standards
+- Each branch must follow this specific format for consistency and traceability. If a branch is named wrong, then you must close it and start over again.
+- The format is: <type>/<sprint-id>-<story-id>-<short-description>
+- Some examples are:
   - feature/S1-04-volume-control 
   - feature/S3-08-like-songs 
   - bugfix/S1-08-seek-edgecase
 
 
-## 4. Workflow Rules
-1. Start: Must always branch off `main`.
-2. Commit: Commits must be made often. The commit message must start with the ID:
-    - [S1-04] Implement volume clamp (0–100)
-    - [S2-09] Fix scanner duplicate handling
-3. Pull Request (PR): Push branch and open a Pull Request when you meet the Definition of Done
-4. Review: You will need a peer review from at least one group member before you can merge.
-5. Merge: Merge the branch into `main`
-6. Tagging: We tag the release at the end of each sprint:
-   - Sprint 1 -> `v0.1.0`
-   - Sprint 2 -> `v0.2.0`
-   - Sprint 3 -> `v0.3.0`
-   - Sprint 4 -> `v1.0.0`
-7. Cleanup: As mentioned in Section 2, we will leave the remote branches for proof for the final report.
+## 4. Workflow Requirements
+1. Start - Always make sure to pull main before creating a new branch.
+2. Branch - Create your branch using the naming convention mentioned above.
+3. Commit - Each commit must make sense and be as small as possible and must relate to the user story.
+4. Pull Request (PR) - Open the PR against main when you meet the Definition of Done.
+    You must tag at least one group member as a reviewer for their review.
+    Quality Check - Do not merge if there are merge conflicts. 
+5. Merge - Once it is approved, then the code is able to be merged into main.
 
 
-## 5. Branch Protection, Access Control and Reviews
-We have locked the `main` branch to prevent any accidental changes or breakages to the code.
-- Direct Pushing: Do not push any code directly to `main`. All changes must come from a Pull Request.
-- Quality Gate: Ensure that all tests do pass with at least an 85 % coverage before merging.
-- Approvals: Requires at least 1 reviewer to approve. 
+## 5. Releases and Baselines
+- Tagging - Use Semantic Versioning (e.g., v0.1.0, v0.2.0, v1.0.0) for tagging releases.
+- Before tagging, make sure that the repository has - The latest stable code in main.
+- At the end of each sprint, we make sure to also update the evidence folders - (REQM, PP, PMC, CM, MA, PPQA).
+- And finally, we create the EVM & COCOMO I and II tracking sheets for each of the 4 Sprints.
+++
+
+## 6.Handling Changes (Change Control)
+- If there are any changes that need to be made to a user story that is already merged:
+  - Go to the closed GitHub issue and comment why the change is needed
+  - Create a new branch with a version (-v2)
+    - For example - feature/S1-04-volume-control-v2
+  - Then update the requirements traceability matrix (excel) in /Evidence/REQM/requirements_traceability.xlsx to point to the new branch
 
 
-## 6. Configuration Baselines ("Snapshot")
-- At the end of each sprint, we create a baseline. We do this by ensuring the following things are updated and committed before tagging:
-    - All the source code (via git tag)
-    - Test coverage report in: `/Evidence/MA/coverage_report.xlsx`
-    - The evidence folder updates: (REQM, PP, PMC, CM, MA, PPQA).
-    - Finally, EVM & COCOMO I and II tracking sheets.
-
-
-## 7. Change Control
-- If any modifications are needed to be made to a user story that has already been merged or implemented, then:
-    1. Post a new comment on the original GitHub Issue on the Project Board and explain why the change is needed and get approval.
-    2. Create a new branch referencing the original story ID - for example - feature/S1-04-volume-control-v2.
-    3. Ensure to update the traceability matrix in `/Evidence/REQM/requirements_traceability.xlsx`.
-
-
-## 8. Tool Stack
-- Version Control (VCS): Git + GitHub
-- Code Reviews: GitHub Pull Requests  
-- Issue Tracking: GitHub Projects Board
+## 7. Tool Stack
+- VSC - Git via PyCharm
+- Repository - GitHub
+- Code Reviews - GitHub Pull Requests  
+- Issue Tracking - GitHub Projects Board
