@@ -1,10 +1,10 @@
 # CO3095 Software Measurement and Quality Assurance - Group 16 Music Player Application
 
 ## Team Members:
-- Neel Patkar
-- Raiyan Alam 
-- Sanil Panchal 
-- Samuel Ameyaw
+- Neel Patkar (np343)
+- Raiyan Alam (ra495)
+- Sanil Panchal (sp871)
+- Samuel Ameyaw (sa1077)
 
 ## About the Project:
 A command-line music player application developed as part of the CO3095 Software Measurement and Quality Assurance module at the University of Leicester. 
