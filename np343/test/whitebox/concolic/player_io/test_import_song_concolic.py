@@ -1,25 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch, PropertyMock, mock_open
 from pathlib import Path
-import sys
-
-# Add project root to Python path
-project_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(project_root))
-
 from music_player.player_io import import_song
-
-"""
-Test Results Table:
-[Method]                | [Actual] | [Expected] | [Status]
-----------------------------------------------------------
-test_PC_5_unsupported   | Success  | Success    | PASSED
-test_PC_6_collision     | Success  | Success    | PASSED
-test_PC_9_full_success  | Success  | Success    | PASSED
-
-The average test coverage for this suite is measured at 100%.
-"""
-
 
 class TestConcolicImport(unittest.TestCase):
     def setUp(self):
@@ -30,7 +12,6 @@ class TestConcolicImport(unittest.TestCase):
     @patch('music_player.player_io.SUPPORTED_EXTENSIONS', ['.mp3', '.wav', '.flac'])
     @patch('builtins.print')
     def test_PC_5_unsupported_type(self, mock_print):
-        """PC_5: Unsupported file type"""
         mock_path = MagicMock(spec=Path)
         mock_path.exists.return_value = True
         mock_path.is_file.return_value = True
@@ -47,7 +28,6 @@ class TestConcolicImport(unittest.TestCase):
     @patch('shutil.copy2')
     @patch('builtins.print')
     def test_PC_9_successful_import(self, mock_print, mock_copy, mock_discover):
-        """PC_9: Successful import"""
         mock_src = MagicMock(spec=Path)
         mock_src.exists.return_value = True
         mock_src.is_file.return_value = True
