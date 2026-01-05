@@ -7,7 +7,6 @@ from pathlib import Path
 try:
     from music_player.player_time import load_resume_state
 except ImportError:
-    # Redefine for standalone execution capability
     RESUME_FILE = Path("resume.json")
 
 

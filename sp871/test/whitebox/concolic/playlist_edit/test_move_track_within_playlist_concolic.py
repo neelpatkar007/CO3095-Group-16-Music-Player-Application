@@ -39,7 +39,6 @@ class TestConcolicTesting(unittest.TestCase):
 
     @patch('music_player.playlists_edit._get_playlist')
     def test_PC10_successful_move(self, mock_get):
-        # Constraint: S7 (display_name) exists, Valid indices
         mock_get.return_value = (None, self.mock_playlist)
         with patch('builtins.print') as mock_print:
             move_track_within_playlist(self.mock_state, "S2", "1", "2")

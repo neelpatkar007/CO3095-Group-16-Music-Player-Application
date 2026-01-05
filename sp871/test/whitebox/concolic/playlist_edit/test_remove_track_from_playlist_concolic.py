@@ -12,16 +12,13 @@ from music_player.playlists_edit import remove_track_from_playlist, _get_playlis
 class TestConcolicTesting(unittest.TestCase):
 
     def test_iteration_1_pc1(self):
-        # Concrete Seed (None, "", "") -> PC_1
         remove_track_from_playlist(None, "", "")
 
     def test_iteration_2_pc2(self):
-        # Concrete Seed (State, "", "") -> PC_2
         state = MagicMock()
         remove_track_from_playlist(state, "", "")
 
     def test_iteration_3_pc3(self):
-        # Concrete Seed (State, "p1", "") -> PC_3
         state = MagicMock()
         remove_track_from_playlist(state, "p1", "")
 

@@ -4,9 +4,6 @@ import sys
 from pathlib import Path
 
 
-project_root = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(project_root))
-
 from music_player.playlists_edit import remove_track_from_playlist
 
 

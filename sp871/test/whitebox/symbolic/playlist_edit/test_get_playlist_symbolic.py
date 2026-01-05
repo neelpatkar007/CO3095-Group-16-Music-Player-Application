@@ -4,9 +4,6 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-project_root = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(project_root))
-
 from music_player.playlists_edit import _get_playlist
 
 class TestSymbolicExecution(unittest.TestCase):

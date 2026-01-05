@@ -3,15 +3,11 @@ from unittest.mock import MagicMock, patch
 import datetime
 from music_player.player_time import show_recently_added
 
-# [Method] | [Actual] | [Expected] | [Status]
-# PC_3     | Output   | [recent] Permission denied... | Success
-# PC_5     | Output   | Song metadata list | Success
 
 class TestConcolicTesting(unittest.TestCase):
 
 
     def test_path_pc3_exception(self):
-        # PC_3: S4 triggers PermissionError
         s1 = MagicMock()
         track = MagicMock()
         track.path.exists.return_value = True

@@ -30,9 +30,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_date.now.return_value.strftime.return_value = "10:00"
         state = MagicMock(scheduled_alarms=["10:00"], is_playing=False)
         check_alarms(state)
-        # Confirm alarm was "triggered"
         mock_print.assert_called_with("[alarm] ALARM TRIGGERED")
-        # Confirm alarm removed from scheduled list
         self.assertEqual(len(state.scheduled_alarms), 0)
 
     @patch('builtins.print')
@@ -41,7 +39,7 @@ class TestSymbolicExecution(unittest.TestCase):
         mock_date.now.return_value.strftime.return_value = "10:00"
         state = MagicMock(scheduled_alarms=["10:00"], is_playing=True)
         check_alarms(state)
-        mock_print.assert_not_called()  # No alarm should be triggered
+        mock_print.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()
