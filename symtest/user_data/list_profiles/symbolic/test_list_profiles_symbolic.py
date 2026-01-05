@@ -2,32 +2,18 @@ import unittest
 from unittest.mock import Mock, patch
 from music_player.user_data import list_profiles
 
-# [Method]                   | [Actual] | [Expected] | [Status]
-# test_pc1_null_state        | None     | None       | Passed
-# test_pc2_active_match      | Output   | Output     | Passed
-# test_pc3_no_active_match   | Output   | Output     | Passed
-#
-# The average test coverage for this suite is measured at 100%.
-
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    White-box suite derived from Symbolic Path Conditions (PC_1, PC_2, PC_3).
-    Using S1, S2, S3 symbolic mappings.
-    """
 
     @patch('builtins.print')
     def test_pc1_null_state(self, mock_print):
-        """Path PC_1: Input S1 is None triggers early return."""
         S1 = None
         list_profiles(S1)
 
     @patch('builtins.print')
     def test_pc2_active_match(self, mock_print):
-        """Path PC_2: S3 matches 'default' in all_profiles."""
         S1 = Mock()
         S1.profiles = {}
-        S1.active_profile = "default" # S3 matches the name 'default'
-        # Verification via execution flow
+        S1.active_profile = "default"
         try:
             list_profiles(S1)
         except Exception as e:
@@ -38,7 +24,7 @@ class TestSymbolicExecution(unittest.TestCase):
         """Path PC_3: S3 does not match any name in all_profiles."""
         S1 = Mock()
         S1.profiles = {"player1": {}}
-        S1.active_profile = "none" # S3 does not match 'player1' or 'default'
+        S1.active_profile = "none"
         try:
             list_profiles(S1)
         except Exception as e:
