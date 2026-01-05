@@ -8,21 +8,10 @@ from music_player import audio_backend
 
 
 class TestAudioBackendStatement(unittest.TestCase):
-    """
-    White-Box Statement Tests for audio_backend.py.
-    Testing Tool: Python unittest + unittest.mock + importlib
-    Test Technique: White-Box Statement Testing
-    """
+
 
     def test_import_failures(self):
-        """
-        Expected Result:
-         - HAS_PYGAME and HAS_PYDUB flags are set to False when imports fail.
-         - Warning messages are printed.
-        Actual Result:
-            PASSED [100%][audio] pygame not available – using simulated audio backend.
-            [audio] pydub not found. Speed changes will be simulated.
-        """
+
         original_import = builtins.__import__
 
         def side_effect(name, *args, **kwargs):
@@ -52,17 +41,7 @@ class TestAudioBackendStatement(unittest.TestCase):
             importlib.reload(audio_backend)
 
     def test_exception_handlers(self):
-        """
-        Expected Result:
-         - Speed Error: Fallback to 1.0x speed.
-         - Playback/Seek Error: Error is caught and printed, application does not crash.
-        Actual Result:
-            PASSED [100%][audio] Processing audio for 1.5x speed... (this may take a moment)
-            [audio] Error processing speed: Pydub Fail. Falling back to 1.0x.
-            [audio] PLAY (simulated) test.mp3 from 0.0s
-            [audio] ERROR playing test.mp3: Pygame Load Fail
-            [audio] ERROR seeking: Seek Fail
-        """
+
         engine = audio_backend.AudioEngine()
         path = Path("test.mp3")
 

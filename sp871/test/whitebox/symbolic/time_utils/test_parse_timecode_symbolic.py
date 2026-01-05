@@ -1,17 +1,6 @@
 import unittest
 from music_player.time_utils import parse_timecode
 
-"""
-Test Results Table:
-[Method]             | [Actual] | [Expected] | [Status]
--------------------------------------------------------
-test_pc1_empty       | 0.0      | 0.0        | PASSED
-test_pc2_multi_colon | 0.0      | 0.0        | PASSED
-test_pc3_negative    | 0.0      | 0.0        | PASSED
-test_pc4_valid_min   | 605.0    | 605.0      | PASSED
-
-The average test coverage for this suite is measured at 100%.
-"""
 
 
 class TestSymbolicExecution(unittest.TestCase):

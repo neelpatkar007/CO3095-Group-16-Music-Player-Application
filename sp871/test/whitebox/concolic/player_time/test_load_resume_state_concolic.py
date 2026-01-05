@@ -4,7 +4,6 @@ import sys
 from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
 
-# WORKAROUND: Importing from provided namespace, with local fallback for verification
 try:
     from music_player.player_time import load_resume_state
 except ImportError:
@@ -56,31 +55,14 @@ except ImportError:
 
 
 class TestConcolicGenerative(unittest.TestCase):
-    """
-    Concolic Testing Suite (Systematic Input Generation)
 
-    Test Results Table:
-    ---------------------------------------------------------------------------------
-    Method | Iteration | Flip Constraint | New Input Seed | Status
-    ---------------------------------------------------------------------------------
-    test_iter_1 | 1 | NOT S1 | State Valid | PASS
-    test_iter_2 | 2 | NOT S2 | File Exists | PASS
-    test_iter_3 | 3 | NOT S3 | Valid JSON | PASS
-    test_iter_4 | 4 | NOT S4 | Dict Type | PASS
-    test_iter_5 | 5 | NOT S5 | Path String | PASS
-    test_iter_6 | 6 | NOT S6 | Tracks List | PASS
-    test_iter_7 | 7 | NOT S7 | Match Found | PASS
-    test_iter_8 | 8 | NOT S8 | Display Name | PASS
-    ---------------------------------------------------------------------------------
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         self.state = MagicMock()
         self.state.audio_engine = MagicMock()
 
     def test_iter_01_flip_s1(self):
-        """Iteration 1: Flip NOT S1 (State=None -> State=Valid)"""
+
         # Seed
         load_resume_state(None)
         # Flip
@@ -89,7 +71,7 @@ class TestConcolicGenerative(unittest.TestCase):
 
     @patch("pathlib.Path.exists")
     def test_iter_02_flip_s2(self, mock_exists):
-        """Iteration 2: Flip NOT S2 (No File -> File Exists)"""
+
         # Seed
         mock_exists.return_value = False
         load_resume_state(self.state)
@@ -103,7 +85,6 @@ class TestConcolicGenerative(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open)
     @patch("pathlib.Path.exists")
     def test_iter_03_flip_s3(self, mock_exists, mock_file, mock_print):
-        """Iteration 3: Flip NOT S3 (Bad JSON -> Valid JSON)"""
         mock_exists.return_value = True
         # Seed (Corrupt)
         with patch("json.load", side_effect=json.JSONDecodeError("msg", "doc", 0)):
@@ -135,7 +116,6 @@ class TestConcolicGenerative(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open)
     @patch("pathlib.Path.exists")
     def test_iter_05_flip_s5(self, mock_exists, mock_file, mock_json, mock_print):
-        """Iteration 5: Flip NOT S5 (Empty Dict -> Populated Dict)"""
         mock_exists.return_value = True
         # Seed
         mock_json.return_value = {"position": 1.0}
@@ -150,7 +130,6 @@ class TestConcolicGenerative(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open)
     @patch("pathlib.Path.exists")
     def test_iter_07_flip_s7(self, mock_exists, mock_file, mock_json, mock_print):
-        """Iteration 7: Flip NOT S7 (Mismatch -> Match)"""
         mock_exists.return_value = True
         mock_json.return_value = {"last_track_path": "/a/x.mp3", "position": 1.0}
 

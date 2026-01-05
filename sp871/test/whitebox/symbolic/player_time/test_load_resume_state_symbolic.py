@@ -4,25 +4,19 @@ import sys
 from unittest.mock import MagicMock, patch, mock_open
 from pathlib import Path
 
-# WORKAROUND: To ensure this test suite is self-contained and verifiable without
-# the external 'music_player' package environment, we attempt the import but
-# fall back to a local definition if the module is missing.
+
 try:
     from music_player.player_time import load_resume_state
 except ImportError:
-    # Local definition to maintain semantic fidelity for the test runner
     RESUME_FILE = Path("resume.json")
 
 
-    # Placeholder class
     class PlayerState:
         pass
 
 
     def load_resume_state(state: PlayerState) -> None:
-        '''
-        Loads last known playback state from disk
-        '''
+
         if state is None or not hasattr(state, "audio_engine"):
             return
 
@@ -44,11 +38,9 @@ except ImportError:
                 print("[state] Corrupt resume file.")
                 return
 
-            # Always mark resume info as present
             state.position_seconds = pos
             state.resume_active = True
 
-            # Locate the track in library_tracks
             tracks = getattr(state, "library_tracks", None)
             matched = False
 
@@ -77,26 +69,7 @@ except ImportError:
 
 
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    Symbolic Execution Test Suite
 
-    Test Results Table:
-    -----------------------------------------------------------------------
-    Method | Path ID | Condition Assessed | Actual | Expected | Status
-    -----------------------------------------------------------------------
-    test_pc_1 | PC_1 | NOT S1 | None | None | PASS
-    test_pc_2 | PC_2 | S1 AND NOT S2 | None | None | PASS
-    test_pc_3 | PC_3 | S1..S2 AND NOT S3 (JSON) | Printed | Printed | PASS
-    test_pc_4 | PC_4 | S1..S2 AND NOT S3 (Gen) | Printed | Printed | PASS
-    test_pc_5 | PC_5 | S1..S3 AND NOT S4 | Printed | Printed | PASS
-    test_pc_6 | PC_6 | S1..S4 AND NOT S5 | Printed | Printed | PASS
-    test_pc_7 | PC_7 | S1..S5 AND NOT S6 | Printed | Printed | PASS
-    test_pc_8 | PC_8 | S1..S6 AND NOT S7 | Printed | Printed | PASS
-    test_pc_9 | PC_9 | S1..S7 AND NOT S8 | Printed | Printed | PASS
-    test_pc_10| PC_10 | All True | Printed | Printed | PASS
-    -----------------------------------------------------------------------
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         # We need to mock PlayerState if it was defined locally or imported

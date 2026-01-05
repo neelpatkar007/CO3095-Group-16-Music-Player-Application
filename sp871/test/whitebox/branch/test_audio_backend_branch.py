@@ -5,11 +5,7 @@ from music_player import audio_backend
 
 
 class TestAudioBackendBranch(unittest.TestCase):
-    """
-    White-Box Branch Tests for audio_backend.py.
-    Testing Tool: Python unittest + unittest.mock
-    Test Technique: White-Box Branch Testing
-    """
+
 
     def setUp(self):
         # Set HAS_PYGAME True

@@ -9,15 +9,7 @@ sys.path.insert(0, str(project_root))
 
 from music_player.playlists_edit import move_track_within_playlist
 
-"""
-[Method]                   | [Actual] | [Expected] | [Status]
----------------------------|----------|------------|---------
-test_PC6_from_out_bounds   | Print    | Print      | PASSED
-test_PC7_to_out_bounds     | Print    | Print      | PASSED
-test_PC10_successful_move  | Print    | Print      | PASSED
 
-The average test coverage for this suite is measured at 100%.
-"""
 
 class TestConcolicTesting(unittest.TestCase):
 

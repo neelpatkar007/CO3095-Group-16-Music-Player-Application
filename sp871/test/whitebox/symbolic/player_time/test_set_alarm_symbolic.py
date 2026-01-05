@@ -8,17 +8,6 @@ class PlayerState:
     def __init__(self, alarms=None):
         self.scheduled_alarms = alarms if alarms is not None else []
 
-"""
-Test Results Table:
-| Method        | Actual        | Expected      | Status |
-|---------------|---------------|---------------|--------|
-| test_pc_1     | None          | None          | Passed |
-| test_pc_2     | None          | None          | Passed |
-| test_pc_3     | Invalid Print | Invalid Print | Passed |
-| test_pc_8     | Alarm Set     | Alarm Set     | Passed |
-
-The average test coverage for this suite is measured at 100%.
-"""
 
 class TestSymbolicExecution(unittest.TestCase):
 

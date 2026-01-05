@@ -8,20 +8,7 @@ from music_player.playlists_edit import _get_playlist
 
 
 class TestConcolicTesting(unittest.TestCase):
-    """
-    Concolic Testing Suite for _get_playlist.
 
-    Test Results Table:
-    | Method                      | Actual      | Expected    | Status |
-    |-----------------------------|-------------|-------------|--------|
-    | test_iteration_exploration  | See Below   | See Below   | PASS   |
-    | - Iteration 1 & 2           | None        | None        | PASS   |
-    | - Iteration 3               | None        | None        | PASS   |
-    | - Iteration 4               | None        | None        | PASS   |
-    | - Iteration 5               | (idx, obj)  | (idx, obj)  | PASS   |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def test_iteration_exploration(self):
         """Systematic exploration based on derived concrete seeds S1, S2, S3, S4."""

@@ -4,24 +4,7 @@ from music_player.player_time import save_resume_state
 
 
 class TestConcolicExecution(unittest.TestCase):
-    """
-    Concolic Testing Suite (Concrete + Symbolic) for save_resume_state.
 
-    Test Results Table:
-    | Iteration | Seed Input | Derived Path | Status |
-    |-----------|------------|--------------|--------|
-    | 1         | None       | PC_1         | PASS   |
-    | 2         | EmptyState | PC_2         | PASS   |
-    | 3         | NoPathAttr | PC_3         | PASS   |
-    | 4         | Path=None  | PC_4         | PASS   |
-    | 5         | Pos=125.0  | PC_5         | PASS   |
-    | 6         | Pos=30.0   | PC_6         | PASS   |
-    | 7         | OSError    | PC_7         | PASS   |
-    | 8         | TypeError  | PC_8         | PASS   |
-    | 9         | Exception  | PC_9         | PASS   |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         # Base Mocks

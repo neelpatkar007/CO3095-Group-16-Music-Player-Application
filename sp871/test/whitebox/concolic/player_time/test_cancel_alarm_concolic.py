@@ -6,19 +6,7 @@ class PlayerState:
         if has_attr:
             self.scheduled_alarms = alarms
 
-# The target function remains unchanged to ensure semantic fidelity
 class TestConcolicSuite(unittest.TestCase):
-    """
-    [Method]             | [Actual] | [Expected] | [Status]
-    -------------------------------------------------------
-    test_iteration_1     | Exit     | Exit       | Passed
-    test_iteration_2     | Output   | Output     | Passed
-    test_iteration_3     | Output   | Output     | Passed
-    test_iteration_4     | Output   | Output     | Passed
-    test_iteration_5     | Output   | Output     | Passed
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def test_iteration_1(self):
         # Derived from PC_1 flip

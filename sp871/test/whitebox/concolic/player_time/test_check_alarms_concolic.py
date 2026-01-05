@@ -2,13 +2,6 @@ import unittest
 from unittest.mock import MagicMock, patch
 from music_player.player_time import check_alarms
 
-# [Method] | [Actual] | [Expected] | [Status]
-# test_iteration_1 | Early Exit | Early Exit | PASS
-# test_iteration_2 | Early Exit | Early Exit | PASS
-# test_iteration_3 | Empty List Exit | Empty List Exit | PASS
-# test_iteration_4 | Condition Negated | Condition Negated | PASS
-# test_iteration_5 | Success Trigger | Success Trigger | PASS
-# The average test coverage for this suite is measured at 100%.
 
 class TestConcolicExecution(unittest.TestCase):
 

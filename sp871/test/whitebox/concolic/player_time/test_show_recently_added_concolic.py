@@ -8,10 +8,7 @@ from music_player.player_time import show_recently_added
 # PC_5     | Output   | Song metadata list | Success
 
 class TestConcolicTesting(unittest.TestCase):
-    """
-    The average test coverage for this suite is measured at 100%.
-    Tests derived from Concolic Iteration table using S1, S2, S3, S4.
-    """
+
 
     def test_path_pc3_exception(self):
         # PC_3: S4 triggers PermissionError

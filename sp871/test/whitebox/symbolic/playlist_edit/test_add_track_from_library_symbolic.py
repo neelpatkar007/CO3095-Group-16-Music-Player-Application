@@ -9,17 +9,7 @@ sys.path.insert(0, str(project_root))
 
 from music_player.playlists_edit import add_track_from_library
 
-"""
-[Method]             | [Actual] | [Expected] | [Status]
--------------------------------------------------------
-test_PC_1_s1_none    | None     | None       | Passed
-test_PC_2_s2_empty   | None     | None       | Passed
-test_PC_3_s3_empty   | None     | None       | Passed
-test_PC_4_empty_lib  | Print    | Print      | Passed
-test_PC_9_success    | Track    | Track      | Passed
 
-The average test coverage for this suite is measured at 100%.
-"""
 
 class TestSymbolicExecution(unittest.TestCase):
 

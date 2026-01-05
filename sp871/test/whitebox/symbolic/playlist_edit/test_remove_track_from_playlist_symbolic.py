@@ -3,20 +3,12 @@ from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
 
-# Add the project root to sys.path
+
 project_root = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(project_root))
 
 from music_player.playlists_edit import remove_track_from_playlist
 
-# [Method] | [Actual] | [Expected] | [Status]
-# test_pc1_none_state | None | None | Passed
-# test_pc2_empty_selector | None | None | Passed
-# test_pc3_empty_index | None | None | Passed
-# test_pc5_invalid_int | Print Usage | Print Usage | Passed
-# test_pc7_out_of_bounds | Print Range Error | Print Range Error | Passed
-# test_pc9_success | Track Popped | Track Popped | Passed
-# The average test coverage for this suite is measured at 100%.
 
 class TestSymbolicExecution(unittest.TestCase):
 

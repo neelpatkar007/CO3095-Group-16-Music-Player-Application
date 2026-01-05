@@ -1,18 +1,7 @@
 import unittest
 from music_player.time_utils import parse_timecode
 
-"""
-Test Results Table:
-[Method]              | [Actual] | [Expected] | [Status]
---------------------------------------------------------
-test_iter1_initial    | 0.0      | 0.0        | PASSED
-test_iter2_flip_empty | 605.0    | 605.0      | PASSED
-test_iter3_flip_parts | 0.0      | 0.0        | PASSED
-test_iter4_flip_colon | 0.0      | 0.0        | PASSED
-test_iter5_final      | 45.0     | 45.0       | PASSED
 
-The average test coverage for this suite is measured at 100%.
-"""
 
 class TestConcolicTesting(unittest.TestCase):
 

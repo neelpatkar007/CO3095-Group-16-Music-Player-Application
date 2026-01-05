@@ -9,17 +9,6 @@ class PlayerState:
             self.scheduled_alarms = alarms
 
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    [Method]             | [Actual] | [Expected] | [Status]
-    -------------------------------------------------------
-    test_pc1_null_state  | None     | None       | Passed
-    test_pc2_none_alarms | Print    | Print      | Passed
-    test_pc3_type_error  | Print    | Print      | Passed
-    test_pc4_empty_list  | Print    | Print      | Passed
-    test_pc5_clear_path  | Print    | Print      | Passed
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def test_pc1_null_state(self):
         # PC_1: S1 is None

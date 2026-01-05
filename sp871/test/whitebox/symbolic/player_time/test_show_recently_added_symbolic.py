@@ -4,16 +4,8 @@ import datetime
 from music_player.player_time import show_recently_added
 
 
-# [Method] | [Actual] | [Expected] | [Status]
-# PC_1     | None     | None       | Success
-# PC_2     | Output   | [recent] Library is empty | Success
-# PC_4     | Output   | [recent] No valid files found | Success
-
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    The average test coverage for this suite is measured at 100%.
-    This suite utilizes Symbolic Path Conditions (PC_1 - PC_5).
-    """
+
 
     def test_path_pc1(self):
         # PC_1: S1 is None

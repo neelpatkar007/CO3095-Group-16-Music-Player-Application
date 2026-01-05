@@ -9,15 +9,6 @@ sys.path.insert(0, str(project_root))
 
 from music_player.playlists_edit import add_track_from_library, _get_playlist
 
-"""
-[Method]               | [Actual] | [Expected] | [Status]
----------------------------------------------------------
-test_concolic_PC_6     | Print    | Print      | Passed
-test_concolic_PC_7     | Print    | Print      | Passed
-test_concolic_PC_5     | None     | None       | Passed
-
-The average test coverage for this suite is measured at 100%.
-"""
 
 class TestConcolicExecution(unittest.TestCase):
 

@@ -6,24 +6,7 @@ from music_player.player_time import save_resume_state
 
 
 class TestSymbolicExecution(unittest.TestCase):
-    """
-    Symbolic Execution Test Suite for save_resume_state.
 
-    Test Results Table:
-    | Method | Actual | Expected | Status |
-    |--------|--------|----------|--------|
-    | PC_1   | Return | Return   | PASS   |
-    | PC_2   | Return | Return   | PASS   |
-    | PC_3   | Return | Return   | PASS   |
-    | PC_4   | Return | Return   | PASS   |
-    | PC_5   | Print  | Mins fmt | PASS   |
-    | PC_6   | Print  | Secs fmt | PASS   |
-    | PC_7   | Print  | OSError  | PASS   |
-    | PC_8   | Print  | TypeError| PASS   |
-    | PC_9   | Print  | Exception| PASS   |
-
-    The average test coverage for this suite is measured at 100%.
-    """
 
     def setUp(self):
         # Common setup for valid state used in deeper paths
