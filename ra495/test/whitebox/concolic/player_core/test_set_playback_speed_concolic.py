@@ -30,7 +30,7 @@ class TestConcolicExecution(unittest.TestCase):
 
     def test_iteration_3_flip_range_lower(self):
         s1 = self.create_state()
-        s2 = 0.1  # Below 0.5
+        s2 = 0.1
 
         with patch('builtins.print') as mock_print:
             set_playback_speed(s1, s2)
