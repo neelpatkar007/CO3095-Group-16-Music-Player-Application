@@ -11,7 +11,6 @@ class TestConcolicExecution(unittest.TestCase):
         self.mock_state.position_seconds = 0.0
 
     def run_concolic_step(self, s1_command, s2_resume, s3_track, s4_pos):
-        """Helper to inject concrete values derived from symbolic solving."""
         self.mock_state.resume_active = s2_resume
         self.mock_state.current_track = s3_track
         self.mock_state.position_seconds = s4_pos

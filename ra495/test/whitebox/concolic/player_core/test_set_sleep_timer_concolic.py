@@ -15,7 +15,6 @@ class TestConcolicGenerations(unittest.TestCase):
 
     def test_iteration_1_invalid_type_flip(self):
         set_sleep_timer("NotAState", 10)
-        # Implicit assertion: Function returns early, no crash.
 
     def test_iteration_4_negation_flip(self):
         self.s1.sleep_deadline = time.time() + 500
@@ -36,11 +35,8 @@ class TestConcolicGenerations(unittest.TestCase):
 
     def test_overwrite_branch_traversal(self):
 
-        # Set existing deadline
         self.s1.sleep_deadline = time.time() + 3600  # 1 hour left
-        # Call again to trigger "Replacing..."
         set_sleep_timer(self.s1, 15)
-        # State should be updated
         expected_roughly = time.time() + (15 * 60)
         self.assertAlmostEqual(self.s1.sleep_deadline, expected_roughly, delta=1)
 
