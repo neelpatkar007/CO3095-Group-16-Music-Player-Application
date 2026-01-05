@@ -3,14 +3,6 @@ from unittest.mock import MagicMock, patch
 import sys
 from pathlib import Path
 
-# Add the project root to sys.path
-project_root = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(project_root))
-
-# Verify the path exists and print for debugging
-music_player_path = project_root / "music_player"
-if not music_player_path.exists():
-    raise ImportError(f"music_player directory not found at {music_player_path}")
 
 from music_player.playlists_edit import _get_playlist
 
