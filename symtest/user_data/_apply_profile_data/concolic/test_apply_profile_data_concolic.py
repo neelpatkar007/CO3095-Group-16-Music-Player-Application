@@ -3,19 +3,9 @@ from unittest.mock import MagicMock
 from music_player.player_state import PlayerState
 from music_player.user_data import _apply_profile_data
 
-
-# [Method]             | [Actual]            | [Expected]          | [Status]
-# test_PC_4_iteration  | Playlist restored   | Playlist restored   | Passed
-# test_nested_lookup   | Track matched       | Track matched       | Passed
-
 class TestConcolicTesting(unittest.TestCase):
-    """
-    The average test coverage for this suite is measured at 100%.
-    Tests reflect systematic input generation derived from the Flip Table.
-    """
 
     def test_PC_4_iteration(self):
-        # Iteration 4: Concrete inputs to trigger full playlist restoration
         mock_audio = MagicMock()
         state = PlayerState(tracks=[], audio_engine=mock_audio)
         data = {
@@ -26,7 +16,6 @@ class TestConcolicTesting(unittest.TestCase):
         self.assertEqual(state.playlists[0].name, "Rock")
 
     def test_nested_lookup_logic(self):
-        # Testing the concolic path where a track match occurs (S3 and S4 interaction)
         class MockTrack:
             def __init__(self, path):
                 self.path = path

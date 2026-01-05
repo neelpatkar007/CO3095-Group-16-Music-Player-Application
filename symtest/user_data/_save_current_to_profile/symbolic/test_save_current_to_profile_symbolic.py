@@ -2,17 +2,6 @@ import unittest
 from unittest.mock import MagicMock, patch
 from music_player.user_data import _save_current_to_profile
 
-"""
-[Method]             | [Actual] | [Expected] | [Status]
--------------------------------------------------------
-test_pc1_early_exit  | None     | None       | Passed
-test_pc2_no_save     | None     | None       | Passed
-test_pc3_full_save   | Saved    | Saved      | Passed
-
-The average test coverage for this suite is measured at 100%.
-"""
-
-
 class TestSymbolicExecution(unittest.TestCase):
 
     def setUp(self):
@@ -27,7 +16,6 @@ class TestSymbolicExecution(unittest.TestCase):
     @patch('music_player.user_data._save_profiles')
     @patch('music_player.user_data._serialize_current_state')
     def test_pc2_no_save(self, mock_ser, mock_save):
-        # PC_2: S1 != None AND S2 AND S3 AND NOT S4
         self.state.profiles = {}
         self.state.active_profile = "default"
         mock_ser.return_value = None
@@ -38,7 +26,6 @@ class TestSymbolicExecution(unittest.TestCase):
     @patch('music_player.user_data._save_profiles')
     @patch('music_player.user_data._serialize_current_state')
     def test_pc3_full_save(self, mock_ser, mock_save):
-        # PC_3: S1 != None AND S2 AND S3 AND S4
         self.state.profiles = {}
         self.state.active_profile = "slot1"
         serialised_data = {"hp": 100}
