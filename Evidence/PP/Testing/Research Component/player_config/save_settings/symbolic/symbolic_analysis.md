@@ -11,4 +11,4 @@
 | Path ID  | Condition          | Description                                                                            |
 |----------|--------------------|----------------------------------------------------------------------------------------|
 | PC_1     | S1 == None         | The input state is null; the function returns immediately to prevent attribute errors. |
-| PC_2     | S1 != None AND S2  | The input state is valid, and the file system permits writing (Happy Path).            |
+| PC_2     | S1 != None AND S2  | The input state is valid, and the file system permits writing .                        |
